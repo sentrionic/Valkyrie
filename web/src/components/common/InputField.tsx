@@ -18,7 +18,9 @@ export const InputField: React.FC<InputFieldProps> = ({ label, ...props }) => {
   return (
     <FormControl mt={4} isInvalid={error != null && touched}>
       <FormLabel htmlFor={field.name}>
-        <Text textTransform="uppercase">{label}</Text>
+        <Text fontSize="12px" textTransform="uppercase">
+          {label}
+        </Text>
       </FormLabel>
       {/* @ts-ignore */}
       <Input

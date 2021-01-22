@@ -8,6 +8,8 @@ import { Account } from "./pages/Account";
 import { AuthRoute } from "./components/layouts/AuthRoute";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
+import { ViewGuild } from "./pages/ViewGuild";
+import { Home } from "./components/layouts/Home";
 
 export const App = () => (
   <QueryClientProvider client={new QueryClient()}>
@@ -24,6 +26,12 @@ export const App = () => (
         </Route>
         <Route path="/reset-password/:token">
           <ResetPassword />
+        </Route>
+        <Route exact path="/channels/me">
+          <Home />
+        </Route>
+        <Route path="/channels">
+          <ViewGuild />
         </Route>
         <AuthRoute path="/account" component={Account} />
         <Route path="/">

@@ -684,7 +684,7 @@ true Pacific/Easter
 false Pacific/Efate
 false Pacific/Enderbury
 false Pacific/Fakaofo
-true Pacific/Fiji
+false Pacific/Fiji
 false Pacific/Funafuti
 false Pacific/Galapagos
 false Pacific/Gambier
@@ -1334,7 +1334,7 @@ true posix/Pacific/Easter
 false posix/Pacific/Efate
 false posix/Pacific/Enderbury
 false posix/Pacific/Fakaofo
-true posix/Pacific/Fiji
+false posix/Pacific/Fiji
 false posix/Pacific/Funafuti
 false posix/Pacific/Galapagos
 false posix/Pacific/Gambier
@@ -1462,7 +1462,7 @@ false posixrules
     <database id="14" parent="1" name="valk">
       <ObjectId>47052</ObjectId>
       <Owner>pi</Owner>
-      <IntrospectionStateNumber>27744</IntrospectionStateNumber>
+      <IntrospectionStateNumber>27890</IntrospectionStateNumber>
       <Current>1</Current>
     </database>
     <database id="15" parent="1" name="valkyrie">
@@ -1547,7 +1547,7 @@ UC/10
 </Acl>
       <StateNumber>359</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>27745</IntrospectionStateNumber>
+      <IntrospectionStateNumber>27891</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <extension id="32" parent="14" name="plpgsql">
@@ -1640,47 +1640,314 @@ UC/10
       <HandlerId>335</HandlerId>
       <Type>index</Type>
     </access-method>
-    <table id="43" parent="31" name="users">
-      <ObjectId>47053</ObjectId>
-      <Outdated>1</Outdated>
+    <table id="43" parent="31" name="channels">
+      <ObjectId>47242</ObjectId>
       <Owner>pi</Owner>
-      <StateNumber>27743</StateNumber>
+      <StateNumber>27889</StateNumber>
     </table>
-    <column id="44" parent="43" name="id">
+    <table id="44" parent="31" name="guilds">
+      <ObjectId>47267</ObjectId>
+      <Owner>pi</Owner>
+      <StateNumber>27889</StateNumber>
+    </table>
+    <table id="45" parent="31" name="members">
+      <ObjectId>47255</ObjectId>
+      <Owner>pi</Owner>
+      <StateNumber>27889</StateNumber>
+    </table>
+    <table id="46" parent="31" name="users">
+      <ObjectId>47053</ObjectId>
+      <Owner>pi</Owner>
+      <StateNumber>27746</StateNumber>
+    </table>
+    <column id="47" parent="43" name="id">
+      <Position>1</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="48" parent="43" name="createdAt">
+      <Position>2</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <DefaultExpression>now()</DefaultExpression>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="49" parent="43" name="updatedAt">
+      <Position>3</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <DefaultExpression>now()</DefaultExpression>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="50" parent="43" name="name">
+      <Position>4</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="51" parent="43" name="public">
+      <Position>5</Position>
+      <DataType>boolean|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <DefaultExpression>true</DefaultExpression>
+      <TypeId>16</TypeId>
+    </column>
+    <column id="52" parent="43" name="dm">
+      <Position>6</Position>
+      <DataType>boolean|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <DefaultExpression>false</DefaultExpression>
+      <TypeId>16</TypeId>
+    </column>
+    <column id="53" parent="43" name="guildId">
+      <Position>7</Position>
+      <DataType>varchar|0s</DataType>
+      <StateNumber>27889</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="54" parent="43" name="PK_bc603823f3f741359c2339389f9">
+      <ObjectId>47252</ObjectId>
+      <StateNumber>27887</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>100</CollationIds>
+      <CollationNames>default</CollationNames>
+      <ClassIds>3126</ClassIds>
+    </index>
+    <index id="55" parent="43" name="IDX_6480a2e715dda44c2e44826712">
+      <ObjectId>47254</ObjectId>
+      <StateNumber>27887</StateNumber>
+      <ColNames>createdAt</ColNames>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0</CollationIds>
+      <ClassIds>3128</ClassIds>
+    </index>
+    <key id="56" parent="43" name="PK_bc603823f3f741359c2339389f9">
+      <ObjectId>47253</ObjectId>
+      <StateNumber>27887</StateNumber>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PK_bc603823f3f741359c2339389f9</UnderlyingIndexName>
+    </key>
+    <foreign-key id="57" parent="43" name="FK_16f7ae247a7cf9894db7f23df8e">
+      <ObjectId>47283</ObjectId>
+      <StateNumber>27889</StateNumber>
+      <ColNames>guildId</ColNames>
+      <RefTableId>47267</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>guilds</RefTableName>
+      <RefKeyName>PK_e7e7f2a51bd6d96a9ac2aa560f9</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="58" parent="44" name="id">
+      <Position>1</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27888</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="59" parent="44" name="createdAt">
+      <Position>2</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27888</StateNumber>
+      <DefaultExpression>now()</DefaultExpression>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="60" parent="44" name="updatedAt">
+      <Position>3</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27888</StateNumber>
+      <DefaultExpression>now()</DefaultExpression>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="61" parent="44" name="name">
+      <Position>4</Position>
+      <DataType>varchar(50)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27888</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="62" parent="44" name="membersId">
+      <Position>5</Position>
+      <DataType>varchar|0s</DataType>
+      <StateNumber>27889</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="63" parent="44" name="membersUserId">
+      <Position>6</Position>
+      <DataType>varchar|0s</DataType>
+      <StateNumber>27889</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="64" parent="44" name="membersGuildId">
+      <Position>7</Position>
+      <DataType>varchar|0s</DataType>
+      <StateNumber>27889</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="65" parent="44" name="PK_e7e7f2a51bd6d96a9ac2aa560f9">
+      <ObjectId>47275</ObjectId>
+      <StateNumber>27888</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>100</CollationIds>
+      <CollationNames>default</CollationNames>
+      <ClassIds>3126</ClassIds>
+    </index>
+    <index id="66" parent="44" name="IDX_6de265be5805c7145f8bf8380d">
+      <ObjectId>47277</ObjectId>
+      <StateNumber>27888</StateNumber>
+      <ColNames>createdAt</ColNames>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0</CollationIds>
+      <ClassIds>3128</ClassIds>
+    </index>
+    <key id="67" parent="44" name="PK_e7e7f2a51bd6d96a9ac2aa560f9">
+      <ObjectId>47276</ObjectId>
+      <StateNumber>27888</StateNumber>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PK_e7e7f2a51bd6d96a9ac2aa560f9</UnderlyingIndexName>
+    </key>
+    <foreign-key id="68" parent="44" name="FK_5097cc50286d7349c8c8c257a3b">
+      <ObjectId>47278</ObjectId>
+      <StateNumber>27889</StateNumber>
+      <ColNames>membersId
+membersUserId
+membersGuildId</ColNames>
+      <RefTableId>47255</RefTableId>
+      <RefColPositions>1,4,5</RefColPositions>
+      <RefTableName>members</RefTableName>
+      <RefKeyName>PK_92a577ea23fc211edab40817a8a</RefKeyName>
+      <RefColNames>id
+userId
+guildId</RefColNames>
+    </foreign-key>
+    <column id="69" parent="45" name="id">
+      <Position>1</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="70" parent="45" name="createdAt">
+      <Position>2</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <DefaultExpression>now()</DefaultExpression>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="71" parent="45" name="updatedAt">
+      <Position>3</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <DefaultExpression>now()</DefaultExpression>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="72" parent="45" name="userId">
+      <Position>4</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="73" parent="45" name="guildId">
+      <Position>5</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="74" parent="45" name="admin">
+      <Position>6</Position>
+      <DataType>boolean|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>27887</StateNumber>
+      <DefaultExpression>false</DefaultExpression>
+      <TypeId>16</TypeId>
+    </column>
+    <index id="75" parent="45" name="PK_92a577ea23fc211edab40817a8a">
+      <ObjectId>47264</ObjectId>
+      <StateNumber>27887</StateNumber>
+      <ColNames>id
+userId
+guildId</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>100,100,100</CollationIds>
+      <CollationNames>default
+default
+default</CollationNames>
+      <ClassIds>3126,3126,3126</ClassIds>
+    </index>
+    <index id="76" parent="45" name="IDX_12d2c4a4f7ac9472f51610b2f7">
+      <ObjectId>47266</ObjectId>
+      <StateNumber>27887</StateNumber>
+      <ColNames>createdAt</ColNames>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0</CollationIds>
+      <ClassIds>3128</ClassIds>
+    </index>
+    <key id="77" parent="45" name="PK_92a577ea23fc211edab40817a8a">
+      <ObjectId>47265</ObjectId>
+      <StateNumber>27887</StateNumber>
+      <ColNames>id
+userId
+guildId</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PK_92a577ea23fc211edab40817a8a</UnderlyingIndexName>
+    </key>
+    <column id="78" parent="46" name="id">
       <Position>1</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>27740</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="45" parent="43" name="username">
+    <column id="79" parent="46" name="username">
       <Position>2</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>27740</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="46" parent="43" name="email">
+    <column id="80" parent="46" name="email">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>27740</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="47" parent="43" name="password">
+    <column id="81" parent="46" name="password">
       <Position>4</Position>
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>27740</StateNumber>
       <TypeId>25</TypeId>
     </column>
-    <column id="48" parent="43" name="image">
+    <column id="82" parent="46" name="image">
       <Position>5</Position>
       <DataType>text|0s</DataType>
       <StateNumber>27740</StateNumber>
       <TypeId>25</TypeId>
     </column>
-    <column id="49" parent="43" name="createdAt">
+    <column id="83" parent="46" name="createdAt">
       <Position>7</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
@@ -1688,7 +1955,7 @@ UC/10
       <DefaultExpression>now()</DefaultExpression>
       <TypeId>1114</TypeId>
     </column>
-    <column id="50" parent="43" name="updatedAt">
+    <column id="84" parent="46" name="updatedAt">
       <Position>8</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
@@ -1696,15 +1963,7 @@ UC/10
       <DefaultExpression>now()</DefaultExpression>
       <TypeId>1114</TypeId>
     </column>
-    <column id="51" parent="43" name="confirmed">
-      <Position>9</Position>
-      <DataType>boolean|0s</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>27743</StateNumber>
-      <DefaultExpression>true</DefaultExpression>
-      <TypeId>16</TypeId>
-    </column>
-    <index id="52" parent="43" name="PK_a3ffb1c0c8416b9fc6f907b7433">
+    <index id="85" parent="46" name="PK_a3ffb1c0c8416b9fc6f907b7433">
       <ObjectId>47062</ObjectId>
       <StateNumber>27740</StateNumber>
       <ColNames>id</ColNames>
@@ -1715,7 +1974,7 @@ UC/10
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <index id="53" parent="43" name="UQ_97672ac88f789774dd47f7c8be3">
+    <index id="86" parent="46" name="UQ_97672ac88f789774dd47f7c8be3">
       <ObjectId>47064</ObjectId>
       <StateNumber>27740</StateNumber>
       <ColNames>email</ColNames>
@@ -1725,22 +1984,22 @@ UC/10
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <index id="54" parent="43" name="IDX_204e9b624861ff4a5b26819210">
-      <ObjectId>47067</ObjectId>
-      <StateNumber>27743</StateNumber>
+    <index id="87" parent="46" name="IDX_204e9b624861ff4a5b26819210">
+      <ObjectId>47069</ObjectId>
+      <StateNumber>27746</StateNumber>
       <ColNames>createdAt</ColNames>
       <AccessMethodId>403</AccessMethodId>
       <CollationIds>0</CollationIds>
       <ClassIds>3128</ClassIds>
     </index>
-    <key id="55" parent="43" name="PK_a3ffb1c0c8416b9fc6f907b7433">
+    <key id="88" parent="46" name="PK_a3ffb1c0c8416b9fc6f907b7433">
       <ObjectId>47063</ObjectId>
       <StateNumber>27740</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>PK_a3ffb1c0c8416b9fc6f907b7433</UnderlyingIndexName>
     </key>
-    <key id="56" parent="43" name="UQ_97672ac88f789774dd47f7c8be3">
+    <key id="89" parent="46" name="UQ_97672ac88f789774dd47f7c8be3">
       <ObjectId>47065</ObjectId>
       <StateNumber>27740</StateNumber>
       <ColNames>email</ColNames>

@@ -16,7 +16,7 @@ import {
 import { Form, Formik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
-import { Link as RLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AccountResponse } from "../api/response/accountresponse";
 import { getAccount, logout, updateAccount } from "../api/setupAxios";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
