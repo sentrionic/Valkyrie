@@ -2,8 +2,8 @@ import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { App } from "./App";
-import reportWebVitals from "./reportWebVitals";
-import customTheme from "./utils/theme";
+import reportWebVitals from "./lib/utils/reportWebVitals";
+import customTheme from "./lib/utils/theme";
 
 ReactDOM.render(
   <React.StrictMode>

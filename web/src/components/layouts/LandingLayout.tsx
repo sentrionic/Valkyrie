@@ -1,8 +1,8 @@
 import React from "react";
 import { Flex } from "@chakra-ui/react";
-import { Header } from "../sections/Header";
+import { NavBar } from "../sections/NavBar";
 
-export const LandingLayout: React.FC<{}> = (props) => {
+export const LandingLayout: React.FC = (props) => {
   return (
     <Flex
       direction="column"
@@ -11,7 +11,7 @@ export const LandingLayout: React.FC<{}> = (props) => {
       m="0 auto"
       {...props}
     >
-      <Header />
+      <NavBar />
       {props.children}
     </Flex>
   );

@@ -81,7 +81,6 @@ export const Hero: React.FC<HeroProps> = ({
         </Text>
       </Stack>
       <Box w={{ base: "80%", sm: "60%", md: "50%" }} mb={{ base: 12, md: 0 }}>
-        {/* TODO: Make this change every X secs */}
         <Image src={image} size="50%" rounded="1rem" />
       </Box>
     </Flex>
