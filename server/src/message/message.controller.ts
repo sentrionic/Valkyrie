@@ -1,4 +1,4 @@
-import { Controller, Delete, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { AuthGuard } from '../config/auth.guard';
 import { GetUser } from '../config/user.decorator';
@@ -37,28 +37,28 @@ export class MessageController {
   //   return await ctx.userLoader.load(message.user.id);
   // }
   //
-  // @Mutation(() => Boolean)
-  // @UseGuards(AuthGuard)
-  // async createMessage(
-  //   @GetUser() user: User,
-  //   @Args('channelId') channelId: string,
-  //   @Args('text', { nullable: true }) text?: string,
-  //   @Args({ name: 'file', nullable: true, type: () => GraphQLUpload })
-  //     file?: FileUpload,
-  // ): Promise<boolean> {
-  //   return this.messageService.createMessage(user, channelId, text, file);
-  // }
-  //
-  // @Mutation(() => DefaultResponse)
-  // @UseGuards(AuthGuard)
-  // async editMessage(
-  //   @GetUser() user: User,
-  //   @Args('messageId') messageId: string,
-  //   @Args('text') text: string,
-  // ): Promise<DefaultResponse> {
-  //   return this.messageService.editMessage(user, messageId, text);
-  // }
-  //
+  @Post("/:channelId")
+  @UseGuards(AuthGuard)
+  async createMessage(
+    @GetUser() user: string,
+    @Param('channelId') channelId: string,
+    @Body('text') text?: string,
+    @Args({ name: 'file', nullable: true, type: () => GraphQLUpload })
+      file?: FileUpload,
+  ): Promise<boolean> {
+    return this.messageService.createMessage(user, channelId, text, file);
+  }
+
+  @Put("/:id")
+  @UseGuards(AuthGuard)
+  async editMessage(
+    @GetUser() user: string,
+    @Param('messageId') messageId: string,
+    @Body('text') text: string,
+  ): Promise<boolean> {
+    return this.messageService.editMessage(user, messageId, text);
+  }
+
   @Delete("/:id")
   @UseGuards(AuthGuard)
   async deleteMessage(

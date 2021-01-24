@@ -1,16 +1,9 @@
-import {
-  Avatar,
-  Box,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-} from "@chakra-ui/react";
+import { Avatar, Box, Flex, Menu, MenuButton, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaEllipsisV, FaRegTrashAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
+import { StyledMenuItem, StyledRedMenuItem } from "../menus/StyledMenuItem";
+import { StyledMenuList } from "../menus/StyledMenuList";
 
 export const Message: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -46,20 +39,18 @@ export const Message: React.FC = () => {
               </MenuButton>
             )}
           </Flex>
-          <MenuList bg="#18191c">
-            <MenuItem _hover={{ bg: "#7289da" }}>
-              <Flex align="center" justify="space-between" w="full">
-                <Text>Edit Message</Text>
-                <MdEdit />
-              </Flex>
-            </MenuItem>
-            <MenuItem _hover={{ bg: "#f04747", color: "#fff" }}>
-              <Flex align="center" justify="space-between" w="full">
-                <Text>Delete Message</Text>
-                <FaRegTrashAlt />
-              </Flex>
-            </MenuItem>
-          </MenuList>
+          <StyledMenuList>
+            <StyledMenuItem
+              label={"Edit Message"}
+              icon={MdEdit}
+              handleClick={() => console.log("Edit")}
+            />
+            <StyledRedMenuItem
+              label={"Delete Message"}
+              icon={FaRegTrashAlt}
+              handleClick={() => console.log("Delete")}
+            />
+          </StyledMenuList>
         </>
       )}
     </Menu>

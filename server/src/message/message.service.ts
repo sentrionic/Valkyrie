@@ -11,6 +11,7 @@ import { MessageData } from '../types/MessageData';
 @Injectable()
 export class MessageService {
   constructor(
+    @InjectRepository(Channel) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
   ) {}
@@ -53,7 +54,7 @@ export class MessageService {
   }
 
   async createMessage(
-    user: User,
+    userId: string,
     channelId: string,
     text?: string,
     file?: BufferFile,
@@ -70,6 +71,8 @@ export class MessageService {
         messageData.filetype = 'image/webp';
         messageData.url = url;
       }
+
+      const user = await this.userRepository.findOne({ where: { id: userId } });
 
       const channel = await this.channelRepository.findOne({
         where: { id: channelId },
@@ -108,7 +111,7 @@ export class MessageService {
   }
 
   async editMessage(
-    user: User,
+    userId: string,
     id: string,
     text: string,
   ): Promise<boolean> {
@@ -122,7 +125,7 @@ export class MessageService {
         throw new NotFoundException();
       }
 
-      if (message.user.id !== user.id) {
+      if (message.user.id !== userId) {
         throw new UnauthorizedException();
       }
 
