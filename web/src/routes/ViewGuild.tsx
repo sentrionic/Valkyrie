@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Channels } from '../components/layouts/chat/Channels';
 import { GuildList } from '../components/layouts/chat/GuildList';
 import { ChannelHeader } from '../components/layouts/chat/ChannelHeader';
@@ -8,14 +8,17 @@ import { ChatScreen } from '../components/layouts/chat/ChatScreen';
 import { AppLayout } from '../components/layouts/AppLayout';
 
 export const ViewGuild: React.FC = () => {
+  const [showMemberList, setShowMemberList] = useState(false);
+  const toggleMemberList = () => setShowMemberList(!showMemberList);
+
   return (
-    <AppLayout>
+    <AppLayout showLastColumn={showMemberList}>
       <GuildList />
       <Channels />
-      <ChannelHeader />
+      <ChannelHeader toggleMemberList={toggleMemberList} />
       <ChatScreen />
       <MessageInput />
-      <MemberList />
+      {showMemberList && <MemberList />}
     </AppLayout>
   );
 };

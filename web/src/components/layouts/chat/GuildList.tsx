@@ -9,10 +9,16 @@ export const GuildList: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <GridItem gridColumn={1} gridRow={'1 / 4'} bg='#202225' overflowY='hidden'>
+    <GridItem gridColumn={1} gridRow={'1 / 4'} bg='#202225' overflowY='auto' css={{
+      "&::-webkit-scrollbar": {
+        width: "0",
+      },
+    }}>
       <HomeIcon />
       <UnorderedList listStyleType='none' ml='0'>
-        <GuildListItem />
+        {[...Array(15)].map((x, i) =>
+          <GuildListItem key={`${i}`} />
+        )}
       </UnorderedList>
       <AddGuildIcon onOpen={onOpen} />
       <AddGuildModal isOpen={isOpen} onClose={onClose} />

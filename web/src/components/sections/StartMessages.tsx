@@ -10,7 +10,7 @@ export const StartMessages: React.FC = () => {
     >
       <Box textAlign={"center"}>
         <Heading>Welcome to #general</Heading>
-        <Text>This is the start of #general channel</Text>
+        <Text>This is the start of the #general channel</Text>
       </Box>
     </Flex>
   );

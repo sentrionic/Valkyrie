@@ -72,18 +72,18 @@ export class ChannelService {
 
   async getOrCreateChannel(
     guildId: string,
-    members: string[],
-    user: User,
+    members: string,
+    userId: string,
   ): Promise<DMChannelResponse> {
     const member = await this.memberRepository.findOne({
-      where: { guildId, userId: user.id },
+      where: { guildId, userId },
     });
 
     if (!member) {
       throw new Error('Not Authorized');
     }
 
-    const allMembers = [...members, user.id];
+    const allMembers = [...members, userId];
 
     // create string containing all member ids and seperate them with a comma
     let array = '';

@@ -13,16 +13,15 @@ export const AddGuildIcon: React.FC<AddGuildIconProps> = ({ onOpen }) => {
       m="auto"
       align="center"
       justify="center"
-      bg="#36393f"
+      bg='brandGray.light'
       borderRadius="50%"
-      h="50px"
-      w="50px"
+      h='48px'
+      w='48px'
       _hover={{
-        borderStyle: "solid",
-        borderWidth: "thick",
-        borderColor: "#707070",
         cursor: "pointer",
-        borderRadius: "25%",
+        borderRadius: "35%",
+        bg: '#43b581',
+        color: 'white'
       }}
       onClick={onOpen}
     >

@@ -1,13 +1,19 @@
-import React from "react";
-import { GridItem, Flex, Text, Icon } from "@chakra-ui/react";
-import { FaHashtag } from "react-icons/fa";
-import { BsPeopleFill } from "react-icons/bs";
+import React from 'react';
+import { GridItem, Flex, Text, Icon } from '@chakra-ui/react';
+import { FaHashtag } from 'react-icons/fa';
+import { BsPeopleFill } from 'react-icons/bs';
 
-export const ChannelHeader: React.FC = () => {
+interface ChannelHeaderProps {
+  toggleMemberList: () => void;
+}
+
+export const ChannelHeader: React.FC<ChannelHeaderProps> = ({
+  toggleMemberList,
+}) => {
   return (
     <GridItem
       gridColumn={3}
-      gridRow={"1"}
+      gridRow={'1'}
       bg="brandGray.light"
       padding="10px"
       zIndex="2"
@@ -24,7 +30,8 @@ export const ChannelHeader: React.FC = () => {
           as={BsPeopleFill}
           fontSize="20px"
           mr="2"
-          _hover={{ cursor: "pointer" }}
+          _hover={{ cursor: 'pointer' }}
+          onClick={toggleMemberList}
         />
       </Flex>
     </GridItem>

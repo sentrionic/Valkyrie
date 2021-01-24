@@ -1,7 +1,21 @@
-import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MessageService } from './message.service';
 import { AuthGuard } from '../config/auth.guard';
 import { GetUser } from '../config/user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { BufferFile } from '../types/BufferFile';
+import { Message } from '../entities/message.entity';
 
 @Controller('messages')
 export class MessageController {
@@ -19,15 +33,15 @@ export class MessageController {
   //   return this.pubSub.asyncIterator(MESSAGE_SUBSCRIPTION);
   // }
   //
-  // @Query(() => [Message!]!)
-  // @UseGuards(AuthGuard)
-  // async messages(
-  //   @Args('cursor', { nullable: true }) cursor: string,
-  //   @Args('channelId') channelId: string,
-  //   @GetUser() user: User,
-  // ): Promise<Message[]> {
-  //   return this.messageService.getMessages(cursor, channelId, user.id);
-  // }
+  @Get("/:channelId/messages")
+  @UseGuards(AuthGuard)
+  async messages(
+    @Param('channelId') channelId: string,
+    @GetUser() userId: string,
+    @Body('cursor') cursor?: string | null,
+  ): Promise<Message[]> {
+    return this.messageService.getMessages(cursor, channelId, userId);
+  }
   //
   // @ResolveField(() => [MemberResponse!]!)
   // async user(
@@ -38,13 +52,13 @@ export class MessageController {
   // }
   //
   @Post("/:channelId")
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthGuard)
   async createMessage(
     @GetUser() user: string,
     @Param('channelId') channelId: string,
     @Body('text') text?: string,
-    @Args({ name: 'file', nullable: true, type: () => GraphQLUpload })
-      file?: FileUpload,
+    @UploadedFile() file?: BufferFile,
   ): Promise<boolean> {
     return this.messageService.createMessage(user, channelId, text, file);
   }

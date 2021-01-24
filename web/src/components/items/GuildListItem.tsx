@@ -4,22 +4,21 @@ import { ListItem } from '@chakra-ui/react';
 export const GuildListItem: React.FC = () => {
   return (
     <ListItem
-      h='50px'
-      w='50px'
-      bg='#36393f'
+      h='48px'
+      w='48px'
+      bg='brandGray.light'
       m='auto'
-      mb='10px'
+      mb='3'
       fontSize='24px'
       borderRadius='50%'
       alignItems='center'
       justifyContent='center'
       display='flex'
       _hover={{
-        borderStyle: 'solid',
-        borderWidth: 'thick',
-        borderColor: '#707070',
         cursor: 'pointer',
-        borderRadius: '25%',
+        borderRadius: '35%',
+        bg: 'highlight.standard',
+        color: 'white'
       }}
     >
       H

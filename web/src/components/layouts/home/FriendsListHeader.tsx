@@ -20,7 +20,7 @@ export const FriendsListHeader: React.FC = () => {
           </Text>
         </Flex>
         <LightMode>
-          <Button size='sm' colorScheme='blue'>
+          <Button size='sm' bg={"#43b581"} _hover={{ bg: '#43b581' }} _active={{ bg: '#43b581' }} >
             Add Friend
           </Button>
         </LightMode>

@@ -1,20 +1,11 @@
-import React from "react";
-import {
-  Flex,
-  Heading,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-} from "@chakra-ui/react";
-import { FiChevronDown, FiX } from "react-icons/fi";
-import { FaUserPlus } from "react-icons/fa";
-import { MdAddCircle } from "react-icons/md";
-import { HiLogout } from "react-icons/hi";
-import { StyledMenuList } from "./StyledMenuList";
-import { StyledMenuItem, StyledRedMenuItem } from "./StyledMenuItem";
+import React from 'react';
+import { Flex, Heading, Icon, Menu, MenuButton } from '@chakra-ui/react';
+import { FiChevronDown, FiX } from 'react-icons/fi';
+import { FaUserPlus } from 'react-icons/fa';
+import { MdAddCircle } from 'react-icons/md';
+import { HiLogout } from 'react-icons/hi';
+import { StyledMenuList } from './StyledMenuList';
+import { StyledMenuItem, StyledRedMenuItem } from './StyledMenuItem';
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -37,19 +28,19 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({
           </Flex>
           <StyledMenuList>
             <StyledMenuItem
-              label={"Create Channel"}
+              label={'Create Channel'}
               icon={MdAddCircle}
               handleClick={channelOpen}
             />
             <StyledMenuItem
-              label={"Invite People"}
+              label={'Invite People'}
               icon={FaUserPlus}
               handleClick={inviteOpen}
             />
             <StyledRedMenuItem
-              label={"Leave Server"}
+              label={'Leave Server'}
               icon={HiLogout}
-              handleClick={() => console.log("Leave")}
+              handleClick={() => console.log('Leave')}
             />
           </StyledMenuList>
         </>

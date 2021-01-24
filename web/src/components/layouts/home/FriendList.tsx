@@ -18,8 +18,9 @@ export const FriendList: React.FC = () => {
         css={scrollbarCss}
       >
         <UnorderedList listStyleType='none' ml='0' w='full' mt='2'>
-          <FriendsListItem />
-          <FriendsListItem />
+          {[...Array(15)].map((x, i) =>
+            <FriendsListItem key={`${i}`} />
+          )}
         </UnorderedList>
       </GridItem>
     </>
