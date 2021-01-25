@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as sharp from 'sharp';
 import { config } from 'dotenv';
 import { BufferFile } from '../types/BufferFile';
+import { nanoid } from 'nanoid';
 
 config();
 
@@ -74,7 +75,7 @@ export const uploadAvatarToS3 = async (
 
   const params = {
     Bucket: process.env.AWS_STORAGE_BUCKET_NAME as string,
-    Key: `files/${directory}/avatar.webp`,
+    Key: `files/${directory}/${nanoid(20)}.webp`,
     Body: stream,
     ContentType: 'image/webp',
   };

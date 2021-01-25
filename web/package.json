@@ -12,6 +12,7 @@
     "framer-motion": ">=3.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-easy-crop": "^3.3.1",
     "react-icons": "^4.1.0",
     "react-infinite-scroll-component": "^5.1.0",
     "react-query": "^3.5.16",

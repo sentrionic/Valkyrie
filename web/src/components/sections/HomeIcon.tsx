@@ -1,8 +1,11 @@
-import React from 'react';
-import { Divider, Flex, useColorModeValue } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Divider, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Link, useLocation } from "react-router-dom";
 
 export const HomeIcon: React.FC = () => {
+  const location = useLocation();
+  const isActive = location.pathname === "/channels/me";
+
   return (
     <Flex direction="column" my="2" align="center">
       <Link to="/channels/me">
@@ -11,15 +14,15 @@ export const HomeIcon: React.FC = () => {
           m="auto"
           align="center"
           justify="center"
-          bg="brandGray.light"
-          borderRadius="50%"
+          bg={isActive ? "highlight.standard" : "brandGray.light"}
+          borderRadius={isActive ? "35%" : "50%"}
           h="48px"
           w="48px"
+          color="white"
           _hover={{
-            cursor: 'pointer',
-            borderRadius: '35%',
-            bg: 'highlight.standard',
-            color: 'white',
+            cursor: "pointer",
+            borderRadius: "35%",
+            bg: "highlight.standard",
           }}
         >
           <Logo />
@@ -31,7 +34,7 @@ export const HomeIcon: React.FC = () => {
 };
 
 const Logo = () => {
-  const fill = useColorModeValue('#2D3748', '#fff');
+  const fill = useColorModeValue("#2D3748", "#fff");
   return (
     <svg width="27pt" height="22pt" viewBox="0 0 27 22" version="1.1">
       <g id="surface1" fill={fill}>

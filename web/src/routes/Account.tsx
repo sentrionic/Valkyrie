@@ -23,15 +23,21 @@ import { ChangePasswordModal } from "../components/modals/ChangePasswordModal";
 import { toErrorMap } from "../lib/utils/toErrorMap";
 import { userStore } from "../lib/stores/userStore";
 import { UserSchema } from "../lib/utils/yup-schemas";
-import { getAccount, updateAccount } from '../lib/api/handler/account';
-import { AccountResponse } from '../lib/api/models';
-import { logout } from '../lib/api/handler/auth';
+import { getAccount, updateAccount } from "../lib/api/handler/account";
+import { AccountResponse } from "../lib/api/models";
+import { logout } from "../lib/api/handler/auth";
+import { CropImageModal } from "../components/modals/CropImageModal";
 
 export const Account = () => {
   const { colorMode } = useColorMode();
   const history = useHistory();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: cropperIsOpen,
+    onOpen: cropperOnOpen,
+    onClose: cropperOnClose,
+  } = useDisclosure();
 
   const { data: user } = useQuery<AccountResponse>("account", () =>
     getAccount().then((response) => response.data)
@@ -39,15 +45,18 @@ export const Account = () => {
   const logoutUser = userStore((state) => state.logout);
   const setUser = userStore((state) => state.setUser);
 
-  useEffect(() => {
-    if (user) setUser(user);
-  }, [user, setUser]);
-
   const inputFile: any = useRef(null);
   const [imageUrl, setImageUrl] = useState(user?.image || "");
+  const [croppedImage, setCroppedImage] = useState<any>(null);
 
   const closeClicked = () => {
     history.goBack();
+  };
+
+  const applyCrop = (file: Blob) => {
+    setImageUrl(URL.createObjectURL(file));
+    setCroppedImage(new File([file], "avatar"));
+    cropperOnClose();
   };
 
   const logoutClicked = async () => {
@@ -80,7 +89,7 @@ export const Account = () => {
                   const formData = new FormData();
                   formData.append("email", values.email);
                   formData.append("username", values.username);
-                  formData.append("image", values.image ?? imageUrl);
+                  formData.append("image", croppedImage ?? imageUrl);
                   const { data } = await updateAccount(formData);
                   if (data) {
                     setUser(data);
@@ -100,7 +109,7 @@ export const Account = () => {
                 }
               }}
             >
-              {({ isSubmitting, setFieldValue, values }) => (
+              {({ isSubmitting, values }) => (
                 <Form>
                   <Flex mb="4" justify="center">
                     <Tooltip label="Change Avatar" aria-label="Change Avatar">
@@ -120,10 +129,10 @@ export const Account = () => {
                       hidden
                       onChange={async (e) => {
                         if (!e.currentTarget.files) return;
-                        setFieldValue("image", e.currentTarget.files[0]);
                         setImageUrl(
                           URL.createObjectURL(e.currentTarget.files[0])
                         );
+                        cropperOnOpen();
                       }}
                     />
                   </Flex>
@@ -202,6 +211,12 @@ export const Account = () => {
         </Box>
       </Box>
       <ChangePasswordModal isOpen={isOpen} onClose={onClose} />
+      <CropImageModal
+        isOpen={cropperIsOpen}
+        onClose={cropperOnClose}
+        initialImage={imageUrl}
+        applyCrop={applyCrop}
+      />
     </Flex>
   );
 };

@@ -14,7 +14,7 @@ import { ResetPasswordInput } from '../models/dto/ResetPasswordInput';
 import { ChangePasswordInput } from '../models/dto/ChangePasswordInput';
 import { UpdateInput } from '../models/dto/UpdateInput';
 import { BufferFile } from '../types/BufferFile';
-import { uploadAvatarToS3 } from '../utils/fileUtils';
+import { deleteFile, uploadAvatarToS3 } from '../utils/fileUtils';
 import { UserResponse } from '../models/response/UserResponse';
 import * as argon2 from 'argon2';
 
@@ -210,6 +210,7 @@ export class UserService {
 
     if (image) {
       const directory = `valkyrie/users/${id}`;
+      await deleteFile(user.image);
       data.image = await uploadAvatarToS3(directory, image);
     }
 

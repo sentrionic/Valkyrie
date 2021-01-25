@@ -14,7 +14,7 @@ import { InputField } from "../components/common/InputField";
 import { toErrorMap } from "../lib/utils/toErrorMap";
 import { userStore } from "../lib/stores/userStore";
 import { ResetPasswordSchema } from "../lib/utils/yup-schemas";
-import { resetPassword } from '../lib/api/handler/auth';
+import { resetPassword } from "../lib/api/handler/auth";
 
 interface TokenProps {
   token: string;
@@ -45,7 +45,7 @@ export const ResetPassword = () => {
                   const { data } = await resetPassword({ ...values, token });
                   if (data) {
                     setUser(data);
-                    history.push("/account");
+                    history.push("/channels/me");
                   }
                 } catch (err) {
                   const errors = err?.response?.data?.errors;

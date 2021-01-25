@@ -14,7 +14,7 @@ import { InputField } from "../components/common/InputField";
 import { toErrorMap } from "../lib/utils/toErrorMap";
 import { userStore } from "../lib/stores/userStore";
 import { RegisterSchema } from "../lib/utils/yup-schemas";
-import { register } from '../lib/api/handler/auth';
+import { register } from "../lib/api/handler/auth";
 
 export const Register = () => {
   const history = useHistory();
@@ -39,7 +39,7 @@ export const Register = () => {
                   const { data } = await register(values);
                   if (data) {
                     setUser(data);
-                    history.push("/account");
+                    history.push("/channels/me");
                   }
                 } catch (err) {
                   if (err?.response?.data?.errors) {

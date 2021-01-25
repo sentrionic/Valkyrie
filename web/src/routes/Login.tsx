@@ -14,7 +14,7 @@ import { InputField } from "../components/common/InputField";
 import { toErrorMap } from "../lib/utils/toErrorMap";
 import { userStore } from "../lib/stores/userStore";
 import { LoginSchema } from "../lib/utils/yup-schemas";
-import { login } from '../lib/api/handler/auth';
+import { login } from "../lib/api/handler/auth";
 
 export const Login = () => {
   const history = useHistory();
@@ -39,9 +39,12 @@ export const Login = () => {
                   const { data } = await login(values);
                   if (data) {
                     setUser(data);
-                    history.push("/account");
+                    history.push("/channels/me");
                   }
                 } catch (err) {
+                  if (err?.response?.status === 401) {
+                    setErrors({ password: "Invalid Credentials" });
+                  }
                   if (err?.response?.data?.errors) {
                     const errors = err?.response?.data?.errors;
                     setErrors(toErrorMap(errors));

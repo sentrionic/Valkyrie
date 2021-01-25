@@ -5,7 +5,7 @@ import {
   RouteProps,
 } from "react-router-dom";
 import { getCurrent } from "../lib/stores/userStore";
-import React from 'react';
+import React from "react";
 
 interface IProps extends RouteProps {
   component: React.ComponentType<RouteComponentProps<any>>;
@@ -21,7 +21,7 @@ export const AuthRoute: React.FC<IProps> = ({
     <Route
       {...rest}
       render={(props) =>
-        true || storage?.state?.current ? (
+        current || storage?.state?.current ? (
           <Component {...props} />
         ) : (
           <Redirect to="/login" />

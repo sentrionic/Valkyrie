@@ -13,7 +13,11 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
-  ApiBody, ApiConsumes, ApiCookieAuth, ApiCreatedResponse, ApiOkResponse,
+  ApiBody,
+  ApiConsumes,
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -25,11 +29,15 @@ import {
   ChangePasswordSchema,
   ForgotPasswordSchema,
   RegisterSchema,
-  ResetPasswordSchema, UserSchema,
+  ResetPasswordSchema,
+  UserSchema,
 } from '../validation/user.schema';
 import { COOKIE_NAME } from '../utils/constants';
 import { ChangePasswordInput } from '../models/dto/ChangePasswordInput';
-import { ForgotPasswordInput, ResetPasswordInput } from '../models/dto/ResetPasswordInput';
+import {
+  ForgotPasswordInput,
+  ResetPasswordInput,
+} from '../models/dto/ResetPasswordInput';
 import { AuthGuard } from '../config/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { User } from '../entities/user.entity';
@@ -40,8 +48,7 @@ import { UserResponse } from '../models/response/UserResponse';
 
 @Controller('account')
 export class UserController {
-  constructor(private userService: UserService) {
-  }
+  constructor(private userService: UserService) {}
 
   @Post('/register')
   @ApiOperation({ summary: 'Register Account' })
@@ -80,7 +87,7 @@ export class UserController {
   @ApiBody({ type: ChangePasswordInput })
   async changePassword(
     @Body(new YupValidationPipe(ChangePasswordSchema))
-      input: ChangePasswordInput,
+    input: ChangePasswordInput,
     @GetUser() id: string,
   ): Promise<boolean> {
     return await this.userService.changePassword(input, id);
@@ -91,7 +98,7 @@ export class UserController {
   @ApiCreatedResponse({ description: 'Send Email' })
   async forgotPassword(
     @Body(new YupValidationPipe(ForgotPasswordSchema))
-      { email }: ForgotPasswordInput,
+    { email }: ForgotPasswordInput,
   ): Promise<boolean> {
     return await this.userService.forgotPassword(email);
   }
@@ -102,7 +109,7 @@ export class UserController {
   @ApiBody({ type: ResetPasswordInput })
   async resetPassword(
     @Body(new YupValidationPipe(ResetPasswordSchema))
-      input: ResetPasswordInput,
+    input: ResetPasswordInput,
     @Req() req: e.Request,
   ): Promise<UserResponse> {
     return await this.userService.resetPassword(input, req);
@@ -133,7 +140,7 @@ export class UserController {
       new YupValidationPipe(UserSchema),
       new ValidationPipe({ transform: true }),
     )
-      data: UpdateInput,
+    data: UpdateInput,
     @UploadedFile() image?: BufferFile,
   ): Promise<UserResponse> {
     return await this.userService.updateUser(id, data, image);
