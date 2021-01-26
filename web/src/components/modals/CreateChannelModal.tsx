@@ -16,7 +16,7 @@ import {
 import { Form, Formik } from "formik";
 import React from "react";
 import { AiOutlineLock } from "react-icons/ai";
-import { ChangePasswordSchema } from "../../lib/utils/yup-schemas";
+import { ChangePasswordSchema } from "../../lib/utils/validation/yup-schemas";
 import { InputField } from "../common/InputField";
 
 interface IProps {

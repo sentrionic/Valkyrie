@@ -8,10 +8,10 @@ export class MemberGuard implements CanActivate {
     const request: e.Request = context.switchToHttp().getRequest();
     if (!(request?.session["userId"])) return false;
 
-    const { id } = request.params;
+    const { guildId } = request.params;
 
     const member = await Member.findOne({
-      where: { guildId: id, userId: request.session["userId"] },
+      where: { guildId, userId: request.session["userId"] },
     });
     return !!member;
   }

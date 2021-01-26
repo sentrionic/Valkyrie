@@ -13,7 +13,7 @@ import {
 import { Form, Formik } from "formik";
 import React from "react";
 import { toErrorMap } from "../../lib/utils/toErrorMap";
-import { ChangePasswordSchema } from "../../lib/utils/yup-schemas";
+import { ChangePasswordSchema } from "../../lib/utils/validation/yup-schemas";
 import { InputField } from "../common/InputField";
 import { changePassword } from '../../lib/api/handler/auth';
 

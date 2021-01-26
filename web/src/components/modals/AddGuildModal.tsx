@@ -14,6 +14,9 @@ import {
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../common/InputField";
+import { GuildSchema } from '../../lib/utils/validation/guild.schema';
+import { createGuild } from '../../lib/api/handler/guilds';
+import { userStore } from '../../lib/stores/userStore';
 
 interface IProps {
   isOpen: boolean;
@@ -39,9 +42,9 @@ export const AddGuildModal: React.FC<IProps> = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={submitClose} isCentered size="sm">
       <ModalOverlay />
 
-      {screen === AddGuildScreen.INVITE && <JoinServerModal goBack={goBack} />}
+      {screen === AddGuildScreen.INVITE && <JoinServerModal goBack={goBack} submitClose={submitClose} />}
       {screen === AddGuildScreen.CREATE && (
-        <CreateServerModal goBack={goBack} />
+        <CreateServerModal goBack={goBack} submitClose={submitClose} />
       )}
       {screen === AddGuildScreen.START && (
         <ModalContent bg="brandGray.light">
@@ -96,9 +99,10 @@ export const AddGuildModal: React.FC<IProps> = ({ isOpen, onClose }) => {
 
 interface IScreenProps {
   goBack: () => void;
+  submitClose: () => void;
 }
 
-const JoinServerModal: React.FC<IScreenProps> = ({ goBack }) => {
+const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
   return (
     <ModalContent bg="brandGray.light">
       <Formik
@@ -164,20 +168,25 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack }) => {
   );
 };
 
-const CreateServerModal: React.FC<IScreenProps> = ({ goBack }) => {
+const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
+
+  const user = userStore(state => state.current);
+
   return (
     <ModalContent bg="brandGray.light">
       <Formik
         initialValues={{
-          name: "",
+          name: `${user?.username}'s server`,
         }}
-        //validationSchema={ChangePasswordSchema}
-        onSubmit={async (values, { setErrors }) => {
-          console.log(values.name);
-          //onClose();
+        validationSchema={GuildSchema}
+        onSubmit={async (values) => {
+          const { data } = await createGuild(values);
+          if (data) {
+            submitClose();
+          }
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values }) => (
           <Form>
             <ModalHeader textAlign="center" fontWeight="bold" pb="0">
               Create your server
@@ -187,7 +196,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack }) => {
               <InputField
                 label="server name"
                 name="name"
-                value={`Sen's server`}
+                value={values.name}
               />
             </ModalBody>
 

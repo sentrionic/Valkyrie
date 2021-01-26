@@ -26,3 +26,19 @@ export interface AccountResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Channel {
+  id: string;
+  name: string;
+  public: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Guild {
+  id: string;
+  name: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+}

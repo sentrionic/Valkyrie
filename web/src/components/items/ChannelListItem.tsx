@@ -1,19 +1,34 @@
 import { Flex, ListItem, Text } from '@chakra-ui/react';
 import { FaHashtag } from 'react-icons/fa';
 import React from 'react';
+import { Channel } from '../../lib/api/models';
+import { Link, useLocation } from 'react-router-dom';
 
-export const ChannelListItem: React.FC = () => {
+interface ChannelListItemProps {
+  channel: Channel,
+  guildId: string,
+}
+
+export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guildId }) => {
+
+  const currentPath = `/channels/${guildId}/${channel.id}`;
+  const location = useLocation();
+  const isActive = location.pathname === currentPath;
+
   return (
-    <ListItem
-      p="5px"
-      m="0 10px"
-      _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer' }}
-      mb="2px"
-    >
-      <Flex align="center">
-        <FaHashtag />
-        <Text ml="2">general</Text>
-      </Flex>
-    </ListItem>
+    <Link to={currentPath}>
+      <ListItem
+        p='5px'
+        m='0 10px'
+        _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer' }}
+        bg={isActive ? '#36393f' : undefined}
+        mb='2px'
+      >
+        <Flex align='center'>
+          <FaHashtag />
+          <Text ml='2'>{channel.name}</Text>
+        </Flex>
+      </ListItem>
+    </Link>
   );
 };

@@ -9,6 +9,9 @@ export class Guild extends AbstractEntity {
   @Column('varchar', { length: 50 })
   name: string;
 
+  @Column('varchar')
+  ownerId: string;
+
   @ManyToOne(() => Member, (member) => member.guild)
   @Exclude()
   members: Promise<Member[]>;

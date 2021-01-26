@@ -13,16 +13,28 @@ import { MdAddCircle } from 'react-icons/md';
 import { HiLogout } from 'react-icons/hi';
 import { StyledMenuList } from './StyledMenuList';
 import { StyledMenuItem, StyledRedMenuItem } from './StyledMenuItem';
+import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { Guild } from '../../lib/api/models';
 
 interface GuildMenuProps {
   channelOpen: () => void;
   inviteOpen: () => void;
 }
 
+interface RouterProps {
+  guildId: string;
+}
+
 export const GuildMenu: React.FC<GuildMenuProps> = ({
   channelOpen,
   inviteOpen,
 }) => {
+
+  const { guildId } = useParams<RouterProps>();
+  const { data } = useQuery<Guild[]>('guilds');
+  const guild = data?.find(g => g.id === guildId);
+
   return (
     <GridItem
       gridColumn={2}
@@ -36,7 +48,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({
         {({ isOpen }) => (
           <>
             <Flex justify="space-between" align="center">
-              <Heading fontSize="20px">Harmony</Heading>
+              <Heading fontSize="20px">{guild?.name}</Heading>
               <MenuButton>
                 <Icon as={!isOpen ? FiChevronDown : FiX} />
               </MenuButton>

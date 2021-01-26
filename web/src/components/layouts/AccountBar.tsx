@@ -2,8 +2,12 @@ import React from 'react';
 import { Avatar, Flex, IconButton, Text } from '@chakra-ui/react';
 import { RiSettings5Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { userStore } from '../../lib/stores/userStore';
 
 export const AccountBar = () => {
+
+  const user = userStore(state => state.current);
+
   return (
     <Flex
       p="10px"
@@ -15,8 +19,8 @@ export const AccountBar = () => {
       justify="space-between"
     >
       <Flex align="center">
-        <Avatar size="sm" />
-        <Text ml="2">Username</Text>
+        <Avatar size="sm" src={user?.image} />
+        <Text ml="2">{user?.username}</Text>
       </Flex>
       <Link to={'/account'}>
         <IconButton

@@ -41,7 +41,6 @@ export const CropImageModal: React.FC<IProps> = ({
   const showCroppedImage = useCallback(async () => {
     try {
       const croppedImage = await getCroppedImg(initialImage, croppedAreaPixels);
-      console.log("Here");
       applyCrop(croppedImage);
     } catch (e) {
       console.error(e);
@@ -77,7 +76,7 @@ export const CropImageModal: React.FC<IProps> = ({
             aria-label="zoom"
             min={1}
             max={3}
-            step={0.1}
+            step={0.01}
             value={zoom}
             onChange={(value: number) => setZoom(value)}
             my="4"

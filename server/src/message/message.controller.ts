@@ -17,7 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
 import { Message } from '../entities/message.entity';
 
-@Controller('messages')
+@Controller('channels')
 export class MessageController {
   constructor(
     private readonly messageService: MessageService,
@@ -51,7 +51,7 @@ export class MessageController {
   //   return await ctx.userLoader.load(message.user.id);
   // }
   //
-  @Post("/:channelId")
+  @Post("/:channelId/messages")
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthGuard)
   async createMessage(
@@ -63,7 +63,7 @@ export class MessageController {
     return this.messageService.createMessage(user, channelId, text, file);
   }
 
-  @Put("/:id")
+  @Put("/messages/:messageId")
   @UseGuards(AuthGuard)
   async editMessage(
     @GetUser() user: string,
@@ -73,11 +73,11 @@ export class MessageController {
     return this.messageService.editMessage(user, messageId, text);
   }
 
-  @Delete("/:id")
+  @Delete("/messages/:messageId")
   @UseGuards(AuthGuard)
   async deleteMessage(
     @GetUser() userId: string,
-    @Param('id') messageId: string,
+    @Param('messageId') messageId: string,
   ): Promise<boolean> {
     return this.messageService.deleteMessage(userId, messageId);
   }

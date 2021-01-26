@@ -70,6 +70,11 @@ export class ChannelService {
     };
   }
 
+  async getGuildChannels(guildId: string): Promise<ChannelResponse[]> {
+    const channels = await this.channelRepository.find({ where: { guild: guildId } });
+    return channels.map(c => c.toJson());
+  }
+
   async getOrCreateChannel(
     guildId: string,
     members: string,

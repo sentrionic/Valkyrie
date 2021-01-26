@@ -1,15 +1,25 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ChannelService } from './channel.service';
 import { AuthGuard } from '../config/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { DMChannelResponse } from '../models/response/DMChannelResponse';
+import { MemberGuard } from '../config/member.guard';
 
-@Controller('channel')
+@Controller('channels')
 export class ChannelController {
-  constructor(private readonly channelService: ChannelService) {}
+  constructor(private readonly channelService: ChannelService) {
+  }
 
-  @Post("/:guildId/channels")
-  @UseGuards(AuthGuard)
+  @Get('/:guildId')
+  @UseGuards(MemberGuard)
+  async getGuildChannels(
+    @Param('guildId') guildId: string
+  ) {
+    return this.channelService.getGuildChannels(guildId);
+  }
+
+  @Post('/:guildId')
+  @UseGuards(MemberGuard)
   async createChannel(
     @GetUser() userId: string,
     @Param('guildId') guildId: string,
@@ -26,12 +36,12 @@ export class ChannelController {
     );
   }
 
-  @Post("/:guildId/dms")
+  @Post('/:guildId/dms')
   @UseGuards(AuthGuard)
   async getOrCreateChannel(
     @GetUser() userId: string,
     @Body('memberId') member: string,
-    @Param("guildId") guildId: string
+    @Param('guildId') guildId: string,
   ): Promise<DMChannelResponse> {
     return this.channelService.getOrCreateChannel(guildId, member, userId);
   }

@@ -13,7 +13,7 @@ import { Link as RLink, useHistory, useParams } from "react-router-dom";
 import { InputField } from "../components/common/InputField";
 import { toErrorMap } from "../lib/utils/toErrorMap";
 import { userStore } from "../lib/stores/userStore";
-import { ResetPasswordSchema } from "../lib/utils/yup-schemas";
+import { ResetPasswordSchema } from "../lib/utils/validation/yup-schemas";
 import { resetPassword } from "../lib/api/handler/auth";
 
 interface TokenProps {

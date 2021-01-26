@@ -1,14 +1,18 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { getManager, Repository } from 'typeorm';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { getConnection, getManager, Repository } from 'typeorm';
 import { Guild } from '../entities/guild.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from '../entities/channel.entity';
 import { User } from '../entities/user.entity';
 import { Member } from '../entities/member.entity';
-import { nanoid } from 'nanoid';
+import { customAlphabet, nanoid } from 'nanoid';
 import { redis } from '../config/redis';
 import { INVITE_LINK_PREFIX } from '../utils/constants';
 import { MemberResponse } from '../models/response/MemberResponse';
+import { GuildResponse } from '../models/response/GuildResponse';
+
+const alphabet = '0123456789';
+const idGenerator = customAlphabet(alphabet, 20);
 
 @Injectable()
 export class GuildService {
@@ -23,7 +27,7 @@ export class GuildService {
   async getGuildMembers(guildId: string): Promise<MemberResponse[]> {
     const manager = getManager();
     return await manager.query(
-      `select *
+      `select u.id, u.username, u.image, m.admin, u."createdAt", u."updatedAt"
        from users as u
                 join members m on u."id"::text = m."userId"
        where m."guildId" = $1`,
@@ -31,14 +35,14 @@ export class GuildService {
     );
   }
 
-  async getUserGuilds(userId: string): Promise<Guild[]> {
+  async getUserGuilds(userId: string): Promise<GuildResponse[]> {
     const manager = getManager();
     return await manager.query(
-      `select *
-       from guild
-                join members as member on guild."id"::text = member."guildId"
+      `select distinct g."id", g."name", g."ownerId", g."createdAt", g."updatedAt" 
+       from guilds g
+                join members as member on g."id"::text = member."guildId"
        where member."userId" = $1
-       order by guild."createdAt" ASC;`,
+       order by g."createdAt";`,
       [userId],
     );
   }
@@ -77,7 +81,7 @@ export class GuildService {
       let guild = null;
 
       await getManager().transaction(async (entityManager) => {
-        guild = this.guildRepository.create();
+        guild = this.guildRepository.create({ ownerId: userId });
         const channel = this.channelRepository.create({ name: 'general' });
 
         guild.name = name;
@@ -88,7 +92,9 @@ export class GuildService {
         await channel.save();
         await entityManager.save(channel);
 
+        // ID gets inserted later, ignore for now
         await entityManager.insert(Member, {
+          id: await idGenerator(),
           guildId: guild.id,
           userId,
           admin: true,
@@ -104,7 +110,7 @@ export class GuildService {
   async generateInviteLink(guildId: string): Promise<string> {
     const token = nanoid(8);
     await redis.set(INVITE_LINK_PREFIX + token, guildId, 'ex', 60 * 60 * 24); // 1 day expiration
-    return `${process.env.BACKEND_HOST}/${token}`;
+    return `${process.env.CORS_ORIGIN}/${token}`;
   }
 
   async joinGuild(token: string, userId: string): Promise<Guild> {
@@ -124,13 +130,13 @@ export class GuildService {
       throw new NotFoundException();
     }
 
-    try {
-      await this.memberRepository.insert({ userId, guildId });
-    } catch (err) {
-      if (err.code === '23505') {
-        throw new InternalServerErrorException();
-      }
+    const isMember = await this.memberRepository.findOne({ where: { userId, guildId } });
+
+    if (isMember) {
+      throw new BadRequestException();
     }
+
+    await this.memberRepository.insert({ id: await idGenerator(), userId, guildId });
 
     await redis.del(INVITE_LINK_PREFIX + token);
 
