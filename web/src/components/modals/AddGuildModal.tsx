@@ -15,8 +15,9 @@ import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../common/InputField";
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
-import { createGuild } from '../../lib/api/handler/guilds';
+import { createGuild, joinGuild } from '../../lib/api/handler/guilds';
 import { userStore } from '../../lib/stores/userStore';
+import { toErrorMap } from '../../lib/utils/toErrorMap';
 
 interface IProps {
   isOpen: boolean;
@@ -109,10 +110,22 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
         initialValues={{
           link: "",
         }}
-        //validationSchema={ChangePasswordSchema}
-        onSubmit={async (values, { setErrors }) => {
-          console.log(values.link);
-          //onClose();
+        onSubmit={ async (values, { setErrors }) => {
+          if (values.link === "") {
+            setErrors({ link: "Enter a valid link" });
+          } else {
+            try {
+              const { data } = await joinGuild(values);
+              if (data) {
+                submitClose();
+              }
+            } catch (err) {
+              if (err?.response?.data?.errors) {
+                const errors = err?.response?.data?.errors;
+                setErrors(toErrorMap(errors));
+              }
+            }
+          }
         }}
       >
         {({ isSubmitting }) => (

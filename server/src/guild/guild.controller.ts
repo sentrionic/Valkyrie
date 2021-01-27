@@ -15,10 +15,10 @@ export class GuildController {
   constructor(private readonly guildService: GuildService) {
   }
 
-  @Get("/:id/members")
+  @Get("/:guildId/members")
   @UseGuards(MemberGuard)
   async getGuildMembers(
-    @Param('id') guildId: string,
+    @Param('guildId') guildId: string,
     @GetUser() userId: string,
   ): Promise<MemberResponse[]> {
     return await this.guildService.getGuildMembers(guildId);
@@ -60,9 +60,9 @@ export class GuildController {
   @Post("/join")
   @UseGuards(AuthGuard)
   async joinTeam(
-    @Body('token') token: string,
+    @Body('link') link: string,
     @GetUser() user: string,
   ): Promise<Guild> {
-    return this.guildService.joinGuild(token, user);
+    return this.guildService.joinGuild(link, user);
   }
 }

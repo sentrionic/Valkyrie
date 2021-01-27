@@ -1,44 +1,38 @@
+interface BaseModel {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface FieldError {
   field: string;
   message: string;
 }
 
-export interface Member {
-  id: string;
+export interface Member extends BaseModel {
   username: string;
-  avatar: string;
-  createdAt: string;
-  updatedAt: string;
+  image: string;
 }
 
-export interface Message {
-  id: string;
+export interface Message extends BaseModel {
   text?: string;
-  createdAt: string;
-  updatedAt: string;
+  filetype?: string;
+  user: Member;
 }
 
-export interface AccountResponse {
-  id: string;
+export interface AccountResponse extends BaseModel {
   username: string;
   email: string;
   image: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export interface Channel {
-  id: string;
+export interface Channel extends BaseModel {
   name: string;
   public: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export interface Guild {
-  id: string;
+export interface Guild extends BaseModel {
   name: string;
   ownerId: string;
-  createdAt: string;
-  updatedAt: string;
+  default_channel_id: string;
 }

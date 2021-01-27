@@ -1,7 +1,7 @@
 import { GridItem, Text, UnorderedList } from '@chakra-ui/react';
 import React from 'react';
 import { FriendsListButton } from '../../sections/FriendsListButton';
-import { DMListItem } from '../../items/DMListItem';
+// import { DMListItem } from '../../items/DMListItem';
 import { AccountBar } from '../AccountBar';
 
 export const DMSidebar: React.FC = () => {
@@ -36,9 +36,9 @@ export const DMSidebar: React.FC = () => {
         DIRECT MESSAGES
       </Text>
       <UnorderedList listStyleType="none" ml="0" mt="4">
-        {[...Array(15)].map((x, i) => (
-          <DMListItem key={`${i}`} />
-        ))}
+        {/*{[...Array(15)].map((x, i) => (*/}
+        {/*  <DMListItem key={`${i}`} />*/}
+        {/*))}*/}
       </UnorderedList>
       <AccountBar />
     </GridItem>

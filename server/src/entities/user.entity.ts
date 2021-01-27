@@ -1,9 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToMany, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
-import { classToPlain, Exclude } from 'class-transformer';
+import { classToPlain, Exclude, Expose } from 'class-transformer';
 import { UserResponse } from '../models/response/UserResponse';
 import { Member } from './member.entity';
 import { Channel } from './channel.entity';
+import { MemberResponse } from '../models/response/MemberResponse';
 
 @Entity('users')
 export class User extends AbstractEntity {
@@ -11,6 +12,7 @@ export class User extends AbstractEntity {
   username: string;
 
   @Column('varchar', { length: 255, unique: true })
+  @Expose({ groups: ['user'] })
   email: string;
 
   @Column('text')
@@ -32,6 +34,10 @@ export class User extends AbstractEntity {
 
 
   toJSON(): UserResponse {
-    return <UserResponse>classToPlain(this);
+    return <UserResponse>classToPlain(this, { groups: ['user'] });
+  }
+
+  toMember(): MemberResponse {
+    return <MemberResponse>classToPlain(this);
   }
 }

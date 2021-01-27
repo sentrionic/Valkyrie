@@ -1,8 +1,25 @@
 import React from 'react';
 import { GridItem, UnorderedList, Text } from '@chakra-ui/react';
 import { MemberListItem } from '../../items/MemberListItem';
+import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getGuildMembers } from '../../../lib/api/handler/guilds';
+
+interface RouterProps {
+  guildId: string;
+}
 
 export const MemberList: React.FC = () => {
+
+  const { guildId } = useParams<RouterProps>();
+
+  const { data } = useQuery(`members-${guildId}`, () =>
+      getGuildMembers(guildId).then(response => response.data),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+
   return (
     <GridItem
       gridColumn={4}
@@ -27,9 +44,8 @@ export const MemberList: React.FC = () => {
         <Text fontSize="14" p="5px" m="5px 10px">
           Online
         </Text>
-        <MemberListItem />
-        {[...Array(15)].map((x, i) => (
-          <MemberListItem key={`${i}`} />
+        {data?.map(m => (
+          <MemberListItem key={`${m.id}`} member={m} />
         ))}
       </UnorderedList>
     </GridItem>

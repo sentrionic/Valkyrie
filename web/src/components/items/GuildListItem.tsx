@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, ListItem } from '@chakra-ui/react';
+import { ListItem } from '@chakra-ui/react';
 import { Guild } from '../../lib/api/models';
 import { NavLink, useLocation } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ export const GuildListItem: React.FC<GuildListItemProps> = ({ guild }) => {
   const isActive = location.pathname.includes(guild.id);
 
   return (
-    <NavLink to={`/channels/${guild.id}`}>
+    <NavLink to={`/channels/${guild.id}/${guild.default_channel_id}`}>
       <ListItem
         h='48px'
         w='48px'
