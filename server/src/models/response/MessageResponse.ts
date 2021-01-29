@@ -1,6 +1,6 @@
 import { MemberResponse } from './MemberResponse';
 
-class MessageResponse {
+export class MessageResponse {
   id: string;
   text?: string;
   url?: string;

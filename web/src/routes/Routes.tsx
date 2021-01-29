@@ -27,7 +27,7 @@ export const Routes: React.FC = () => {
           <ResetPassword />
         </Route>
         <AuthRoute exact path="/channels/me" component={Home} />
-        <AuthRoute path="/channels/:guildId" component={ViewGuild} />
+        <AuthRoute path="/channels/:guildId/:channelId" component={ViewGuild} />
         <AuthRoute path="/account" component={Account} />
         <Route path="/">
           <Landing />

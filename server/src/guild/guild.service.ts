@@ -27,10 +27,12 @@ export class GuildService {
   async getGuildMembers(guildId: string): Promise<MemberResponse[]> {
     const manager = getManager();
     return await manager.query(
-      `select u.id, u.username, u.image, m.admin, u."createdAt", u."updatedAt"
+      `select distinct u.id, u.username, u.image, m.admin, u."createdAt", u."updatedAt"
        from users as u
                 join members m on u."id"::text = m."userId"
-       where m."guildId" = $1`,
+       where m."guildId" = $1
+       order by u.username
+       `,
       [guildId],
     );
   }
@@ -38,7 +40,8 @@ export class GuildService {
   async getUserGuilds(userId: string): Promise<GuildResponse[]> {
     const manager = getManager();
     return await manager.query(
-      `select distinct g."id", g."name", g."ownerId", g."createdAt", g."updatedAt" 
+      `select distinct g."id", g."name", g."ownerId", g."createdAt", g."updatedAt",
+                       (select c.id as "default_channel_id" from channels c join guilds g on g.id = c."guildId" where g.id = member."guildId" order by c."createdAt" limit 1)
        from guilds g
                 join members as member on g."id"::text = member."guildId"
        where member."userId" = $1

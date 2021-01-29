@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Channel, Guild } from '../models';
+import { Channel, Guild, Member } from '../models';
 import { request } from '../setupAxios';
 import { GuildDto } from '../dtos/GuildDto';
 import { InviteDto } from '../dtos/InviteDto';
@@ -18,3 +18,6 @@ export const getChannels = (id: string): Promise<AxiosResponse<Channel[]>> =>
 
 export const getInviteLink = (id: string): Promise<AxiosResponse<string>> =>
   request.get(`guilds/${id}/invite`);
+
+export const getGuildMembers = (id: string): Promise<AxiosResponse<Member[]>> =>
+  request.get(`guilds/${id}/members`);

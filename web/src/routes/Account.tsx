@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import { ColorModeSwitcher } from "../components/common/ColorModeSwitcher";

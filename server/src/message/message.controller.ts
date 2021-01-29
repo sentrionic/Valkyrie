@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Put, Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -15,7 +15,20 @@ import { AuthGuard } from '../config/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
-import { Message } from '../entities/message.entity';
+import { MessageResponse } from '../models/response/MessageResponse';
+import { YupValidationPipe } from '../utils/yupValidationPipe';
+import { MessageInput } from '../models/dto/MessageInput';
+import { MessageSchema } from '../validation/message.schema';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiCookieAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { User } from '../entities/user.entity';
+import { UpdateInput } from '../models/dto/UpdateInput';
 
 @Controller('channels')
 export class MessageController {
@@ -38,29 +51,27 @@ export class MessageController {
   async messages(
     @Param('channelId') channelId: string,
     @GetUser() userId: string,
-    @Body('cursor') cursor?: string | null,
-  ): Promise<Message[]> {
-    return this.messageService.getMessages(cursor, channelId, userId);
+    @Query('cursor') cursor?: string | null,
+  ): Promise<MessageResponse[]> {
+    return this.messageService.getMessages(channelId, userId, cursor);
   }
-  //
-  // @ResolveField(() => [MemberResponse!]!)
-  // async user(
-  //   @Parent() message: Message,
-  //   @Context() ctx: MyContext,
-  // ): Promise<User[]> {
-  //   return await ctx.userLoader.load(message.user.id);
-  // }
-  //
+
   @Post("/:channelId/messages")
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Send Message' })
+  @ApiOkResponse({ description: 'Message Success', type: Boolean })
+  @ApiUnauthorizedResponse()
+  @ApiBody({ type: MessageInput })
+  @ApiConsumes('multipart/form-data')
   async createMessage(
-    @GetUser() user: string,
+    @GetUser() userId: string,
     @Param('channelId') channelId: string,
-    @Body('text') text?: string,
+    @Body(new YupValidationPipe(MessageSchema)) input: MessageInput,
     @UploadedFile() file?: BufferFile,
   ): Promise<boolean> {
-    return this.messageService.createMessage(user, channelId, text, file);
+    return this.messageService.createMessage(userId, channelId, input, file);
   }
 
   @Put("/messages/:messageId")

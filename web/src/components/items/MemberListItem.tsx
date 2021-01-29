@@ -1,7 +1,12 @@
 import React from 'react';
 import { Avatar, AvatarBadge, Flex, ListItem, Text } from '@chakra-ui/react';
+import { Member } from '../../lib/api/models';
 
-export const MemberListItem: React.FC = () => {
+interface MemberListItemProps {
+  member: Member;
+}
+
+export const MemberListItem: React.FC<MemberListItemProps> = ({ member }) => {
   return (
     <ListItem
       p="5px"
@@ -9,10 +14,10 @@ export const MemberListItem: React.FC = () => {
       _hover={{ bg: "#36393f", borderRadius: "5px", cursor: "pointer" }}
     >
       <Flex align="center">
-        <Avatar size="sm">
+        <Avatar size="sm" src={member.image}>
           <AvatarBadge boxSize="1.25em" bg="green.500" />
         </Avatar>
-        <Text ml="2">Username</Text>
+        <Text ml="2">{member.username}</Text>
       </Flex>
     </ListItem>
   );

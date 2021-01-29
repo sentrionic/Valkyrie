@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 
 interface RouterProps {
   guildId: string;
+  channelId: string;
 }
 
 export const Channels: React.FC = () => {
@@ -28,7 +29,7 @@ export const Channels: React.FC = () => {
   const { guildId } = useParams<RouterProps>();
 
   const { data } = useQuery(`channels-${guildId}`, () =>
-    getChannels(guildId).then(response => response.data),
+      getChannels(guildId).then(response => response.data),
     {
       refetchOnWindowFocus: false,
     },

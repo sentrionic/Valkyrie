@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Message } from '../entities/message.entity';
@@ -6,21 +6,22 @@ import { User } from '../entities/user.entity';
 import { Channel } from '../entities/channel.entity';
 import { uploadToS3 } from '../utils/fileUtils';
 import { BufferFile } from '../types/BufferFile';
-import { MessageData } from '../types/MessageData';
+import { MessageResponse } from '../models/response/MessageResponse';
+import { MessageInput } from '../models/dto/MessageInput';
 
 @Injectable()
 export class MessageService {
   constructor(
-    @InjectRepository(Channel) private userRepository: Repository<User>,
+    @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
   ) {}
 
   async getMessages(
-    cursor: string,
     channelId: string,
     userId: string,
-  ): Promise<Message[]> {
+    cursor?: string,
+  ): Promise<MessageResponse[]> {
     const channel = await this.channelRepository.findOne({
       where: { id: channelId },
     });
@@ -50,64 +51,59 @@ export class MessageService {
       });
     }
 
-    return await queryBuilder.getMany();
+    const messages = await queryBuilder.getMany();
+    return messages.map(m => m.toJSON());
   }
 
   async createMessage(
     userId: string,
     channelId: string,
-    text?: string,
+    input: MessageInput,
     file?: BufferFile,
   ): Promise<boolean> {
-    try {
-      const messageData: MessageData = { text };
 
-      if (file) {
-        const directory = `channels/${channelId}`;
-        const url = await uploadToS3(
-          directory,
-          file
-        );
-        messageData.filetype = 'image/webp';
-        messageData.url = url;
-      }
-
-      const user = await this.userRepository.findOne({ where: { id: userId } });
-
-      const channel = await this.channelRepository.findOne({
-        where: { id: channelId },
-      });
-
-      const message = this.messageRepository.create();
-
-      //TODO: Improve
-      message.text = text;
-      message.url = messageData.url;
-      message.filetype = messageData.filetype;
-      message.user = user;
-      message.channel = channel;
-
-      await message.save();
-
-      // const asyncFunc = async () => {
-      //   this.pubsub.publish(MESSAGE_SUBSCRIPTION, {
-      //     channelId,
-      //     channelMessage: {
-      //       message: {
-      //         message,
-      //         operation: MessageOperation.NEW,
-      //       },
-      //     },
-      //   });
-      // };
-      //
-      // asyncFunc();
-
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
+    if (!file && !input.text) {
+      throw new BadRequestException();
     }
+
+    const message = this.messageRepository.create({ ...input });
+
+    if (file) {
+      const directory = `channels/${channelId}`;
+      const url = await uploadToS3(
+        directory,
+        file
+      );
+      message.filetype = 'image/webp';
+      message.url = url;
+    }
+
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
+
+    const channel = await this.channelRepository.findOneOrFail({
+      where: { id: channelId },
+    });
+
+    message.user = user;
+    message.channel = channel;
+
+    await message.save();
+
+    // const asyncFunc = async () => {
+    //   this.pubsub.publish(MESSAGE_SUBSCRIPTION, {
+    //     channelId,
+    //     channelMessage: {
+    //       message: {
+    //         message,
+    //         operation: MessageOperation.NEW,
+    //       },
+    //     },
+    //   });
+    // };
+    //
+    // asyncFunc();
+
+    return true;
   }
 
   async editMessage(
