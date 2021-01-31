@@ -12,6 +12,7 @@ export interface FieldError {
 export interface Member extends BaseModel {
   username: string;
   image: string;
+  isOnline: boolean;
 }
 
 export interface Message extends BaseModel {

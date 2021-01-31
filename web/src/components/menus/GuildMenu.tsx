@@ -13,9 +13,10 @@ import { MdAddCircle } from 'react-icons/md';
 import { HiLogout } from 'react-icons/hi';
 import { StyledMenuList } from './StyledMenuList';
 import { StyledMenuItem, StyledRedMenuItem } from './StyledMenuItem';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Guild } from '../../lib/api/models';
+import { leaveGuild } from '../../lib/api/handler/guilds';
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -34,6 +35,14 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({
   const { guildId } = useParams<RouterProps>();
   const { data } = useQuery<Guild[]>('guilds');
   const guild = data?.find(g => g.id === guildId);
+  const history = useHistory();
+
+  const handleLeave = async () => {
+    const { data } = await leaveGuild(guildId);
+    if (data) {
+      history.replace('/channels/me');
+    }
+  }
 
   return (
     <GridItem
@@ -67,7 +76,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({
               <StyledRedMenuItem
                 label={'Leave Server'}
                 icon={HiLogout}
-                handleClick={() => console.log('Leave')}
+                handleClick={handleLeave}
               />
             </StyledMenuList>
           </>

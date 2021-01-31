@@ -8,26 +8,29 @@ import { MemberResponse } from '../models/response/MemberResponse';
 
 @Entity('users')
 export class User extends AbstractEntity {
-  @Column('varchar', { length: 50 })
-  username: string;
+  @Column('varchar')
+  username!: string;
 
-  @Column('varchar', { length: 255, unique: true })
+  @Column('varchar', { unique: true })
   @Expose({ groups: ['user'] })
-  email: string;
+  email!: string;
 
   @Column('text')
   @Exclude()
-  password: string;
+  password!: string;
 
   @Column('text', { nullable: true })
-  image: string;
+  image!: string;
+
+  @Column({ default: true })
+  isOnline!: boolean;
 
   @OneToMany(() => Member, (member) => member.user)
-  guilds: Promise<Member[]>;
+  guilds!: Promise<Member[]>;
 
   @ManyToMany(() => Channel)
   @JoinColumn({ name: 'channel_member' })
-  channels: Promise<Channel[]>;
+  channels!: Promise<Channel[]>;
   //
   // @OneToMany(() => PCMember, (pcmember) => pcmember.user)
   // pcmembers: Promise<PCMember[]>;

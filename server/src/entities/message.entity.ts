@@ -8,21 +8,21 @@ import { MessageResponse } from '../models/response/MessageResponse';
 @Entity('messages')
 export class Message extends AbstractEntity {
   @Column('text', { nullable: true })
-  text: string;
+  text!: string;
 
   @Column('text', { nullable: true })
-  url: string;
+  url!: string;
 
   @Column('varchar', { length: 50, nullable: true })
-  filetype: string;
+  filetype!: string;
 
   @ManyToOne(() => Channel)
   @Exclude()
-  channel: Channel;
+  channel!: Channel;
 
   @ManyToOne(() => User, (user) => user.id)
   @Exclude()
-  user: User;
+  user!: User;
 
   toJSON(): MessageResponse {
     const response =  <MessageResponse>classToPlain(this);

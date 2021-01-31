@@ -1,12 +1,14 @@
-import { Avatar, Box, Flex, Menu, MenuButton, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { FaEllipsisV, FaRegTrashAlt } from 'react-icons/fa';
-import { MdEdit } from 'react-icons/md';
-import { StyledMenuItem, StyledRedMenuItem } from '../menus/StyledMenuItem';
-import { StyledMenuList } from '../menus/StyledMenuList';
 import { Message as MessageResponse } from '../../lib/api/models';
 import { userStore } from '../../lib/stores/userStore';
+import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
+import { Item, Menu, theme, useContextMenu } from 'react-contexify';
 import { getTime } from '../../lib/utils/dateUtils';
+import { MdEdit } from 'react-icons/md';
+import { FaEllipsisV, FaRegTrashAlt } from 'react-icons/fa';
+import { DeleteMessageModal } from '../modals/DeleteMessageModal';
+import './css/ContextMenu.css';
+import { EditMessageModal } from '../modals/EditMessageModal';
 
 interface MessageProps {
   message: MessageResponse;
@@ -14,55 +16,72 @@ interface MessageProps {
 
 export const Message: React.FC<MessageProps> = ({ message }) => {
 
+  const [showSettings, setShowSettings] = useState(false);
   const current = userStore(state => state.current);
   const isAuthor = current?.id === message.user.id;
-  const [showSettings, setShowSettings] = useState(false);
+
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
+
+  const { show } = useContextMenu({
+    id: message.id,
+  });
 
   return (
-    // <Menu>
-    //   {({ isOpen }) => (
-    //     <>
-          <Flex
-            alignItems='center'
-            my='2'
-            mr='1'
-            _hover={{ bg: 'brandGray.dark' }}
-            justify='space-between'
-            onMouseLeave={() => setShowSettings(false)}
-            onMouseEnter={() => setShowSettings(true)}
-          >
+    <>
+      <Flex
+        alignItems='center'
+        my='2'
+        mr='1'
+        _hover={{ bg: 'brandGray.dark' }}
+        justify='space-between'
+        onContextMenu={(e) => {
+          if (isAuthor) show(e);
+        }}
+        onMouseLeave={() => setShowSettings(false)}
+        onMouseEnter={() => setShowSettings(true)}
+      >
+        <Flex alignItems='center'>
+          <Avatar h='40px' w='40px' ml='4' src={message.user.image} />
+          <Box ml='3'>
             <Flex alignItems='center'>
-              <Avatar h='40px' w='40px' ml='4' src={message.user.image} />
-              <Box ml='3'>
-                <Flex alignItems='center'>
-                  <Text>{message.user.username}</Text>
-                  <Text fontSize='12px' color='brandGray.accent' ml='3'>
-                    {getTime(message.createdAt)}
-                  </Text>
-                </Flex>
-                <Text>{message.text}</Text>
-              </Box>
+              <Text>{message.user.username}</Text>
+              <Text fontSize='12px' color='brandGray.accent' ml='2'>
+                {getTime(message.createdAt)}
+              </Text>
             </Flex>
-            {(isAuthor && (showSettings)) && (
-              <Box  mr='2' _hover={{ cursor: "pointer" }}>
-                <FaEllipsisV />
-              </Box>
-            )}
-          </Flex>
-    //       <StyledMenuList>
-    //         <StyledMenuItem
-    //           label={'Edit Message'}
-    //           icon={MdEdit}
-    //           handleClick={() => console.log('Edit')}
-    //         />
-    //         <StyledRedMenuItem
-    //           label={'Delete Message'}
-    //           icon={FaRegTrashAlt}
-    //           handleClick={() => console.log('Delete')}
-    //         />
-    //       </StyledMenuList>
-    //     </>
-    //   )}
-    // </Menu>
+            <Flex alignItems={"center"}>
+              <Text>{message.text}</Text>
+              {message.createdAt !== message.updatedAt && <Text fontSize={"10px"} ml={"1"} color={"#72767d"}>(edited)</Text>}
+            </Flex>
+          </Box>
+        </Flex>
+        {(isAuthor && (showSettings)) && (
+          <Box onClick={show}  mr='2' _hover={{ cursor: "pointer" }}>
+            <FaEllipsisV />
+          </Box>
+        )}
+      </Flex>
+      {isAuthor &&
+      <>
+        <Menu id={message.id} theme={theme.dark}>
+          <Item className={'menu-item'} onClick={onEditOpen}>
+            <Flex align='center' justify='space-between' w='full'>
+              <Text>Edit Message</Text>
+              <Icon as={MdEdit} />
+            </Flex>
+          </Item>
+          <Item onClick={onDeleteOpen} className={'delete-item'}>
+            <Flex align='center' justify='space-between' w='full'>
+              <Text>Delete Message</Text>
+              <Icon as={FaRegTrashAlt} />
+            </Flex>
+          </Item>
+        </Menu>
+        <DeleteMessageModal message={message} isOpen={isDeleteOpen} onClose={onDeleteClose} />
+        <EditMessageModal message={message} isOpen={isEditOpen} onClose={onEditClose} />
+      </>
+      }
+    </>
   );
-};
+}

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Message } from '../entities/message.entity';
@@ -8,6 +8,7 @@ import { uploadToS3 } from '../utils/fileUtils';
 import { BufferFile } from '../types/BufferFile';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { MessageInput } from '../models/dto/MessageInput';
+import { SocketService } from '../socket/socket.service';
 
 @Injectable()
 export class MessageService {
@@ -15,6 +16,7 @@ export class MessageService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
+    private readonly socketService: SocketService
   ) {}
 
   async getMessages(
@@ -89,19 +91,7 @@ export class MessageService {
 
     await message.save();
 
-    // const asyncFunc = async () => {
-    //   this.pubsub.publish(MESSAGE_SUBSCRIPTION, {
-    //     channelId,
-    //     channelMessage: {
-    //       message: {
-    //         message,
-    //         operation: MessageOperation.NEW,
-    //       },
-    //     },
-    //   });
-    // };
-    //
-    // asyncFunc();
+    this.socketService.sendMessage({ room: channelId, message: message.toJSON() });
 
     return true;
   }
@@ -125,21 +115,14 @@ export class MessageService {
         throw new UnauthorizedException();
       }
 
-      message = await this.messageRepository.save({ ...message, text });
+      await this.messageRepository.update(id, { text });
 
-      // const asyncFunc = async () => {
-      //   this.pubsub.publish(MESSAGE_SUBSCRIPTION, {
-      //     channelId: message.channel.id,
-      //     channelMessage: {
-      //       message: {
-      //         message,
-      //         operation: MessageOperation.EDIT,
-      //       },
-      //     },
-      //   });
-      // };
-      //
-      // asyncFunc();
+      message = await this.messageRepository.findOne({
+        where: { id },
+        relations: ['user', 'channel'],
+      });
+
+      this.socketService.editMessage({ room: message.channel.id, message: message.toJSON() });
 
       return true;
   }
@@ -164,19 +147,7 @@ export class MessageService {
 
     message.id = deleteId;
 
-    // const asyncFunc = async () => {
-    //   this.pubsub.publish(MESSAGE_SUBSCRIPTION, {
-    //     channelId: message.channel.id,
-    //     channelMessage: {
-    //       message: {
-    //         message,
-    //         operation: MessageOperation.DELETE,
-    //       },
-    //     },
-    //   });
-    // };
-    //
-    // asyncFunc();
+    this.socketService.deleteMessage({ room: message.channel.id, message: message.toJSON() });
 
     return true;
   }

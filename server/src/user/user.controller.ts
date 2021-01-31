@@ -38,7 +38,7 @@ import {
   ForgotPasswordInput,
   ResetPasswordInput,
 } from '../models/dto/ResetPasswordInput';
-import { AuthGuard } from '../config/auth.guard';
+import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { User } from '../entities/user.entity';
 import { UpdateInput } from '../models/dto/UpdateInput';

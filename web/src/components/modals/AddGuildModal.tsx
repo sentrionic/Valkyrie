@@ -18,6 +18,8 @@ import { GuildSchema } from '../../lib/utils/validation/guild.schema';
 import { createGuild, joinGuild } from '../../lib/api/handler/guilds';
 import { userStore } from '../../lib/stores/userStore';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
+import { useQueryClient } from 'react-query';
+import { Guild } from '../../lib/api/models';
 
 interface IProps {
   isOpen: boolean;
@@ -56,7 +58,7 @@ export const AddGuildModal: React.FC<IProps> = ({ isOpen, onClose }) => {
           <ModalBody pb={6}>
             <VStack spacing="5">
               <Text textAlign="center">
-                Your server is wehre you and your friends hang out. Make yours
+                Your server is where you and your friends hang out. Make yours
                 and start talking.
               </Text>
 
@@ -104,6 +106,9 @@ interface IScreenProps {
 }
 
 const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
+
+  const cache = useQueryClient();
+
   return (
     <ModalContent bg="brandGray.light">
       <Formik
@@ -117,6 +122,9 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             try {
               const { data } = await joinGuild(values);
               if (data) {
+                cache.setQueryData<Guild[]>("guilds", (old) => {
+                  return [...old!, data];
+                })
                 submitClose();
               }
             } catch (err) {
@@ -184,6 +192,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
 const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
 
   const user = userStore(state => state.current);
+  const cache = useQueryClient();
 
   return (
     <ModalContent bg="brandGray.light">
@@ -195,6 +204,9 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
         onSubmit={async (values) => {
           const { data } = await createGuild(values);
           if (data) {
+            cache.setQueryData<Guild[]>("guilds", (old) => {
+              return [...old!, data];
+            })
             submitClose();
           }
         }}

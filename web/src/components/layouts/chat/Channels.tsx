@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, GridItem, UnorderedList, useDisclosure } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
+import socketIOClient from 'socket.io-client';
+import { useQuery, useQueryClient } from 'react-query';
+import { AccountBar } from '../AccountBar';
 import { CreateChannelModal } from '../../modals/CreateChannelModal';
 import { GuildMenu } from '../../menus/GuildMenu';
 import { InviteModal } from '../../modals/InviteModal';
 import { ChannelListItem } from '../../items/ChannelListItem';
-import { AccountBar } from '../AccountBar';
-import { useQuery } from 'react-query';
 import { getChannels } from '../../../lib/api/handler/guilds';
-import { useParams } from 'react-router-dom';
+import { Channel } from '../../../lib/api/models';
 
 interface RouterProps {
   guildId: string;
@@ -27,13 +29,32 @@ export const Channels: React.FC = () => {
   } = useDisclosure();
 
   const { guildId } = useParams<RouterProps>();
+  const key = `channels-${guildId}`;
 
-  const { data } = useQuery(`channels-${guildId}`, () =>
+  const cache = useQueryClient();
+
+  const { data } = useQuery(key, () =>
       getChannels(guildId).then(response => response.data),
     {
       refetchOnWindowFocus: false,
     },
   );
+
+  useEffect((): any => {
+    const socket = socketIOClient(process.env.REACT_APP_API_WS!);
+    socket.emit('joinGuild', guildId);
+
+    socket.on('add_channel', (newChannel: Channel) => {
+      cache.setQueryData<Channel[]>(key, (_) => {
+        return [...data!, newChannel];
+      })
+    });
+
+    return () => {
+      socket.emit('leaveRoom', guildId);
+      socket.disconnect();
+    };
+  }, [guildId, data, key, cache]);
 
   return (
     <>
@@ -58,7 +79,7 @@ export const Channels: React.FC = () => {
         }}
       >
         <InviteModal isOpen={inviteIsOpen} onClose={inviteClose} />
-        <CreateChannelModal onClose={channelClose} isOpen={channelIsOpen} />
+        <CreateChannelModal guildId={guildId} onClose={channelClose} isOpen={channelIsOpen} />
         <UnorderedList listStyleType='none' ml='0' mt='4'>
           {data?.map(c => (
             <ChannelListItem channel={c} guildId={guildId} key={`${c.id}`} />

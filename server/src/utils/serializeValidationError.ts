@@ -12,7 +12,7 @@ export const serializeValidationError = (
 
   err.inner.map((value) => {
     invalid.push({
-      field: value.path,
+      field: value.path!,
       message: value.errors[0],
     });
   });

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { SWRConfig } from 'swr';
 import { Routes } from './routes/Routes';
-import { request } from './lib/api/setupAxios';
+import { GlobalState } from './components/sections/GlobalState';
 
 export const App = () => (
   <QueryClientProvider client={new QueryClient()}>
-    <SWRConfig value={{ fetcher: request, revalidateOnFocus: false }}>
+    <GlobalState>
       <Routes />
-    </SWRConfig>
+    </ GlobalState>
   </QueryClientProvider>
 );

@@ -20,8 +20,9 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
       <ListItem
         p='5px'
         m='0 10px'
-        _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer' }}
-        bg={isActive ? '#36393f' : undefined}
+        color={isActive ? '#fff' : 'brandGray.accent'}
+        _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
+        bg={isActive ? '#393c43' : undefined}
         mb='2px'
       >
         <Flex align='center'>

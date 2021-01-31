@@ -6,6 +6,7 @@ import { Member } from '../entities/member.entity';
 import { User } from '../entities/user.entity';
 import { Guild } from '../entities/guild.entity';
 import { DMChannelResponse } from '../models/response/DMChannelResponse';
+import { SocketService } from '../socket/socket.service';
 
 @Injectable()
 export class ChannelService {
@@ -14,21 +15,22 @@ export class ChannelService {
     @InjectRepository(Guild) private guildRepository: Repository<Guild>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly socketService: SocketService
   ) {
   }
 
   async createChannel(
     guildId: string,
     name: string,
-    isPublic: boolean,
+    isPublic: boolean = true,
     userId: string,
     members: string[],
-  ): Promise<ChannelResponse> {
+  ): Promise<boolean> {
     const data = { name, public: isPublic };
-    const memberPromise = await this.memberRepository.findOne({
+    const memberPromise = await this.memberRepository.findOneOrFail({
       where: { guildId, userId },
     });
-    const guildPromise = await this.guildRepository.findOne({
+    const guildPromise = await this.guildRepository.findOneOrFail({
       where: { id: guildId },
     });
 
@@ -61,14 +63,18 @@ export class ChannelService {
       await entityManager.save(channel);
     });
 
-    return {
-      id: channel?.id,
-      name: channel?.name,
+    const response: ChannelResponse = {
+      id: channel!.id,
+      name: channel!.name,
       public: true,
-      createdAt: channel?.createdAt.toString(),
-      updatedAt: channel?.updatedAt.toString(),
-    };
+      createdAt: channel!.createdAt.toString(),
+      updatedAt: channel!.updatedAt.toString(),
+    }
+
+    this.socketService.addChannel({ room: guildId, channel: response });
+    return true;
   }
+
 
   async getGuildChannels(guildId: string): Promise<ChannelResponse[]> {
     const channels = await this.channelRepository.find({ where: { guild: guildId } });
@@ -121,12 +127,12 @@ export class ChannelService {
     const name: string = users.map((u) => u.id).join('/');
 
     const channelId = await getManager().transaction(async (entityManager) => {
-      const channel = this.channelRepository.create({
+      const channel = await this.channelRepository.create({
         name,
-        public: false,
+        isPublic: false,
         dm: true,
       });
-      channel.guild = await this.guildRepository.findOne({
+      channel.guild = await this.guildRepository.findOneOrFail({
         where: { id: guildId },
       });
 

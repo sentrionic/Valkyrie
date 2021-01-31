@@ -1,0 +1,242 @@
+.react-contexify {
+    position: fixed;
+    opacity: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #18191c;
+    box-sizing: border-box;
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    padding: 6px;
+    min-width: 200px;
+    z-index: 100;
+    font-size: 14px;
+}
+
+.react-contexify__submenu--is-open > .react-contexify__submenu {
+    pointer-events: initial;
+    opacity: 1;
+}
+
+.react-contexify .react-contexify__submenu {
+    position: absolute;
+    /* negate padding */
+    top: -6px;
+    pointer-events: none;
+    transition: opacity 0.275s;
+}
+.react-contexify__submenu-arrow {
+    margin-left: auto;
+    font-size: 12px;
+}
+.react-contexify__separator {
+    width: 100%;
+    height: 1px;
+    cursor: default;
+    margin: 4px 0;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.react-contexify__will-leave--disabled {
+    pointer-events: none;
+}
+.react-contexify__item {
+    cursor: pointer;
+    position: relative;
+}
+.react-contexify__item:focus {
+    outline: 0;
+}
+
+.menu-item:hover {
+    color: white;
+    background-color: #7289da;
+    border-radius: 2px;
+}
+
+.delete-item {
+    color: #f04747!important;
+}
+
+.delete-item:hover {
+    color: white;
+    background-color: #f04747;
+    border-radius: 2px;
+}
+
+.react-contexify__item:not(.react-contexify__item--disabled):hover > .react-contexify__submenu {
+    pointer-events: initial;
+    opacity: 1;
+}
+.react-contexify__item--disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+.react-contexify__item__content {
+    padding: 6px 12px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    white-space: nowrap;
+    color: #333;
+    position: relative;
+}
+
+.react-contexify__theme--dark {
+    background-color: rgba(40, 40, 40, 0.98);
+}
+.react-contexify__theme--dark .react-contexify__submenu {
+    background-color: rgba(40, 40, 40, 0.98);
+}
+.react-contexify__theme--dark .react-contexify__separator {
+    background-color: #eee;
+}
+
+.react-contexify__item__content {
+    color: #ffffff;
+}
+
+.react-contexify__theme--light .react-contexify__separator {
+    background-color: #eee;
+}
+.react-contexify__theme--light .react-contexify__submenu--is-open,
+.react-contexify__theme--light .react-contexify__submenu--is-open > .react-contexify__item__content {
+    color: #4393e6;
+    background-color: #e0eefd;
+}
+.react-contexify__theme--light .react-contexify__item:not(.react-contexify__item--disabled):hover > .react-contexify__item__content, .react-contexify__theme--light .react-contexify__item:not(.react-contexify__item--disabled):focus > .react-contexify__item__content {
+    color: #4393e6;
+    background-color: #e0eefd;
+}
+.react-contexify__theme--light .react-contexify__item__content {
+    color: #666;
+}
+
+@keyframes react-contexify__scaleIn {
+    from {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes react-contexify__scaleOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+}
+.react-contexify__will-enter--scale {
+    transform-origin: top left;
+    animation: react-contexify__scaleIn 0.3s;
+}
+
+.react-contexify__will-leave--scale {
+    transform-origin: top left;
+    animation: react-contexify__scaleOut 0.3s;
+}
+
+@keyframes react-contexify__fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes react-contexify__fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+.react-contexify__will-enter--fade {
+    animation: react-contexify__fadeIn 0.3s ease;
+}
+
+.react-contexify__will-leave--fade {
+    animation: react-contexify__fadeOut 0.3s ease;
+}
+
+@keyframes react-contexify__flipInX {
+    from {
+        transform: perspective(800px) rotate3d(1, 0, 0, 45deg);
+    }
+    to {
+        transform: perspective(800px);
+    }
+}
+@keyframes react-contexify__flipOutX {
+    from {
+        transform: perspective(800px);
+    }
+    to {
+        transform: perspective(800px) rotate3d(1, 0, 0, 45deg);
+        opacity: 0;
+    }
+}
+.react-contexify__will-enter--flip {
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    transform-origin: top center;
+    animation: react-contexify__flipInX 0.3s;
+}
+
+.react-contexify__will-leave--flip {
+    transform-origin: top center;
+    animation: react-contexify__flipOutX 0.3s;
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+}
+
+@keyframes swing-in-top-fwd {
+    0% {
+        transform: rotateX(-100deg);
+        transform-origin: top;
+        opacity: 0;
+    }
+    100% {
+        transform: rotateX(0deg);
+        transform-origin: top;
+        opacity: 1;
+    }
+}
+@keyframes react-contexify__slideIn {
+    from {
+        opacity: 0;
+        transform: scale3d(1, 0.3, 1);
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes react-contexify__slideOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: scale3d(1, 0.3, 1);
+    }
+}
+.react-contexify__will-enter--slide {
+    transform-origin: top center;
+    animation: react-contexify__slideIn 0.3s;
+}
+
+.react-contexify__will-leave--slide {
+    transform-origin: top center;
+    animation: react-contexify__slideOut 0.3s;
+}

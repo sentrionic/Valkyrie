@@ -6,9 +6,13 @@ import { Member } from '../entities/member.entity';
 import { Guild } from '../entities/guild.entity';
 import { Channel } from '../entities/channel.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SocketModule } from '../socket/socket.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Channel, Guild, Member, User])],
+  imports: [
+    TypeOrmModule.forFeature([Channel, Guild, Member, User]),
+    SocketModule
+  ],
   controllers: [ChannelController],
   providers: [ChannelService],
 })

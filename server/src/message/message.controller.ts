@@ -11,7 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
-import { AuthGuard } from '../config/auth.guard';
+import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
@@ -36,16 +36,6 @@ export class MessageController {
     private readonly messageService: MessageService,
   ) {}
 
-  // @Subscription(() => MessageSubscription, {
-  //   name: MESSAGE_SUBSCRIPTION,
-  //   resolve: (value) => value.channelMessage.message,
-  //   filter: (payload, variables) => payload.channelId === variables.channelId,
-  // })
-  // @UseGuards(TeamGuard)
-  // messageSubscription(@Args('channelId') channelId: string) {
-  //   return this.pubSub.asyncIterator(MESSAGE_SUBSCRIPTION);
-  // }
-  //
   @Get("/:channelId/messages")
   @UseGuards(AuthGuard)
   async messages(
@@ -79,9 +69,9 @@ export class MessageController {
   async editMessage(
     @GetUser() user: string,
     @Param('messageId') messageId: string,
-    @Body('text') text: string,
+    @Body(new YupValidationPipe(MessageSchema)) input: MessageInput,
   ): Promise<boolean> {
-    return this.messageService.editMessage(user, messageId, text);
+    return this.messageService.editMessage(user, messageId, input.text);
   }
 
   @Delete("/messages/:messageId")

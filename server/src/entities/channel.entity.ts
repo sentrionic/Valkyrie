@@ -12,23 +12,23 @@ import { classToPlain, Exclude } from 'class-transformer';
 
 @Entity('channels')
 export class Channel extends AbstractEntity {
-  @Column('varchar', { length: 100 })
-  name: string;
+  @Column('varchar')
+  name!: string;
 
   @Column('boolean', { default: true })
-  public: boolean;
+  isPublic!: boolean;
 
   @Column('boolean', { default: false })
-  dm: boolean;
+  dm!: boolean;
 
   @ManyToOne(() => Guild, (guild) => guild.id)
   @Exclude()
-  guild: Guild;
+  guild!: Guild;
 
   @ManyToMany(() => User)
   @JoinColumn({ name: 'channel_member' })
   @Exclude()
-  members: Promise<User[]>;
+  members!: Promise<User[]>;
 
   // @OneToMany(() => PCMember, (pcmember) => pcmember.channel)
   // pcmembers: Promise<PCMember[]>;

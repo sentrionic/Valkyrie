@@ -3,6 +3,7 @@ import { Channel, Guild, Member } from '../models';
 import { request } from '../setupAxios';
 import { GuildDto } from '../dtos/GuildDto';
 import { InviteDto } from '../dtos/InviteDto';
+import { ChannelInput } from '../dtos/ChannelInput';
 
 export const getUserGuilds = (): Promise<AxiosResponse<Guild[]>> =>
   request.get("/guilds");
@@ -21,3 +22,9 @@ export const getInviteLink = (id: string): Promise<AxiosResponse<string>> =>
 
 export const getGuildMembers = (id: string): Promise<AxiosResponse<Member[]>> =>
   request.get(`guilds/${id}/members`);
+
+export const createChannel = (id: string, input: ChannelInput): Promise<AxiosResponse<boolean>> =>
+  request.post(`channels/${id}`, input);
+
+export const leaveGuild = (id: string): Promise<AxiosResponse<boolean>> =>
+  request.delete(`guilds/${id}`);

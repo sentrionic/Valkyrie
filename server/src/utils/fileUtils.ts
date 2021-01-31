@@ -51,9 +51,7 @@ const profileImageTransformer = (buffer: Buffer): Promise<Buffer> =>
       width: 150,
       height: 150,
     })
-    .webp({
-      quality: 75,
-    })
+    .webp()
     .toBuffer();
 
 const s3 = new aws.S3({

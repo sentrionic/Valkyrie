@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Channel } from '../entities/channel.entity';
 import { Message } from '../entities/message.entity';
 import { User } from '../entities/user.entity';
+import { SocketModule } from '../socket/socket.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Message, Channel, User]),
+    SocketModule
   ],
   controllers: [MessageController],
   providers: [MessageService]

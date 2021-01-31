@@ -6,19 +6,19 @@ import { Guild } from './guild.entity';
 @Entity('members')
 export class Member extends AbstractEntity {
   @PrimaryColumn()
-  userId: string;
+  userId!: string;
 
   @PrimaryColumn()
-  guildId: string;
+  guildId!: string;
 
   @ManyToMany(() => User, (user) => user.guilds, { primary: true })
   @JoinColumn({ name: 'userId' })
-  user: Promise<User>;
+  user!: Promise<User>;
 
   @ManyToMany(() => Guild, (guild) => guild.members, { primary: true })
   @JoinColumn({ name: 'guildId' })
-  guild: Promise<Guild>;
+  guild!: Promise<Guild>;
 
   @Column('boolean', { default: false })
-  admin: boolean;
+  admin!: boolean;
 }

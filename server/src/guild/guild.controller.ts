@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { GuildService } from './guild.service';
-import { AuthGuard } from '../config/auth.guard';
+import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { Guild } from '../entities/guild.entity';
-import { MemberGuard } from '../config/member.guard';
+import { MemberGuard } from '../guards/http/member.guard';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
 import { GuildSchema } from '../validation/guild.schema';
@@ -46,7 +46,7 @@ export class GuildController {
   async createGuild(
     @Body(new YupValidationPipe(GuildSchema)) input: GuildInput,
     @GetUser() user: string,
-  ): Promise<Guild> {
+  ): Promise<GuildResponse> {
     const { name } = input;
     return this.guildService.createGuild(name, user);
   }
@@ -62,7 +62,16 @@ export class GuildController {
   async joinTeam(
     @Body('link') link: string,
     @GetUser() user: string,
-  ): Promise<Guild> {
+  ): Promise<GuildResponse> {
     return this.guildService.joinGuild(link, user);
+  }
+
+  @Delete("/:guildId")
+  @UseGuards(AuthGuard)
+  async leaveGuild(
+    @GetUser() userId: string,
+    @Param("guildId") guildId: string
+  ): Promise<boolean> {
+    return this.guildService.leaveGuild(userId, guildId);
   }
 }

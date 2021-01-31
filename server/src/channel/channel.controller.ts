@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ChannelService } from './channel.service';
-import { AuthGuard } from '../config/auth.guard';
+import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { DMChannelResponse } from '../models/response/DMChannelResponse';
-import { MemberGuard } from '../config/member.guard';
+import { MemberGuard } from '../guards/http/member.guard';
 
 @Controller('channels')
 export class ChannelController {
@@ -24,9 +24,9 @@ export class ChannelController {
     @GetUser() userId: string,
     @Param('guildId') guildId: string,
     @Body('name') name: string,
-    @Body('isPublic') isPublic?: boolean | null,
+    @Body('isPublic') isPublic: boolean = true,
     @Body('members') members: string[] = [],
-  ): Promise<ChannelResponse> {
+  ): Promise<boolean> {
     return this.channelService.createChannel(
       guildId,
       name,

@@ -11,3 +11,9 @@ export const sendMessage = (channelId: string, data: FormData): Promise<AxiosRes
       "Content-Type": "multipart/form-data",
     },
   });
+
+export const deleteMessage = (id: string): Promise<AxiosResponse<boolean>> =>
+  request.delete(`channels/messages/${id}`);
+
+export const editMessage = (id: string, text: string): Promise<AxiosResponse<boolean>> =>
+  request.put(`channels/messages/${id}`, { text });

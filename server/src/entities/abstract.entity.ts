@@ -7,14 +7,14 @@ const nanoid = customAlphabet(alphabet, 20);
 export abstract class AbstractEntity extends BaseEntity {
 
   @PrimaryColumn()
-  id: string;
+  id!: string;
 
   @CreateDateColumn()
   @Index()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @BeforeInsert()
   async generateId() {
