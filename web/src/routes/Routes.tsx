@@ -10,6 +10,11 @@ import { AuthRoute } from './AuthRoute';
 import { Account } from './Account';
 import { Landing } from './Landing';
 
+export interface RouterProps {
+  guildId: string;
+  channelId: string;
+}
+
 export const Routes: React.FC = () => {
   return (
     <BrowserRouter>

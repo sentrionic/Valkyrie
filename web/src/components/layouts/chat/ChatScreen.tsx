@@ -7,12 +7,9 @@ import { useParams } from 'react-router-dom';
 import { getMessages } from '../../../lib/api/handler/messages';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Message as MessageResponse } from '../../../lib/api/models';
-import socketIOClient from 'socket.io-client';
 import { InfiniteData, useInfiniteQuery, useQueryClient } from 'react-query';
-
-interface RouterProps {
-  channelId: string;
-}
+import { getSocket } from '../../../lib/api/getSocket';
+import { RouterProps } from '../../../routes/Routes';
 
 export const ChatScreen: React.FC = () => {
 
@@ -35,7 +32,7 @@ export const ChatScreen: React.FC = () => {
 
   useEffect((): any => {
 
-    const socket = socketIOClient(process.env.REACT_APP_API_WS!);
+    const socket = getSocket();
     socket.emit('joinChannel', channelId);
 
     socket.on('new_message', (newMessage: MessageResponse) => {

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Flex,
-  GridItem,
-  Heading,
-  Icon,
-  Menu,
-  MenuButton,
-} from '@chakra-ui/react';
+import { Flex, GridItem, Heading, Icon, Menu, MenuButton } from '@chakra-ui/react';
 import { FiChevronDown, FiX } from 'react-icons/fi';
 import { FaUserPlus } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
@@ -17,20 +10,17 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Guild } from '../../lib/api/models';
 import { leaveGuild } from '../../lib/api/handler/guilds';
+import { RouterProps } from '../../routes/Routes';
 
 interface GuildMenuProps {
   channelOpen: () => void;
   inviteOpen: () => void;
 }
 
-interface RouterProps {
-  guildId: string;
-}
-
 export const GuildMenu: React.FC<GuildMenuProps> = ({
-  channelOpen,
-  inviteOpen,
-}) => {
+                                                      channelOpen,
+                                                      inviteOpen
+                                                    }) => {
 
   const { guildId } = useParams<RouterProps>();
   const { data } = useQuery<Guild[]>('guilds');
@@ -42,22 +32,22 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({
     if (data) {
       history.replace('/channels/me');
     }
-  }
+  };
 
   return (
     <GridItem
       gridColumn={2}
       gridRow={'1'}
-      bg="brandGray.light"
-      padding="10px"
-      zIndex="2"
-      boxShadow="md"
+      bg='brandGray.light'
+      padding='10px'
+      zIndex='2'
+      boxShadow='md'
     >
-      <Menu placement="bottom-end">
+      <Menu placement='bottom-end'>
         {({ isOpen }) => (
           <>
-            <Flex justify="space-between" align="center">
-              <Heading fontSize="20px">{guild?.name}</Heading>
+            <Flex justify='space-between' align='center'>
+              <Heading fontSize='20px'>{guild?.name}</Heading>
               <MenuButton>
                 <Icon as={!isOpen ? FiChevronDown : FiX} />
               </MenuButton>

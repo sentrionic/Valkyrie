@@ -3,11 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Channel } from '../../lib/api/models';
-
-interface RouterProps {
-  channelId: string;
-  guildId: string;
-}
+import { RouterProps } from '../../routes/Routes';
 
 export const StartMessages: React.FC = () => {
 
@@ -21,7 +17,7 @@ export const StartMessages: React.FC = () => {
       mb='2'
       justify='center'
     >
-      <Box textAlign={"center"}>
+      <Box textAlign={'center'}>
         <Heading>Welcome to #{channel?.name}</Heading>
         <Text>This is the start of the #{channel?.name} channel</Text>
       </Box>

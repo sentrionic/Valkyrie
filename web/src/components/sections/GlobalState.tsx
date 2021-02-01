@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { userStore } from '../../lib/stores/userStore';
-import socketIOClient from 'socket.io-client';
+import { getSocket } from '../../lib/api/getSocket';
 
 export const GlobalState: React.FC = ({ children }) => {
 
@@ -14,7 +14,7 @@ export const GlobalState: React.FC = ({ children }) => {
         socket.disconnect();
       }
 
-      const socket = socketIOClient(process.env.REACT_APP_API_WS!);
+      const socket = getSocket();
       socket.emit('toggleOnline');
 
       window.addEventListener('beforeunload', disconnect);

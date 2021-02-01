@@ -11,11 +11,7 @@ import { sendMessage } from '../../../lib/api/handler/messages';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Channel } from '../../../lib/api/models';
-
-interface RouterProps {
-  guildId: string;
-  channelId: string;
-}
+import { RouterProps } from '../../../routes/Routes';
 
 export const MessageInput: React.FC = () => {
 

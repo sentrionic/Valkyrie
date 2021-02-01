@@ -1,8 +1,8 @@
 import {
   Button,
+  Input,
   InputGroup,
   InputRightElement,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,19 +11,16 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useClipboard
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getInviteLink } from '../../lib/api/handler/guilds';
-import { useClipboard } from '@chakra-ui/react';
+import { RouterProps } from '../../routes/Routes';
 
 interface InviteModalProps {
   isOpen: boolean;
   onClose: () => void;
-}
-
-interface RouterProps {
-  guildId: string;
 }
 
 export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => {
@@ -41,7 +38,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
         fetchLink();
       }
     },
-    [isOpen, setInviteLink, guildId],
+    [isOpen, setInviteLink, guildId]
   );
 
   return (

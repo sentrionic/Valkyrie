@@ -5,11 +5,8 @@ import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
 import { getGuildMembers } from '../../../lib/api/handler/guilds';
 import { Member } from '../../../lib/api/models';
-import socketIOClient from 'socket.io-client';
-
-interface RouterProps {
-  guildId: string;
-}
+import { getSocket } from '../../../lib/api/getSocket';
+import { RouterProps } from '../../../routes/Routes';
 
 export const MemberList: React.FC = () => {
 
@@ -24,8 +21,6 @@ export const MemberList: React.FC = () => {
     }
   );
 
-  console.log(data);
-
   const online: Member[] = [];
   const offline: Member[] = [];
 
@@ -35,10 +30,9 @@ export const MemberList: React.FC = () => {
   });
 
   useEffect((): any => {
-    const socket = socketIOClient(process.env.REACT_APP_API_WS!);
+    const socket = getSocket();
     socket.emit('joinGuild', guildId);
     socket.on('add_member', (newMember: Member) => {
-      console.log(newMember);
       cache.setQueryData<Member[]>(key, (_) => {
         return [...data!, newMember].sort((a, b) => a.username.localeCompare(b.username));
       });

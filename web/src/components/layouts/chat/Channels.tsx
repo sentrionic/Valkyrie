@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, GridItem, UnorderedList, useDisclosure } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import socketIOClient from 'socket.io-client';
 import { useQuery, useQueryClient } from 'react-query';
 import { AccountBar } from '../AccountBar';
 import { CreateChannelModal } from '../../modals/CreateChannelModal';
@@ -10,22 +9,19 @@ import { InviteModal } from '../../modals/InviteModal';
 import { ChannelListItem } from '../../items/ChannelListItem';
 import { getChannels } from '../../../lib/api/handler/guilds';
 import { Channel } from '../../../lib/api/models';
-
-interface RouterProps {
-  guildId: string;
-  channelId: string;
-}
+import { getSocket } from '../../../lib/api/getSocket';
+import { RouterProps } from '../../../routes/Routes';
 
 export const Channels: React.FC = () => {
   const {
     isOpen: inviteIsOpen,
     onOpen: inviteOpen,
-    onClose: inviteClose,
+    onClose: inviteClose
   } = useDisclosure();
   const {
     isOpen: channelIsOpen,
     onOpen: channelOpen,
-    onClose: channelClose,
+    onClose: channelClose
   } = useDisclosure();
 
   const { guildId } = useParams<RouterProps>();
@@ -36,18 +32,18 @@ export const Channels: React.FC = () => {
   const { data } = useQuery(key, () =>
       getChannels(guildId).then(response => response.data),
     {
-      refetchOnWindowFocus: false,
-    },
+      refetchOnWindowFocus: false
+    }
   );
 
   useEffect((): any => {
-    const socket = socketIOClient(process.env.REACT_APP_API_WS!);
+    const socket = getSocket();
     socket.emit('joinGuild', guildId);
 
     socket.on('add_channel', (newChannel: Channel) => {
       cache.setQueryData<Channel[]>(key, (_) => {
         return [...data!, newChannel];
-      })
+      });
     });
 
     return () => {
@@ -67,15 +63,15 @@ export const Channels: React.FC = () => {
         _hover={{ overflowY: 'auto' }}
         css={{
           '&::-webkit-scrollbar': {
-            width: '4px',
+            width: '4px'
           },
           '&::-webkit-scrollbar-track': {
-            width: '4px',
+            width: '4px'
           },
           '&::-webkit-scrollbar-thumb': {
             background: '#202225',
-            borderRadius: '18px',
-          },
+            borderRadius: '18px'
+          }
         }}
       >
         <InviteModal isOpen={inviteIsOpen} onClose={inviteClose} />

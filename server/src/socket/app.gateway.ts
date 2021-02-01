@@ -33,14 +33,12 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   @UseGuards(WsAuthGuard)
   @SubscribeMessage('toggleOnline')
   handleToggleOnline(client: Socket): void {
-    console.log("Online");
     this.socketService.toggleOnlineStatus(client);
   }
 
   @UseGuards(WsAuthGuard)
   @SubscribeMessage('toggleOffline')
   handleToggleOffline(client: Socket): void {
-    console.log("Offline");
     this.socketService.toggleOfflineStatus(client);
   }
 
