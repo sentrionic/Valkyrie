@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, GridItem, UnorderedList, useDisclosure } from '@chakra-ui/react';
 import { AddGuildModal } from '../../modals/AddGuildModal';
 import { GuildListItem } from '../../items/GuildListItem';
@@ -6,7 +6,6 @@ import { AddGuildIcon } from '../../sections/AddGuildIcon';
 import { HomeIcon } from '../../sections/HomeIcon';
 import { useQuery } from 'react-query';
 import { getUserGuilds } from '../../../lib/api/handler/guilds';
-import socketIOClient from 'socket.io-client';
 
 export const GuildList: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

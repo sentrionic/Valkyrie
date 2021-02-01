@@ -26,7 +26,7 @@ export class ChannelService {
     userId: string,
     members: string[],
   ): Promise<boolean> {
-    const data = { name, public: isPublic };
+    const data = { name: name.trim(), public: isPublic };
     const memberPromise = await this.memberRepository.findOneOrFail({
       where: { guildId, userId },
     });

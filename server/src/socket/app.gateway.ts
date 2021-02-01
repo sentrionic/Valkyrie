@@ -17,7 +17,7 @@ import { WsAuthGuard } from '../guards/ws/ws.auth.guard';
 @WebSocketGateway({ namespace: "/ws" })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   constructor(private socketService: SocketService) {}
 

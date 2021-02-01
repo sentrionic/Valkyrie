@@ -8,6 +8,7 @@ import { getMessages } from '../../../lib/api/handler/messages';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Message as MessageResponse } from '../../../lib/api/models';
 import socketIOClient from 'socket.io-client';
+import { InfiniteData, useInfiniteQuery, useQueryClient } from 'react-query';
 
 interface RouterProps {
   channelId: string;
@@ -16,55 +17,66 @@ interface RouterProps {
 export const ChatScreen: React.FC = () => {
 
   const { channelId } = useParams<RouterProps>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<MessageResponse[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const qKey = `messages-${channelId}`;
+  const cache = useQueryClient();
 
-  useEffect(() => {
-    setData([]);
-    setIsLoading(true);
-    const fetchData = async () => {
-      const { data: messages } = await getMessages(channelId);
-      setData(messages);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, [channelId]);
+  const { data, isLoading, fetchNextPage } = useInfiniteQuery<MessageResponse[]>(qKey, async ({ pageParam = null }) => {
+    const { data } = await getMessages(channelId, pageParam);
+    if (data.length !== 35) setHasMore(false);
+    return data;
+  }, {
+    staleTime: 0,
+    cacheTime: 0,
+    getNextPageParam: lastPage => hasMore && lastPage.length ? lastPage[lastPage.length - 1].createdAt : '',
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: false
+  });
 
   useEffect((): any => {
-
-    if (data.length === 0) setHasMore(false);
 
     const socket = socketIOClient(process.env.REACT_APP_API_WS!);
     socket.emit('joinChannel', channelId);
 
     socket.on('new_message', (newMessage: MessageResponse) => {
-      setData([newMessage, ...data]);
+      cache.setQueryData<InfiniteData<MessageResponse[]>>(qKey, (d) => {
+        d!.pages[0].unshift(newMessage);
+        return d!;
+      });
     });
 
     socket.on('edit_message', (editMessage: MessageResponse) => {
-      const index = data.findIndex(m => m.id === editMessage.id);
-      const messages = [...data];
-      messages[index] = editMessage;
-      setData(messages);
+      cache.setQueryData<InfiniteData<MessageResponse[]>>(qKey, (d) => {
+        let index = -1;
+        let editId = -1;
+        d!.pages.forEach((p, i) => {
+          editId = p.findIndex(m => m.id === editMessage.id);
+          if (editId !== -1) index = i;
+        });
+
+        if (index !== -1 && editId !== -1) {
+          d!.pages[index][editId] = editMessage;
+        }
+        return d!;
+      });
     });
 
     socket.on('delete_message', (toBeRemoved: MessageResponse) => {
-      setData(data.filter(m => m.id !== toBeRemoved.id));
+      cache.setQueryData<InfiniteData<MessageResponse[]>>(qKey, (d) => {
+        let index = -1;
+        d!.pages.forEach((p, i) => {
+          if (p.findIndex(m => m.id === toBeRemoved.id) !== -1) index = i;
+        });
+        if (index !== -1) d!.pages[index] = d!.pages[index].filter(m => m.id !== toBeRemoved.id);
+        return d!;
+      });
     });
 
     return () => {
       socket.emit('leaveRoom', channelId);
       socket.disconnect();
     };
-  }, [channelId, setData, data]);
-
-  const fetchMore = async () => {
-    const cursor = data[data.length - 1].createdAt;
-    const { data: messages } = await getMessages(channelId, cursor);
-    setData([...data, ...messages]);
-    setHasMore(messages.length === 35);
-  };
+  }, [channelId, data, cache, qKey]);
 
   if (isLoading) {
     return (
@@ -73,6 +85,8 @@ export const ChatScreen: React.FC = () => {
       </ChatGrid>
     );
   }
+
+  const messages = data ? data!.pages.map(p => p.map(p => p)).flat() : [];
 
   return (
     <ChatGrid>
@@ -84,20 +98,20 @@ export const ChatScreen: React.FC = () => {
             width: '0'
           }
         }}
-        dataLength={data.length}
-        next={() => fetchMore()}
+        dataLength={messages.length}
+        next={() => fetchNextPage()}
         style={{ display: 'flex', flexDirection: 'column-reverse' }}
         inverse={true}
         hasMore={hasMore}
         loader={
-          data.length > 0 &&
+          messages.length > 0 &&
           <Flex align={'center'} justify={'center'} h={'50px'}>
             <Spinner />
           </Flex>
         }
         scrollableTarget='chatGrid'
       >
-        {data.map(m => <Message key={m.id} message={m} />)}
+        {messages.map(m => <Message key={m.id} message={m} />)}
       </Box>
       {!hasMore && <StartMessages />}
     </ChatGrid>

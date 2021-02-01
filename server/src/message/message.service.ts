@@ -22,7 +22,7 @@ export class MessageService {
   async getMessages(
     channelId: string,
     userId: string,
-    cursor?: string,
+    cursor?: string | null,
   ): Promise<MessageResponse[]> {
     const channel = await this.channelRepository.findOne({
       where: { id: channelId },
@@ -102,7 +102,7 @@ export class MessageService {
     text: string,
   ): Promise<boolean> {
 
-      let message: Message = await this.messageRepository.findOne({
+      let message = await this.messageRepository.findOneOrFail({
         where: { id },
         relations: ['user', 'channel'],
       });
@@ -117,7 +117,7 @@ export class MessageService {
 
       await this.messageRepository.update(id, { text });
 
-      message = await this.messageRepository.findOne({
+      message = await this.messageRepository.findOneOrFail({
         where: { id },
         relations: ['user', 'channel'],
       });
@@ -128,7 +128,7 @@ export class MessageService {
   }
 
   async deleteMessage(userId: string, id: string): Promise<boolean> {
-    const message: Message = await this.messageRepository.findOne({
+    const message: Message = await this.messageRepository.findOneOrFail({
       where: { id },
       relations: ['user', 'channel'],
     });

@@ -21,18 +21,18 @@ import * as argon2 from 'argon2';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(User) private userRepository: Repository<User>
   ) {
   }
 
   async register(
     credentials: RegisterInput,
-    req: e.Request,
+    req: e.Request
   ): Promise<UserResponse> {
-    const { email } = credentials;
+    const { email, username, password } = credentials;
 
     const emailTaken = await this.userRepository.findOne({
-      where: { email },
+      where: { email }
     });
 
     if (emailTaken) {
@@ -41,15 +41,19 @@ export class UserService {
           errors: [
             {
               field: 'email',
-              message: 'Email must be unique.',
-            },
-          ],
+              message: 'Email must be unique.'
+            }
+          ]
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
-    const user = this.userRepository.create({ ...credentials, password: await argon2.hash(credentials.password) });
+    const user = this.userRepository.create({
+      email: email.trim(),
+      username: username.trim(),
+      password: await argon2.hash(password)
+    });
     user.image = `https://gravatar.com/avatar/${md5(email)}?d=identicon`;
     await user.save();
 
@@ -60,13 +64,13 @@ export class UserService {
 
   async login(
     credentials: LoginInput,
-    req: e.Request,
+    req: e.Request
   ): Promise<UserResponse> {
 
     const { email, password } = credentials;
 
     const user = await this.userRepository.findOne({
-      where: { email },
+      where: { email }
     });
 
     if (!user) {
@@ -97,11 +101,11 @@ export class UserService {
       FORGET_PASSWORD_PREFIX + token,
       user.id,
       'ex',
-      1000 * 60 * 60 * 24 * 3,
+      1000 * 60 * 60 * 24 * 3
     ); // 3 days
     await sendEmail(
       email,
-      `<a href='${process.env.CORS_ORIGIN}/reset-password/${token}'>Reset Password</a>`,
+      `<a href='${process.env.CORS_ORIGIN}/reset-password/${token}'>Reset Password</a>`
     );
 
     return true;
@@ -109,7 +113,7 @@ export class UserService {
 
   async resetPassword(
     input: ResetPasswordInput,
-    req: e.Request,
+    req: e.Request
   ): Promise<UserResponse> {
     const { newPassword, token } = input;
 
@@ -121,16 +125,16 @@ export class UserService {
           errors: [
             {
               field: 'token',
-              message: 'Token expired',
-            },
-          ],
+              message: 'Token expired'
+            }
+          ]
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
     const user = await this.userRepository.findOne({
-      where: { id: userId },
+      where: { id: userId }
     });
 
     if (!user) throw new NotFoundException();
@@ -149,7 +153,7 @@ export class UserService {
 
   async changePassword(
     input: ChangePasswordInput,
-    userId: string,
+    userId: string
   ): Promise<boolean> {
     const { newPassword, currentPassword } = input;
 
@@ -176,7 +180,7 @@ export class UserService {
     const user = await this.userRepository.findOne(id);
     if (!user) {
       throw new NotFoundException({
-        message: 'An account with that username or email does not exist.',
+        message: 'An account with that username or email does not exist.'
       });
     }
     return user.toJSON();
@@ -185,7 +189,7 @@ export class UserService {
   async updateUser(
     id: string,
     data: UpdateInput,
-    image?: BufferFile,
+    image?: BufferFile
   ): Promise<UserResponse> {
     const { email } = data;
 
@@ -199,11 +203,11 @@ export class UserService {
             errors: [
               {
                 field: 'email',
-                message: 'Email must be unique.',
-              },
-            ],
+                message: 'Email must be unique.'
+              }
+            ]
           },
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
     }

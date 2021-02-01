@@ -1,4 +1,4 @@
 export class DMChannelResponse {
-  id: string;
-  name: string;
+  id!: string;
+  name!: string;
 }

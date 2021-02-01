@@ -22,7 +22,7 @@ export class GuildService {
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
-    private socketService: SocketService,
+    private socketService: SocketService
   ) {
   }
 
@@ -35,7 +35,7 @@ export class GuildService {
        where m."guildId" = $1
        order by u.username
       `,
-      [guildId],
+      [guildId]
     );
   }
 
@@ -57,13 +57,13 @@ export class GuildService {
        on g."id"::text = member."guildId"
        where member."userId" = $1
        order by g."createdAt";`,
-      [userId],
+      [userId]
     );
   }
 
   async getDirectMessageMembers(
     guildId: string,
-    userId: string,
+    userId: string
   ): Promise<User[]> {
     const manager = getManager();
     return await manager.query(
@@ -78,20 +78,20 @@ export class GuildService {
          and dm."guildId"::text = $2
          and u."id"::text != $1
       `,
-      [userId, guildId],
+      [userId, guildId]
     );
   }
 
   async createGuild(name: string, userId: string): Promise<GuildResponse> {
     try {
-      let guild: Guild = null;
-      let channel: Channel = null;
+      let guild: Guild | null = null;
+      let channel: Channel | null = null;
 
       await getManager().transaction(async (entityManager) => {
         guild = this.guildRepository.create({ ownerId: userId });
         channel = this.channelRepository.create({ name: 'general' });
 
-        guild.name = name;
+        guild.name = name.trim();
         await guild.save();
         await entityManager.save(guild);
 
@@ -104,16 +104,16 @@ export class GuildService {
           id: await idGenerator(),
           guildId: guild.id,
           userId,
-          admin: true,
+          admin: true
         });
       });
 
       return {
-        id: guild?.id,
-        name: guild?.name,
-        default_channel_id: channel?.id,
-        createdAt: guild?.createdAt.toString(),
-        updatedAt: guild?.updatedAt.toString(),
+        id: guild!.id,
+        name: guild!.name,
+        default_channel_id: channel!.id,
+        createdAt: guild!.createdAt.toString(),
+        updatedAt: guild!.updatedAt.toString()
       };
     } catch (err) {
       throw new InternalServerErrorException(err);
@@ -153,13 +153,13 @@ export class GuildService {
 
     await redis.del(INVITE_LINK_PREFIX + token);
 
-    const defaultChannel = await this.channelRepository.findOne({
+    const defaultChannel = await this.channelRepository.findOneOrFail({
       where: { guild },
       relations: ['guild'],
-      order: { createdAt: 'ASC' },
+      order: { createdAt: 'ASC' }
     });
 
-    const user = await this.userRepository.findOne(userId);
+    const user = await this.userRepository.findOneOrFail(userId);
 
     this.socketService.addMember({ room: guild.id, member: user.toMember() });
 
@@ -168,7 +168,7 @@ export class GuildService {
       name: guild.name,
       default_channel_id: defaultChannel.id,
       createdAt: guild?.createdAt.toString(),
-      updatedAt: guild?.updatedAt.toString(),
+      updatedAt: guild?.updatedAt.toString()
     };
   }
 

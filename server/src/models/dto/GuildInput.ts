@@ -1,3 +1,3 @@
 export class GuildInput {
-  name: string;
+  name!: string;
 }

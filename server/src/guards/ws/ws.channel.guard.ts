@@ -13,12 +13,12 @@ export class WsChannelGuard implements CanActivate {
 
     if (!channelID) return false;
 
-    const channel = await Channel.findOne({
+    const channel = await Channel.findOneOrFail({
       where: { id: channelID },
       relations: ['guild'],
     });
 
-    const member = await Member.findOne({
+    const member = await Member.findOneOrFail({
       where: { guildId: channel.guild.id, userId: id },
     });
 
