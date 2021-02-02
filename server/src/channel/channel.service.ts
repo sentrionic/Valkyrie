@@ -7,6 +7,8 @@ import { User } from '../entities/user.entity';
 import { Guild } from '../entities/guild.entity';
 import { DMChannelResponse } from '../models/response/DMChannelResponse';
 import { SocketService } from '../socket/socket.service';
+import { ChannelResponse } from '../models/response/ChannelResponse';
+import { ChannelInput } from '../models/dto/ChannelInput';
 
 @Injectable()
 export class ChannelService {
@@ -21,11 +23,12 @@ export class ChannelService {
 
   async createChannel(
     guildId: string,
-    name: string,
-    isPublic: boolean = true,
     userId: string,
-    members: string[],
+    input: ChannelInput
   ): Promise<boolean> {
+
+    const { name, isPublic, members } = input;
+
     const data = { name: name.trim(), public: isPublic };
     const memberPromise = await this.memberRepository.findOneOrFail({
       where: { guildId, userId },

@@ -5,6 +5,7 @@ import { MemberResponse } from '../models/response/MemberResponse';
 import { getManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
+import { ChannelResponse } from '../models/response/ChannelResponse';
 
 @Injectable()
 export class SocketService {

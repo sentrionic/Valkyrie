@@ -27,8 +27,7 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { User } from '../entities/user.entity';
-import { UpdateInput } from '../models/dto/UpdateInput';
+import { ChannelGuard } from '../guards/http/channel.guard';
 
 @Controller('channels')
 export class MessageController {
@@ -37,7 +36,11 @@ export class MessageController {
   ) {}
 
   @Get("/:channelId/messages")
-  @UseGuards(AuthGuard)
+  @UseGuards(ChannelGuard)
+  @ApiOperation({ summary: 'Get Channel Messages' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: [MessageResponse] })
   async messages(
     @Param('channelId') channelId: string,
     @GetUser() userId: string,
@@ -48,7 +51,7 @@ export class MessageController {
 
   @Post("/:channelId/messages")
   @UseInterceptors(FileInterceptor('file'))
-  @UseGuards(AuthGuard)
+  @UseGuards(ChannelGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Send Message' })
   @ApiOkResponse({ description: 'Message Success', type: Boolean })
@@ -66,6 +69,11 @@ export class MessageController {
 
   @Put("/messages/:messageId")
   @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Edit Message' })
+  @ApiOkResponse({ description: 'Edit Success', type: Boolean })
+  @ApiUnauthorizedResponse()
+  @ApiBody({ type: MessageInput })
   async editMessage(
     @GetUser() user: string,
     @Param('messageId') messageId: string,
@@ -76,6 +84,10 @@ export class MessageController {
 
   @Delete("/messages/:messageId")
   @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Delete Message' })
+  @ApiOkResponse({ description: 'Delete Success', type: Boolean })
+  @ApiUnauthorizedResponse()
   async deleteMessage(
     @GetUser() userId: string,
     @Param('messageId') messageId: string,

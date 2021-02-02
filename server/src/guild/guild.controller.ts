@@ -2,13 +2,14 @@ import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/c
 import { GuildService } from './guild.service';
 import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
-import { Guild } from '../entities/guild.entity';
 import { MemberGuard } from '../guards/http/member.guard';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
 import { GuildSchema } from '../validation/guild.schema';
 import { GuildInput } from '../models/dto/GuildInput';
 import { GuildResponse } from '../models/response/GuildResponse';
+import { ApiBody, ApiCookieAuth, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ChannelResponse } from '../models/response/ChannelResponse';
 
 @Controller('guilds')
 export class GuildController {
@@ -17,6 +18,10 @@ export class GuildController {
 
   @Get("/:guildId/members")
   @UseGuards(MemberGuard)
+  @ApiOperation({ summary: 'Get Guild Members' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: [MemberResponse] })
   async getGuildMembers(
     @Param('guildId') guildId: string,
     @GetUser() userId: string,
@@ -24,17 +29,12 @@ export class GuildController {
     return await this.guildService.getGuildMembers(guildId);
   }
 
-  // @ResolveField(() => [MemberResponse!]!)
-  // @UseGuards(TeamGuard)
-  // async directMessageMembers(
-  //   @Parent() team: Team,
-  //   @GetUser() user: User,
-  // ): Promise<User[]> {
-  //   return this.teamService.getDirectMessageMembers(team.id, user.id);
-  // }
-
   @Get()
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get Users Guilds' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: [GuildResponse] })
   async getGuilds(
     @GetUser() userId: string
   ): Promise<GuildResponse[]> {
@@ -43,6 +43,11 @@ export class GuildController {
 
   @Post("/create")
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Create Guild' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiBody({ type: GuildInput })
+  @ApiOkResponse({ type: [GuildResponse] })
   async createGuild(
     @Body(new YupValidationPipe(GuildSchema)) input: GuildInput,
     @GetUser() user: string,
@@ -53,12 +58,22 @@ export class GuildController {
 
   @Get("/:guildId/invite")
   @UseGuards(MemberGuard)
+  @ApiOperation({ summary: 'Create Invite Link' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiBody({ type: String, description: "The guildId" })
+  @ApiOkResponse({ type: String, description: "The invite link" })
   async generateTeamInvite(@Param('guildId') id: string): Promise<string> {
     return this.guildService.generateInviteLink(id);
   }
 
   @Post("/join")
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Join Guild' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiBody({ type: String, description: "The invite link" })
+  @ApiOkResponse({ type: GuildResponse })
   async joinTeam(
     @Body('link') link: string,
     @GetUser() user: string,
@@ -68,6 +83,10 @@ export class GuildController {
 
   @Delete("/:guildId")
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Leave Guild' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: Boolean })
   async leaveGuild(
     @GetUser() userId: string,
     @Param("guildId") guildId: string

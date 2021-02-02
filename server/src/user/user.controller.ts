@@ -52,6 +52,7 @@ export class UserController {
 
   @Post('/register')
   @ApiOperation({ summary: 'Register Account' })
+  @ApiCreatedResponse({ description: 'Newly Created User' })
   @ApiBody({ type: RegisterInput })
   async register(
     @Body(new YupValidationPipe(RegisterSchema)) credentials: RegisterInput,
@@ -62,6 +63,7 @@ export class UserController {
 
   @Post('/login')
   @ApiOperation({ summary: 'User Login' })
+  @ApiOkResponse({ description: 'Current User', type: UserResponse })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiBody({ type: LoginInput })
   async login(
@@ -130,7 +132,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('image'))
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Update Current User' })
-  @ApiOkResponse({ description: 'Update Success', type: User })
+  @ApiOkResponse({ description: 'Update Success', type: UserResponse })
   @ApiUnauthorizedResponse()
   @ApiBody({ type: UpdateInput })
   @ApiConsumes('multipart/form-data')
