@@ -43,7 +43,6 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               if (data) {
                 toast({
                   title: "Changed Password",
-                  description: "Successfully changed your password",
                   status: "success",
                   duration: 5000,
                   isClosable: true,

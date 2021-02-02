@@ -7,8 +7,8 @@ import { getTime } from '../../lib/utils/dateUtils';
 import { MdEdit } from 'react-icons/md';
 import { FaEllipsisV, FaRegTrashAlt } from 'react-icons/fa';
 import { DeleteMessageModal } from '../modals/DeleteMessageModal';
-import './css/ContextMenu.css';
 import { EditMessageModal } from '../modals/EditMessageModal';
+import './css/ContextMenu.css';
 
 interface MessageProps {
   message: MessageResponse;
@@ -33,7 +33,7 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
         alignItems='center'
         my='2'
         mr='1'
-        _hover={{ bg: 'brandGray.dark' }}
+        _hover={{ bg: '#32353b' }}
         justify='space-between'
         onContextMenu={(e) => {
           if (isAuthor) show(e);

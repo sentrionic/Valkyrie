@@ -29,7 +29,7 @@ export const MessageInput: React.FC = () => {
     }
     setSubmitting(true);
     const data = new FormData();
-    data.append("text", text);
+    data.append("text", text.trim());
     await sendMessage(channelId, data);
   };
 
@@ -52,8 +52,8 @@ export const MessageInput: React.FC = () => {
              inputRef?.current?.focus()
            });
           }} />
-        <InputLeftElement _hover={{ cursor: 'pointer' }}>
-          <Icon as={MdAddCircle} boxSize={'20px'} />
+        <InputLeftElement color={"#b9bbbe"} _hover={{ cursor: 'pointer', color: '#fcfcfc' }}>
+          <Icon as={MdAddCircle} boxSize={'20px'}  />
         </InputLeftElement>
       </InputGroup>
     </GridItem>

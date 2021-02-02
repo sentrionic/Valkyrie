@@ -27,7 +27,7 @@ export const EditMessageModal: React.FC<IProps> = ({ message, isOpen, onClose })
 
   const handleSubmit = async () => {
     if (!text || !text.trim()) return;
-    await editMessage(message.id, text);
+    await editMessage(message.id, text.trim());
     onClose();
   };
 

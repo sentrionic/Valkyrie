@@ -47,6 +47,7 @@ export const Account = () => {
 
   const inputFile: any = useRef(null);
   const [imageUrl, setImageUrl] = useState(user?.image || "");
+  const [cropImage, setCropImage] = useState("");
   const [croppedImage, setCroppedImage] = useState<any>(null);
 
   const closeClicked = () => {
@@ -95,9 +96,8 @@ export const Account = () => {
                     setUser(data);
                     toast({
                       title: "Account Updated.",
-                      description: "Successfully updated your account",
                       status: "success",
-                      duration: 5000,
+                      duration: 3000,
                       isClosable: true,
                     });
                   }
@@ -129,7 +129,7 @@ export const Account = () => {
                       hidden
                       onChange={async (e) => {
                         if (!e.currentTarget.files) return;
-                        setImageUrl(
+                        setCropImage(
                           URL.createObjectURL(e.currentTarget.files[0])
                         );
                         cropperOnOpen();
@@ -214,7 +214,7 @@ export const Account = () => {
       <CropImageModal
         isOpen={cropperIsOpen}
         onClose={cropperOnClose}
-        initialImage={imageUrl}
+        initialImage={cropImage}
         applyCrop={applyCrop}
       />
     </Flex>

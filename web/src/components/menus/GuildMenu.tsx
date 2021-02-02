@@ -17,10 +17,7 @@ interface GuildMenuProps {
   inviteOpen: () => void;
 }
 
-export const GuildMenu: React.FC<GuildMenuProps> = ({
-                                                      channelOpen,
-                                                      inviteOpen
-                                                    }) => {
+export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen }) => {
 
   const { guildId } = useParams<RouterProps>();
   const { data } = useQuery<Guild[]>('guilds');

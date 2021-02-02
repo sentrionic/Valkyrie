@@ -6,7 +6,8 @@ interface AppLayoutProps {
 }
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ showLastColumn = false, children }) => {
-  // Col: GuildList ChannelList Chat MemberList
+  // Col Chat: GuildList ChannelList Chat [MemberList]
+  // Col Home: GuildList DMList Chat/FriendsList
   return (
     <Grid
       height='100vh'

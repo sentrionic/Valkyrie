@@ -9,7 +9,6 @@ import { GuildSchema } from '../validation/guild.schema';
 import { GuildInput } from '../models/dto/GuildInput';
 import { GuildResponse } from '../models/response/GuildResponse';
 import { ApiBody, ApiCookieAuth, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { ChannelResponse } from '../models/response/ChannelResponse';
 
 @Controller('guilds')
 export class GuildController {

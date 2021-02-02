@@ -155,14 +155,14 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 textColor="brandGray.accent"
                 textTransform="uppercase"
               >
-                invite links shouls look like
+                invite links should look like
               </Text>
 
               <Text mt="2" fontSize="12px" textColor="brandGray.accent">
                 hTKzmak
               </Text>
               <Text fontSize="12px" textColor="brandGray.accent">
-                https://discord.gg/hTKzmak
+                http://localhost:3000/hTKzmak
               </Text>
             </ModalBody>
 

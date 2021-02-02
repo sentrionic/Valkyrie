@@ -5,11 +5,13 @@ import { config } from 'dotenv';
 import { AppModule } from './app.module';
 import { COOKIE_NAME } from './utils/constants';
 import { sessionMiddleware } from './config/sessionmiddleware';
+import { RedisIoAdapter } from './config/redis.adapter';
 
 config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useWebSocketAdapter(new RedisIoAdapter(app));
   app.setGlobalPrefix('api');
   app.set('trust proxy', 1);
   app.enableCors({

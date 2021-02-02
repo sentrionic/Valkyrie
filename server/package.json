@@ -48,6 +48,7 @@
     "rxjs": "^6.6.3",
     "sharp": "^0.27.1",
     "swagger-ui-express": "^4.1.6",
+    "socket.io-redis": "5.4.0",
     "typeorm": "^0.2.30",
     "uuid": "^8.3.2",
     "yup": "^0.32.8"
@@ -72,6 +73,7 @@
     "@types/rimraf": "^3.0.0",
     "@types/sharp": "^0.27.1",
     "@types/socket.io": "^2.1.13",
+    "@types/socket.io-redis": "1.0.26",
     "@types/supertest": "^2.0.10",
     "@types/swagger-ui-express": "^4.1.2",
     "@types/uuid": "^8.3.0",
