@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { GridItem, Flex, Box, Spinner } from '@chakra-ui/react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { InfiniteData, useInfiniteQuery, useQueryClient } from 'react-query';
 import { Message } from '../../items/Message';
 import { StartMessages } from '../../sections/StartMessages';
 import { scrollbarCss } from '../../../lib/utils/theme';
 import { useParams } from 'react-router-dom';
 import { getMessages } from '../../../lib/api/handler/messages';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { Message as MessageResponse } from '../../../lib/api/models';
-import { InfiniteData, useInfiniteQuery, useQueryClient } from 'react-query';
 import { getSocket } from '../../../lib/api/getSocket';
 import { RouterProps } from '../../../routes/Routes';
 
@@ -26,8 +26,6 @@ export const ChatScreen: React.FC = () => {
     staleTime: 0,
     cacheTime: 0,
     getNextPageParam: lastPage => hasMore && lastPage.length ? lastPage[lastPage.length - 1].createdAt : '',
-    refetchOnWindowFocus: false,
-    refetchIntervalInBackground: false
   });
 
   useEffect((): any => {

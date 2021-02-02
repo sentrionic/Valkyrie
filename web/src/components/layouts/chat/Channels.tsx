@@ -30,10 +30,7 @@ export const Channels: React.FC = () => {
   const cache = useQueryClient();
 
   const { data } = useQuery(key, () =>
-      getChannels(guildId).then(response => response.data),
-    {
-      refetchOnWindowFocus: false
-    }
+    getChannels(guildId).then(response => response.data)
   );
 
   useEffect((): any => {

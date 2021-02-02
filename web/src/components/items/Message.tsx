@@ -24,7 +24,7 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
 
   const { show } = useContextMenu({
-    id: message.id,
+    id: message.id
   });
 
   return (
@@ -50,14 +50,15 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
                 {getTime(message.createdAt)}
               </Text>
             </Flex>
-            <Flex alignItems={"center"}>
+            <Flex alignItems={'center'}>
               <Text>{message.text}</Text>
-              {message.createdAt !== message.updatedAt && <Text fontSize={"10px"} ml={"1"} color={"#72767d"}>(edited)</Text>}
+              {message.createdAt !== message.updatedAt &&
+              <Text fontSize={'10px'} ml={'1'} color={'#72767d'}>(edited)</Text>}
             </Flex>
           </Box>
         </Flex>
         {(isAuthor && (showSettings)) && (
-          <Box onClick={show}  mr='2' _hover={{ cursor: "pointer" }}>
+          <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }}>
             <FaEllipsisV />
           </Box>
         )}

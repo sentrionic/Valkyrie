@@ -61,7 +61,6 @@ export const Register = () => {
                   <InputField
                     label="username"
                     name="username"
-                    autoComplete="username"
                   />
 
                   <InputField

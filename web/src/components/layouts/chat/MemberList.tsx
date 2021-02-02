@@ -14,12 +14,7 @@ export const MemberList: React.FC = () => {
   const key = `members-${guildId}`;
   const cache = useQueryClient();
 
-  const { data } = useQuery(key, () =>
-      getGuildMembers(guildId).then(response => response.data),
-    {
-      refetchOnWindowFocus: false
-    }
-  );
+  const { data } = useQuery(key, () => getGuildMembers(guildId).then(response => response.data));
 
   const online: Member[] = [];
   const offline: Member[] = [];

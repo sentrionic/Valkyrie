@@ -13,9 +13,6 @@ export const GuildList: React.FC = () => {
   const { data } = useQuery('guilds', () => {
       return getUserGuilds().then(response => response.data);
     },
-    {
-      refetchOnWindowFocus: false,
-    },
   );
 
   return (

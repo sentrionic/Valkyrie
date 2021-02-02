@@ -3,8 +3,17 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Routes } from './routes/Routes';
 import { GlobalState } from './components/sections/GlobalState';
 
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+    }
+  }
+});
+
 export const App = () => (
-  <QueryClientProvider client={new QueryClient()}>
+  <QueryClientProvider client={client}>
     <GlobalState>
       <Routes />
     </ GlobalState>
