@@ -22,7 +22,7 @@ import { InputField } from "../components/common/InputField";
 import { ChangePasswordModal } from "../components/modals/ChangePasswordModal";
 import { toErrorMap } from "../lib/utils/toErrorMap";
 import { userStore } from "../lib/stores/userStore";
-import { UserSchema } from "../lib/utils/validation/yup-schemas";
+import { UserSchema } from "../lib/utils/validation/auth.schema";
 import { getAccount, updateAccount } from "../lib/api/handler/account";
 import { AccountResponse } from "../lib/api/models";
 import { logout } from "../lib/api/handler/auth";

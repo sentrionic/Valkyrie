@@ -18,6 +18,7 @@ export interface Member extends BaseModel {
 export interface Message extends BaseModel {
   text?: string;
   filetype?: string;
+  url?: string;
   user: Member;
 }
 

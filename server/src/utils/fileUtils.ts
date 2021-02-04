@@ -85,21 +85,21 @@ export const uploadAvatarToS3 = async (
 
 export const uploadToS3 = async (
   directory: string,
-  image: BufferFile,
+  file: BufferFile,
 ): Promise<string> => {
-  const { buffer, originalname } = await image;
+  const { buffer, originalname, mimetype } = await file;
 
-  const stream = await storyImageTransformer(buffer);
-
-  if (!stream) {
-    throw new InternalServerErrorException();
-  }
+  // const stream = await storyImageTransformer(buffer);
+  //
+  // if (!stream) {
+  //   throw new InternalServerErrorException();
+  // }
 
   const params = {
     Bucket: process.env.AWS_STORAGE_BUCKET_NAME as string,
     Key: `files/${directory}/${formatName(originalname)}`,
-    Body: stream,
-    ContentType: 'image/webp',
+    Body: buffer,
+    ContentType: mimetype,
   };
 
   const response = await s3.upload(params).promise();
@@ -108,10 +108,12 @@ export const uploadToS3 = async (
 };
 
 const formatName = (filename: string): string => {
-  const name = path.parse(filename).name;
+  const file = path.parse(filename);
+  const name = file.name;
+  const ext = file.ext
   const date = Date.now();
   const cleanFileName = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-  return `${date}-${cleanFileName}.webp`;
+  return `${date}-${cleanFileName}${ext}`;
 };
 
 export const deleteFile = async (filename: string): Promise<void> => {

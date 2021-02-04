@@ -4,7 +4,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { InputField } from "../components/common/InputField";
 import { toErrorMap } from "../lib/utils/toErrorMap";
-import { ForgotPasswordSchema } from "../lib/utils/validation/yup-schemas";
+import { ForgotPasswordSchema } from "../lib/utils/validation/auth.schema";
 import { forgotPassword } from '../lib/api/handler/auth';
 
 export const ForgotPassword = () => {

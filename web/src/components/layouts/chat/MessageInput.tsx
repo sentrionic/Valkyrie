@@ -2,16 +2,14 @@ import {
   GridItem,
   InputGroup,
   Input,
-  InputLeftElement,
-  Icon,
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
-import { MdAddCircle } from 'react-icons/md';
 import { sendMessage } from '../../../lib/api/handler/messages';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Channel } from '../../../lib/api/models';
 import { RouterProps } from '../../../routes/Routes';
+import { FileUploadButton } from './FileUploadButton';
 
 export const MessageInput: React.FC = () => {
 
@@ -52,9 +50,7 @@ export const MessageInput: React.FC = () => {
              inputRef?.current?.focus()
            });
           }} />
-        <InputLeftElement color={"#b9bbbe"} _hover={{ cursor: 'pointer', color: '#fcfcfc' }}>
-          <Icon as={MdAddCircle} boxSize={'20px'}  />
-        </InputLeftElement>
+        <FileUploadButton />
       </InputGroup>
     </GridItem>
   );

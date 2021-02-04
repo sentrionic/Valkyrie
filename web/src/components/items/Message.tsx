@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { MdEdit } from 'react-icons/md';
+import { FaEllipsisH, FaRegTrashAlt } from 'react-icons/fa';
+import { FiLink } from 'react-icons/fi';
 import { Message as MessageResponse } from '../../lib/api/models';
 import { userStore } from '../../lib/stores/userStore';
 import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme, useContextMenu } from 'react-contexify';
 import { getTime } from '../../lib/utils/dateUtils';
-import { MdEdit } from 'react-icons/md';
-import { FaEllipsisV, FaRegTrashAlt } from 'react-icons/fa';
 import { DeleteMessageModal } from '../modals/DeleteMessageModal';
 import { EditMessageModal } from '../modals/EditMessageModal';
+import { MessageContent } from '../sections/MessageContent';
 import './css/ContextMenu.css';
 
 interface MessageProps {
@@ -27,6 +29,11 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
     id: message.id
   });
 
+  const openInNewTab = (url: string) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+  }
+
   return (
     <>
       <Flex
@@ -41,37 +48,45 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
         onMouseLeave={() => setShowSettings(false)}
         onMouseEnter={() => setShowSettings(true)}
       >
-        <Flex alignItems='center'>
-          <Avatar h='40px' w='40px' ml='4' src={message.user.image} />
-          <Box ml='3'>
-            <Flex alignItems='center'>
-              <Text>{message.user.username}</Text>
-              <Text fontSize='12px' color='brandGray.accent' ml='2'>
-                {getTime(message.createdAt)}
-              </Text>
+        <Flex w={'full'}>
+          <Avatar h='40px' w='40px' ml='4' mt={'1'} src={message.user.image} />
+          <Box ml='3' w={'full'}>
+            <Flex alignItems='center' justify={'space-between'}>
+              <Flex alignItems={'center'}>
+                <Text>{message.user.username}</Text>
+                <Text fontSize='12px' color='brandGray.accent' ml='2'>
+                  {getTime(message.createdAt)}
+                </Text>
+              </Flex>
+              {(isAuthor && (showSettings)) && (
+                <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }}>
+                  <FaEllipsisH />
+                </Box>
+              )}
             </Flex>
-            <Flex alignItems={'center'}>
-              <Text>{message.text}</Text>
-              {message.createdAt !== message.updatedAt &&
-              <Text fontSize={'10px'} ml={'1'} color={'#72767d'}>(edited)</Text>}
-            </Flex>
+            <MessageContent message={message} />
           </Box>
         </Flex>
-        {(isAuthor && (showSettings)) && (
-          <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }}>
-            <FaEllipsisV />
-          </Box>
-        )}
       </Flex>
       {isAuthor &&
       <>
         <Menu id={message.id} theme={theme.dark}>
-          <Item className={'menu-item'} onClick={onEditOpen}>
-            <Flex align='center' justify='space-between' w='full'>
-              <Text>Edit Message</Text>
-              <Icon as={MdEdit} />
-            </Flex>
-          </Item>
+          {message.filetype ?
+            <Item className={'menu-item'} onClick={() => {
+              if (message.url) openInNewTab(message.url);
+            }}>
+              <Flex align='center' justify='space-between' w='full'>
+                <Text>Open Link</Text>
+                <Icon as={FiLink} />
+              </Flex>
+            </Item> :
+            <Item className={'menu-item'} onClick={onEditOpen}>
+              <Flex align='center' justify='space-between' w='full'>
+                <Text>Edit Message</Text>
+                <Icon as={MdEdit} />
+              </Flex>
+            </Item>
+          }
           <Item onClick={onDeleteOpen} className={'delete-item'}>
             <Flex align='center' justify='space-between' w='full'>
               <Text>Delete Message</Text>
@@ -85,4 +100,4 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
       }
     </>
   );
-}
+};

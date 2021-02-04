@@ -76,7 +76,7 @@ export class MessageService {
         directory,
         file
       );
-      message.filetype = 'image/webp';
+      message.filetype = file.mimetype;
       message.url = url;
     }
 
