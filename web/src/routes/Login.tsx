@@ -13,7 +13,7 @@ import { Link as RLink, useHistory } from "react-router-dom";
 import { InputField } from "../components/common/InputField";
 import { toErrorMap } from "../lib/utils/toErrorMap";
 import { userStore } from "../lib/stores/userStore";
-import { LoginSchema } from "../lib/utils/validation/yup-schemas";
+import { LoginSchema } from "../lib/utils/validation/auth.schema";
 import { login } from "../lib/api/handler/auth";
 
 export const Login = () => {

@@ -11,6 +11,7 @@ import { useQuery } from 'react-query';
 import { Guild } from '../../lib/api/models';
 import { leaveGuild } from '../../lib/api/handler/guilds';
 import { RouterProps } from '../../routes/Routes';
+import { userStore } from '../../lib/stores/userStore';
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -23,6 +24,8 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
   const { data } = useQuery<Guild[]>('guilds');
   const guild = data?.find(g => g.id === guildId);
   const history = useHistory();
+
+  const user = userStore(state => state.current);
 
   const handleLeave = async () => {
     const { data } = await leaveGuild(guildId);
@@ -40,7 +43,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
       zIndex='2'
       boxShadow='md'
     >
-      <Menu placement='bottom-end'>
+      <Menu placement='bottom-end' isLazy>
         {({ isOpen }) => (
           <>
             <Flex justify='space-between' align='center'>
@@ -50,11 +53,13 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
               </MenuButton>
             </Flex>
             <StyledMenuList>
-              <StyledMenuItem
-                label={'Create Channel'}
-                icon={MdAddCircle}
-                handleClick={channelOpen}
-              />
+              {guild?.ownerId === user?.id &&
+                <StyledMenuItem
+                  label={'Create Channel'}
+                  icon={MdAddCircle}
+                  handleClick={channelOpen}
+                />
+              }
               <StyledMenuItem
                 label={'Invite People'}
                 icon={FaUserPlus}

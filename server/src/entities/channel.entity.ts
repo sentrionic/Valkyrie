@@ -1,14 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Guild } from './guild.entity';
 import { classToPlain, Exclude } from 'class-transformer';
+import { ChannelResponse } from '../models/response/ChannelResponse';
 
 @Entity('channels')
 export class Channel extends AbstractEntity {
