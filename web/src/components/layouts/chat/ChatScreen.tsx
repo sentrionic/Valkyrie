@@ -10,6 +10,8 @@ import { getMessages } from '../../../lib/api/handler/messages';
 import { Message as MessageResponse } from '../../../lib/api/models';
 import { getSocket } from '../../../lib/api/getSocket';
 import { RouterProps } from '../../../routes/Routes';
+import { channelStore } from '../../../lib/stores/channelStore';
+import { userStore } from '../../../lib/stores/userStore';
 
 export const ChatScreen: React.FC = () => {
 
@@ -17,6 +19,8 @@ export const ChatScreen: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const qKey = `messages-${channelId}`;
   const cache = useQueryClient();
+  const current = userStore(state => state.current);
+  const store = channelStore();
 
   const { data, isLoading, fetchNextPage } = useInfiniteQuery<MessageResponse[]>(qKey, async ({ pageParam = null }) => {
     const { data } = await getMessages(channelId, pageParam);
@@ -30,6 +34,7 @@ export const ChatScreen: React.FC = () => {
 
   useEffect((): any => {
 
+    store.reset();
     const socket = getSocket();
     socket.emit('joinChannel', channelId);
 
@@ -67,11 +72,21 @@ export const ChatScreen: React.FC = () => {
       });
     });
 
+    socket.on('addToTyping', (username: string) => {
+      if (username !== current?.username)
+        store.addTyping(username);
+    });
+
+    socket.on('removeFromTyping', (username: string) => {
+      if (username !== current?.username)
+        store.removeTyping(username);
+    });
+
     return () => {
       socket.emit('leaveRoom', channelId);
       socket.disconnect();
     };
-  }, [channelId, data, cache, qKey]);
+  }, [channelId, data, cache, qKey, current]);
 
   if (isLoading) {
     return (
@@ -85,7 +100,7 @@ export const ChatScreen: React.FC = () => {
 
   return (
     <ChatGrid>
-      <Box h={'10px'} />
+      <Box h={'10px'} mt={2} />
       <Box
         as={InfiniteScroll}
         css={{

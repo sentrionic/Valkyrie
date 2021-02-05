@@ -33,7 +33,7 @@ export const MessageContent: React.FC<MessageProps> = ({ message: { url, text, f
     <Flex alignItems={'center'}>
       <Text>{text}</Text>
       {createdAt !== updatedAt &&
-      <Text fontSize={'10px'} ml={'1'} color={'#72767d'}>(edited)</Text>
+        <Text fontSize={'10px'} ml={'1'} color={'#72767d'}>(edited)</Text>
       }
     </Flex>
   );

@@ -84,4 +84,12 @@ export class SocketService {
   async setOnlineStatus(userId: string, isOnline: boolean): Promise<void> {
     await this.userRepository.update(userId, { isOnline });
   }
+
+  addTyping(room: string, username: string) {
+    this.socket.to(room).emit("addToTyping", username);
+  }
+
+  stopTyping(room: string, username: string) {
+    this.socket.to(room).emit("removeFromTyping", username);
+  }
 }

@@ -62,4 +62,18 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   handleRoomLeave(client: Socket, room: string): void {
     client.leave(room);
   }
+
+  @SubscribeMessage('startTyping')
+  handleStartTyping(client: Socket, data: string[]): void {
+    const room = data[0];
+    const username = data[1];
+    this.socketService.addTyping(room, username);
+  }
+
+  @SubscribeMessage('stopTyping')
+  handleStopTyping(client: Socket, data: string[]): void {
+    const room = data[0];
+    const username = data[1];
+    this.socketService.stopTyping(room, username);
+  }
 }
