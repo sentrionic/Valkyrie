@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { GridItem, Flex, Box, Spinner } from '@chakra-ui/react';
+import { GridItem, Flex, Box, Spinner, Text, Divider } from '@chakra-ui/react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { InfiniteData, useInfiniteQuery, useQueryClient } from 'react-query';
-import { Message } from '../../items/Message';
+import { Message } from '../../items/message/Message';
 import { StartMessages } from '../../sections/StartMessages';
 import { scrollbarCss } from '../../../lib/utils/theme';
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { getSocket } from '../../../lib/api/getSocket';
 import { RouterProps } from '../../../routes/Routes';
 import { channelStore } from '../../../lib/stores/channelStore';
 import { userStore } from '../../../lib/stores/userStore';
+import { checkNewDay, formatDivider, getTimeDifference } from '../../../lib/utils/dateUtils';
 
 export const ChatScreen: React.FC = () => {
 
@@ -29,7 +30,7 @@ export const ChatScreen: React.FC = () => {
   }, {
     staleTime: 0,
     cacheTime: 0,
-    getNextPageParam: lastPage => hasMore && lastPage.length ? lastPage[lastPage.length - 1].createdAt : '',
+    getNextPageParam: lastPage => hasMore && lastPage.length ? lastPage[lastPage.length - 1].createdAt : ''
   });
 
   useEffect((): any => {
@@ -86,6 +87,7 @@ export const ChatScreen: React.FC = () => {
       socket.emit('leaveRoom', channelId);
       socket.disconnect();
     };
+    // eslint-disable-next-line
   }, [channelId, data, cache, qKey, current]);
 
   if (isLoading) {
@@ -96,11 +98,17 @@ export const ChatScreen: React.FC = () => {
     );
   }
 
+  const checkIfWithinTime = (message1: MessageResponse, message2: MessageResponse): boolean => {
+    if (message1.user.id !== message2.user.id) return false;
+    if (message1.createdAt === message2.createdAt) return false;
+    return getTimeDifference(message1.createdAt, message2.createdAt) <= 5;
+  };
+
   const messages = data ? data!.pages.map(p => p.map(p => p)).flat() : [];
 
   return (
     <ChatGrid>
-      <Box h={'10px'} mt={2} />
+      <Box h={'10px'} mt={4} />
       <Box
         as={InfiniteScroll}
         css={{
@@ -121,7 +129,27 @@ export const ChatScreen: React.FC = () => {
         }
         scrollableTarget='chatGrid'
       >
-        {messages.map(m => <Message key={m.id} message={m} />)}
+        {messages.map((m, i) =>
+          <>
+            <Message
+              key={m.id}
+              message={m}
+              isCompact={
+                checkIfWithinTime(
+                  m,
+                  messages[Math.min(i + 1, messages.length - 1)]
+                )}
+            />
+            {checkNewDay(m.createdAt, messages[Math.min(i + 1, messages.length - 1)].createdAt) &&
+            <Flex textAlign='center' align='center' mt={'2'} mx={'4'}>
+              <Divider />
+              <Text w='full' fontSize={'12px'} color={'brandGray.accent'}>{formatDivider(m.createdAt)}</Text>
+              <Divider />
+            </Flex>
+            }
+          </>
+        )
+        }
       </Box>
       {!hasMore && <StartMessages />}
     </ChatGrid>

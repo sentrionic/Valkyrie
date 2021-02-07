@@ -2,21 +2,22 @@ import React, { useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { FaEllipsisH, FaRegTrashAlt } from 'react-icons/fa';
 import { FiLink } from 'react-icons/fi';
-import { Message as MessageResponse } from '../../lib/api/models';
-import { userStore } from '../../lib/stores/userStore';
+import { Message as MessageResponse } from '../../../lib/api/models';
+import { userStore } from '../../../lib/stores/userStore';
 import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme, useContextMenu } from 'react-contexify';
-import { getTime } from '../../lib/utils/dateUtils';
-import { DeleteMessageModal } from '../modals/DeleteMessageModal';
-import { EditMessageModal } from '../modals/EditMessageModal';
-import { MessageContent } from '../sections/MessageContent';
-import './css/ContextMenu.css';
+import { getShortenedTime, getTime } from '../../../lib/utils/dateUtils';
+import { DeleteMessageModal } from '../../modals/DeleteMessageModal';
+import { EditMessageModal } from '../../modals/EditMessageModal';
+import { MessageContent } from './MessageContent';
+import '../css/ContextMenu.css';
 
 interface MessageProps {
   message: MessageResponse;
+  isCompact?: boolean;
 }
 
-export const Message: React.FC<MessageProps> = ({ message }) => {
+export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) => {
 
   const [showSettings, setShowSettings] = useState(false);
   const current = userStore(state => state.current);
@@ -30,16 +31,16 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
   });
 
   const openInNewTab = (url: string) => {
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-    if (newWindow) newWindow.opener = null
-  }
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
 
   return (
     <>
       <Flex
         alignItems='center'
-        my='2'
         mr='1'
+        mt={isCompact ? '0' : '3'}
         _hover={{ bg: '#32353b' }}
         justify='space-between'
         onContextMenu={(e) => {
@@ -49,23 +50,46 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
         onMouseEnter={() => setShowSettings(true)}
       >
         <Flex w={'full'}>
-          <Avatar h='40px' w='40px' ml='4' mt={'1'} src={message.user.image} />
-          <Box ml='3' w={'full'}>
-            <Flex alignItems='center' justify={'space-between'}>
-              <Flex alignItems={'center'}>
-                <Text>{message.user.username}</Text>
-                <Text fontSize='12px' color='brandGray.accent' ml='2'>
-                  {getTime(message.createdAt)}
+          {isCompact ?
+            <>
+              <Box ml={'3'} minW={'44px'} textAlign={'center'}>
+                <Text fontSize={'10px'} color='brandGray.accent' mt={'1'} hidden={!showSettings}>
+                  {getShortenedTime(message.createdAt)}
                 </Text>
-              </Flex>
-              {(isAuthor && (showSettings)) && (
-                <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }}>
+              </Box>
+
+              <Box ml='3' w={'full'}>
+                <MessageContent message={message} />
+              </Box>
+              {(isAuthor && (showSettings)) ?
+                <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }} h={'5px'}>
                   <FaEllipsisH />
                 </Box>
-              )}
-            </Flex>
-            <MessageContent message={message} />
-          </Box>
+                :
+                <Box mr={"6"} />
+              }
+            </>
+            :
+            <>
+              <Avatar h='40px' w='40px' ml='4' mt={'1'} src={message.user.image} />
+              <Box ml='3' w={'full'}>
+                <Flex alignItems='center' justify={'space-between'}>
+                  <Flex alignItems={'center'}>
+                    <Text>{message.user.username}</Text>
+                    <Text fontSize='12px' color='brandGray.accent' ml='2'>
+                      {getTime(message.createdAt)}
+                    </Text>
+                  </Flex>
+                  {(isAuthor && (showSettings)) && (
+                    <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }}>
+                      <FaEllipsisH />
+                    </Box>
+                  )}
+                </Flex>
+                <MessageContent message={message} />
+              </Box>
+            </>
+          }
         </Flex>
       </Flex>
       {isAuthor &&

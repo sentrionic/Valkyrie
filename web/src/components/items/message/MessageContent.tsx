@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
-import { Message as MessageResponse } from '../../lib/api/models';
+import { Message as MessageResponse } from '../../../lib/api/models';
 
 interface MessageProps {
   message: MessageResponse;
