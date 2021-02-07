@@ -1,17 +1,18 @@
+import React, { useRef, useState } from 'react';
 import {
   Flex,
   GridItem,
   InputGroup,
-  Input,
   Text,
+  Textarea
 } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
-import { sendMessage } from '../../../lib/api/handler/messages';
+import ResizeTextarea from "react-textarea-autosize";
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { FileUploadButton } from './FileUploadButton';
+import { sendMessage } from '../../../lib/api/handler/messages';
 import { Channel } from '../../../lib/api/models';
 import { RouterProps } from '../../../routes/Routes';
-import { FileUploadButton } from './FileUploadButton';
 import { getSocket } from '../../../lib/api/getSocket';
 import { userStore } from '../../../lib/stores/userStore';
 import { channelStore } from '../../../lib/stores/channelStore';
@@ -55,7 +56,14 @@ export const MessageInput: React.FC = () => {
   return (
     <GridItem gridColumn={3} gridRow={3} px='20px' pb={isTyping.length > 0 ? "0" : "26px"} bg='#36393f'>
       <InputGroup size='md' bg='#40444b' alignItems='center' borderRadius='8px'>
-        <Input
+        <Textarea
+          as={ResizeTextarea}
+          minH="40px"
+          transition="height none"
+          overflow="hidden"
+          w="100%"
+          resize="none"
+          minRows={1}
           pl='3rem'
           name={'text'}
           placeholder={`Message #${channel?.name}`}
