@@ -38,3 +38,8 @@ export interface Guild extends BaseModel {
   ownerId: string;
   default_channel_id: string;
 }
+
+export interface DMChannel {
+  id: string;
+  user: Member;
+}

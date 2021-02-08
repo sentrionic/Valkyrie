@@ -15,7 +15,13 @@ export class Channel extends AbstractEntity {
   @Column('boolean', { default: false })
   dm!: boolean;
 
-  @ManyToOne(() => Guild, (guild) => guild.id)
+  @ManyToOne(
+    () => Guild,
+    (guild) => guild.id,
+    {
+      nullable: true
+    }
+  )
   guild!: Guild;
 
   @ManyToMany(() => User, { onDelete: 'CASCADE' })
@@ -33,8 +39,8 @@ export class Channel extends AbstractEntity {
   members!: User[];
 
   @OneToMany(
-  () => PCMember,
-  (pcmember) => pcmember.channel,
+    () => PCMember,
+    (pcmember) => pcmember.channel
   )
   pcmembers: PCMember[];
 }

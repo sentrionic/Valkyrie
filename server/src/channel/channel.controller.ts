@@ -74,14 +74,25 @@ export class ChannelController {
     );
   }
 
-  @Post('/:guildId/dms')
+  @Get('/me/dm')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get Users DMs' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: [DMChannelResponse] })
+  async getDirectMessageChannels(
+    @GetUser() userId: string
+  ): Promise<DMChannelResponse[]> {
+    return this.channelService.getDirectMessageChannels(userId);
+  }
+
+  @Post(':memberId/dm')
   @UseGuards(AuthGuard)
   async getOrCreateChannel(
     @GetUser() userId: string,
-    @Body('memberId') member: string,
-    @Param('guildId') guildId: string
+    @Param('memberId') memberId: string
   ): Promise<DMChannelResponse> {
-    return this.channelService.getOrCreateChannel(guildId, member, userId);
+    return this.channelService.getOrCreateChannel(userId, memberId);
   }
 
   @Put("/:guildId/:channelId")
