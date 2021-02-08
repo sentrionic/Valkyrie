@@ -8,7 +8,7 @@ export class ChannelResponse {
   name!: string;
 
   @ApiProperty()
-  public!: boolean;
+  isPublic!: boolean;
 
   @ApiProperty({ type: String })
   createdAt!: string;

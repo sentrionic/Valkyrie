@@ -43,8 +43,8 @@ export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose 
             boxShadow={"dark-lg"}
             py={2}
           >
-            <Flex alignItems='center'>
-              <Avatar h='40px' w='40px' ml='4' src={message.user.image} />
+            <Flex>
+              <Avatar h='40px' w='40px' ml='4' mt={'1'} src={message.user.image} />
               <Box ml='3'>
                 <Flex alignItems='center'>
                   <Text>{message.user.username}</Text>

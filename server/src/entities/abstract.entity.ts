@@ -1,8 +1,5 @@
 import { BaseEntity, BeforeInsert, CreateDateColumn, Index, PrimaryColumn, UpdateDateColumn } from 'typeorm';
-import { customAlphabet } from 'nanoid';
-
-const alphabet = '0123456789';
-const nanoid = customAlphabet(alphabet, 20);
+import { idGenerator } from '../utils/idGenerator';
 
 export abstract class AbstractEntity extends BaseEntity {
 
@@ -18,6 +15,6 @@ export abstract class AbstractEntity extends BaseEntity {
 
   @BeforeInsert()
   async generateId() {
-    this.id = await nanoid();
+    this.id = await idGenerator();
   }
 }

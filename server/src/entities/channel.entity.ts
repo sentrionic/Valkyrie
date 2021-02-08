@@ -1,9 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Guild } from './guild.entity';
-import { classToPlain, Exclude } from 'class-transformer';
-import { ChannelResponse } from '../models/response/ChannelResponse';
+import { PCMember } from './pcmember.entity';
 
 @Entity('channels')
 export class Channel extends AbstractEntity {
@@ -17,18 +16,25 @@ export class Channel extends AbstractEntity {
   dm!: boolean;
 
   @ManyToOne(() => Guild, (guild) => guild.id)
-  @Exclude()
   guild!: Guild;
 
-  @ManyToMany(() => User)
-  @JoinColumn({ name: 'channel_member' })
-  @Exclude()
-  members!: Promise<User[]>;
+  @ManyToMany(() => User, { onDelete: 'CASCADE' })
+  @JoinTable({
+    name: 'channel_member',
+    joinColumn: {
+      name: 'channels',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'users',
+      referencedColumnName: 'id'
+    }
+  })
+  members!: User[];
 
-  // @OneToMany(() => PCMember, (pcmember) => pcmember.channel)
-  // pcmembers: Promise<PCMember[]>;
-
-  toJson(): ChannelResponse {
-    return <ChannelResponse>classToPlain(this);
-  }
+  @OneToMany(
+  () => PCMember,
+  (pcmember) => pcmember.channel,
+  )
+  pcmembers: PCMember[];
 }

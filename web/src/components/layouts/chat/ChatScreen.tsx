@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GridItem, Flex, Box, Spinner, Text, Divider } from '@chakra-ui/react';
+import { Box, Divider, Flex, GridItem, Spinner, Text } from '@chakra-ui/react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { InfiniteData, useInfiniteQuery, useQueryClient } from 'react-query';
 import { Message } from '../../items/message/Message';
@@ -130,7 +130,7 @@ export const ChatScreen: React.FC = () => {
         scrollableTarget='chatGrid'
       >
         {messages.map((m, i) =>
-          <>
+          <React.Fragment key={i}>
             <Message
               key={m.id}
               message={m}
@@ -141,13 +141,19 @@ export const ChatScreen: React.FC = () => {
                 )}
             />
             {checkNewDay(m.createdAt, messages[Math.min(i + 1, messages.length - 1)].createdAt) &&
-            <Flex textAlign='center' align='center' mt={'2'} mx={'4'}>
+            <Flex textAlign='center' align='center' mt={'2'} mx={'4'} key={m.createdAt}>
               <Divider />
-              <Text w='full' fontSize={'12px'} color={'brandGray.accent'}>{formatDivider(m.createdAt)}</Text>
+              <Text
+                w={['75%', '75%', '75%', '40%', '25%']}
+                fontSize={'12px'}
+                color={'brandGray.accent'}
+              >
+                {formatDivider(m.createdAt)}
+              </Text>
               <Divider />
             </Flex>
             }
-          </>
+          </React.Fragment>
         )
         }
       </Box>

@@ -1,8 +1,12 @@
-import { Flex, ListItem, Text } from '@chakra-ui/react';
-import { FaHashtag } from 'react-icons/fa';
-import React from 'react';
-import { Channel } from '../../lib/api/models';
+import React, { useState } from 'react';
+import { Flex, Icon, ListItem, Text, useDisclosure } from '@chakra-ui/react';
+import { FaHashtag, FaUserLock } from 'react-icons/fa';
+import { MdSettings } from 'react-icons/md';
+import { Channel, Guild } from '../../lib/api/models';
 import { Link, useLocation } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { userStore } from '../../lib/stores/userStore';
+import { ChannelSettingsModal } from '../modals/ChannelSettingsModal';
 
 interface ChannelListItemProps {
   channel: Channel,
@@ -14,6 +18,13 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
   const currentPath = `/channels/${guildId}/${channel.id}`;
   const location = useLocation();
   const isActive = location.pathname === currentPath;
+  const [showSettings, setShowSettings] = useState(false);
+
+  const current = userStore(state => state.current);
+  const { data } = useQuery<Guild[]>('guilds');
+  const guild = data?.find(g => g.id === guildId);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Link to={currentPath}>
@@ -24,10 +35,36 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
         _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
         bg={isActive ? '#393c43' : undefined}
         mb='2px'
+        onMouseLeave={() => setShowSettings(false)}
+        onMouseEnter={() => setShowSettings(true)}
       >
-        <Flex align='center'>
-          <FaHashtag />
-          <Text ml='2'>{channel.name}</Text>
+        <Flex align='center' justify={'space-between'}>
+          <Flex align='center'>
+            <Icon as={channel.isPublic ? FaHashtag : FaUserLock} />
+            <Text ml='2'>{channel.name}</Text>
+          </Flex>
+          {(current?.id === guild?.ownerId && (showSettings || isOpen)) &&
+          <>
+            <Icon
+              as={MdSettings}
+              color={'brandGray.accent'}
+              fontSize={'12px'}
+              _hover={{ color: '#fff' }}
+              onClick={(e) => {
+                e.preventDefault();
+                onOpen();
+              }}
+            />
+            {isOpen &&
+              <ChannelSettingsModal
+                guildId={guildId}
+                channelId={channel.id}
+                isOpen={isOpen}
+                onClose={onClose}
+              />
+            }
+          </>
+          }
         </Flex>
       </ListItem>
     </Link>

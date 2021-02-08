@@ -118,10 +118,10 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
             </Flex>
           </Item>
         </Menu>
-        <DeleteMessageModal message={message} isOpen={isDeleteOpen} onClose={onDeleteClose} />
-        <EditMessageModal message={message} isOpen={isEditOpen} onClose={onEditClose} />
+        {isDeleteOpen && <DeleteMessageModal message={message} isOpen={isDeleteOpen} onClose={onDeleteClose} /> }
+        {isEditOpen && <EditMessageModal message={message} isOpen={isEditOpen} onClose={onEditClose} /> }
       </>
       }
     </>
   );
-};
+}

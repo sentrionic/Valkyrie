@@ -5,6 +5,7 @@ import { UserResponse } from '../models/response/UserResponse';
 import { Member } from './member.entity';
 import { Channel } from './channel.entity';
 import { MemberResponse } from '../models/response/MemberResponse';
+import { PCMember } from './pcmember.entity';
 
 @Entity('users')
 export class User extends AbstractEntity {
@@ -26,15 +27,14 @@ export class User extends AbstractEntity {
   isOnline!: boolean;
 
   @OneToMany(() => Member, (member) => member.user)
-  guilds!: Promise<Member[]>;
+  guilds!: Member[];
 
   @ManyToMany(() => Channel)
   @JoinColumn({ name: 'channel_member' })
-  channels!: Promise<Channel[]>;
-  //
-  // @OneToMany(() => PCMember, (pcmember) => pcmember.user)
-  // pcmembers: Promise<PCMember[]>;
+  channels!: Channel[];
 
+  @OneToMany(() => PCMember, (pcmember) => pcmember.user)
+  pcmembers: PCMember[];
 
   toJSON(): UserResponse {
     return <UserResponse>classToPlain(this, { groups: ['user'] });

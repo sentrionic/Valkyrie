@@ -14,7 +14,7 @@ export class Guild extends AbstractEntity {
 
   @ManyToOne(() => Member, (member) => member.guild)
   @Exclude()
-  members!: Promise<Member[]>;
+  members!: Member[];
 
   toJson(): GuildResponse {
     return <GuildResponse>classToPlain(this);
