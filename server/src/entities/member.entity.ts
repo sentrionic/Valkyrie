@@ -13,11 +13,11 @@ export class Member extends AbstractEntity {
 
   @ManyToMany(() => User, (user) => user.guilds, { primary: true })
   @JoinColumn({ name: 'userId' })
-  user!: Promise<User>;
+  user!: User;
 
   @ManyToMany(() => Guild, (guild) => guild.members, { primary: true })
   @JoinColumn({ name: 'guildId' })
-  guild!: Promise<Guild>;
+  guild!: Guild;
 
   @Column('boolean', { default: false })
   admin!: boolean;

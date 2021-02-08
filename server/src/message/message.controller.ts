@@ -29,13 +29,13 @@ import {
 } from '@nestjs/swagger';
 import { ChannelGuard } from '../guards/http/channel.guard';
 
-@Controller('channels')
+@Controller('messages')
 export class MessageController {
   constructor(
     private readonly messageService: MessageService,
   ) {}
 
-  @Get("/:channelId/messages")
+  @Get("/:channelId")
   @UseGuards(ChannelGuard)
   @ApiOperation({ summary: 'Get Channel Messages' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
@@ -49,7 +49,7 @@ export class MessageController {
     return this.messageService.getMessages(channelId, userId, cursor);
   }
 
-  @Post("/:channelId/messages")
+  @Post("/:channelId")
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(ChannelGuard)
   @ApiCookieAuth()
@@ -67,7 +67,7 @@ export class MessageController {
     return this.messageService.createMessage(userId, channelId, input, file);
   }
 
-  @Put("/messages/:messageId")
+  @Put("/:messageId")
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Edit Message' })
@@ -82,7 +82,7 @@ export class MessageController {
     return this.messageService.editMessage(user, messageId, input.text);
   }
 
-  @Delete("/messages/:messageId")
+  @Delete("/:messageId")
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Delete Message' })

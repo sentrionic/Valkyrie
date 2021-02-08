@@ -7,6 +7,7 @@
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
     "axios": "^0.21.1",
+    "chakra-ui-autocomplete": "^1.2.5",
     "dayjs": "^1.10.4",
     "formik": "^2.2.6",
     "framer-motion": ">=3.2.1",

@@ -41,6 +41,18 @@ export class SocketService {
     this.socket.to(message.room).emit('add_channel', message.channel);
   }
 
+  editChannel(
+    message: { room: string; channel: ChannelResponse },
+  ) {
+    this.socket.to(message.room).emit('edit_channel', message.channel);
+  }
+
+  deleteChannel(
+    message: { room: string, channelId: string },
+  ) {
+    this.socket.to(message.room).emit('delete_channel', message.channelId);
+  }
+
   addMember(
     message: { room: string, member: MemberResponse },
   ) {

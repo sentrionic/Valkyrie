@@ -9,6 +9,7 @@ import { BufferFile } from '../types/BufferFile';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { MessageInput } from '../models/dto/MessageInput';
 import { SocketService } from '../socket/socket.service';
+import { PCMember } from '../entities/pcmember.entity';
 
 @Injectable()
 export class MessageService {
@@ -16,6 +17,8 @@ export class MessageService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
+    @InjectRepository(PCMember)
+    private pcMemberRepository: Repository<PCMember>,
     private readonly socketService: SocketService
   ) {}
 
@@ -28,15 +31,15 @@ export class MessageService {
       where: { id: channelId },
     });
 
-    // if (!channel.public) {
-    //   const member = await this.pcMemberRepository.findOne({
-    //     where: { channelId, userId },
-    //   });
-    //
-    //   if (!member) {
-    //     throw new Error('Not Authorized');
-    //   }
-    // }
+    if (!channel.isPublic) {
+      const member = await this.pcMemberRepository.findOne({
+        where: { channelId, userId },
+      });
+
+      if (!member) {
+        throw new Error('Not Authorized');
+      }
+    }
 
     const queryBuilder = this.messageRepository
       .createQueryBuilder('message')
@@ -128,6 +131,7 @@ export class MessageService {
   }
 
   async deleteMessage(userId: string, id: string): Promise<boolean> {
+    console.log("Here");
     const message: Message = await this.messageRepository.findOneOrFail({
       where: { id },
       relations: ['user', 'channel'],

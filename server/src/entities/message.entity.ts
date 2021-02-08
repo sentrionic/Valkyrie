@@ -16,7 +16,7 @@ export class Message extends AbstractEntity {
   @Column('varchar', { length: 50, nullable: true })
   filetype!: string;
 
-  @ManyToOne(() => Channel)
+  @ManyToOne(() => Channel, { onDelete: 'CASCADE' })
   @Exclude()
   channel!: Channel;
 

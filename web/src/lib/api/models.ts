@@ -30,7 +30,7 @@ export interface AccountResponse extends BaseModel {
 
 export interface Channel extends BaseModel {
   name: string;
-  public: boolean;
+  isPublic: boolean;
 }
 
 export interface Guild extends BaseModel {

@@ -5,15 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from '../entities/channel.entity';
 import { User } from '../entities/user.entity';
 import { Member } from '../entities/member.entity';
-import { customAlphabet, nanoid } from 'nanoid';
+import { nanoid } from 'nanoid';
 import { redis } from '../config/redis';
 import { INVITE_LINK_PREFIX } from '../utils/constants';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { GuildResponse } from '../models/response/GuildResponse';
 import { SocketService } from '../socket/socket.service';
-
-const alphabet = '0123456789';
-const idGenerator = customAlphabet(alphabet, 20);
+import { idGenerator } from '../utils/idGenerator';
 
 @Injectable()
 export class GuildService {
