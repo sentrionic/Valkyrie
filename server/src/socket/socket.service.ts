@@ -10,6 +10,7 @@ import { Channel } from '../entities/channel.entity';
 import { Member } from '../entities/member.entity';
 import { PCMember } from '../entities/pcmember.entity';
 import { WsException } from '@nestjs/websockets';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Injectable()
 export class SocketService {
@@ -21,6 +22,7 @@ export class SocketService {
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(PCMember) private pcMemberRepository: Repository<PCMember>,
+    @InjectRepository(DMMember) private dmMemberRepository: Repository<DMMember>
   ) {
   }
 
@@ -38,49 +40,49 @@ export class SocketService {
   }
 
   sendMessage(
-    message: { room: string; message: MessageResponse },
+    message: { room: string; message: MessageResponse }
   ) {
     this.socket.to(message.room).emit('new_message', message.message);
   }
 
   editMessage(
-    message: { room: string; message: MessageResponse },
+    message: { room: string; message: MessageResponse }
   ) {
     this.socket.to(message.room).emit('edit_message', message.message);
   }
 
   deleteMessage(
-    message: { room: string; message: MessageResponse },
+    message: { room: string; message: MessageResponse }
   ) {
     this.socket.to(message.room).emit('delete_message', message.message);
   }
 
   addChannel(
-    message: { room: string; channel: ChannelResponse },
+    message: { room: string; channel: ChannelResponse }
   ) {
     this.socket.to(message.room).emit('add_channel', message.channel);
   }
 
   editChannel(
-    message: { room: string; channel: ChannelResponse },
+    message: { room: string; channel: ChannelResponse }
   ) {
     this.socket.to(message.room).emit('edit_channel', message.channel);
   }
 
   deleteChannel(
-    message: { room: string, channelId: string },
+    message: { room: string, channelId: string }
   ) {
     this.socket.to(message.room).emit('delete_channel', message.channelId);
   }
 
   addMember(
-    message: { room: string, member: MemberResponse },
+    message: { room: string, member: MemberResponse }
   ) {
     this.socket.to(message.room).emit('add_member', message.member);
   }
 
   removeMember(
-    message: { room: string, memberId: string },
+    message: { room: string, memberId: string }
   ) {
     this.socket.to(message.room).emit('remove_member', message.memberId);
   }
@@ -90,11 +92,14 @@ export class SocketService {
     await this.setOnlineStatus(id, true);
     const manager = getManager();
     const guilds: string[] = await manager.query(
-      `select g.id from guilds g join members m on m."guildId" = g."id" where m."userId" = $1`,
-      [id],
+      `select g.id
+       from guilds g
+                join members m on m."guildId" = g."id"
+       where m."userId" = $1`,
+      [id]
     );
     guilds.forEach(g => {
-      const gId = g["id"];
+      const gId = g['id'];
       if (gId !== undefined) this.socket.to(gId).emit('toggle_online', id);
     });
   }
@@ -104,11 +109,14 @@ export class SocketService {
     await this.setOnlineStatus(id, false);
     const manager = getManager();
     const guilds: string[] = await manager.query(
-      `select g.id from guilds g join members m on m."guildId" = g."id" where m."userId" = $1`,
-      [id],
+      `select g.id
+       from guilds g
+                join members m on m."guildId" = g."id"
+       where m."userId" = $1`,
+      [id]
     );
     guilds.forEach(g => {
-      const gId = g["id"];
+      const gId = g['id'];
       if (gId !== undefined) this.socket.to(gId).emit('toggle_offline', id);
     });
   }
@@ -118,27 +126,39 @@ export class SocketService {
   }
 
   addTyping(room: string, username: string) {
-    this.socket.to(room).emit("addToTyping", username);
+    this.socket.to(room).emit('addToTyping', username);
   }
 
   stopTyping(room: string, username: string) {
-    this.socket.to(room).emit("removeFromTyping", username);
+    this.socket.to(room).emit('removeFromTyping', username);
   }
 
   private async isChannelMember(channel: Channel, userId: string): Promise<boolean> {
     // Check if user has access to private channel
     if (!channel.isPublic) {
-      const member = await this.pcMemberRepository.findOne({
-        where: { channelId: channel.id, userId },
-      });
 
-      if (!member) {
-        throw new WsException('Not Authorized');
+      if (channel.dm) {
+        const member = await this.dmMemberRepository.findOne({
+          where: { channelId: channel.id, userId },
+        });
+
+        if (!member) {
+          throw new WsException('Not Authorized');
+        }
+
+      } else {
+        const member = await this.pcMemberRepository.findOne({
+          where: { channelId: channel.id, userId }
+        });
+
+        if (!member) {
+          throw new WsException('Not Authorized');
+        }
       }
       // Check if user has access to the channel
     } else {
       const member = await this.memberRepository.findOneOrFail({
-        where: { guildId: channel.guild.id, userId },
+        where: { guildId: channel.guild.id, userId }
       });
 
       if (!member) {

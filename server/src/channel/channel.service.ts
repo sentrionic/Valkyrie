@@ -11,6 +11,7 @@ import { ChannelResponse } from '../models/response/ChannelResponse';
 import { ChannelInput } from '../models/dto/ChannelInput';
 import { PCMember } from '../entities/pcmember.entity';
 import { idGenerator } from '../utils/idGenerator';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Injectable()
 export class ChannelService {
@@ -20,6 +21,7 @@ export class ChannelService {
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(PCMember) private pcMemberRepository: Repository<PCMember>,
+    @InjectRepository(DMMember) private dmMemberRepository: Repository<DMMember>,
     private readonly socketService: SocketService
   ) {
   }
@@ -34,16 +36,12 @@ export class ChannelService {
     let { members } = input;
 
     const data = { name: name.trim(), public: isPublic };
-    const memberPromise = await this.memberRepository.findOneOrFail({
-      where: { guildId, userId }
-    });
-    const guildPromise = await this.guildRepository.findOneOrFail({
+
+    const guild = await this.guildRepository.findOneOrFail({
       where: { id: guildId }
     });
 
-    const [member, guild] = await Promise.all([memberPromise, guildPromise]);
-
-    if (!member.admin) throw new UnauthorizedException();
+    if (guild.ownerId !== userId) throw new UnauthorizedException();
 
     let channel: Channel;
 
@@ -119,11 +117,11 @@ export class ChannelService {
     const data = await getManager().query(
       `
         select c.id
-        from channels as c, pcmembers pc 
-        where pc."channelId"::text = c."id"::text and c.dm = true and c."isPublic" = false
+        from channels as c, dm_members dm 
+        where dm."channelId" = c."id" and c.dm = true and c."isPublic" = false
         group by c."id"
-        having array_agg(pc."userId"::text) @> Array['${memberId}', '${userId}']
-        and count(pc."userId") = 2;
+        having array_agg(dm."userId"::text) @> Array['${memberId}', '${userId}']
+        and count(dm."userId") = 2;
         `
     );
 
@@ -145,12 +143,13 @@ export class ChannelService {
 
       const channelId = channel.id;
       const allMembers = [memberId, userId];
-      const pcmembers = allMembers.map((m) => ({ userId: m, channelId }));
-      pcmembers.forEach((member) => {
-        entityManager.insert(PCMember, {
+      const dmMembers = allMembers.map((m) => ({ userId: m, channelId }));
+      dmMembers.forEach((member) => {
+        entityManager.insert(DMMember, {
           id: idGenerator(),
           channelId,
-          userId: member.userId
+          userId: member.userId,
+          isOpen: member.userId === userId
         });
       });
 
@@ -167,19 +166,20 @@ export class ChannelService {
     const manager = getManager();
     const result = await manager.query(
       `
-          select pc."channelId", u.username, u.image, u.id, u."isOnline", u."createdAt", u."updatedAt"
+          select dm."channelId", u.username, u.image, u.id, u."isOnline", u."createdAt", u."updatedAt"
           from users u
-                   join pcmembers pc on pc."userId" = u.id
+                   join dm_members dm on dm."userId" = u.id
           where u.id != $1
-            and pc."channelId" in (
+            and dm."channelId" in (
               select distinct c.id
               from channels as c
-                       left outer join pcmembers as pc
-                                       on c."id" = pc."channelId"
-                       join users u on pc."userId" = u.id
+                       left outer join dm_members as dm
+                                       on c."id" = dm."channelId"
+                       join users u on dm."userId" = u.id
               where c."isPublic" = false
                 and c.dm = true
-                and pc."userId" = $1
+                and dm."isOpen" = true
+                and dm."userId" = $1
           )
       `,
       [userId]

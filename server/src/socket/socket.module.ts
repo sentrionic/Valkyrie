@@ -6,11 +6,12 @@ import { User } from '../entities/user.entity';
 import { Channel } from '../entities/channel.entity';
 import { Member } from '../entities/member.entity';
 import { PCMember } from '../entities/pcmember.entity';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Channel, Member, PCMember])
+    TypeOrmModule.forFeature([User, Channel, Member, PCMember, DMMember])
   ],
   providers: [SocketService, AppGateway],
   exports: [SocketService],

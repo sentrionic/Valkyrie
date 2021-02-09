@@ -11,6 +11,7 @@ import { MessageInput } from '../models/dto/MessageInput';
 import { SocketService } from '../socket/socket.service';
 import { PCMember } from '../entities/pcmember.entity';
 import { Member } from '../entities/member.entity';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Injectable()
 export class MessageService {
@@ -21,6 +22,8 @@ export class MessageService {
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(PCMember)
     private pcMemberRepository: Repository<PCMember>,
+    @InjectRepository(DMMember)
+    private dmMemberRepository: Repository<DMMember>,
     private readonly socketService: SocketService
   ) {}
 
@@ -154,12 +157,24 @@ export class MessageService {
   private async isChannelMember(channel: Channel, userId: string): Promise<boolean> {
     // Check if user has access to private channel
     if (!channel.isPublic) {
-      const member = await this.pcMemberRepository.findOne({
-        where: { channelId: channel.id, userId },
-      });
+      // Channel is DM -> Check if one of the members
+      if (channel.dm) {
+        const member = await this.dmMemberRepository.findOne({
+          where: { channelId: channel.id, userId },
+        });
 
-      if (!member) {
-        throw new UnauthorizedException('Not Authorized');
+        if (!member) {
+          throw new UnauthorizedException('Not Authorized');
+        }
+        // Channel is private
+      } else {
+        const member = await this.pcMemberRepository.findOne({
+          where: { channelId: channel.id, userId },
+        });
+
+        if (!member) {
+          throw new UnauthorizedException('Not Authorized');
+        }
       }
       // Check if user has access to the channel
     } else {

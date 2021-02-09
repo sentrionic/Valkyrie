@@ -97,12 +97,10 @@ export class GuildService {
         await channel.save();
         await entityManager.save(channel);
 
-        // ID gets inserted later, ignore for now
         await entityManager.insert(Member, {
           id: await idGenerator(),
           guildId: guild.id,
           userId,
-          admin: true
         });
       });
 

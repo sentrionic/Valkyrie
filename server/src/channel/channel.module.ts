@@ -8,14 +8,15 @@ import { Channel } from '../entities/channel.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SocketModule } from '../socket/socket.module';
 import { PCMember } from '../entities/pcmember.entity';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Channel, Guild, Member, User, PCMember]),
+    TypeOrmModule.forFeature([Channel, Guild, Member, User, PCMember, DMMember]),
     SocketModule
   ],
   controllers: [ChannelController],
-  providers: [ChannelService],
+  providers: [ChannelService]
 })
 export class ChannelModule {
 }
