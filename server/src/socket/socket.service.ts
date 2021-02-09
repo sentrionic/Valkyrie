@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { MemberResponse } from '../models/response/MemberResponse';
@@ -6,6 +6,10 @@ import { getManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { ChannelResponse } from '../models/response/ChannelResponse';
+import { Channel } from '../entities/channel.entity';
+import { Member } from '../entities/member.entity';
+import { PCMember } from '../entities/pcmember.entity';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class SocketService {
@@ -14,7 +18,23 @@ export class SocketService {
 
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Channel) private channelRepository: Repository<Channel>,
+    @InjectRepository(Member) private memberRepository: Repository<Member>,
+    @InjectRepository(PCMember) private pcMemberRepository: Repository<PCMember>,
   ) {
+  }
+
+  async joinChannel(client: Socket, room: string) {
+    const id: string = client.handshake.session['userId'];
+
+    const channel = await this.channelRepository.findOneOrFail({
+      where: { id: room },
+      relations: ['guild']
+    });
+
+    await this.isChannelMember(channel, id);
+
+    client.join(room);
   }
 
   sendMessage(
@@ -103,5 +123,29 @@ export class SocketService {
 
   stopTyping(room: string, username: string) {
     this.socket.to(room).emit("removeFromTyping", username);
+  }
+
+  private async isChannelMember(channel: Channel, userId: string): Promise<boolean> {
+    // Check if user has access to private channel
+    if (!channel.isPublic) {
+      const member = await this.pcMemberRepository.findOne({
+        where: { channelId: channel.id, userId },
+      });
+
+      if (!member) {
+        throw new WsException('Not Authorized');
+      }
+      // Check if user has access to the channel
+    } else {
+      const member = await this.memberRepository.findOneOrFail({
+        where: { guildId: channel.guild.id, userId },
+      });
+
+      if (!member) {
+        throw new WsException('Not Authorized');
+      }
+    }
+
+    return true;
   }
 }
