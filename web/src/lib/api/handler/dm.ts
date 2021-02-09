@@ -8,3 +8,6 @@ export const getUserDMs = (): Promise<AxiosResponse<DMChannel[]>> =>
 export const getOrCreateDirectMessage = (id: string): Promise<AxiosResponse<DMChannel>> =>
   request.post(`/channels/${id}/dm`);
 
+export const closeDirectMessage = (id: string): Promise<AxiosResponse<boolean>> =>
+  request.delete(`/channels/${id}/dm`);
+

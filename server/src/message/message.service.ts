@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 import { Message } from '../entities/message.entity';
 import { User } from '../entities/user.entity';
 import { Channel } from '../entities/channel.entity';
@@ -94,6 +94,17 @@ export class MessageService {
     await message.save();
 
     this.socketService.sendMessage({ room: channelId, message: message.toJSON() });
+
+    if (channel.dm) {
+      getManager().query(
+        `
+        update dm_members set "isOpen" = true 
+        where "channelId" = $1 
+        and "userId" != $2
+        and "isOpen" = false
+        `, [channelId, userId]
+      );
+    }
 
     return true;
   }

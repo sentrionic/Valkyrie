@@ -117,6 +117,19 @@ export class ChannelController {
     return this.channelService.editChannel(user, channelId, input);
   }
 
+  @Delete('/:channelId/dm')
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Close the DM' })
+  @ApiOkResponse({ description: 'Close Success', type: Boolean })
+  @ApiUnauthorizedResponse()
+  async closeDirectMessage(
+    @GetUser() userId: string,
+    @Param('channelId') channelId: string,
+  ): Promise<boolean> {
+    return this.channelService.setDirectMessageStatus(channelId, userId, false);
+  }
+
   @Delete("/:guildId/:channelId")
   @UseGuards(MemberGuard)
   @ApiCookieAuth()

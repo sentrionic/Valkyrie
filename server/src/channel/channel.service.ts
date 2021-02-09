@@ -126,6 +126,7 @@ export class ChannelService {
     );
 
     if (data.length) {
+      this.setDirectMessageStatus(data[0].id, userId, true);
       return {
         id: data[0].id,
         user: member.toMember()
@@ -338,5 +339,19 @@ export class ChannelService {
     if (ids.length === 0) return [];
 
     return ids.map(i => i.userId);
+  }
+
+  async setDirectMessageStatus(channelId: string, userId: string, isOpen: boolean): Promise<boolean> {
+    const channel = await this.dmMemberRepository.findOneOrFail({
+      where: { channelId, userId }
+    });
+
+    if (!channel) throw new NotFoundException();
+
+    await this.dmMemberRepository.update({ id: channel.id }, {
+      isOpen
+    });
+
+    return true;
   }
 }
