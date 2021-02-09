@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
+import { Item, Menu, theme, useContextMenu } from 'react-contexify';
+import { useHistory } from 'react-router-dom';
 import { MdEdit } from 'react-icons/md';
 import { FaEllipsisH, FaRegTrashAlt } from 'react-icons/fa';
 import { FiLink } from 'react-icons/fi';
+import { MessageContent } from './MessageContent';
 import { Message as MessageResponse } from '../../../lib/api/models';
 import { userStore } from '../../../lib/stores/userStore';
-import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
-import { Item, Menu, theme, useContextMenu } from 'react-contexify';
 import { getShortenedTime, getTime } from '../../../lib/utils/dateUtils';
 import { DeleteMessageModal } from '../../modals/DeleteMessageModal';
 import { EditMessageModal } from '../../modals/EditMessageModal';
-import { MessageContent } from './MessageContent';
+import { getOrCreateDirectMessage } from '../../../lib/api/handler/dm';
 import '../css/ContextMenu.css';
 
 interface MessageProps {
@@ -22,6 +24,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
   const [showSettings, setShowSettings] = useState(false);
   const current = userStore(state => state.current);
   const isAuthor = current?.id === message.user.id;
+  const history = useHistory();
 
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
@@ -30,10 +33,21 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
     id: message.id
   });
 
+  const { show: profileShow } = useContextMenu({
+    id: message.user.id
+  });
+
   const openInNewTab = (url: string) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
   };
+
+  const getOrCreateDM = async () => {
+    const { data } = await getOrCreateDirectMessage(message.user.id);
+    if (data) {
+      history.push(`/channels/me/${data.id}`)
+    }
+  }
 
   return (
     <>
@@ -66,12 +80,17 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                   <FaEllipsisH />
                 </Box>
                 :
-                <Box mr={"6"} />
+                <Box mr={'6'} />
               }
             </>
             :
             <>
-              <Avatar h='40px' w='40px' ml='4' mt={'1'} src={message.user.image} />
+              <Avatar
+                h='40px' w='40px' ml='4' mt={'1'}
+                src={message.user.image}
+                onContextMenu={(e) => {
+                  if (!isAuthor) profileShow(e);
+                }} />
               <Box ml='3' w={'full'}>
                 <Flex alignItems='center' justify={'space-between'}>
                   <Flex alignItems={'center'}>
@@ -118,10 +137,19 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
             </Flex>
           </Item>
         </Menu>
-        {isDeleteOpen && <DeleteMessageModal message={message} isOpen={isDeleteOpen} onClose={onDeleteClose} /> }
-        {isEditOpen && <EditMessageModal message={message} isOpen={isEditOpen} onClose={onEditClose} /> }
+        {isDeleteOpen && <DeleteMessageModal message={message} isOpen={isDeleteOpen} onClose={onDeleteClose} />}
+        {isEditOpen && <EditMessageModal message={message} isOpen={isEditOpen} onClose={onEditClose} />}
       </>
+      }
+      {!isAuthor &&
+        <Menu id={message.user.id} theme={theme.dark}>
+          <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
+            <Flex align='center' justify='space-between' w='full'>
+              <Text>Message</Text>
+            </Flex>
+          </Item>
+        </Menu>
       }
     </>
   );
-}
+};

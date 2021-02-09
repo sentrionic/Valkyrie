@@ -76,7 +76,7 @@ export class ChannelController {
 
   @Get('/me/dm')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get Users DMs' })
+  @ApiOperation({ summary: 'Get User\'s DMs' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiCookieAuth()
   @ApiOkResponse({ type: [DMChannelResponse] })
@@ -88,6 +88,10 @@ export class ChannelController {
 
   @Post(':memberId/dm')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Start or get DMs with the given user' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: DMChannelResponse })
   async getOrCreateChannel(
     @GetUser() userId: string,
     @Param('memberId') memberId: string

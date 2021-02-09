@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { RouterProps } from './Routes';
 import { ChatScreen } from '../components/layouts/chat/ChatScreen';
 import { DMHeader } from '../components/layouts/home/DMHeader';
+import { MessageInput } from '../components/layouts/chat/MessageInput';
 
 export const Home: React.FC = () => {
 
@@ -22,7 +23,7 @@ export const Home: React.FC = () => {
         <>
           <DMHeader />
           <ChatScreen />
-          {/* DMMessageInput */}
+          <MessageInput />
         </>
       }
     </AppLayout>
