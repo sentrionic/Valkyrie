@@ -35,6 +35,7 @@ export const Routes: React.FC = () => {
           <Landing />
         </Route>
         <AuthRoute exact path='/channels/me' component={Home} />
+        <AuthRoute exact path='/channels/me/:channelId' component={Home} />
         <AuthRoute exact path='/channels/:guildId/:channelId' component={ViewGuild} />
         <AuthRoute exact path='/account' component={Account} />
       </Switch>

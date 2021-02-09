@@ -1,10 +1,17 @@
 import { GridItem, Text, UnorderedList } from '@chakra-ui/react';
 import React from 'react';
 import { FriendsListButton } from '../../sections/FriendsListButton';
-// import { DMListItem } from '../../items/DMListItem';
+import { DMListItem } from '../../items/DMListItem';
 import { AccountBar } from '../AccountBar';
+import { useQuery } from 'react-query';
+import { getUserDMs } from '../../../lib/api/handler/dm';
 
 export const DMSidebar: React.FC = () => {
+
+  const { data } = useQuery('dms', () => {
+    return getUserDMs().then(result => result.data);
+  });
+
   return (
     <GridItem
       gridColumn={'2'}
@@ -36,9 +43,9 @@ export const DMSidebar: React.FC = () => {
         DIRECT MESSAGES
       </Text>
       <UnorderedList listStyleType="none" ml="0" mt="4">
-        {/*{[...Array(15)].map((x, i) => (*/}
-        {/*  <DMListItem key={`${i}`} />*/}
-        {/*))}*/}
+        {data?.map((dm) => (
+          <DMListItem dm={dm} key={dm.id} />
+        ))}
       </UnorderedList>
       <AccountBar />
     </GridItem>

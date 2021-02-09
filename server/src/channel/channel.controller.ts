@@ -74,14 +74,29 @@ export class ChannelController {
     );
   }
 
-  @Post('/:guildId/dms')
+  @Get('/me/dm')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get User\'s DMs' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: [DMChannelResponse] })
+  async getDirectMessageChannels(
+    @GetUser() userId: string
+  ): Promise<DMChannelResponse[]> {
+    return this.channelService.getDirectMessageChannels(userId);
+  }
+
+  @Post(':memberId/dm')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Start or get DMs with the given user' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiOkResponse({ type: DMChannelResponse })
   async getOrCreateChannel(
     @GetUser() userId: string,
-    @Body('memberId') member: string,
-    @Param('guildId') guildId: string
+    @Param('memberId') memberId: string
   ): Promise<DMChannelResponse> {
-    return this.channelService.getOrCreateChannel(guildId, member, userId);
+    return this.channelService.getOrCreateChannel(userId, memberId);
   }
 
   @Put("/:guildId/:channelId")
@@ -100,6 +115,19 @@ export class ChannelController {
     ) input: ChannelInput,
   ): Promise<boolean> {
     return this.channelService.editChannel(user, channelId, input);
+  }
+
+  @Delete('/:channelId/dm')
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Close the DM' })
+  @ApiOkResponse({ description: 'Close Success', type: Boolean })
+  @ApiUnauthorizedResponse()
+  async closeDirectMessage(
+    @GetUser() userId: string,
+    @Param('channelId') channelId: string,
+  ): Promise<boolean> {
+    return this.channelService.setDirectMessageStatus(channelId, userId, false);
   }
 
   @Delete("/:guildId/:channelId")

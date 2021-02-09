@@ -27,7 +27,6 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ChannelGuard } from '../guards/http/channel.guard';
 
 @Controller('messages')
 export class MessageController {
@@ -36,7 +35,7 @@ export class MessageController {
   ) {}
 
   @Get("/:channelId")
-  @UseGuards(ChannelGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get Channel Messages' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiCookieAuth()
@@ -51,7 +50,7 @@ export class MessageController {
 
   @Post("/:channelId")
   @UseInterceptors(FileInterceptor('file'))
-  @UseGuards(ChannelGuard)
+  @UseGuards(AuthGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Send Message' })
   @ApiOkResponse({ description: 'Message Success', type: Boolean })

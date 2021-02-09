@@ -1,6 +1,6 @@
-import { BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 import { Message } from '../entities/message.entity';
 import { User } from '../entities/user.entity';
 import { Channel } from '../entities/channel.entity';
@@ -10,6 +10,8 @@ import { MessageResponse } from '../models/response/MessageResponse';
 import { MessageInput } from '../models/dto/MessageInput';
 import { SocketService } from '../socket/socket.service';
 import { PCMember } from '../entities/pcmember.entity';
+import { Member } from '../entities/member.entity';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Injectable()
 export class MessageService {
@@ -17,8 +19,11 @@ export class MessageService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
+    @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(PCMember)
     private pcMemberRepository: Repository<PCMember>,
+    @InjectRepository(DMMember)
+    private dmMemberRepository: Repository<DMMember>,
     private readonly socketService: SocketService
   ) {}
 
@@ -29,17 +34,10 @@ export class MessageService {
   ): Promise<MessageResponse[]> {
     const channel = await this.channelRepository.findOne({
       where: { id: channelId },
+      relations: ['guild']
     });
 
-    if (!channel.isPublic) {
-      const member = await this.pcMemberRepository.findOne({
-        where: { channelId, userId },
-      });
-
-      if (!member) {
-        throw new Error('Not Authorized');
-      }
-    }
+    await this.isChannelMember(channel, userId);
 
     const queryBuilder = this.messageRepository
       .createQueryBuilder('message')
@@ -67,6 +65,13 @@ export class MessageService {
     file?: BufferFile,
   ): Promise<boolean> {
 
+    const channel = await this.channelRepository.findOneOrFail({
+      where: { id: channelId },
+      relations: ['guild']
+    });
+
+    await this.isChannelMember(channel, userId);
+
     if (!file && !input.text) {
       throw new BadRequestException();
     }
@@ -83,18 +88,23 @@ export class MessageService {
       message.url = url;
     }
 
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
-
-    const channel = await this.channelRepository.findOneOrFail({
-      where: { id: channelId },
-    });
-
-    message.user = user;
+    message.user = await this.userRepository.findOneOrFail({ where: { id: userId } });
     message.channel = channel;
 
     await message.save();
 
     this.socketService.sendMessage({ room: channelId, message: message.toJSON() });
+
+    if (channel.dm) {
+      getManager().query(
+        `
+        update dm_members set "isOpen" = true 
+        where "channelId" = $1 
+        and "userId" != $2
+        and "isOpen" = false
+        `, [channelId, userId]
+      );
+    }
 
     return true;
   }
@@ -131,7 +141,6 @@ export class MessageService {
   }
 
   async deleteMessage(userId: string, id: string): Promise<boolean> {
-    console.log("Here");
     const message: Message = await this.messageRepository.findOneOrFail({
       where: { id },
       relations: ['user', 'channel'],
@@ -152,6 +161,42 @@ export class MessageService {
     message.id = deleteId;
 
     this.socketService.deleteMessage({ room: message.channel.id, message: message.toJSON() });
+
+    return true;
+  }
+
+  private async isChannelMember(channel: Channel, userId: string): Promise<boolean> {
+    // Check if user has access to private channel
+    if (!channel.isPublic) {
+      // Channel is DM -> Check if one of the members
+      if (channel.dm) {
+        const member = await this.dmMemberRepository.findOne({
+          where: { channelId: channel.id, userId },
+        });
+
+        if (!member) {
+          throw new UnauthorizedException('Not Authorized');
+        }
+        // Channel is private
+      } else {
+        const member = await this.pcMemberRepository.findOne({
+          where: { channelId: channel.id, userId },
+        });
+
+        if (!member) {
+          throw new UnauthorizedException('Not Authorized');
+        }
+      }
+      // Check if user has access to the channel
+    } else {
+      const member = await this.memberRepository.findOneOrFail({
+        where: { guildId: channel.guild.id, userId },
+      });
+
+      if (!member) {
+        throw new UnauthorizedException('Not Authorized');
+      }
+    }
 
     return true;
   }

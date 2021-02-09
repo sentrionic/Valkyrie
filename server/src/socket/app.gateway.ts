@@ -9,7 +9,6 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { SocketService } from './socket.service';
-import { WsChannelGuard } from '../guards/ws/ws.channel.guard';
 import * as sharedsession from 'express-socket.io-session';
 import { sessionMiddleware } from '../config/sessionmiddleware';
 import { WsMemberGuard } from '../guards/ws/ws.guild.guard';
@@ -46,10 +45,10 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     this.socketService.toggleOfflineStatus(client);
   }
 
-  @UseGuards(WsChannelGuard)
+  @UseGuards(WsAuthGuard)
   @SubscribeMessage('joinChannel')
   handleChannelJoin(client: Socket, room: string): void {
-    client.join(room);
+    this.socketService.joinChannel(client, room);
   }
 
   @UseGuards(WsMemberGuard)

@@ -7,10 +7,12 @@ import { Message } from '../entities/message.entity';
 import { User } from '../entities/user.entity';
 import { SocketModule } from '../socket/socket.module';
 import { PCMember } from '../entities/pcmember.entity';
+import { Member } from '../entities/member.entity';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message, Channel, User, PCMember]),
+    TypeOrmModule.forFeature([Message, Channel, User, PCMember, Member, DMMember]),
     SocketModule
   ],
   controllers: [MessageController],

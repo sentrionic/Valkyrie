@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getManager, In, Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 import { Channel } from '../entities/channel.entity';
 import { Member } from '../entities/member.entity';
 import { User } from '../entities/user.entity';
@@ -11,6 +11,7 @@ import { ChannelResponse } from '../models/response/ChannelResponse';
 import { ChannelInput } from '../models/dto/ChannelInput';
 import { PCMember } from '../entities/pcmember.entity';
 import { idGenerator } from '../utils/idGenerator';
+import { DMMember } from '../entities/dmmember.entity';
 
 @Injectable()
 export class ChannelService {
@@ -20,6 +21,7 @@ export class ChannelService {
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(PCMember) private pcMemberRepository: Repository<PCMember>,
+    @InjectRepository(DMMember) private dmMemberRepository: Repository<DMMember>,
     private readonly socketService: SocketService
   ) {
   }
@@ -34,16 +36,12 @@ export class ChannelService {
     let { members } = input;
 
     const data = { name: name.trim(), public: isPublic };
-    const memberPromise = await this.memberRepository.findOneOrFail({
-      where: { guildId, userId }
-    });
-    const guildPromise = await this.guildRepository.findOneOrFail({
+
+    const guild = await this.guildRepository.findOneOrFail({
       where: { id: guildId }
     });
 
-    const [member, guild] = await Promise.all([memberPromise, guildPromise]);
-
-    if (!member.admin) throw new UnauthorizedException();
+    if (guild.ownerId !== userId) throw new UnauthorizedException();
 
     let channel: Channel;
 
@@ -104,85 +102,109 @@ export class ChannelService {
   }
 
   async getOrCreateChannel(
-    guildId: string,
-    members: string,
-    userId: string
+    userId: string,
+    memberId: string
   ): Promise<DMChannelResponse> {
-    const member = await this.memberRepository.findOne({
-      where: { guildId, userId }
+    const member = await this.userRepository.findOne({
+      where: { id: memberId }
     });
 
     if (!member) {
-      throw new Error('Not Authorized');
+      throw new NotFoundException();
     }
-
-    const allMembers = [...members, userId];
-
-    // create string containing all member ids and seperate them with a comma
-    let array = '';
-    allMembers.forEach((member, index, arr) => {
-      array += `'${member}'`;
-      if (index < arr.length - 1) array += ',';
-    });
 
     // check if dm channel already exists with these members
     const data = await getManager().query(
       `
-        select c.id, c.name 
-        from channels as c, pcmembers pc 
-        where pc."channelId"::text = c."id"::text and c.dm = true and c.public = false and c."guildId"::text = $1
-        group by c."id", c."name"  
-        having array_agg(pc."userId"::text) @> Array[${array}]
-        and count(pc."userId") = ${allMembers.length};
-        `,
-      [guildId]
+        select c.id
+        from channels as c, dm_members dm 
+        where dm."channelId" = c."id" and c.dm = true and c."isPublic" = false
+        group by c."id"
+        having array_agg(dm."userId"::text) @> Array['${memberId}', '${userId}']
+        and count(dm."userId") = 2;
+        `
     );
 
     if (data.length) {
-      return data[0];
+      this.setDirectMessageStatus(data[0].id, userId, true);
+      return {
+        id: data[0].id,
+        user: member.toMember()
+      };
     }
-
-    const users: User[] = await this.userRepository.find({
-      where: { id: In(allMembers) }
-    });
-
-    const name: string = users.map((u) => u.id).join('/');
 
     const channelId = await getManager().transaction(async (entityManager) => {
       const channel = await this.channelRepository.create({
-        name,
+        name: idGenerator(),
         isPublic: false,
         dm: true
       });
-      channel.guild = await this.guildRepository.findOneOrFail({
-        where: { id: guildId }
-      });
-
       await channel.save();
       await entityManager.save(channel);
 
       const channelId = channel.id;
-      // const pcmembers = allMembers.map((m) => ({ userId: m, channelId }));
-      // pcmembers.forEach((member) => {
-      //   entityManager.insert(PCMember, {
-      //     channelId,
-      //     userId: member.userId,
-      //   });
-      // });
+      const allMembers = [memberId, userId];
+      const dmMembers = allMembers.map((m) => ({ userId: m, channelId }));
+      dmMembers.forEach((member) => {
+        entityManager.insert(DMMember, {
+          id: idGenerator(),
+          channelId,
+          userId: member.userId,
+          isOpen: member.userId === userId
+        });
+      });
 
       return channelId;
     });
 
     return {
       id: channelId,
-      name
+      user: member.toMember()
     };
+  }
+
+  async getDirectMessageChannels(userId: string): Promise<DMChannelResponse[]> {
+    const manager = getManager();
+    const result = await manager.query(
+      `
+          select dm."channelId", u.username, u.image, u.id, u."isOnline", u."createdAt", u."updatedAt"
+          from users u
+                   join dm_members dm on dm."userId" = u.id
+          where u.id != $1
+            and dm."channelId" in (
+              select distinct c.id
+              from channels as c
+                       left outer join dm_members as dm
+                                       on c."id" = dm."channelId"
+                       join users u on dm."userId" = u.id
+              where c."isPublic" = false
+                and c.dm = true
+                and dm."isOpen" = true
+                and dm."userId" = $1
+          )
+      `,
+      [userId]
+    );
+
+    const dms: DMChannelResponse[] = [];
+    result.map(r => dms.push({
+      id: r.channelId,
+      user: {
+        id: r.id,
+        username: r.username,
+        image: r.image,
+        isOnline: r.isOnline,
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt
+      }
+    }));
+    return dms;
   }
 
   async editChannel(userId: string, channelId: string, input: ChannelInput): Promise<boolean> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
-      relations: ['guild'],
+      relations: ['guild']
     });
 
     if (!channel) {
@@ -263,7 +285,7 @@ export class ChannelService {
   async deleteChannel(userId: string, channelId: string): Promise<boolean> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
-      relations: ['guild', 'members'],
+      relations: ['guild', 'members']
     });
 
     if (!channel) {
@@ -291,7 +313,7 @@ export class ChannelService {
   async getPrivateChannelMembers(userId: string, channelId: string): Promise<string[]> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
-      relations: ['guild'],
+      relations: ['guild']
     });
 
     if (!channel) {
@@ -306,16 +328,30 @@ export class ChannelService {
 
     const ids = await getManager().query(
       `
-      select pc."userId"
-      from pcmembers pc
-      join channels c on pc."channelId" = c.id
-      where c.id = $1
-        `,
+          select pc."userId"
+          from pcmembers pc
+                   join channels c on pc."channelId" = c.id
+          where c.id = $1
+      `,
       [channelId]
     );
 
     if (ids.length === 0) return [];
 
     return ids.map(i => i.userId);
+  }
+
+  async setDirectMessageStatus(channelId: string, userId: string, isOpen: boolean): Promise<boolean> {
+    const channel = await this.dmMemberRepository.findOneOrFail({
+      where: { channelId, userId }
+    });
+
+    if (!channel) throw new NotFoundException();
+
+    await this.dmMemberRepository.update({ id: channel.id }, {
+      isOpen
+    });
+
+    return true;
   }
 }

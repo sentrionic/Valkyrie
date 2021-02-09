@@ -26,7 +26,8 @@ export const MessageInput: React.FC = () => {
   const inputRef: any = useRef();
 
   const { guildId, channelId } = useParams<RouterProps>();
-  const { data } = useQuery<Channel[]>(`channels-${guildId}`);
+  const qKey = guildId === undefined ? 'dms' : `channels-${guildId}`;
+  const { data } = useQuery<any[]>(qKey);
   const channel = data?.find(c => c.id === channelId);
   const socket = getSocket();
   const current = userStore(state => state.current);
@@ -53,6 +54,13 @@ export const MessageInput: React.FC = () => {
     }
   }
 
+  const getPlaceholder = (): string => {
+    if (channel?.user) {
+      return `Message @${channel?.user.username}`;
+    }
+    return `Message #${channel?.name}`;
+  }
+
   return (
     <GridItem gridColumn={3} gridRow={3} px='20px' pb={isTyping.length > 0 ? "0" : "26px"} bg='#36393f'>
       <InputGroup size='md' bg='#40444b' alignItems='center' borderRadius='8px'>
@@ -66,7 +74,7 @@ export const MessageInput: React.FC = () => {
           minRows={1}
           pl='3rem'
           name={'text'}
-          placeholder={`Message #${channel?.name}`}
+          placeholder={getPlaceholder()}
           border='0'
           _focus={{ border: '0' }}
           ref={inputRef}
