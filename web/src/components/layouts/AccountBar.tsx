@@ -4,7 +4,7 @@ import { RiSettings5Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { userStore } from '../../lib/stores/userStore';
 
-export const AccountBar = () => {
+export const AccountBar: React.FC = () => {
 
   const user = userStore(state => state.current);
 

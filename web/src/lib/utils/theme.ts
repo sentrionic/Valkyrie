@@ -1,8 +1,8 @@
 import { extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
-const config = {
-  initialColorMode: "dark",
+const config: any = {
+  initialColorMode: 'dark',
 };
 
 const styles = {

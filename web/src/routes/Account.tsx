@@ -27,6 +27,7 @@ import { getAccount, updateAccount } from "../lib/api/handler/account";
 import { AccountResponse } from "../lib/api/models";
 import { logout } from "../lib/api/handler/auth";
 import { CropImageModal } from "../components/modals/CropImageModal";
+import { aKey } from '../lib/utils/querykeys';
 
 export const Account = () => {
   const { colorMode } = useColorMode();
@@ -39,7 +40,7 @@ export const Account = () => {
     onClose: cropperOnClose,
   } = useDisclosure();
 
-  const { data: user } = useQuery<AccountResponse>("account", () =>
+  const { data: user } = useQuery<AccountResponse>(aKey, () =>
     getAccount().then((response) => response.data)
   );
   const logoutUser = userStore((state) => state.logout);
@@ -210,13 +211,17 @@ export const Account = () => {
           </Flex>
         </Box>
       </Box>
-      <ChangePasswordModal isOpen={isOpen} onClose={onClose} />
-      <CropImageModal
-        isOpen={cropperIsOpen}
-        onClose={cropperOnClose}
-        initialImage={cropImage}
-        applyCrop={applyCrop}
-      />
+      {isOpen &&
+        <ChangePasswordModal isOpen={isOpen} onClose={onClose} />
+      }
+      {cropperIsOpen &&
+        <CropImageModal
+          isOpen={cropperIsOpen}
+          onClose={cropperOnClose}
+          initialImage={cropImage}
+          applyCrop={applyCrop}
+        />
+      }
     </Flex>
   );
 };

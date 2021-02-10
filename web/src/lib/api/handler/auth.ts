@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { AccountResponse } from '../models';
 import { request } from '../setupAxios';
-import { ChangePasswordInput, LoginDTO, RegisterDTO, ResetPasswordInput } from '../dtos/AuthDTO';
+import { ChangePasswordInput, LoginDTO, RegisterDTO, ResetPasswordInput } from '../dtos/AuthInput';
 
 export const register = (
   body: RegisterDTO

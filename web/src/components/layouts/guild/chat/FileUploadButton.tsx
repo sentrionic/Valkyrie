@@ -14,9 +14,9 @@ import {
 import React, { useRef, useState } from 'react';
 import { MdAddCircle } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import { sendMessage } from '../../../lib/api/handler/messages';
-import { FileSchema } from '../../../lib/utils/validation/message.schema';
-import { RouterProps } from '../../../routes/Routes';
+import { sendMessage } from '../../../../lib/api/handler/messages';
+import { FileSchema } from '../../../../lib/utils/validation/message.schema';
+import { RouterProps } from '../../../../routes/Routes';
 
 export const FileUploadButton: React.FC = () => {
   const { channelId } = useParams<RouterProps>();

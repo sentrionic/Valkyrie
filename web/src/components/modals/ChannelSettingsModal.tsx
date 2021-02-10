@@ -23,16 +23,13 @@ import { AiOutlineLock } from 'react-icons/ai';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
-import {
-  deleteChannel,
-  editChannel,
-  getGuildMembers,
-  getPrivateChannelMembers
-} from '../../lib/api/handler/guilds';
+import { getGuildMembers } from '../../lib/api/handler/guilds';
 import { ChannelSchema } from '../../lib/utils/validation/channel.schema';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import { useQuery } from 'react-query';
-import { Channel } from '../../lib/api/models';
+import { useGetCurrentChannel } from '../../lib/utils/hooks/useGetCurrentChannel';
+import { cKey, mKey } from '../../lib/utils/querykeys';
+import { deleteChannel, editChannel, getPrivateChannelMembers } from '../../lib/api/handler/channel';
 
 interface IProps {
   guildId: string;
@@ -54,13 +51,12 @@ enum ChannelScreen {
 
 export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isOpen, onClose }) => {
 
-  const key = `members-${guildId}`;
+  const key = mKey(guildId);
   const { data } = useQuery(key, () =>
     getGuildMembers(guildId).then(response => response.data)
   );
 
-  const { data: channelData } = useQuery<Channel[]>(`channels-${guildId}`);
-  const channel = channelData?.find(c => c.id === channelId);
+  const channel = useGetCurrentChannel(channelId, cKey(guildId));
 
   const members: Item[] = [];
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);

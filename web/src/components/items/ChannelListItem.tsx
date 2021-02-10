@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Flex, Icon, ListItem, Text, useDisclosure } from '@chakra-ui/react';
 import { FaHashtag, FaUserLock } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
-import { Channel, Guild } from '../../lib/api/models';
+import { Channel } from '../../lib/api/models';
 import { Link, useLocation } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { userStore } from '../../lib/stores/userStore';
 import { ChannelSettingsModal } from '../modals/ChannelSettingsModal';
+import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 
 interface ChannelListItemProps {
   channel: Channel,
@@ -21,8 +21,7 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
   const [showSettings, setShowSettings] = useState(false);
 
   const current = userStore(state => state.current);
-  const { data } = useQuery<Guild[]>('guilds');
-  const guild = data?.find(g => g.id === guildId);
+  const guild = useGetCurrentGuild(guildId);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

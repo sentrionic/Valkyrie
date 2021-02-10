@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Redirect,
   Route,
@@ -5,7 +6,6 @@ import {
   RouteProps,
 } from "react-router-dom";
 import { getCurrent } from "../lib/stores/userStore";
-import React from "react";
 
 interface IProps extends RouteProps {
   component: React.ComponentType<RouteComponentProps<any>>;

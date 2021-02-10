@@ -1,9 +1,10 @@
 import { Avatar, Box, Divider, Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { Channel, DMChannel } from '../../lib/api/models';
 import { RouterProps } from '../../routes/Routes';
+import { useGetCurrentChannel } from '../../lib/utils/hooks/useGetCurrentChannel';
+import { cKey } from '../../lib/utils/querykeys';
+import { useGetCurrentDM } from '../../lib/utils/hooks/useGetCurrentDM';
 
 export const StartMessages: React.FC = () => {
   const { guildId } = useParams<RouterProps>();
@@ -13,9 +14,7 @@ export const StartMessages: React.FC = () => {
 const ChannelStartMessages: React.FC = () => {
 
   const { guildId, channelId } = useParams<RouterProps>();
-
-  const { data } = useQuery<Channel[]>(`channels-${guildId}`);
-  const channel = data?.find(c => c.id === channelId);
+  const channel = useGetCurrentChannel(channelId, cKey(guildId));
 
   return (
     <Flex
@@ -34,9 +33,7 @@ const ChannelStartMessages: React.FC = () => {
 const DMStartMessages: React.FC = () => {
 
   const { channelId } = useParams<RouterProps>();
-
-  const { data } = useQuery<DMChannel[]>('dms');
-  const channel = data?.find(c => c.id === channelId);
+  const channel = useGetCurrentDM(channelId);
 
   return (
     <Box m='4'>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme, useContextMenu } from 'react-contexify';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { MdEdit } from 'react-icons/md';
 import { FaEllipsisH, FaRegTrashAlt } from 'react-icons/fa';
 import { FiLink } from 'react-icons/fi';
@@ -12,6 +12,8 @@ import { getShortenedTime, getTime } from '../../../lib/utils/dateUtils';
 import { DeleteMessageModal } from '../../modals/DeleteMessageModal';
 import { EditMessageModal } from '../../modals/EditMessageModal';
 import { getOrCreateDirectMessage } from '../../../lib/api/handler/dm';
+import { useGetCurrentGuild } from '../../../lib/utils/hooks/useGetCurrentGuild';
+import { RouterProps } from '../../../routes/Routes';
 import '../css/ContextMenu.css';
 
 interface MessageProps {
@@ -25,6 +27,10 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
   const current = userStore(state => state.current);
   const isAuthor = current?.id === message.user.id;
   const history = useHistory();
+  const { guildId } = useParams<RouterProps>();
+  const guild = useGetCurrentGuild(guildId);
+  const isOwner = guild !== undefined && guild.ownerId === current?.id;
+  const showMenu = (isAuthor || isOwner || message.url);
 
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
@@ -45,9 +51,9 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
   const getOrCreateDM = async () => {
     const { data } = await getOrCreateDirectMessage(message.user.id);
     if (data) {
-      history.push(`/channels/me/${data.id}`)
+      history.push(`/channels/me/${data.id}`);
     }
-  }
+  };
 
   return (
     <>
@@ -57,9 +63,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
         mt={isCompact ? '0' : '3'}
         _hover={{ bg: '#32353b' }}
         justify='space-between'
-        onContextMenu={(e) => {
-          if (isAuthor) show(e);
-        }}
+        onContextMenu={show}
         onMouseLeave={() => setShowSettings(false)}
         onMouseEnter={() => setShowSettings(true)}
       >
@@ -75,7 +79,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
               <Box ml='3' w={'full'}>
                 <MessageContent message={message} />
               </Box>
-              {(isAuthor && (showSettings)) ?
+              {(showSettings && showMenu) ?
                 <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }} h={'5px'}>
                   <FaEllipsisH />
                 </Box>
@@ -99,7 +103,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                       {getTime(message.createdAt)}
                     </Text>
                   </Flex>
-                  {(isAuthor && (showSettings)) && (
+                  {(showSettings && showMenu) && (
                     <Box onClick={show} mr='2' _hover={{ cursor: 'pointer' }}>
                       <FaEllipsisH />
                     </Box>
@@ -111,7 +115,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
           }
         </Flex>
       </Flex>
-      {isAuthor &&
+      {(showMenu) &&
       <>
         <Menu id={message.id} theme={theme.dark}>
           {message.filetype ?
@@ -123,33 +127,36 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                 <Icon as={FiLink} />
               </Flex>
             </Item> :
-            <Item className={'menu-item'} onClick={onEditOpen}>
-              <Flex align='center' justify='space-between' w='full'>
-                <Text>Edit Message</Text>
-                <Icon as={MdEdit} />
-              </Flex>
-            </Item>
+            !isAuthor ? null :
+              <Item className={'menu-item'} onClick={onEditOpen}>
+                <Flex align='center' justify='space-between' w='full'>
+                  <Text>Edit Message</Text>
+                  <Icon as={MdEdit} />
+                </Flex>
+              </Item>
           }
+          {(isAuthor || isOwner) &&
           <Item onClick={onDeleteOpen} className={'delete-item'}>
             <Flex align='center' justify='space-between' w='full'>
               <Text>Delete Message</Text>
               <Icon as={FaRegTrashAlt} />
             </Flex>
           </Item>
+          }
         </Menu>
         {isDeleteOpen && <DeleteMessageModal message={message} isOpen={isDeleteOpen} onClose={onDeleteClose} />}
         {isEditOpen && <EditMessageModal message={message} isOpen={isEditOpen} onClose={onEditClose} />}
       </>
       }
       {!isAuthor &&
-        <Menu id={message.user.id} theme={theme.dark}>
-          <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
-            <Flex align='center' justify='space-between' w='full'>
-              <Text>Message</Text>
-            </Flex>
-          </Item>
-        </Menu>
+      <Menu id={message.user.id} theme={theme.dark}>
+        <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
+          <Flex align='center' justify='space-between' w='full'>
+            <Text>Message</Text>
+          </Flex>
+        </Item>
+      </Menu>
       }
     </>
   );
-};
+}

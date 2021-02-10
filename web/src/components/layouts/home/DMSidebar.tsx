@@ -1,14 +1,16 @@
-import { GridItem, Text, UnorderedList } from '@chakra-ui/react';
 import React from 'react';
+import { GridItem, Text, UnorderedList } from '@chakra-ui/react';
+import { useQuery } from 'react-query';
+import { AccountBar } from '../AccountBar';
 import { FriendsListButton } from '../../sections/FriendsListButton';
 import { DMListItem } from '../../items/DMListItem';
-import { AccountBar } from '../AccountBar';
-import { useQuery } from 'react-query';
 import { getUserDMs } from '../../../lib/api/handler/dm';
+import { dmKey } from '../../../lib/utils/querykeys';
+import { dmScrollerCss } from './css/dmScrollerCSS';
 
 export const DMSidebar: React.FC = () => {
 
-  const { data } = useQuery('dms', () => {
+  const { data } = useQuery(dmKey, () => {
     return getUserDMs().then(result => result.data);
   });
 
@@ -19,18 +21,7 @@ export const DMSidebar: React.FC = () => {
       bg="brandGray.dark"
       overflowY="hidden"
       _hover={{ overflowY: 'auto' }}
-      css={{
-        '&::-webkit-scrollbar': {
-          width: '4px',
-        },
-        '&::-webkit-scrollbar-track': {
-          width: '4px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: '#202225',
-          borderRadius: '18px',
-        },
-      }}
+      css={dmScrollerCss}
     >
       <FriendsListButton />
       <Text

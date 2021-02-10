@@ -17,13 +17,15 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import { AiOutlineLock } from 'react-icons/ai';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
-import { createChannel, getGuildMembers } from '../../lib/api/handler/guilds';
+import { getGuildMembers } from '../../lib/api/handler/guilds';
 import { ChannelSchema } from '../../lib/utils/validation/channel.schema';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
-import { useQuery } from 'react-query';
+import { mKey } from '../../lib/utils/querykeys';
+import { createChannel } from '../../lib/api/handler/channel';
 
 interface IProps {
   guildId: string;
@@ -39,7 +41,7 @@ interface Item {
 
 export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
 
-  const key = `members-${guildId}`;
+  const key = mKey(guildId);
   const { data } = useQuery(key, () =>
     getGuildMembers(guildId).then(response => response.data)
   );

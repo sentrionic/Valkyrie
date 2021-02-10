@@ -7,11 +7,10 @@ import { HiLogout } from 'react-icons/hi';
 import { StyledMenuList } from './StyledMenuList';
 import { StyledMenuItem, StyledRedMenuItem } from './StyledMenuItem';
 import { useHistory, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { Guild } from '../../lib/api/models';
 import { leaveGuild } from '../../lib/api/handler/guilds';
 import { RouterProps } from '../../routes/Routes';
 import { userStore } from '../../lib/stores/userStore';
+import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -21,8 +20,7 @@ interface GuildMenuProps {
 export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen }) => {
 
   const { guildId } = useParams<RouterProps>();
-  const { data } = useQuery<Guild[]>('guilds');
-  const guild = data?.find(g => g.id === guildId);
+  const guild = useGetCurrentGuild(guildId);
   const history = useHistory();
 
   const user = userStore(state => state.current);
