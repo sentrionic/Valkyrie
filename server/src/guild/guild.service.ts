@@ -81,6 +81,9 @@ export class GuildService {
   }
 
   async createGuild(name: string, userId: string): Promise<GuildResponse> {
+
+    await this.checkGuildLimit(userId);
+
     try {
       let guild: Guild | null = null;
       let channel: Channel | null = null;
@@ -123,6 +126,9 @@ export class GuildService {
   }
 
   async joinGuild(token: string, userId: string): Promise<GuildResponse> {
+
+    await this.checkGuildLimit(userId);
+
     if (token.includes('/')) {
       token = token.substring(token.lastIndexOf('/') + 1);
     }
@@ -169,9 +175,21 @@ export class GuildService {
   }
 
   async leaveGuild(userId: string, guildId: string): Promise<boolean> {
-    const member = await this.memberRepository.findOneOrFail({ where: { guildId, userId } });
+    const member = await this.memberRepository.findOneOrFail({ where: { guildId, userId }});
+    const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
+
+    if (guild.ownerId === userId) throw new BadRequestException('The owner cannot leave their server');
+
     await this.memberRepository.delete({ id: member.id });
     this.socketService.removeMember({ room: guildId, memberId: userId });
     return true;
+  }
+
+  async checkGuildLimit(userId: string) {
+    const count = await this.memberRepository.count({ userId });
+
+    if (count >= 100) {
+      throw new BadRequestException('Server Limit is 100');
+    }
   }
 }

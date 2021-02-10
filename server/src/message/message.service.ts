@@ -4,7 +4,7 @@ import { getManager, Repository } from 'typeorm';
 import { Message } from '../entities/message.entity';
 import { User } from '../entities/user.entity';
 import { Channel } from '../entities/channel.entity';
-import { uploadToS3 } from '../utils/fileUtils';
+import { deleteFile, uploadToS3 } from '../utils/fileUtils';
 import { BufferFile } from '../types/BufferFile';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { MessageInput } from '../models/dto/MessageInput';
@@ -155,6 +155,10 @@ export class MessageService {
     }
 
     const deleteId = message.id;
+
+    if (message.url) {
+      await deleteFile(message.url);
+    }
 
     await this.messageRepository.remove(message);
 

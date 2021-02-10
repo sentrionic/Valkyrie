@@ -5,5 +5,6 @@ export const MessageSchema = yup.object().shape({
   text: yup
     .string()
     .optional()
-    .test('empty', 'Message must not be empty', (text) => text?.length !== 0),
+    .test('empty', 'Message must not be empty', (text) => text?.length !== 0)
+    .max(2000)
 });

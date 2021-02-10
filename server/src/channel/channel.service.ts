@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getManager, Repository } from 'typeorm';
 import { Channel } from '../entities/channel.entity';
@@ -42,6 +42,12 @@ export class ChannelService {
     });
 
     if (guild.ownerId !== userId) throw new UnauthorizedException();
+
+    const count = await this.channelRepository.count({ guild });
+
+    if (count >= 50) {
+      throw new BadRequestException('Channel Limit is 50');
+    }
 
     let channel: Channel;
 

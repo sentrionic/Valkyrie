@@ -16,8 +16,6 @@ import { MemberGuard } from '../guards/http/member.guard';
 import { ChannelInput } from '../models/dto/ChannelInput';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
 import { ChannelSchema } from '../validation/channel.schema';
-import { MessageInput } from '../models/dto/MessageInput';
-import { MessageSchema } from '../validation/message.schema';
 
 @Controller('channels')
 export class ChannelController {

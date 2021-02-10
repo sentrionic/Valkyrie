@@ -15,7 +15,7 @@ export class Member extends AbstractEntity {
   @JoinColumn({ name: 'userId' })
   user!: User;
 
-  @ManyToMany(() => Guild, (guild) => guild.members, { primary: true })
+  @ManyToMany(() => Guild, (guild) => guild.members, { primary: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'guildId' })
   guild!: Guild;
 }

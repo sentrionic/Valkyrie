@@ -11,7 +11,6 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { FileUploadButton } from './FileUploadButton';
 import { sendMessage } from '../../../lib/api/handler/messages';
-import { Channel } from '../../../lib/api/models';
 import { RouterProps } from '../../../routes/Routes';
 import { getSocket } from '../../../lib/api/getSocket';
 import { userStore } from '../../../lib/stores/userStore';
@@ -88,7 +87,7 @@ export const MessageInput: React.FC = () => {
               socket.emit('stopTyping', channelId, current?.username);
               setCurrentlyTyping(false);
             }
-            setText(value);
+            if (value.length <= 2000) setText(value);
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSubmit().then(() => {

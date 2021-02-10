@@ -26,6 +26,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
   const history = useHistory();
 
   const user = userStore(state => state.current);
+  const isOwner = guild?.ownerId === user?.id;
 
   const handleLeave = async () => {
     const { data } = await leaveGuild(guildId);
@@ -53,7 +54,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
               </MenuButton>
             </Flex>
             <StyledMenuList>
-              {guild?.ownerId === user?.id &&
+              {isOwner &&
                 <StyledMenuItem
                   label={'Create Channel'}
                   icon={MdAddCircle}
@@ -65,11 +66,13 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
                 icon={FaUserPlus}
                 handleClick={inviteOpen}
               />
-              <StyledRedMenuItem
-                label={'Leave Server'}
-                icon={HiLogout}
-                handleClick={handleLeave}
-              />
+              {!isOwner &&
+                <StyledRedMenuItem
+                  label={'Leave Server'}
+                  icon={HiLogout}
+                  handleClick={handleLeave}
+                />
+              }
             </StyledMenuList>
           </>
         )}

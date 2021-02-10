@@ -8,43 +8,6 @@ import { nanoid } from 'nanoid';
 
 config();
 
-const DIM_MAX = 1080;
-const DIM_MIN = 320;
-
-const storyImageTransformer = async (
-  buffer: Buffer,
-): Promise<Buffer | null> => {
-  const image = sharp(buffer);
-  return await new Promise<Buffer | null>(async (res) =>
-    image.metadata().then((info) => {
-      res(image.resize(getResizeOptions(info)).webp().toBuffer());
-    }),
-  );
-};
-
-const getResizeOptions = (info: sharp.Metadata): sharp.ResizeOptions => {
-  let options: Record<string, unknown>;
-  if (
-    (info.height !== undefined && info.height < DIM_MIN) ||
-    (info.width !== undefined && info.width < DIM_MIN)
-  ) {
-    options = {
-      width: DIM_MIN,
-      height: DIM_MIN,
-      fit: 'outside',
-    };
-  } else {
-    options = {
-      width: DIM_MAX,
-      height: DIM_MAX,
-      fit: 'inside',
-      withoutEnlargement: true,
-    };
-  }
-
-  return options;
-};
-
 const profileImageTransformer = (buffer: Buffer): Promise<Buffer> =>
   sharp(buffer)
     .resize({
@@ -88,12 +51,6 @@ export const uploadToS3 = async (
   file: BufferFile,
 ): Promise<string> => {
   const { buffer, originalname, mimetype } = await file;
-
-  // const stream = await storyImageTransformer(buffer);
-  //
-  // if (!stream) {
-  //   throw new InternalServerErrorException();
-  // }
 
   const params = {
     Bucket: process.env.AWS_STORAGE_BUCKET_NAME as string,
