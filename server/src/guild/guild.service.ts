@@ -24,6 +24,10 @@ export class GuildService {
   ) {
   }
 
+  /**
+   * Get the members of the given guild
+   * @param guildId
+   */
   async getGuildMembers(guildId: string): Promise<MemberResponse[]> {
     const manager = getManager();
     return await manager.query(
@@ -37,6 +41,10 @@ export class GuildService {
     );
   }
 
+  /**
+   * Get the guilds of the current user
+   * @param userId
+   */
   async getUserGuilds(userId: string): Promise<GuildResponse[]> {
     const manager = getManager();
     return await manager.query(
@@ -59,27 +67,12 @@ export class GuildService {
     );
   }
 
-  async getDirectMessageMembers(
-    guildId: string,
-    userId: string
-  ): Promise<User[]> {
-    const manager = getManager();
-    return await manager.query(
-      `select distinct
-       on (u.id) u.id, u.username
-       from users as u
-           join direct_message as dm
-       on (u."id"::text = dm."senderId"::text)
-           or (u."id"::text = dm."receiverId"::text)
-       where ($1 = dm."senderId"::text
-          or $1 = dm."receiverId"::text)
-         and dm."guildId"::text = $2
-         and u."id"::text != $1
-      `,
-      [userId, guildId]
-    );
-  }
-
+  /**
+   * Create a guild. Throws a BadRequest exception if the guild
+   * limit is reached
+   * @param name
+   * @param userId
+   */
   async createGuild(name: string, userId: string): Promise<GuildResponse> {
 
     await this.checkGuildLimit(userId);
@@ -88,6 +81,7 @@ export class GuildService {
       let guild: Guild | null = null;
       let channel: Channel | null = null;
 
+      // Create guild with default channel and owner
       await getManager().transaction(async (entityManager) => {
         guild = this.guildRepository.create({ ownerId: userId });
         channel = this.channelRepository.create({ name: 'general' });
@@ -107,13 +101,7 @@ export class GuildService {
         });
       });
 
-      return {
-        id: guild!.id,
-        name: guild!.name,
-        default_channel_id: channel!.id,
-        createdAt: guild!.createdAt.toString(),
-        updatedAt: guild!.updatedAt.toString()
-      };
+      return this.toGuildResponse(guild, channel.id);
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
@@ -129,6 +117,7 @@ export class GuildService {
 
     await this.checkGuildLimit(userId);
 
+    // Link includes the domain part
     if (token.includes('/')) {
       token = token.substring(token.lastIndexOf('/') + 1);
     }
@@ -145,6 +134,7 @@ export class GuildService {
       throw new NotFoundException();
     }
 
+    // Check if already member
     const isMember = await this.memberRepository.findOne({ where: { userId, guildId } });
 
     if (isMember) {
@@ -165,13 +155,7 @@ export class GuildService {
 
     this.socketService.addMember({ room: guild.id, member: user.toMember() });
 
-    return {
-      id: guild.id,
-      name: guild.name,
-      default_channel_id: defaultChannel.id,
-      createdAt: guild?.createdAt.toString(),
-      updatedAt: guild?.updatedAt.toString()
-    };
+    return this.toGuildResponse(guild, defaultChannel.id);
   }
 
   async leaveGuild(userId: string, guildId: string): Promise<boolean> {
@@ -185,11 +169,26 @@ export class GuildService {
     return true;
   }
 
+  /**
+   * Check if the user is in less than 100 servers.
+   * Throws a BadRequestException if that is not the case.
+   * @param userId
+   */
   async checkGuildLimit(userId: string) {
     const count = await this.memberRepository.count({ userId });
 
     if (count >= 100) {
       throw new BadRequestException('Server Limit is 100');
     }
+  }
+
+  toGuildResponse(guild: Guild, defaultChannelId: string): GuildResponse {
+    return {
+      id: guild.id,
+      name: guild.name,
+      default_channel_id: defaultChannelId,
+      createdAt: guild?.createdAt.toString(),
+      updatedAt: guild?.updatedAt.toString()
+    };
   }
 }

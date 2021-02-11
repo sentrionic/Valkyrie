@@ -6,7 +6,7 @@ import { MemberGuard } from '../guards/http/member.guard';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
 import { GuildSchema } from '../validation/guild.schema';
-import { GuildInput } from '../models/dto/GuildInput';
+import { GuildInput } from '../models/input/GuildInput';
 import { GuildResponse } from '../models/response/GuildResponse';
 import { ApiBody, ApiCookieAuth, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
 

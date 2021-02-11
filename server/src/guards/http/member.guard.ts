@@ -2,6 +2,10 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Member } from '../../entities/member.entity';
 import e from 'express';
 
+/**
+ * Check if the current user is authenticated
+ * using the sessionID and member of the guild
+ */
 @Injectable()
 export class MemberGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {

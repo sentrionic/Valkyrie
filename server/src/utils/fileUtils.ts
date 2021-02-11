@@ -8,6 +8,10 @@ import { nanoid } from 'nanoid';
 
 config();
 
+/**
+ * Shrinks the image to 150 x 150 and turns it into .webp
+ * @param buffer
+ */
 const profileImageTransformer = (buffer: Buffer): Promise<Buffer> =>
   sharp(buffer)
     .resize({
@@ -23,6 +27,11 @@ const s3 = new aws.S3({
   region: process.env.AWS_S3_REGION,
 });
 
+/**
+ * Resizes an image and uploads it to S3
+ * @param directory
+ * @param image
+ */
 export const uploadAvatarToS3 = async (
   directory: string,
   image: BufferFile,
@@ -46,6 +55,11 @@ export const uploadAvatarToS3 = async (
   return response.Location;
 };
 
+/**
+ * Uploads a file to S3
+ * @param directory
+ * @param file
+ */
 export const uploadToS3 = async (
   directory: string,
   file: BufferFile,

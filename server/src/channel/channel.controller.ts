@@ -13,7 +13,7 @@ import { GetUser } from '../config/user.decorator';
 import { DMChannelResponse } from '../models/response/DMChannelResponse';
 import { ChannelResponse } from '../models/response/ChannelResponse';
 import { MemberGuard } from '../guards/http/member.guard';
-import { ChannelInput } from '../models/dto/ChannelInput';
+import { ChannelInput } from '../models/input/ChannelInput';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
 import { ChannelSchema } from '../validation/channel.schema';
 

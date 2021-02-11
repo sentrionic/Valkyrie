@@ -21,9 +21,9 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { LoginInput } from '../models/dto/LoginInput';
+import { LoginInput } from '../models/input/LoginInput';
 import e from 'express';
-import { RegisterInput } from '../models/dto/RegisterInput';
+import { RegisterInput } from '../models/input/RegisterInput';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
 import {
   ChangePasswordSchema,
@@ -33,14 +33,14 @@ import {
   UserSchema,
 } from '../validation/user.schema';
 import { COOKIE_NAME } from '../utils/constants';
-import { ChangePasswordInput } from '../models/dto/ChangePasswordInput';
+import { ChangePasswordInput } from '../models/input/ChangePasswordInput';
 import {
   ForgotPasswordInput,
   ResetPasswordInput,
-} from '../models/dto/ResetPasswordInput';
+} from '../models/input/ResetPasswordInput';
 import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
-import { UpdateInput } from '../models/dto/UpdateInput';
+import { UpdateInput } from '../models/input/UpdateInput';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
 import { UserResponse } from '../models/response/UserResponse';

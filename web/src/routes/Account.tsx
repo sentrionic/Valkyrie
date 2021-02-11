@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React, { useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from 'react-query';
 import { useHistory } from "react-router-dom";
 import { ColorModeSwitcher } from "../components/common/ColorModeSwitcher";
 import { InputField } from "../components/common/InputField";
@@ -43,6 +43,8 @@ export const Account = () => {
   const { data: user } = useQuery<AccountResponse>(aKey, () =>
     getAccount().then((response) => response.data)
   );
+  const cache = useQueryClient();
+
   const logoutUser = userStore((state) => state.logout);
   const setUser = userStore((state) => state.setUser);
 
@@ -64,6 +66,7 @@ export const Account = () => {
   const logoutClicked = async () => {
     const { data } = await logout();
     if (data) {
+      cache.clear();
       logoutUser();
       history.replace("/");
     }

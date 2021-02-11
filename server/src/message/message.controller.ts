@@ -17,7 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
-import { MessageInput } from '../models/dto/MessageInput';
+import { MessageInput } from '../models/input/MessageInput';
 import { MessageSchema } from '../validation/message.schema';
 import {
   ApiBody,

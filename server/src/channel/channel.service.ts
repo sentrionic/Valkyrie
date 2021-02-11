@@ -8,7 +8,7 @@ import { Guild } from '../entities/guild.entity';
 import { DMChannelResponse } from '../models/response/DMChannelResponse';
 import { SocketService } from '../socket/socket.service';
 import { ChannelResponse } from '../models/response/ChannelResponse';
-import { ChannelInput } from '../models/dto/ChannelInput';
+import { ChannelInput } from '../models/input/ChannelInput';
 import { PCMember } from '../entities/pcmember.entity';
 import { idGenerator } from '../utils/idGenerator';
 import { DMMember } from '../entities/dmmember.entity';
@@ -57,6 +57,7 @@ export class ChannelService {
       await channel.save();
 
       if (!isPublic) {
+        // Make sure current user is only once in the array
         members = members.filter((m) => m !== userId);
         members.push(userId);
         const pcmembers = members.map((m) => ({
@@ -78,19 +79,16 @@ export class ChannelService {
       await entityManager.save(channel);
     });
 
-    const response: ChannelResponse = {
-      id: channel!.id,
-      name: channel!.name,
-      isPublic: channel!.isPublic,
-      createdAt: channel!.createdAt.toString(),
-      updatedAt: channel!.updatedAt.toString()
-    };
-
-    this.socketService.addChannel({ room: guildId, channel: response });
+    this.socketService.addChannel({ room: guildId, channel: this.toChannelResponse(channel) });
     return true;
   }
 
-
+  /**
+   * Returns the channels of the guild and the private channels
+   * the current user is part of.
+   * @param guildId
+   * @param userId
+   */
   async getGuildChannels(guildId: string, userId: string): Promise<ChannelResponse[]> {
     const manager = getManager();
     return await manager.query(
@@ -107,6 +105,11 @@ export class ChannelService {
     );
   }
 
+  /**
+   * Create a dm with that user or return an existing one
+   * @param userId
+   * @param memberId
+   */
   async getOrCreateChannel(
     userId: string,
     memberId: string
@@ -139,6 +142,7 @@ export class ChannelService {
       };
     }
 
+    // Create the dm channel between the current user and the member
     const channelId = await getManager().transaction(async (entityManager) => {
       const channel = await this.channelRepository.create({
         name: idGenerator(),
@@ -169,6 +173,10 @@ export class ChannelService {
     };
   }
 
+  /**
+   * Get user's dms
+   * @param userId
+   */
   async getDirectMessageChannels(userId: string): Promise<DMChannelResponse[]> {
     const manager = getManager();
     const result = await manager.query(
@@ -207,6 +215,13 @@ export class ChannelService {
     return dms;
   }
 
+  /**
+   * Edits the settings of the given channel.
+   * Requires ownership.
+   * @param userId
+   * @param channelId
+   * @param input
+   */
   async editChannel(userId: string, channelId: string, input: ChannelInput): Promise<boolean> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
@@ -275,15 +290,7 @@ export class ChannelService {
       where: { id: channelId }
     });
 
-    const response: ChannelResponse = {
-      id: updatedChannel!.id,
-      name: updatedChannel!.name,
-      isPublic: updatedChannel!.isPublic,
-      createdAt: updatedChannel!.createdAt.toString(),
-      updatedAt: updatedChannel!.updatedAt.toString()
-    };
-
-    this.socketService.editChannel({ room: channel.guild.id, channel: response });
+    this.socketService.editChannel({ room: channel.guild.id, channel: this.toChannelResponse(updatedChannel) });
 
     return true;
   }
@@ -302,6 +309,7 @@ export class ChannelService {
       throw new UnauthorizedException();
     }
 
+    // Delete all private channel members before deletion
     if (!channel.isPublic) {
       await getManager().query(
         'delete from pcmembers where "channelId" = $1;',
@@ -316,6 +324,12 @@ export class ChannelService {
     return true;
   }
 
+  /**
+   * Returns the IDs of all members that have access to this channel.
+   * Requires ownership.
+   * @param userId
+   * @param channelId
+   */
   async getPrivateChannelMembers(userId: string, channelId: string): Promise<string[]> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
@@ -347,6 +361,12 @@ export class ChannelService {
     return ids.map(i => i.userId);
   }
 
+  /**
+   * Either opens or closes the DM.
+   * @param channelId
+   * @param userId
+   * @param isOpen
+   */
   async setDirectMessageStatus(channelId: string, userId: string, isOpen: boolean): Promise<boolean> {
     const channel = await this.dmMemberRepository.findOneOrFail({
       where: { channelId, userId }
@@ -359,5 +379,15 @@ export class ChannelService {
     });
 
     return true;
+  }
+
+  toChannelResponse(channel: Channel): ChannelResponse {
+    return {
+      id: channel!.id,
+      name: channel!.name,
+      isPublic: channel!.isPublic,
+      createdAt: channel!.createdAt.toString(),
+      updatedAt: channel!.updatedAt.toString()
+    }
   }
 }

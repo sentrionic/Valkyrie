@@ -1,3 +1,6 @@
+/**
+ * Represents an uploaded file
+ */
 export type BufferFile = {
   fieldname: string;
   originalname: string;

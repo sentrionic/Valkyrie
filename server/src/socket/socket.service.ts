@@ -26,6 +26,11 @@ export class SocketService {
   ) {
   }
 
+  /**
+   * Joins the given room if the user is a member of the room
+   * @param client
+   * @param room
+   */
   async joinChannel(client: Socket, room: string) {
     const id: string = client.handshake.session['userId'];
 
@@ -39,54 +44,90 @@ export class SocketService {
     client.join(room);
   }
 
+  /**
+   * Emits a "new_message" event
+   * @param message
+   */
   sendMessage(
     message: { room: string; message: MessageResponse }
   ) {
     this.socket.to(message.room).emit('new_message', message.message);
   }
 
+  /**
+   * Emits an "edit_message" event
+   * @param message
+   */
   editMessage(
     message: { room: string; message: MessageResponse }
   ) {
     this.socket.to(message.room).emit('edit_message', message.message);
   }
 
+  /**
+   * Emits a "delete_message" event
+   * @param message
+   */
   deleteMessage(
     message: { room: string; message: MessageResponse }
   ) {
     this.socket.to(message.room).emit('delete_message', message.message);
   }
 
+  /**
+   * Emits an "add_channel" event
+   * @param message
+   */
   addChannel(
     message: { room: string; channel: ChannelResponse }
   ) {
     this.socket.to(message.room).emit('add_channel', message.channel);
   }
 
+  /**
+   * Emits an "edit_channel" event
+   * @param message
+   */
   editChannel(
     message: { room: string; channel: ChannelResponse }
   ) {
     this.socket.to(message.room).emit('edit_channel', message.channel);
   }
 
+  /**
+   * Emits an "delete_channel" event
+   * @param message
+   */
   deleteChannel(
     message: { room: string, channelId: string }
   ) {
     this.socket.to(message.room).emit('delete_channel', message.channelId);
   }
 
+  /**
+   * Emits an "add_member" event
+   * @param message
+   */
   addMember(
     message: { room: string, member: MemberResponse }
   ) {
     this.socket.to(message.room).emit('add_member', message.member);
   }
 
+  /**
+   * Emits an "remove_member" event
+   * @param message
+   */
   removeMember(
     message: { room: string, memberId: string }
   ) {
     this.socket.to(message.room).emit('remove_member', message.memberId);
   }
 
+  /**
+   * Set the user as online
+   * @param client
+   */
   async toggleOnlineStatus(client: Socket) {
     const id: string = client.handshake.session['userId'];
     await this.setOnlineStatus(id, true);
@@ -104,6 +145,10 @@ export class SocketService {
     });
   }
 
+  /**
+   * Set the user as offline
+   * @param client
+   */
   async toggleOfflineStatus(client: Socket) {
     const id: string = client.handshake.session['userId'];
     await this.setOnlineStatus(id, false);
@@ -125,14 +170,32 @@ export class SocketService {
     await this.userRepository.update(userId, { isOnline });
   }
 
+  /**
+   * Emits an "addToTyping" event
+   * @param room
+   * @param username
+   */
   addTyping(room: string, username: string) {
     this.socket.to(room).emit('addToTyping', username);
   }
 
+  /**
+   * Emits an "removeFromTyping" event
+   * @param room
+   * @param username
+   */
   stopTyping(room: string, username: string) {
     this.socket.to(room).emit('removeFromTyping', username);
   }
 
+  /**
+   * Check if the given user is part of the channel,
+   * private channel or dm channel.
+   * Throws a WsException if that's not the case
+   * @param channel
+   * @param userId
+   * @private
+   */
   private async isChannelMember(channel: Channel, userId: string): Promise<boolean> {
     // Check if user has access to private channel
     if (!channel.isPublic) {

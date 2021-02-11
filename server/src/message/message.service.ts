@@ -7,7 +7,7 @@ import { Channel } from '../entities/channel.entity';
 import { deleteFile, uploadToS3 } from '../utils/fileUtils';
 import { BufferFile } from '../types/BufferFile';
 import { MessageResponse } from '../models/response/MessageResponse';
-import { MessageInput } from '../models/dto/MessageInput';
+import { MessageInput } from '../models/input/MessageInput';
 import { SocketService } from '../socket/socket.service';
 import { PCMember } from '../entities/pcmember.entity';
 import { Member } from '../entities/member.entity';
@@ -27,6 +27,14 @@ export class MessageService {
     private readonly socketService: SocketService
   ) {}
 
+  /**
+   * Returns 35 messages for the given channel.
+   * Requires channel access.
+   * Uses the "createdAt" attribute as the cursor
+   * @param channelId
+   * @param userId
+   * @param cursor
+   */
   async getMessages(
     channelId: string,
     userId: string,
@@ -96,6 +104,7 @@ export class MessageService {
     this.socketService.sendMessage({ room: channelId, message: message.toJSON() });
 
     if (channel.dm) {
+      // Open the DM if it's closed
       getManager().query(
         `
         update dm_members set "isOpen" = true 
