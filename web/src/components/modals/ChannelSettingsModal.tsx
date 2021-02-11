@@ -255,8 +255,8 @@ const DeleteChannelModal: React.FC<IScreenProps> = ({ goBack, submitClose, name,
             colorScheme='red'
             fontSize={"14px"}
             onClick={async () => {
-              await deleteChannel(guildId, channelId);
               submitClose();
+              await deleteChannel(guildId, channelId);
             }}
           >
             Delete Channel

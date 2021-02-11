@@ -67,8 +67,8 @@ export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose 
               colorScheme='red'
               fontSize={"14px"}
               onClick={async () => {
-                await deleteMessage(message.id);
                 onClose();
+                await deleteMessage(message.id);
               }}
             >
               Delete

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GridItem, Text, UnorderedList } from '@chakra-ui/react';
+import { GridItem, UnorderedList } from '@chakra-ui/react';
 import { MemberListItem } from '../../items/MemberListItem';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
