@@ -2,9 +2,20 @@ import { GridItem, UnorderedList } from '@chakra-ui/react';
 import React from 'react';
 import { FriendsListHeader } from './FriendsListHeader';
 import { scrollbarCss } from '../../../lib/utils/theme';
-// import { FriendsListItem } from '../../items/FriendsListItem';
+import { useQuery } from 'react-query';
+import { fKey } from '../../../lib/utils/querykeys';
+import { getFriends } from '../../../lib/api/handler/account';
+import { FriendsListItem } from '../../items/FriendsListItem';
 
 export const FriendList: React.FC = () => {
+
+  const { data } = useQuery(fKey, () =>
+    getFriends().then(response => response.data),
+    {
+      cacheTime: Infinity
+    }
+  );
+
   return (
     <>
       <FriendsListHeader />
@@ -18,9 +29,9 @@ export const FriendList: React.FC = () => {
         css={scrollbarCss}
       >
         <UnorderedList listStyleType='none' ml='0' w='full' mt='2'>
-          {/*{[...Array(15)].map((x, i) =>*/}
-          {/*  <FriendsListItem key={`${i}`} />*/}
-          {/*)}*/}
+          {data?.map((f) =>
+            <FriendsListItem key={f.id} friend={f} />
+          )}
         </UnorderedList>
       </GridItem>
     </>

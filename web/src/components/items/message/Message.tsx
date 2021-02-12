@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme, useContextMenu } from 'react-contexify';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { MdEdit } from 'react-icons/md';
 import { FaEllipsisH, FaRegTrashAlt } from 'react-icons/fa';
 import { FiLink } from 'react-icons/fi';
@@ -11,9 +11,9 @@ import { userStore } from '../../../lib/stores/userStore';
 import { getShortenedTime, getTime } from '../../../lib/utils/dateUtils';
 import { DeleteMessageModal } from '../../modals/DeleteMessageModal';
 import { EditMessageModal } from '../../modals/EditMessageModal';
-import { getOrCreateDirectMessage } from '../../../lib/api/handler/dm';
 import { useGetCurrentGuild } from '../../../lib/utils/hooks/useGetCurrentGuild';
 import { RouterProps } from '../../../routes/Routes';
+import { MemberContextMenu } from '../../menus/MemberContextMenu';
 import '../css/ContextMenu.css';
 
 interface MessageProps {
@@ -26,7 +26,6 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
   const [showSettings, setShowSettings] = useState(false);
   const current = userStore(state => state.current);
   const isAuthor = current?.id === message.user.id;
-  const history = useHistory();
   const { guildId } = useParams<RouterProps>();
   const guild = useGetCurrentGuild(guildId);
   const isOwner = guild !== undefined && guild.ownerId === current?.id;
@@ -46,13 +45,6 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
   const openInNewTab = (url: string) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
-  };
-
-  const getOrCreateDM = async () => {
-    const { data } = await getOrCreateDirectMessage(message.user.id);
-    if (data) {
-      history.push(`/channels/me/${data.id}`);
-    }
   };
 
   return (
@@ -149,13 +141,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
       </>
       }
       {!isAuthor &&
-      <Menu id={message.user.id} theme={theme.dark}>
-        <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
-          <Flex align='center' justify='space-between' w='full'>
-            <Text>Message</Text>
-          </Flex>
-        </Item>
-      </Menu>
+        <MemberContextMenu id={message.user.id} isFriend={message.user.isFriend} />
       }
     </>
   );

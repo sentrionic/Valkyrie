@@ -50,6 +50,7 @@ export class MessageService {
     const queryBuilder = this.messageRepository
       .createQueryBuilder('message')
       .leftJoinAndSelect('message.user', 'user')
+      .leftJoinAndSelect('user.friends', 'friends')
       .where('message."channelId" = :channelId', { channelId })
       .orderBy('message.createdAt', 'DESC')
       .limit(35);
@@ -63,7 +64,7 @@ export class MessageService {
     }
 
     const messages = await queryBuilder.getMany();
-    return messages.map(m => m.toJSON());
+    return messages.map(m => m.toJSON(userId));
   }
 
   async createMessage(
@@ -96,22 +97,20 @@ export class MessageService {
       message.url = url;
     }
 
-    message.user = await this.userRepository.findOneOrFail({ where: { id: userId } });
+    message.user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
     message.channel = channel;
 
     await message.save();
 
-    this.socketService.sendMessage({ room: channelId, message: message.toJSON() });
+    this.socketService.sendMessage({ room: channelId, message: message.toJSON(userId) });
 
     if (channel.dm) {
-      // Open the DM if it's closed
+      // Open the DM and push it to the top
       getManager().query(
         `
-        update dm_members set "isOpen" = true 
+        update dm_members set "isOpen" = true, "updatedAt" = CURRENT_TIMESTAMP 
         where "channelId" = $1 
-        and "userId" != $2
-        and "isOpen" = false
-        `, [channelId, userId]
+        `, [channelId]
       );
     }
 
@@ -141,10 +140,10 @@ export class MessageService {
 
       message = await this.messageRepository.findOneOrFail({
         where: { id },
-        relations: ['user', 'channel'],
+        relations: ['user', 'channel', 'friends'],
       });
 
-      this.socketService.editMessage({ room: message.channel.id, message: message.toJSON() });
+      this.socketService.editMessage({ room: message.channel.id, message: message.toJSON(userId) });
 
       return true;
   }
@@ -173,7 +172,7 @@ export class MessageService {
 
     message.id = deleteId;
 
-    this.socketService.deleteMessage({ room: message.channel.id, message: message.toJSON() });
+    this.socketService.deleteMessage({ room: message.channel.id, message: message.toJSON(userId) });
 
     return true;
   }

@@ -24,9 +24,9 @@ export class Message extends AbstractEntity {
   @Exclude()
   user!: User;
 
-  toJSON(): MessageResponse {
-    const response =  <MessageResponse>classToPlain(this);
-    response.user = this.user.toMember();
+  toJSON(userId: string): MessageResponse {
+    const response = <MessageResponse>classToPlain(this);
+    response.user = this.user.toMember(userId);
     return response;
   }
 }

@@ -17,6 +17,7 @@ import { BufferFile } from '../types/BufferFile';
 import { deleteFile, uploadAvatarToS3 } from '../utils/fileUtils';
 import { UserResponse } from '../models/response/UserResponse';
 import * as argon2 from 'argon2';
+import { MemberResponse } from '../models/response/MemberResponse';
 
 @Injectable()
 export class UserService {
@@ -223,5 +224,40 @@ export class UserService {
     await this.userRepository.update({ id: user.id }, data);
 
     return this.findCurrentUser(user.id);
+  }
+
+  async getFriends(userId: string): Promise<MemberResponse[]> {
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
+    const friends: MemberResponse[] = [];
+
+    user.friends.map(f => friends.push(f.toMember()));
+
+    return friends.sort((a, b) => a.username.localeCompare(b.username));
+  }
+
+  async addFriend(userId: string, memberId: string): Promise<boolean> {
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
+    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['friends'] });
+
+    if (!user.friends.includes(member) && userId !== memberId) {
+      user.friends.push(member);
+      member.friends.push(user);
+      await user.save();
+      await member.save();
+    }
+
+    return true;
+  }
+
+  async removeFriend(userId: string, memberId: string): Promise<boolean> {
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
+    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['friends'] });
+
+    user.friends = user.friends.filter(m => m === member);
+    member.friends = member.friends.filter(m => m === user);
+    await user.save();
+    await member.save();
+
+    return true;
   }
 }

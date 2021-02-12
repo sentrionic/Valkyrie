@@ -10,7 +10,7 @@ export const MessageContent: React.FC<MessageProps> = ({ message: { url, text, f
   if (url && filetype) {
     if (filetype.startsWith('image/')) {
       return (
-        <Box boxSize='sm' my={'2'} h={'full'} w={['100%', '50%']}>
+        <Box boxSize='sm' my={'2'} h={'full'}>
           <Image
             fit={'contain'}
             src={url}

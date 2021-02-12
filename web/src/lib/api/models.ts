@@ -13,6 +13,7 @@ export interface Member extends BaseModel {
   username: string;
   image: string;
   isOnline: boolean;
+  isFriend: boolean;
 }
 
 export interface Message extends BaseModel {
