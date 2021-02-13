@@ -1,7 +1,14 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
-import { Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 import { RegisterInput } from '../models/input/RegisterInput';
 import * as md5 from 'md5';
 import e from 'express';
@@ -18,6 +25,7 @@ import { deleteFile, uploadAvatarToS3 } from '../utils/fileUtils';
 import { UserResponse } from '../models/response/UserResponse';
 import * as argon2 from 'argon2';
 import { MemberResponse } from '../models/response/MemberResponse';
+import { RequestResponse } from '../models/response/RequestResponse';
 
 @Injectable()
 export class UserService {
@@ -230,21 +238,83 @@ export class UserService {
     const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
     const friends: MemberResponse[] = [];
 
-    user.friends.map(f => friends.push(f.toMember()));
+    user.friends.map(f => friends.push(f.toFriend()));
 
     return friends.sort((a, b) => a.username.localeCompare(b.username));
   }
 
-  async addFriend(userId: string, memberId: string): Promise<boolean> {
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
-    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['friends'] });
+  /**
+   * Fetches the current users pending requests.
+   * Type stands for the type of the request.
+   * 1: Incoming,
+   * 0: Outgoing
+   * @param userId
+   */
+  async getPendingFriendRequests(userId: string): Promise<RequestResponse[]> {
+    const manager = getManager();
+    return await manager.query(
+      `
+          select u.id, u.username, u.image, 1 as "type" from users u
+          join friends_request fr on u.id = fr."senderId"
+          where fr."receiverId" = $1
+          UNION
+          select u.id, u.username, u.image, 0 as "type" from users u
+          join friends_request fr on u.id = fr."receiverId"
+          where fr."senderId" = $1
+          order by username
 
-    if (!user.friends.includes(member) && userId !== memberId) {
+      `,
+      [userId],
+    );
+  }
+
+  async sendFriendRequest(userId: string, memberId: string): Promise<boolean> {
+
+    if (userId === memberId) {
+      throw new BadRequestException('You cannot add yourself');
+    }
+
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['requests', 'friends'] });
+    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['requests'] });
+
+    if (!user.friends.includes(member) && !user.requests.includes(member)) {
+      user.requests.push(member);
+      await user.save();
+    }
+
+    return true;
+  }
+
+  async acceptFriendRequest(userId: string, memberId: string): Promise<boolean> {
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
+    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['friends', 'requests'] });
+
+    let hasRequest = false;
+    member.requests.map(r => {
+      if (r.id === userId) {
+        hasRequest = true;
+      }
+    })
+
+    if (hasRequest) {
       user.friends.push(member);
+      member.requests = member.requests.filter(r => r === user);
       member.friends.push(user);
       await user.save();
       await member.save();
     }
+
+    return true;
+  }
+
+  async cancelFriendRequest(userId: string, memberId: string): Promise<boolean> {
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['requests'] });
+    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['requests'] });
+
+    user.requests = user.requests.filter(r => r === member);
+    member.requests = member.requests.filter(r => r === user);
+    await user.save();
+    await member.save();
 
     return true;
   }

@@ -112,6 +112,7 @@ export class MessageService {
         where "channelId" = $1 
         `, [channelId]
       );
+      this.socketService.pushDMToTop({ room: channelId, channelId })
     }
 
     return true;

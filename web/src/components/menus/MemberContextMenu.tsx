@@ -1,9 +1,11 @@
 import React from 'react';
+import { Flex, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme } from 'react-contexify';
-import { Flex, Text } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
+import { sendFriendRequest } from '../../lib/api/handler/account';
 import '../items/css/ContextMenu.css';
+import { RemoveFriendModal } from '../modals/RemoveFriendModal';
 
 interface MemberContextMenuProps {
   id: string;
@@ -13,6 +15,7 @@ interface MemberContextMenuProps {
 export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ id, isFriend }) => {
 
   const history = useHistory();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getOrCreateDM = async () => {
     const { data } = await getOrCreateDirectMessage(id);
@@ -21,18 +24,31 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ id, isFrie
     }
   };
 
+  const handleFriendClick = async () => {
+    if (!isFriend) {
+      await sendFriendRequest(id);
+    } else {
+      onOpen();
+    }
+  }
+
   return (
-    <Menu id={id} theme={theme.dark}>
-      <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
-        <Flex align='center' justify='space-between' w='full'>
-          <Text>Message</Text>
-        </Flex>
-      </Item>
-      <Item onClick={() => console.log('Friend')} className={'menu-item'}>
-        <Flex align='center' justify='space-between' w='full'>
-          <Text>{isFriend ? 'Remove' : 'Add'} Friend</Text>
-        </Flex>
-      </Item>
-    </Menu>
+    <>
+      <Menu id={id} theme={theme.dark}>
+        <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
+          <Flex align='center' justify='space-between' w='full'>
+            <Text>Message</Text>
+          </Flex>
+        </Item>
+        <Item onClick={handleFriendClick} className={'menu-item'}>
+          <Flex align='center' justify='space-between' w='full'>
+            <Text>{isFriend ? 'Remove' : 'Add'} Friend</Text>
+          </Flex>
+        </Item>
+      </Menu>
+      {isOpen &&
+        <RemoveFriendModal id={id} isOpen onClose={onClose} />
+      }
+    </>
   );
 }

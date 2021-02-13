@@ -45,6 +45,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
 import { UserResponse } from '../models/response/UserResponse';
 import { MemberResponse } from '../models/response/MemberResponse';
+import { RequestResponse } from '../models/response/RequestResponse';
 
 @Controller('account')
 export class UserController {
@@ -158,16 +159,50 @@ export class UserController {
     return await this.userService.getFriends(id);
   }
 
+  @Get('/me/pending')
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Get Current User\'s friend requests' })
+  @ApiOkResponse({ description: 'List of users', type: [RequestResponse] })
+  @ApiUnauthorizedResponse()
+  async getFriendRequests(@GetUser() id: string): Promise<RequestResponse[]> {
+    return await this.userService.getPendingFriendRequests(id);
+  }
+
   @Post('/:memberId/friend')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Add Friend' })
+  @ApiCreatedResponse({ description: 'Successfully send a friend request' })
+  @ApiCookieAuth()
+  async sendFriendRequest(
+    @Param('memberId') memberId: string,
+    @GetUser() userId: string
+  ): Promise<boolean> {
+    return await this.userService.sendFriendRequest(userId, memberId);
+  }
+
+  @Post('/:memberId/friend/accept')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Accept Friend Request' })
   @ApiCreatedResponse({ description: 'Successfully added as friend' })
   @ApiCookieAuth()
   async addFriend(
     @Param('memberId') memberId: string,
     @GetUser() userId: string
   ): Promise<boolean> {
-    return await this.userService.addFriend(userId, memberId);
+    return await this.userService.acceptFriendRequest(userId, memberId);
+  }
+
+  @Post('/:memberId/friend/cancel')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Cancel Friend Request' })
+  @ApiCreatedResponse({ description: 'Successfully canceled the request' })
+  @ApiCookieAuth()
+  async cancelFriendRequest(
+    @Param('memberId') memberId: string,
+    @GetUser() userId: string
+  ): Promise<boolean> {
+    return await this.userService.cancelFriendRequest(userId, memberId);
   }
 
   @Delete('/:memberId/friend')

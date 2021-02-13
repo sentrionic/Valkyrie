@@ -37,7 +37,7 @@ export class GuildService {
                        u."isOnline",
                        u."createdAt",
                        u."updatedAt",
-                       exists(select 1 from friends f where f.sender = u.id) as "isFriend"
+                       exists(select 1 from friends f where f.user = u.id) as "isFriend"
        from users as u
                 join members m on u."id"::text = m."userId"
        where m."guildId" = $1

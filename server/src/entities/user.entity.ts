@@ -39,11 +39,20 @@ export class User extends AbstractEntity {
   @ManyToMany(() => User, { cascade: true })
   @JoinTable({
     name: 'friends',
-    joinColumn: { name: 'sender' },
-    inverseJoinColumn: { name: 'receiver' }
+    joinColumn: { name: 'user' },
+    inverseJoinColumn: { name: 'friend' }
   })
   @Exclude()
   friends!: User[];
+
+  @ManyToMany(() => User, { cascade: true })
+  @JoinTable({
+    name: 'friends_request',
+    joinColumn: { name: 'senderId' },
+    inverseJoinColumn: { name: 'receiverId' }
+  })
+  @Exclude()
+  requests!: User[];
 
   toJSON(): UserResponse {
     return <UserResponse>classToPlain(this, { groups: ['user'] });

@@ -44,3 +44,10 @@ export interface DMChannel {
   id: string;
   user: Member;
 }
+
+export interface RequestResponse {
+  id: string;
+  username: string;
+  image: string;
+  type: number;
+}

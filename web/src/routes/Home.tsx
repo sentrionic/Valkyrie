@@ -1,7 +1,7 @@
 import React from 'react';
 import { GuildList } from '../components/layouts/guild/GuildList';
 import { DMSidebar } from '../components/layouts/home/DMSidebar';
-import { FriendList } from '../components/layouts/home/FriendList';
+import { FriendsDashboard } from '../components/layouts/home/FriendsDashboard';
 import { AppLayout } from '../components/layouts/AppLayout';
 import { useParams } from 'react-router-dom';
 import { RouterProps } from './Routes';
@@ -18,7 +18,7 @@ export const Home: React.FC = () => {
       <GuildList />
       <DMSidebar />
       {channelId === undefined ?
-        <FriendList />
+        <FriendsDashboard />
         :
         <>
           <DMHeader />

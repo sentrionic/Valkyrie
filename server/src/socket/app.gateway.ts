@@ -46,6 +46,12 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   @UseGuards(WsAuthGuard)
+  @SubscribeMessage('joinUser')
+  handleUserJoin(client: Socket, room: string): void {
+    client.join(room);
+  }
+
+  @UseGuards(WsAuthGuard)
   @SubscribeMessage('joinChannel')
   handleChannelJoin(client: Socket, room: string): void {
     this.socketService.joinChannel(client, room);

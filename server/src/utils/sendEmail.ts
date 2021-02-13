@@ -16,7 +16,7 @@ export async function sendEmail(to: string, html: string): Promise<void> {
 
   // send mail with defined transport object
   await transporter.sendMail({
-    from: '"OlympusBlog Team" <support@olympublog.com>', // sender address
+    from: '"Valkyrie Team" <support@vakyrie.com>', // sender address
     to: to, // list of receivers
     subject: 'Change Password', // Subject line
     html,

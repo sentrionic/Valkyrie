@@ -125,6 +125,19 @@ export class SocketService {
   }
 
   /**
+   * Emits an "push_to_top" event
+   * @param message
+   */
+  async pushDMToTop(
+    message: { room: string, channelId: string }
+  ) {
+    const members = await this.dmMemberRepository.find({ where: { channelId: message.channelId } });
+    members.forEach(m => {
+      this.socket.to(m.userId).emit('push_to_top', message.channelId);
+    });
+  }
+
+  /**
    * Set the user as online
    * @param client
    */

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Flex, IconButton, Text } from '@chakra-ui/react';
+import { Avatar, Flex, IconButton, Text, Tooltip, useClipboard } from '@chakra-ui/react';
 import { RiSettings5Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { userStore } from '../../lib/stores/userStore';
@@ -7,6 +7,7 @@ import { userStore } from '../../lib/stores/userStore';
 export const AccountBar: React.FC = () => {
 
   const user = userStore(state => state.current);
+  const { hasCopied, onCopy } = useClipboard(user?.id || "");
 
   return (
     <Flex
@@ -18,11 +19,27 @@ export const AccountBar: React.FC = () => {
       align="center"
       justify="space-between"
     >
-      <Flex align="center">
-        <Avatar size="sm" src={user?.image} />
-        <Text ml="2">{user?.username}</Text>
-      </Flex>
+      <Tooltip
+        hasArrow
+        label={hasCopied ? 'Copied!' : "Click to copy ID"}
+        placement={"top"}
+        bg={hasCopied ? '#43b581' : '#18191c'}
+        color={"white"}
+        closeOnClick={false}
+      >
+        <Flex align="center" w={"full"} mr={2} _hover={{ cursor: 'pointer' }} onClick={onCopy}>
+          <Avatar size="sm" src={user?.image} />
+          <Text ml="2">{user?.username}</Text>
+        </Flex>
+      </Tooltip>
       <Link to={'/account'}>
+        <Tooltip
+          hasArrow
+          label={'User Settings'}
+          placement={"top"}
+          bg={'#18191c'}
+          color={"white"}
+        >
         <IconButton
           icon={<RiSettings5Fill />}
           aria-label="settings"
@@ -30,6 +47,7 @@ export const AccountBar: React.FC = () => {
           fontSize="20px"
           variant="ghost"
         />
+        </Tooltip>
       </Link>
     </Flex>
   );
