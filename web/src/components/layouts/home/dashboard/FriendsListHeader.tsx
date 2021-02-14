@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Flex, GridItem, Icon, LightMode, Text, useDisclosure } from '@chakra-ui/react';
 import { FiUsers } from 'react-icons/fi';
-import { AddFriendModal } from '../../modals/AddFriendModal';
-import { friendStore } from '../../../lib/stores/friendStore';
+import { AddFriendModal } from '../../../modals/AddFriendModal';
+import { friendStore } from '../../../../lib/stores/friendStore';
 
 export const FriendsListHeader: React.FC = () => {
 

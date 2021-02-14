@@ -1,7 +1,7 @@
 import React from 'react';
 import { GuildList } from '../components/layouts/guild/GuildList';
 import { DMSidebar } from '../components/layouts/home/DMSidebar';
-import { FriendsDashboard } from '../components/layouts/home/FriendsDashboard';
+import { FriendsDashboard } from '../components/layouts/home/dashboard/FriendsDashboard';
 import { AppLayout } from '../components/layouts/AppLayout';
 import { useParams } from 'react-router-dom';
 import { RouterProps } from './Routes';

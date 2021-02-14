@@ -26,11 +26,13 @@ import { UserResponse } from '../models/response/UserResponse';
 import * as argon2 from 'argon2';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { RequestResponse } from '../models/response/RequestResponse';
+import { SocketService } from '../socket/socket.service';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>
+    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly socketService: SocketService
   ) {
   }
 
@@ -302,6 +304,7 @@ export class UserService {
       member.friends.push(user);
       await user.save();
       await member.save();
+      this.socketService.addFriend(memberId, user.toFriend());
     }
 
     return true;
@@ -327,6 +330,7 @@ export class UserService {
     member.friends = member.friends.filter(m => m === user);
     await user.save();
     await member.save();
+    this.socketService.removeFriend(memberId, userId);
 
     return true;
   }

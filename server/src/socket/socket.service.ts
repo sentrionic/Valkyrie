@@ -145,16 +145,23 @@ export class SocketService {
     const id: string = client.handshake.session['userId'];
     await this.setOnlineStatus(id, true);
     const manager = getManager();
-    const guilds: string[] = await manager.query(
-      `select g.id
-       from guilds g
-                join members m on m."guildId" = g."id"
-       where m."userId" = $1`,
+    const ids: string[] = await manager.query(
+      `
+          select g.id
+          from guilds g
+                   join members m on m."guildId" = g."id"
+          where m."userId" = $1
+          UNION
+          SELECT "User__friends"."id"
+          FROM "users" "User" LEFT JOIN "friends" "User_User__friends" ON "User_User__friends"."user"="User"."id" LEFT
+              JOIN "users" "User__friends" ON "User__friends"."id"="User_User__friends"."friend"
+          WHERE ( "User"."id" = $1 )
+      `,
       [id]
     );
-    guilds.forEach(g => {
-      const gId = g['id'];
-      if (gId !== undefined) this.socket.to(gId).emit('toggle_online', id);
+    ids.forEach(i => {
+      const dId = i['id'];
+      this.socket.to(dId).emit('toggle_online', id);
     });
   }
 
@@ -166,16 +173,24 @@ export class SocketService {
     const id: string = client.handshake.session['userId'];
     await this.setOnlineStatus(id, false);
     const manager = getManager();
-    const guilds: string[] = await manager.query(
-      `select g.id
-       from guilds g
-                join members m on m."guildId" = g."id"
-       where m."userId" = $1`,
+    const ids: string[] = await manager.query(
+      `
+          select g.id
+          from guilds g
+         join members m on m."guildId" = g."id"
+          where m."userId" = $1
+          UNION
+          SELECT "User__friends"."id"
+          FROM "users" "User" LEFT JOIN "friends" "User_User__friends" ON "User_User__friends"."user"="User"."id" LEFT
+              JOIN "users" "User__friends" ON "User__friends"."id"="User_User__friends"."friend"
+          WHERE ( "User"."id" = $1 )
+
+       `,
       [id]
     );
-    guilds.forEach(g => {
-      const gId = g['id'];
-      if (gId !== undefined) this.socket.to(gId).emit('toggle_offline', id);
+    ids.forEach(i => {
+      const dId = i['id'];
+      this.socket.to(dId).emit('toggle_offline', id);
     });
   }
 
@@ -199,6 +214,24 @@ export class SocketService {
    */
   stopTyping(room: string, username: string) {
     this.socket.to(room).emit('removeFromTyping', username);
+  }
+
+  /**
+   * Emits an "add_friend" event
+   * @param room
+   * @param member
+   */
+  addFriend(room: string, member: MemberResponse) {
+    this.socket.to(room).emit('add_friend', member);
+  }
+
+  /**
+   * Emits an "remove_friend" event
+   * @param room
+   * @param memberId
+   */
+  removeFriend(room: string, memberId: string) {
+    this.socket.to(room).emit('remove_friend', memberId);
   }
 
   /**
