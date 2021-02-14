@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, OneToMany } from 'typeorm';
+import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany} from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { classToPlain, Exclude, Expose } from 'class-transformer';
 import { UserResponse } from '../models/response/UserResponse';
@@ -36,11 +36,37 @@ export class User extends AbstractEntity {
   @OneToMany(() => PCMember, (pcmember) => pcmember.user)
   pcmembers: PCMember[];
 
+  @ManyToMany(() => User, { cascade: true })
+  @JoinTable({
+    name: 'friends',
+    joinColumn: { name: 'user' },
+    inverseJoinColumn: { name: 'friend' }
+  })
+  @Exclude()
+  friends!: User[];
+
+  @ManyToMany(() => User, { cascade: true })
+  @JoinTable({
+    name: 'friends_request',
+    joinColumn: { name: 'senderId' },
+    inverseJoinColumn: { name: 'receiverId' }
+  })
+  @Exclude()
+  requests!: User[];
+
   toJSON(): UserResponse {
     return <UserResponse>classToPlain(this, { groups: ['user'] });
   }
 
-  toMember(): MemberResponse {
-    return <MemberResponse>classToPlain(this);
+  toMember(userId: string = null): MemberResponse {
+    const response = <MemberResponse>classToPlain(this);
+    response.isFriend = (userId && this.friends?.findIndex(f => f.id === userId) !== -1);
+    return response;
+  }
+
+  toFriend(): MemberResponse {
+    const response = <MemberResponse>classToPlain(this);
+    response.isFriend = true;
+    return response;
   }
 }

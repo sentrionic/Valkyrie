@@ -7,10 +7,12 @@ export class MemberResponse {
   username!: string;
   @ApiProperty({ type: String })
   image!: string;
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: Boolean })
   isOnline!: boolean;
   @ApiProperty({ type: String })
   createdAt!: string;
   @ApiProperty({ type: String })
   updatedAt!: string;
+  @ApiProperty({ type: Boolean })
+  isFriend!: boolean;
 }

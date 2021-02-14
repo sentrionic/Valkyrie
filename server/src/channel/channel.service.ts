@@ -138,7 +138,7 @@ export class ChannelService {
       this.setDirectMessageStatus(data[0].id, userId, true);
       return {
         id: data[0].id,
-        user: member.toMember()
+        user: member.toMember(userId)
       };
     }
 
@@ -169,12 +169,13 @@ export class ChannelService {
 
     return {
       id: channelId,
-      user: member.toMember()
+      user: member.toMember(userId)
     };
   }
 
   /**
-   * Get user's dms
+   * Get user's dms.
+   * Ordered by recency
    * @param userId
    */
   async getDirectMessageChannels(userId: string): Promise<DMChannelResponse[]> {
@@ -196,6 +197,7 @@ export class ChannelService {
                 and dm."isOpen" = true
                 and dm."userId" = $1
           )
+          order by dm."updatedAt" DESC 
       `,
       [userId]
     );
@@ -209,7 +211,8 @@ export class ChannelService {
         image: r.image,
         isOnline: r.isOnline,
         createdAt: r.createdAt,
-        updatedAt: r.updatedAt
+        updatedAt: r.updatedAt,
+        isFriend: false
       }
     }));
     return dms;

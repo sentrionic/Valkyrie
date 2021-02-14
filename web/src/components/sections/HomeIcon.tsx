@@ -1,35 +1,38 @@
 import React from "react";
-import { Divider, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Divider, Flex, useColorModeValue } from '@chakra-ui/react';
 import { Link, useLocation } from "react-router-dom";
+import { StyledTooltip } from './StyledTooltip';
 
 export const HomeIcon: React.FC = () => {
   const location = useLocation();
   const isActive = location.pathname === "/channels/me";
 
   return (
-    <Flex direction="column" my="2" align="center">
-      <Link to="/channels/me">
-        <Flex
-          direction="column"
-          m="auto"
-          align="center"
-          justify="center"
-          bg={isActive ? "highlight.standard" : "brandGray.light"}
-          borderRadius={isActive ? "35%" : "50%"}
-          h="48px"
-          w="48px"
-          color="white"
-          _hover={{
-            cursor: "pointer",
-            borderRadius: "35%",
-            bg: "highlight.standard",
-          }}
-        >
-          <Logo />
-        </Flex>
-      </Link>
-      <Divider mt="2" w="40px" />
-    </Flex>
+    <StyledTooltip label={'Home'} position={'right'}>
+      <Flex direction="column" my="2" align="center">
+        <Link to="/channels/me">
+          <Flex
+            direction="column"
+            m="auto"
+            align="center"
+            justify="center"
+            bg={isActive ? "highlight.standard" : "brandGray.light"}
+            borderRadius={isActive ? "35%" : "50%"}
+            h="48px"
+            w="48px"
+            color="white"
+            _hover={{
+              cursor: "pointer",
+              borderRadius: "35%",
+              bg: "highlight.standard",
+            }}
+          >
+            <Logo />
+          </Flex>
+        </Link>
+        <Divider mt="2" w="40px" />
+      </Flex>
+    </StyledTooltip>
   );
 };
 

@@ -20,7 +20,7 @@ export class GuildService {
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
-    private socketService: SocketService
+    private socketService: SocketService,
   ) {
   }
 
@@ -31,13 +31,19 @@ export class GuildService {
   async getGuildMembers(guildId: string): Promise<MemberResponse[]> {
     const manager = getManager();
     return await manager.query(
-      `select distinct u.id, u.username, u.image, u."isOnline", u."createdAt", u."updatedAt"
+      `select distinct u.id,
+                       u.username,
+                       u.image,
+                       u."isOnline",
+                       u."createdAt",
+                       u."updatedAt",
+                       exists(select 1 from friends f where f.user = u.id) as "isFriend"
        from users as u
                 join members m on u."id"::text = m."userId"
        where m."guildId" = $1
        order by u.username
       `,
-      [guildId]
+      [guildId],
     );
   }
 
@@ -57,13 +63,14 @@ export class GuildService {
                         from channels c
                                  join guilds g on g.id = c."guildId"
                         where g.id = member."guildId"
-                        order by c."createdAt" limit 1)
+                        order by c."createdAt"
+                        limit 1)
        from guilds g
-           join members as member
-       on g."id"::text = member."guildId"
+                join members as member
+                     on g."id"::text = member."guildId"
        where member."userId" = $1
        order by g."createdAt";`,
-      [userId]
+      [userId],
     );
   }
 
@@ -148,18 +155,18 @@ export class GuildService {
     const defaultChannel = await this.channelRepository.findOneOrFail({
       where: { guild },
       relations: ['guild'],
-      order: { createdAt: 'ASC' }
+      order: { createdAt: 'ASC' },
     });
 
-    const user = await this.userRepository.findOneOrFail(userId);
+    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
 
-    this.socketService.addMember({ room: guild.id, member: user.toMember() });
+    this.socketService.addMember({ room: guild.id, member: user.toMember(userId) });
 
     return this.toGuildResponse(guild, defaultChannel.id);
   }
 
   async leaveGuild(userId: string, guildId: string): Promise<boolean> {
-    const member = await this.memberRepository.findOneOrFail({ where: { guildId, userId }});
+    const member = await this.memberRepository.findOneOrFail({ where: { guildId, userId } });
     const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
 
     if (guild.ownerId === userId) throw new BadRequestException('The owner cannot leave their server');
@@ -188,7 +195,7 @@ export class GuildService {
       name: guild.name,
       default_channel_id: defaultChannelId,
       createdAt: guild?.createdAt.toString(),
-      updatedAt: guild?.updatedAt.toString()
+      updatedAt: guild?.updatedAt.toString(),
     };
   }
 }

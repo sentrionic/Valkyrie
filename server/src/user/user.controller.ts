@@ -1,7 +1,7 @@
 import {
   Body,
-  Controller,
-  Get,
+  Controller, Delete,
+  Get, Param,
   Post,
   Put,
   Req,
@@ -44,6 +44,8 @@ import { UpdateInput } from '../models/input/UpdateInput';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
 import { UserResponse } from '../models/response/UserResponse';
+import { MemberResponse } from '../models/response/MemberResponse';
+import { RequestResponse } from '../models/response/RequestResponse';
 
 @Controller('account')
 export class UserController {
@@ -145,5 +147,73 @@ export class UserController {
     @UploadedFile() image?: BufferFile,
   ): Promise<UserResponse> {
     return await this.userService.updateUser(id, data, image);
+  }
+
+  @Get('/me/friends')
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Get Current User\'s friends' })
+  @ApiOkResponse({ description: 'List of users', type: [MemberResponse] })
+  @ApiUnauthorizedResponse()
+  async getFriends(@GetUser() id: string): Promise<MemberResponse[]> {
+    return await this.userService.getFriends(id);
+  }
+
+  @Get('/me/pending')
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Get Current User\'s friend requests' })
+  @ApiOkResponse({ description: 'List of users', type: [RequestResponse] })
+  @ApiUnauthorizedResponse()
+  async getFriendRequests(@GetUser() id: string): Promise<RequestResponse[]> {
+    return await this.userService.getPendingFriendRequests(id);
+  }
+
+  @Post('/:memberId/friend')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Add Friend' })
+  @ApiCreatedResponse({ description: 'Successfully send a friend request' })
+  @ApiCookieAuth()
+  async sendFriendRequest(
+    @Param('memberId') memberId: string,
+    @GetUser() userId: string
+  ): Promise<boolean> {
+    return await this.userService.sendFriendRequest(userId, memberId);
+  }
+
+  @Post('/:memberId/friend/accept')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Accept Friend Request' })
+  @ApiCreatedResponse({ description: 'Successfully added as friend' })
+  @ApiCookieAuth()
+  async addFriend(
+    @Param('memberId') memberId: string,
+    @GetUser() userId: string
+  ): Promise<boolean> {
+    return await this.userService.acceptFriendRequest(userId, memberId);
+  }
+
+  @Post('/:memberId/friend/cancel')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Cancel Friend Request' })
+  @ApiCreatedResponse({ description: 'Successfully canceled the request' })
+  @ApiCookieAuth()
+  async cancelFriendRequest(
+    @Param('memberId') memberId: string,
+    @GetUser() userId: string
+  ): Promise<boolean> {
+    return await this.userService.cancelFriendRequest(userId, memberId);
+  }
+
+  @Delete('/:memberId/friend')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Remove Friend' })
+  @ApiCreatedResponse({ description: 'Successfully removed friend' })
+  @ApiCookieAuth()
+  async removeFriend(
+    @Param('memberId') memberId: string,
+    @GetUser() userId: string
+  ): Promise<boolean> {
+    return await this.userService.removeFriend(userId, memberId);
   }
 }

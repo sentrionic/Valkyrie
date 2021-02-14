@@ -36,13 +36,21 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   @UseGuards(WsAuthGuard)
   @SubscribeMessage('toggleOnline')
   handleToggleOnline(client: Socket): void {
+    console.log("ONLINE")
     this.socketService.toggleOnlineStatus(client);
   }
 
   @UseGuards(WsAuthGuard)
   @SubscribeMessage('toggleOffline')
   handleToggleOffline(client: Socket): void {
+    console.log("OFFLINE")
     this.socketService.toggleOfflineStatus(client);
+  }
+
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('joinUser')
+  handleUserJoin(client: Socket, room: string): void {
+    client.join(room);
   }
 
   @UseGuards(WsAuthGuard)

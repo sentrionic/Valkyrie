@@ -7,12 +7,15 @@ import { DMListItem } from '../../items/DMListItem';
 import { getUserDMs } from '../../../lib/api/handler/dm';
 import { dmKey } from '../../../lib/utils/querykeys';
 import { dmScrollerCss } from './css/dmScrollerCSS';
+import { useDMSocket } from '../../../lib/api/ws/useDMSocket';
 
 export const DMSidebar: React.FC = () => {
 
   const { data } = useQuery(dmKey, () => {
     return getUserDMs().then(result => result.data);
   });
+
+  useDMSocket();
 
   return (
     <GridItem

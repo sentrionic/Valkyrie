@@ -5,6 +5,7 @@ import { IoMdClose } from 'react-icons/io';
 import { useQueryClient } from 'react-query';
 import { DMChannel } from '../../lib/api/models';
 import { closeDirectMessage } from '../../lib/api/handler/dm';
+import { dmKey } from '../../lib/utils/querykeys';
 
 interface DMListItemProps {
   dm: DMChannel
@@ -21,7 +22,7 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
 
   const closeDM = async () => {
     await closeDirectMessage(dm.id);
-    cache.setQueryData<DMChannel[]>('dms', (d) => {
+    cache.setQueryData<DMChannel[]>(dmKey, (d) => {
       return d!.filter(c => c.id !== dm.id);
     });
     if (isActive) {

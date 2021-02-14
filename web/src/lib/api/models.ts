@@ -13,6 +13,7 @@ export interface Member extends BaseModel {
   username: string;
   image: string;
   isOnline: boolean;
+  isFriend: boolean;
 }
 
 export interface Message extends BaseModel {
@@ -42,4 +43,11 @@ export interface Guild extends BaseModel {
 export interface DMChannel {
   id: string;
   user: Member;
+}
+
+export interface RequestResponse {
+  id: string;
+  username: string;
+  image: string;
+  type: number;
 }
