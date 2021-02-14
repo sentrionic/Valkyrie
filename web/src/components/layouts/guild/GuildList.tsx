@@ -8,6 +8,7 @@ import { HomeIcon } from '../../sections/HomeIcon';
 import { getUserGuilds } from '../../../lib/api/handler/guilds';
 import { gKey } from '../../../lib/utils/querykeys';
 import { guildScrollbarCss } from './css/GuildScrollerCSS';
+import { useGuildSocket } from '../../../lib/api/ws/useGuildSocket';
 
 export const GuildList: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -19,6 +20,8 @@ export const GuildList: React.FC = () => {
       cacheTime: Infinity
     }
   );
+
+  useGuildSocket();
 
   return (
     <GridItem

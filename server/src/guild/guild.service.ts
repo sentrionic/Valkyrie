@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common';
 import { getManager, Repository } from 'typeorm';
 import { Guild } from '../entities/guild.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +18,7 @@ import { MemberResponse } from '../models/response/MemberResponse';
 import { GuildResponse } from '../models/response/GuildResponse';
 import { SocketService } from '../socket/socket.service';
 import { idGenerator } from '../utils/idGenerator';
+import { GuildInput } from '../models/input/GuildInput';
 
 @Injectable()
 export class GuildService {
@@ -176,6 +183,50 @@ export class GuildService {
     return true;
   }
 
+  async editGuild(userId: string, guildId: string, input: GuildInput): Promise<boolean> {
+
+    const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
+
+    if (guild.ownerId !== userId) {
+      throw new UnauthorizedException();
+    }
+
+    const { name, image } = input;
+
+    await this.guildRepository.update(guildId, {
+      name: name ?? guild.name
+    });
+
+    const updatedGuild = await this.guildRepository.findOneOrFail(guildId);
+
+    this.socketService.editGuild(updatedGuild);
+
+    return true;
+  }
+
+  async deleteGuild(userId: string, guildId: string): Promise<boolean> {
+    const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
+
+    if (guild.ownerId !== userId) {
+      throw new UnauthorizedException();
+    }
+
+    let memberIds: any[];
+
+    const manager = getManager();
+    memberIds = await manager.query('delete from members where "guildId" = $1 returning members."userId";',
+      [guildId]
+    );
+    await manager.query('delete from pcmembers where "channelId" = (select id from channels where "guildId" = $1);',
+      [guildId]
+    );
+
+    await this.guildRepository.remove(guild);
+    this.socketService.deleteGuild(memberIds[0], guildId);
+
+    return true;
+  }
+
   /**
    * Check if the user is in less than 100 servers.
    * Throws a BadRequestException if that is not the case.
@@ -194,6 +245,7 @@ export class GuildService {
       id: guild.id,
       name: guild.name,
       default_channel_id: defaultChannelId,
+      ownerId: guild.ownerId,
       createdAt: guild?.createdAt.toString(),
       updatedAt: guild?.updatedAt.toString(),
     };

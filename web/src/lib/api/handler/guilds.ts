@@ -21,3 +21,9 @@ export const getGuildMembers = (id: string): Promise<AxiosResponse<Member[]>> =>
 
 export const leaveGuild = (id: string): Promise<AxiosResponse<boolean>> =>
   request.delete(`guilds/${id}`);
+
+export const editGuild = (id: string, input: GuildInput): Promise<AxiosResponse<boolean>> =>
+  request.put(`guilds/${id}`, input);
+
+export const deleteGuild = (id: string): Promise<AxiosResponse<boolean>> =>
+  request.delete(`guilds/${id}/delete`);

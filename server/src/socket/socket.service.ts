@@ -11,6 +11,7 @@ import { Member } from '../entities/member.entity';
 import { PCMember } from '../entities/pcmember.entity';
 import { WsException } from '@nestjs/websockets';
 import { DMMember } from '../entities/dmmember.entity';
+import { Guild } from '../entities/guild.entity';
 
 @Injectable()
 export class SocketService {
@@ -105,6 +106,30 @@ export class SocketService {
   }
 
   /**
+   * Emits an "edit_guild" event
+   * @param guild
+   */
+  async editGuild(guild: Guild) {
+    const ids = await this.getGuildMemberIds(guild.id);
+    ids.forEach(id => {
+      const uid = id['userId'];
+      this.socket.to(uid).emit('edit_guild', guild);
+    });
+  }
+
+  /**
+   * Emits an "delete_guild" event
+   * @param memberIds
+   * @param guildId
+   */
+  async deleteGuild(memberIds: string[], guildId: string) {
+    memberIds.forEach(id => {
+      const uid = id['userId'];
+      this.socket.to(uid).emit('delete_guild', guildId);
+    });
+  }
+
+  /**
    * Emits an "add_member" event
    * @param message
    */
@@ -149,7 +174,7 @@ export class SocketService {
       `
           select g.id
           from guilds g
-                   join members m on m."guildId" = g."id"
+          join members m on m."guildId" = g."id"
           where m."userId" = $1
           UNION
           SELECT "User__friends"."id"
@@ -276,5 +301,18 @@ export class SocketService {
     }
 
     return true;
+  }
+
+  private async getGuildMemberIds(guildId: string): Promise<string[]> {
+    const manager = getManager();
+    return await manager.query(
+      `
+          select m."userId"
+          from guilds g
+                   join members m on m."guildId" = g."id"
+          where g.id = $1
+      `,
+      [guildId]
+    );
   }
 }

@@ -20,9 +20,6 @@ export const userStore = create<AccountState>(
     }),
     {
       name: 'user-storage',
-      getStorage: () => sessionStorage,
     },
   ),
 );
-
-export const getCurrent = () => userStore((state) => state.current);

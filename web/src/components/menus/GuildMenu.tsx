@@ -1,9 +1,10 @@
 import React from 'react';
-import { Flex, GridItem, Heading, Icon, Menu, MenuButton } from '@chakra-ui/react';
+import { Flex, GridItem, Heading, Icon, Menu, MenuButton, MenuDivider, useDisclosure } from '@chakra-ui/react';
 import { FiChevronDown, FiX } from 'react-icons/fi';
 import { FaUserPlus } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
 import { HiLogout } from 'react-icons/hi';
+import { RiSettings5Fill } from 'react-icons/ri';
 import { StyledMenuList } from './StyledMenuList';
 import { StyledMenuItem, StyledRedMenuItem } from './StyledMenuItem';
 import { useHistory, useParams } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { leaveGuild } from '../../lib/api/handler/guilds';
 import { RouterProps } from '../../routes/Routes';
 import { userStore } from '../../lib/stores/userStore';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
+import { GuildSettingsModal } from '../modals/GuildSettingsModal';
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -25,6 +27,8 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
 
   const user = userStore(state => state.current);
   const isOwner = guild?.ownerId === user?.id;
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleLeave = async () => {
     const { data } = await leaveGuild(guildId);
@@ -52,6 +56,18 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
               </MenuButton>
             </Flex>
             <StyledMenuList>
+              <StyledMenuItem
+                label={'Invite People'}
+                icon={FaUserPlus}
+                handleClick={inviteOpen}
+              />
+              {isOwner &&
+                <StyledMenuItem
+                  label={'Server Settings'}
+                  icon={RiSettings5Fill}
+                  handleClick={onOpen}
+                />
+              }
               {isOwner &&
                 <StyledMenuItem
                   label={'Create Channel'}
@@ -59,22 +75,24 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
                   handleClick={channelOpen}
                 />
               }
-              <StyledMenuItem
-                label={'Invite People'}
-                icon={FaUserPlus}
-                handleClick={inviteOpen}
-              />
+
               {!isOwner &&
-                <StyledRedMenuItem
-                  label={'Leave Server'}
-                  icon={HiLogout}
-                  handleClick={handleLeave}
-                />
+                <>
+                  <MenuDivider />
+                  <StyledRedMenuItem
+                    label={'Leave Server'}
+                    icon={HiLogout}
+                    handleClick={handleLeave}
+                  />
+                </>
               }
             </StyledMenuList>
           </>
         )}
       </Menu>
+      {isOpen &&
+        <GuildSettingsModal guildId={guildId} isOpen={isOpen} onClose={onClose} />
+      }
     </GridItem>
   );
-};
+}

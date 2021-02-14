@@ -5,7 +5,7 @@ import {
   RouteComponentProps,
   RouteProps,
 } from "react-router-dom";
-import { getCurrent } from "../lib/stores/userStore";
+import { userStore } from '../lib/stores/userStore';
 
 interface IProps extends RouteProps {
   component: React.ComponentType<RouteComponentProps<any>>;
@@ -15,8 +15,8 @@ export const AuthRoute: React.FC<IProps> = ({
   component: Component,
   ...rest
 }) => {
-  const storage = JSON.parse(sessionStorage.getItem("user-storage")!!);
-  const current = getCurrent();
+  const storage = JSON.parse(localStorage.getItem("user-storage")!!);
+  const current = userStore(state => state.current);
   return (
     <Route
       {...rest}
