@@ -19,7 +19,8 @@ export class Channel extends AbstractEntity {
     () => Guild,
     (guild) => guild.id,
     {
-      nullable: true
+      nullable: true,
+      onDelete: 'CASCADE'
     }
   )
   guild!: Guild;

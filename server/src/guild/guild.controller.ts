@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, ValidationPipe } from '@nestjs/common';
 import { GuildService } from './guild.service';
 import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
@@ -9,6 +9,7 @@ import { GuildSchema } from '../validation/guild.schema';
 import { GuildInput } from '../models/input/GuildInput';
 import { GuildResponse } from '../models/response/GuildResponse';
 import { ApiBody, ApiCookieAuth, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ChannelInput } from '../models/input/ChannelInput';
 
 @Controller('guilds')
 export class GuildController {
@@ -73,7 +74,7 @@ export class GuildController {
   @ApiCookieAuth()
   @ApiBody({ type: String, description: "The invite link" })
   @ApiOkResponse({ type: GuildResponse })
-  async joinTeam(
+  async joinGuild(
     @Body('link') link: string,
     @GetUser() user: string,
   ): Promise<GuildResponse> {
@@ -91,5 +92,36 @@ export class GuildController {
     @Param("guildId") guildId: string
   ): Promise<boolean> {
     return this.guildService.leaveGuild(userId, guildId);
+  }
+
+  @Put("/:guildId")
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Edit Guild' })
+  @ApiOkResponse({ description: 'Edit Success', type: Boolean })
+  @ApiUnauthorizedResponse()
+  @ApiBody({ type: GuildInput })
+  async editGuild(
+    @GetUser() user: string,
+    @Param('guildId') guildId: string,
+    @Body(
+      new YupValidationPipe(GuildSchema),
+      new ValidationPipe({ transform: true })
+    ) input: ChannelInput,
+  ): Promise<boolean> {
+    return this.guildService.editGuild(user, guildId, input);
+  }
+
+  @Delete("/:guildId/delete")
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Delete Guild' })
+  @ApiOkResponse({ description: 'Delete Success', type: Boolean })
+  @ApiUnauthorizedResponse()
+  async deleteGuild(
+    @GetUser() userId: string,
+    @Param('guildId') guildId: string,
+  ): Promise<boolean> {
+    return this.guildService.deleteGuild(userId, guildId);
   }
 }

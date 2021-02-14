@@ -21,6 +21,7 @@ import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { useQueryClient } from 'react-query';
 import { Guild } from '../../lib/api/models';
 import { gKey } from '../../lib/utils/querykeys';
+import { useHistory } from 'react-router-dom';
 
 interface IProps {
   isOpen: boolean;
@@ -109,6 +110,7 @@ interface IScreenProps {
 const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
 
   const cache = useQueryClient();
+  const history = useHistory();
 
   return (
     <ModalContent bg='brandGray.light'>
@@ -127,6 +129,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                   return [...old!, data];
                 });
                 submitClose();
+                history.push(`/channels/${data.id}/${data.default_channel_id}`);
               }
             } catch (err) {
               if (err?.response?.status === 400) {
@@ -197,6 +200,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
 
   const user = userStore(state => state.current);
   const cache = useQueryClient();
+  const history = useHistory();
 
   return (
     <ModalContent bg='brandGray.light'>
@@ -213,6 +217,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 return [...old!, data];
               });
               submitClose();
+              history.push(`/channels/${data.id}/${data.default_channel_id}`);
             }
           } catch (err) {
             if (err?.response?.status === 400) {

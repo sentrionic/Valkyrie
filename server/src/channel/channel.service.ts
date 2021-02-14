@@ -312,6 +312,12 @@ export class ChannelService {
       throw new UnauthorizedException();
     }
 
+    const count = await this.channelRepository.count({ guild: channel.guild });
+
+    if (count === 1) {
+      throw new BadRequestException("A server needs at least one channel");
+    }
+
     // Delete all private channel members before deletion
     if (!channel.isPublic) {
       await getManager().query(
