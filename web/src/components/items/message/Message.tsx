@@ -53,7 +53,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
         alignItems='center'
         mr='1'
         mt={isCompact ? '0' : '3'}
-        _hover={{ bg: '#32353b' }}
+        _hover={{ bg: 'brandGray.hover' }}
         justify='space-between'
         onContextMenu={show}
         onMouseLeave={() => setShowSettings(false)}

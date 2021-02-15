@@ -15,7 +15,7 @@ export const StyledMenuItem: React.FC<StyledMenuItemProps> = ({
 }) => {
   return (
     <MenuItem
-      _hover={{ bg: "#7289da", borderRadius: "2px" }}
+      _hover={{ bg: "highlight.standard", borderRadius: "2px" }}
       onClick={handleClick}
     >
       <Flex align="center" justify="space-between" w="full">
@@ -33,7 +33,7 @@ export const StyledRedMenuItem: React.FC<StyledMenuItemProps> = ({
 }) => {
   return (
     <MenuItem
-      _hover={{ bg: "#f04747", color: "#fff", borderRadius: "2px" }}
+      _hover={{ bg: "menuRed", color: "#fff", borderRadius: "2px" }}
       onClick={handleClick}
     >
       <Flex align="center" justify="space-between" w="full">

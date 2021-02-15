@@ -7,9 +7,7 @@ import {
   Heading,
   LightMode,
   Spacer,
-  Text,
   Tooltip,
-  useColorMode,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -17,7 +15,6 @@ import { Form, Formik } from "formik";
 import React, { useRef, useState } from "react";
 import { useQuery, useQueryClient } from 'react-query';
 import { useHistory } from "react-router-dom";
-import { ColorModeSwitcher } from "../components/common/ColorModeSwitcher";
 import { InputField } from "../components/common/InputField";
 import { ChangePasswordModal } from "../components/modals/ChangePasswordModal";
 import { toErrorMap } from "../lib/utils/toErrorMap";
@@ -30,7 +27,6 @@ import { CropImageModal } from "../components/modals/CropImageModal";
 import { aKey } from '../lib/utils/querykeys';
 
 export const Account = () => {
-  const { colorMode } = useColorMode();
   const history = useHistory();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -158,19 +154,14 @@ export const Account = () => {
                       autoComplete="username"
                     />
 
-                    <Flex mt={8}>
-                      <Flex align="center">
-                        <ColorModeSwitcher />
-                        <Text ml="2">
-                          Use {colorMode === "light" ? "Dark" : "Light"} Mode
-                        </Text>
-                      </Flex>
+                    <Flex my={8} align={'end'}>
                       <Spacer />
                       <Button
                         mr={4}
                         colorScheme="white"
                         variant="outline"
                         onClick={closeClicked}
+                        fontSize={"14px"}
                       >
                         Close
                       </Button>
@@ -180,6 +171,7 @@ export const Account = () => {
                           type="submit"
                           colorScheme="green"
                           isLoading={isSubmitting}
+                          fontSize={"14px"}
                         >
                           Update
                         </Button>
@@ -203,12 +195,13 @@ export const Account = () => {
               _active={{ bg: "highlight.active" }}
               _focus={{ boxShadow: "none" }}
               onClick={onOpen}
+              fontSize={"14px"}
             >
               Change Password
             </Button>
 
             <Spacer />
-            <Button colorScheme="red" variant="outline" onClick={logoutClicked}>
+            <Button colorScheme="red" variant="outline" onClick={logoutClicked} fontSize={"14px"}>
               Logout
             </Button>
           </Flex>

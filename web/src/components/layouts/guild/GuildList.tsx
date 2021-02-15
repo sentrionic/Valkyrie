@@ -27,7 +27,7 @@ export const GuildList: React.FC = () => {
     <GridItem
       gridColumn={1}
       gridRow={'1 / 4'}
-      bg='#202225'
+      bg='brandGray.darker'
       overflowY='auto'
       css={guildScrollbarCss}
     >

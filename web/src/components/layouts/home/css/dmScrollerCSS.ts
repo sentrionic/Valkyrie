@@ -6,7 +6,7 @@ export const dmScrollerCss = {
     width: '4px',
   },
   '&::-webkit-scrollbar-thumb': {
-    background: '#202225',
+    background: 'brandGray.darker',
     borderRadius: '18px',
   },
 }

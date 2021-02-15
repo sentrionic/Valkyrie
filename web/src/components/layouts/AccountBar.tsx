@@ -23,7 +23,7 @@ export const AccountBar: React.FC = () => {
         hasArrow
         label={hasCopied ? 'Copied!' : "Click to copy ID"}
         placement={"top"}
-        bg={hasCopied ? '#43b581' : '#18191c'}
+        bg={hasCopied ? 'brandGreen' : 'brandGray.darkest'}
         color={"white"}
         closeOnClick={false}
       >
@@ -37,7 +37,7 @@ export const AccountBar: React.FC = () => {
           hasArrow
           label={'User Settings'}
           placement={"top"}
-          bg={'#18191c'}
+          bg={'brandGray.darkest'}
           color={"white"}
         >
         <IconButton

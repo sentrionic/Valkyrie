@@ -19,7 +19,6 @@ import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
 import { deleteGuild, editGuild } from '../../lib/api/handler/guilds';
-import { useHistory } from 'react-router-dom';
 
 interface IProps {
   guildId: string;
@@ -139,8 +138,6 @@ interface IScreenProps {
 }
 
 const DeleteGuildModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, guildId }) => {
-
-  const history = useHistory();
 
   return (
     <ModalContent bg='brandGray.light'>

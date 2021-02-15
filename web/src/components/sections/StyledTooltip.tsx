@@ -13,7 +13,7 @@ export const StyledTooltip: React.FC<StyledTooltipProps> = ({ label, position , 
     hasArrow
     label={label}
     placement={position}
-    bg={'#18191c'}
+    bg={'brandGray.darkest'}
     color={"white"}
     fontWeight={"semibold"}
     py={1}

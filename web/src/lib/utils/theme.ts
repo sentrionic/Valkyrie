@@ -21,10 +21,17 @@ const colors = {
   },
   brandGray: {
     accent: "#8e9297",
+    active: '#393c43',
     light: "#36393f",
     dark: "#303339",
+    darker: '#202225',
+    darkest: '#18191c',
+    hover: '#32353b',
   },
-};
+  brandGreen: '#43b581',
+  labelGray: '#72767d',
+  menuRed: '#f04747'
+}
 
 const fonts = {
   body: "'Open Sans', sans-serif"

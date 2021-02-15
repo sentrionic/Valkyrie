@@ -31,8 +31,8 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
         p='5px'
         m='0 10px'
         color={isActive ? '#fff' : 'brandGray.accent'}
-        _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
-        bg={isActive ? '#393c43' : undefined}
+        _hover={{ bg: 'brandGray.light', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
+        bg={isActive ? 'brandGray.active' : undefined}
         mb='2px'
         onMouseLeave={() => setShowSettings(false)}
         onMouseEnter={() => setShowSettings(true)}

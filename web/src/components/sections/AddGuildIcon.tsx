@@ -22,7 +22,7 @@ export const AddGuildIcon: React.FC<AddGuildIconProps> = ({ onOpen }) => {
         _hover={{
           cursor: "pointer",
           borderRadius: "35%",
-          bg: "#43b581",
+          bg: "brandGreen",
           color: "white",
         }}
         onClick={onOpen}

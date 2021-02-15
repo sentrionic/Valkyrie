@@ -55,7 +55,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
           <InputGroup>
             <Input
               bg='brandGray.dark'
-              borderColor={hasCopied ? '#43b581' : 'black'}
+              borderColor={hasCopied ? 'brandGreen' : 'black'}
               borderRadius='3px'
               focusBorderColor='highlight.standard'
               value={inviteLink}
@@ -64,7 +64,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
             <InputRightElement width='4.5rem'>
               <Button
                 h='1.75rem' size='sm'
-                bg={hasCopied ? '#43b581' : 'highlight.standard'}
+                bg={hasCopied ? 'brandGreen' : 'highlight.standard'}
                 color='white'
                 type='submit'
                 _hover={{ bg: 'highlight.hover' }}

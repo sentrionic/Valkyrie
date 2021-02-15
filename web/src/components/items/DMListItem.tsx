@@ -36,8 +36,8 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
         p='2'
         mx='2'
         color={isActive ? '#fff' : 'brandGray.accent'}
-        _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
-        bg={isActive ? '#393c43' : undefined}
+        _hover={{ bg: 'brandGray.light', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
+        bg={isActive ? 'brandGray.active' : undefined}
         onMouseLeave={() => setShowButton(false)}
         onMouseEnter={() => setShowButton(true)}
       >

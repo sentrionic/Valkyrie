@@ -73,7 +73,7 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
                   <InputLeftAddon bg={'#202225'} borderColor={'black'} children='UID' />
                   <Input
                     bg='brandGray.dark'
-                    borderColor={hasCopied ? '#43b581' : 'black'}
+                    borderColor={hasCopied ? 'brandGreen' : 'black'}
                     borderRadius='3px'
                     focusBorderColor='highlight.standard'
                     value={current?.id || ''}
@@ -82,7 +82,7 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
                   <InputRightElement width='4.5rem'>
                     <Button
                       h='1.75rem' size='sm'
-                      bg={hasCopied ? '#43b581' : 'highlight.standard'}
+                      bg={hasCopied ? 'brandGreen' : 'highlight.standard'}
                       color='white'
                       _hover={{ bg: 'highlight.hover' }}
                       _active={{ bg: 'highlight.active' }}

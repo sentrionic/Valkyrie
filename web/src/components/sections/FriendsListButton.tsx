@@ -16,8 +16,8 @@ export const FriendsListButton: React.FC = () => {
         p='3'
         align='center'
         color={isActive ? '#fff' : 'brandGray.accent'}
-        _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
-        bg={isActive ? '#393c43' : undefined}
+        _hover={{ bg: 'brandGray.light', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
+        bg={isActive ? 'brandGray.active' : undefined}
       >
         <Icon as={FiUsers} fontSize='20px' />
         <Text fontSize='16px' ml='4' fontWeight='semibold'>

@@ -27,7 +27,7 @@ export const MemberListItem: React.FC<MemberListItemProps> = ({ member }) => {
         onContextMenu={(e) => {
           if (!self) show(e)
         }}
-        _hover={{ bg: '#36393f', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
+        _hover={{ bg: 'brandGray.light', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
       >
         <Flex align='center'>
           <Avatar size='sm' src={member.image}>
