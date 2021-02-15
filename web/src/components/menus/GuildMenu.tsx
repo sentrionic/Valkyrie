@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, GridItem, Heading, Icon, Menu, MenuButton, MenuDivider, useDisclosure } from '@chakra-ui/react';
 import { FiChevronDown, FiX } from 'react-icons/fi';
-import { FaUserPlus } from 'react-icons/fa';
+import { FaUserPlus, FaUserEdit } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
 import { HiLogout } from 'react-icons/hi';
 import { RiSettings5Fill } from 'react-icons/ri';
@@ -75,7 +75,12 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
                   handleClick={channelOpen}
                 />
               }
-
+              <MenuDivider />
+              <StyledMenuItem
+                label={'Change Appearance'}
+                icon={FaUserEdit}
+                handleClick={inviteOpen}
+              />
               {!isOwner &&
                 <>
                   <MenuDivider />

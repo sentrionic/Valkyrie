@@ -16,6 +16,9 @@ export class Guild extends AbstractEntity {
   @Exclude()
   members!: Member[];
 
+  @Column('varchar', { nullable: true })
+  icon?: string;
+
   toJson(): GuildResponse {
     return <GuildResponse>classToPlain(this);
   }

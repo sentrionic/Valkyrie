@@ -66,6 +66,7 @@ export const ForgotPassword = () => {
                     _hover={{ bg: "highlight.hover" }}
                     _active={{ bg: "highlight.active" }}
                     _focus={{ boxShadow: "none" }}
+                    fontSize={'14px'}
                   >
                     Send Mail
                   </Button>

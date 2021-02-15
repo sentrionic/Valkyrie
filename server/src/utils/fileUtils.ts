@@ -12,7 +12,7 @@ config();
  * Shrinks the image to 150 x 150 and turns it into .webp
  * @param buffer
  */
-const profileImageTransformer = (buffer: Buffer): Promise<Buffer> =>
+const imageTransformer = (buffer: Buffer): Promise<Buffer> =>
   sharp(buffer)
     .resize({
       width: 150,
@@ -37,7 +37,7 @@ export const uploadAvatarToS3 = async (
   image: BufferFile,
 ): Promise<string> => {
   const { buffer } = await image;
-  const stream = await profileImageTransformer(buffer);
+  const stream = await imageTransformer(buffer);
 
   if (!stream) {
     throw new InternalServerErrorException();

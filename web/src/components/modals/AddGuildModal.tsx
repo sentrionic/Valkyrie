@@ -174,7 +174,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             </ModalBody>
 
             <ModalFooter bg='brandGray.dark'>
-              <Button mr={6} variant='link' onClick={goBack}>
+              <Button mr={6} variant='link' onClick={goBack} fontSize={"14px"}>
                 Back
               </Button>
               <Button
@@ -185,6 +185,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
                 isLoading={isSubmitting}
+                fontSize={"14px"}
               >
                 Join Server
               </Button>
@@ -245,7 +246,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             </ModalBody>
 
             <ModalFooter bg='brandGray.dark'>
-              <Button mr={6} variant='link' onClick={goBack}>
+              <Button mr={6} fontSize={"14px"} variant='link' onClick={goBack}>
                 Back
               </Button>
               <Button
@@ -256,6 +257,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
                 isLoading={isSubmitting}
+                fontSize={"14px"}
               >
                 Create
               </Button>

@@ -1,17 +1,36 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put, UploadedFile,
+  UseGuards,
+  UseInterceptors,
+  ValidationPipe
+} from '@nestjs/common';
 import { GuildService } from './guild.service';
 import { AuthGuard } from '../guards/http/auth.guard';
 import { GetUser } from '../config/user.decorator';
 import { MemberGuard } from '../guards/http/member.guard';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
-import { GuildSchema } from '../validation/guild.schema';
+import { GuildSchema, UpdateGuildSchema } from '../validation/guild.schema';
 import { GuildInput } from '../models/input/GuildInput';
 import { GuildResponse } from '../models/response/GuildResponse';
-import { ApiBody, ApiCookieAuth, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { ChannelInput } from '../models/input/ChannelInput';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiCookieAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiUnauthorizedResponse
+} from '@nestjs/swagger';
 import { GuildMemberInput } from "../models/input/GuildMemberInput";
 import { MemberSchema } from "../validation/member.schema";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { BufferFile } from '../types/BufferFile';
 
 @Controller('guilds')
 export class GuildController {
@@ -115,20 +134,23 @@ export class GuildController {
 
   @Put("/:guildId")
   @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Edit Guild' })
   @ApiOkResponse({ description: 'Edit Success', type: Boolean })
   @ApiUnauthorizedResponse()
   @ApiBody({ type: GuildInput })
+  @ApiConsumes('multipart/form-data')
   async editGuild(
     @GetUser() user: string,
     @Param('guildId') guildId: string,
     @Body(
-      new YupValidationPipe(GuildSchema),
+      new YupValidationPipe(UpdateGuildSchema),
       new ValidationPipe({ transform: true })
-    ) input: ChannelInput,
+    ) input: GuildInput,
+    @UploadedFile() image?: BufferFile,
   ): Promise<boolean> {
-    return this.guildService.editGuild(user, guildId, input);
+    return this.guildService.editGuild(user, guildId, input, image);
   }
 
   @Delete("/:guildId/delete")

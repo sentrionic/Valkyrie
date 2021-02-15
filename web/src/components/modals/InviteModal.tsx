@@ -67,6 +67,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
                 bg={hasCopied ? 'brandGreen' : 'highlight.standard'}
                 color='white'
                 type='submit'
+                fontSize={"14px"}
                 _hover={{ bg: 'highlight.hover' }}
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}

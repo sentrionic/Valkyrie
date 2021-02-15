@@ -90,7 +90,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
               <Box ml='3' w={'full'}>
                 <Flex alignItems='center' justify={'space-between'}>
                   <Flex alignItems={'center'}>
-                    <Text>{message.user.username}</Text>
+                    <Text color={message.user.color ?? undefined}>{message.user.nickname ?? message.user.username}</Text>
                     <Text fontSize='12px' color='brandGray.accent' ml='2'>
                       {getTime(message.createdAt)}
                     </Text>
