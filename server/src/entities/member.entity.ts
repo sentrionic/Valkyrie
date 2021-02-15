@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToMany, PrimaryColumn } from 'typeorm';
 import { User } from './user.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Guild } from './guild.entity';
@@ -18,4 +18,10 @@ export class Member extends AbstractEntity {
   @ManyToMany(() => Guild, (guild) => guild.members, { primary: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'guildId' })
   guild!: Guild;
+
+  @Column("varchar", { nullable: true })
+  nickname?: string;
+
+  @Column("varchar", { nullable: true })
+  color?: string;
 }

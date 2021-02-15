@@ -15,4 +15,8 @@ export class MemberResponse {
   updatedAt!: string;
   @ApiProperty({ type: Boolean })
   isFriend!: boolean;
+  @ApiProperty({ type: String, required: false })
+  nickname?: string;
+  @ApiProperty({ type: String, required: false })
+  color?: string;
 }

@@ -1,10 +1,9 @@
-import { MemberResponse } from './MemberResponse';
 import { ApiProperty } from '@nestjs/swagger';
+import { MemberResponse } from './MemberResponse';
 
 export class MessageResponse {
   @ApiProperty({ type: String })
   id!: string;
-  @ApiProperty({ type: String })
   @ApiProperty({ type: String })
   text?: string | null;
   @ApiProperty({ type: String })

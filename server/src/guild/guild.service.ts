@@ -19,6 +19,7 @@ import { GuildResponse } from '../models/response/GuildResponse';
 import { SocketService } from '../socket/socket.service';
 import { idGenerator } from '../utils/idGenerator';
 import { GuildInput } from '../models/input/GuildInput';
+import { GuildMemberInput } from "../models/input/GuildMemberInput";
 
 @Injectable()
 export class GuildService {
@@ -223,6 +224,27 @@ export class GuildService {
 
     await this.guildRepository.remove(guild);
     this.socketService.deleteGuild(memberIds[0], guildId);
+
+    return true;
+  }
+
+  async changeMemberSettings(userId: string, guildId: string, input: GuildMemberInput): Promise<boolean> {
+
+    const member = await this.memberRepository.findOne({
+      where: {
+        userId,
+        guildId
+      }
+    });
+
+    if (!member) throw new NotFoundException();
+
+    const { nickname, color } = input;
+
+    await this.memberRepository.update({ id: member.id }, {
+      color,
+      nickname
+    });
 
     return true;
   }

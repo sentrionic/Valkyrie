@@ -25,7 +25,8 @@ export class MessageService {
     @InjectRepository(DMMember)
     private dmMemberRepository: Repository<DMMember>,
     private readonly socketService: SocketService
-  ) {}
+  ) {
+  }
 
   /**
    * Returns 35 messages for the given channel.
@@ -46,25 +47,66 @@ export class MessageService {
     });
 
     await this.isChannelMember(channel, userId);
-
-    const queryBuilder = this.messageRepository
-      .createQueryBuilder('message')
-      .leftJoinAndSelect('message.user', 'user')
-      .leftJoinAndSelect('user.friends', 'friends')
-      .where('message."channelId" = :channelId', { channelId })
-      .orderBy('message.createdAt', 'DESC')
-      .limit(35);
-
+    let time: string;
     if (cursor) {
       const timeString = new Date(cursor).getTime().toString();
-      const time = timeString.substring(0, timeString.length - 3);
-      queryBuilder.andWhere('message."createdAt" < (to_timestamp(:cursor))', {
-        cursor: time,
-      });
+      time = timeString.substring(0, timeString.length - 3);
     }
 
-    const messages = await queryBuilder.getMany();
-    return messages.map(m => m.toJSON(userId));
+    const manager = getManager();
+    const results = await manager.query(
+      `
+          SELECT "message".id,
+                  "message".text,
+                  "message".filetype,
+                  "message".url,
+                  "message"."createdAt",
+                  "message"."updatedAt",
+                  "user"."id" as "userId",
+                  "user"."createdAt" as "ucreatedAt",
+                  "user"."updatedAt" as "uupdatedAt",
+                  "user"."username",
+                  "user"."image",
+                  "user"."isOnline",
+                  exists(
+                          select 1
+                          from users
+                                   left join friends f on users.id = f."user"
+                          where f."friend" = "message"."userId"
+                            and f."user" = $2
+                      ) as "isFriend"
+          FROM "messages" "message"
+                   LEFT JOIN "users" "user" ON "user"."id" = "message"."userId"
+          WHERE message."channelId" = $1 
+          ${cursor ? `AND message."createdAt" < (to_timestamp(${time}))` : ``}
+          ORDER BY "message"."createdAt" DESC
+              LIMIT 35
+      `,
+      [channelId, userId],
+    );
+
+    const messages: MessageResponse[] = [];
+    results.map(m => messages.push({
+      id: m.id,
+      text: m.text,
+      filetype: m.filetype,
+      url: m.url,
+      createdAt: m.createdAt,
+      updatedAt: m.updatedAt,
+      user: {
+        id: m.userId,
+        username: m.username,
+        image: m.image,
+        isOnline: m.isOnline,
+        createdAt: m.ucreatedAt,
+        updatedAt: m.uupdatedAt,
+        isFriend: m.isFriend,
+        nickname: m.nickname,
+        color: m.color
+      }
+    }));
+
+    return messages;
   }
 
   async createMessage(
@@ -108,8 +150,10 @@ export class MessageService {
       // Open the DM and push it to the top
       getManager().query(
         `
-        update dm_members set "isOpen" = true, "updatedAt" = CURRENT_TIMESTAMP 
-        where "channelId" = $1 
+            update dm_members
+            set "isOpen" = true,
+                "updatedAt" = CURRENT_TIMESTAMP
+            where "channelId" = $1
         `, [channelId]
       );
       this.socketService.pushDMToTop({ room: channelId, channelId })
@@ -124,29 +168,29 @@ export class MessageService {
     text: string,
   ): Promise<boolean> {
 
-      let message = await this.messageRepository.findOneOrFail({
-        where: { id },
-        relations: ['user', 'channel'],
-      });
+    let message = await this.messageRepository.findOneOrFail({
+      where: { id },
+      relations: ['user', 'channel'],
+    });
 
-      if (!message) {
-        throw new NotFoundException();
-      }
+    if (!message) {
+      throw new NotFoundException();
+    }
 
-      if (message.user.id !== userId) {
-        throw new UnauthorizedException();
-      }
+    if (message.user.id !== userId) {
+      throw new UnauthorizedException();
+    }
 
-      await this.messageRepository.update(id, { text });
+    await this.messageRepository.update(id, { text });
 
-      message = await this.messageRepository.findOneOrFail({
-        where: { id },
-        relations: ['user', 'channel', 'friends'],
-      });
+    message = await this.messageRepository.findOneOrFail({
+      where: { id },
+      relations: ['user', 'channel', 'friends'],
+    });
 
-      this.socketService.editMessage({ room: message.channel.id, message: message.toJSON(userId) });
+    this.socketService.editMessage({ room: message.channel.id, message: message.toJSON(userId) });
 
-      return true;
+    return true;
   }
 
   async deleteMessage(userId: string, id: string): Promise<boolean> {

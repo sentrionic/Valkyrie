@@ -14,6 +14,8 @@ export interface Member extends BaseModel {
   image: string;
   isOnline: boolean;
   isFriend: boolean;
+  nickname?: string | null;
+  color?: string | null;
 }
 
 export interface Message extends BaseModel {

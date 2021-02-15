@@ -10,6 +10,8 @@ import { GuildInput } from '../models/input/GuildInput';
 import { GuildResponse } from '../models/response/GuildResponse';
 import { ApiBody, ApiCookieAuth, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { ChannelInput } from '../models/input/ChannelInput';
+import { GuildMemberInput } from "../models/input/GuildMemberInput";
+import { MemberSchema } from "../validation/member.schema";
 
 @Controller('guilds')
 export class GuildController {
@@ -79,6 +81,23 @@ export class GuildController {
     @GetUser() user: string,
   ): Promise<GuildResponse> {
     return this.guildService.joinGuild(link, user);
+  }
+
+  @Put("/:guildId/member")
+  @UseGuards(MemberGuard)
+  @ApiBody({ type: GuildMemberInput })
+  @ApiOperation({ summary: 'Edit Member Settings' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  async editMember(
+    @GetUser() user: string,
+    @Param('guildId') guildId: string,
+    @Body(
+      new YupValidationPipe(MemberSchema),
+      new ValidationPipe({ transform: true })
+    ) input: GuildMemberInput,
+  ): Promise<boolean> {
+    return this.guildService.changeMemberSettings(user, guildId, input);
   }
 
   @Delete("/:guildId")
