@@ -3,6 +3,7 @@ import { Guild, Member } from '../models';
 import { request } from '../setupAxios';
 import { GuildInput } from '../dtos/GuildInput';
 import { InviteInput } from '../dtos/InviteInput';
+import { GuildMemberInput } from "../dtos/GuildMemberInput";
 
 export const getUserGuilds = (): Promise<AxiosResponse<Guild[]>> =>
   request.get("/guilds");
@@ -22,8 +23,18 @@ export const getGuildMembers = (id: string): Promise<AxiosResponse<Member[]>> =>
 export const leaveGuild = (id: string): Promise<AxiosResponse<boolean>> =>
   request.delete(`guilds/${id}`);
 
-export const editGuild = (id: string, input: GuildInput): Promise<AxiosResponse<boolean>> =>
-  request.put(`guilds/${id}`, input);
+export const editGuild = (id: string, input: FormData): Promise<AxiosResponse<boolean>> =>
+  request.put(`guilds/${id}`, input, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 
 export const deleteGuild = (id: string): Promise<AxiosResponse<boolean>> =>
   request.delete(`guilds/${id}/delete`);
+
+export const getGuildMemberSettings = (id: string): Promise<AxiosResponse<GuildMemberInput>> =>
+  request.get(`guilds/${id}/member`);
+
+export const changeGuildMemberSettings = (id: string, input: GuildMemberInput): Promise<AxiosResponse<boolean>> =>
+  request.put(`guilds/${id}/member`, input);

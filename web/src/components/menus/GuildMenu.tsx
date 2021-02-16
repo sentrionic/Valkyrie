@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, GridItem, Heading, Icon, Menu, MenuButton, MenuDivider, useDisclosure } from '@chakra-ui/react';
 import { FiChevronDown, FiX } from 'react-icons/fi';
-import { FaUserPlus } from 'react-icons/fa';
+import { FaUserPlus, FaUserEdit } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
 import { HiLogout } from 'react-icons/hi';
 import { RiSettings5Fill } from 'react-icons/ri';
@@ -13,6 +13,7 @@ import { RouterProps } from '../../routes/Routes';
 import { userStore } from '../../lib/stores/userStore';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSettingsModal } from '../modals/GuildSettingsModal';
+import { EditMemberModal } from "../modals/EditMemberModal";
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -29,6 +30,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
   const isOwner = guild?.ownerId === user?.id;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: memberOpen, onOpen: memberOnOpen, onClose: memberOnClose } = useDisclosure();
 
   const handleLeave = async () => {
     const { data } = await leaveGuild(guildId);
@@ -75,7 +77,12 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
                   handleClick={channelOpen}
                 />
               }
-
+              <MenuDivider />
+              <StyledMenuItem
+                label={'Change Appearance'}
+                icon={FaUserEdit}
+                handleClick={memberOnOpen}
+              />
               {!isOwner &&
                 <>
                   <MenuDivider />
@@ -92,6 +99,9 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
       </Menu>
       {isOpen &&
         <GuildSettingsModal guildId={guildId} isOpen={isOpen} onClose={onClose} />
+      }
+      {memberOpen &&
+        <EditMemberModal guildId={guildId} isOpen={memberOpen} onClose={memberOnClose} />
       }
     </GridItem>
   );

@@ -20,6 +20,8 @@ import { SocketService } from '../socket/socket.service';
 import { idGenerator } from '../utils/idGenerator';
 import { GuildInput } from '../models/input/GuildInput';
 import { GuildMemberInput } from "../models/input/GuildMemberInput";
+import { deleteFile, uploadAvatarToS3 } from '../utils/fileUtils';
+import { BufferFile } from '../types/BufferFile';
 
 @Injectable()
 export class GuildService {
@@ -65,6 +67,7 @@ export class GuildService {
       `select distinct g."id",
                        g."name",
                        g."ownerId",
+                       g."icon",
                        g."createdAt",
                        g."updatedAt",
                        (select c.id as "default_channel_id"
@@ -184,7 +187,7 @@ export class GuildService {
     return true;
   }
 
-  async editGuild(userId: string, guildId: string, input: GuildInput): Promise<boolean> {
+  async editGuild(userId: string, guildId: string, input: GuildInput, image: BufferFile): Promise<boolean> {
 
     const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
 
@@ -192,10 +195,19 @@ export class GuildService {
       throw new UnauthorizedException();
     }
 
-    const { name, image } = input;
+    let icon = input.image;
+    if (image) {
+      const directory = `valkyrie/guilds/${guildId}`;
+      if (guild.icon) await deleteFile(guild.icon);
+      icon = await uploadAvatarToS3(directory, image);
+    }
+
+    // Frontend sets the null as string
+    if (icon === "null") icon = null;
 
     await this.guildRepository.update(guildId, {
-      name: name ?? guild.name
+      name: input.name ?? guild.name,
+      icon
     });
 
     const updatedGuild = await this.guildRepository.findOneOrFail(guildId);
@@ -247,6 +259,23 @@ export class GuildService {
     });
 
     return true;
+  }
+
+  async getMemberSettings(userId: string, guildId: string): Promise<GuildMemberInput> {
+
+    const member = await this.memberRepository.findOne({
+      where: {
+        userId,
+        guildId
+      }
+    });
+
+    if (!member) throw new NotFoundException();
+
+    return {
+      nickname: member.nickname,
+      color: member.color
+    };
   }
 
   /**

@@ -25,3 +25,4 @@ export class Member extends AbstractEntity {
   @Column("varchar", { nullable: true })
   color?: string;
 }
+

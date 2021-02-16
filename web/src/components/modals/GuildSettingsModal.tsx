@@ -1,6 +1,9 @@
 import {
+  Avatar,
+  Box,
   Button,
   Divider,
+  Flex,
   LightMode,
   Modal,
   ModalBody,
@@ -9,16 +12,19 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text
+  Text,
+  Tooltip,
+  useDisclosure
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
 import { deleteGuild, editGuild } from '../../lib/api/handler/guilds';
+import { CropImageModal } from './CropImageModal';
 
 interface IProps {
   guildId: string;
@@ -43,6 +49,23 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
     onClose();
   };
 
+  const {
+    isOpen: cropperIsOpen,
+    onOpen: cropperOnOpen,
+    onClose: cropperOnClose
+  } = useDisclosure();
+
+  const inputFile: any = useRef(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(guild?.icon || '');
+  const [cropImage, setCropImage] = useState('');
+  const [croppedImage, setCroppedImage] = useState<any>(null);
+
+  const applyCrop = (file: Blob) => {
+    setImageUrl(URL.createObjectURL(file));
+    setCroppedImage(new File([file], 'icon'));
+    cropperOnClose();
+  };
+
   if (!guild) return null;
 
   return (
@@ -57,7 +80,10 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
           validationSchema={GuildSchema}
           onSubmit={async (values, { setErrors, resetForm }) => {
             try {
-              const { data } = await editGuild(guildId, values);
+              const formData = new FormData();
+              formData.append("name", values.name);
+              formData.append("image", croppedImage ?? imageUrl);
+              const { data } = await editGuild(guildId, formData);
               if (data) {
                 resetForm();
                 onClose();
@@ -78,6 +104,49 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
+                <Flex mb='4' justify='center'>
+                  <Box textAlign={'center'}>
+                    <Tooltip label='Change Icon' aria-label='Change Icon'>
+                      <Avatar
+                        size='xl'
+                        name={guild?.name[0]}
+                        bg={'brandGray.darker'}
+                        color={"#fff"}
+                        src={imageUrl || ''}
+                        _hover={{ cursor: 'pointer', opacity: 0.5 }}
+                        onClick={() => inputFile.current.click()}
+                      />
+                    </Tooltip>
+                    <Text
+                      mt={'2'}
+                      _hover={{
+                        cursor: 'pointer',
+                        color: 'brandGray.accent'
+                      }}
+                      onClick={() => {
+                        setCroppedImage(null);
+                        setImageUrl(null);
+                      }}
+                    >
+                      Remove
+                    </Text>
+                  </Box>
+                  <input
+                    type='file'
+                    name='image'
+                    accept='image/*'
+                    ref={inputFile}
+                    hidden
+                    onChange={async (e) => {
+                      if (!e.currentTarget.files) return;
+                      setCropImage(
+                        URL.createObjectURL(e.currentTarget.files[0])
+                      );
+                      cropperOnOpen();
+                    }}
+                  />
+                </Flex>
+
                 <InputField label='server name' name='name' />
 
                 <Divider my={'4'} />
@@ -116,6 +185,14 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
             </Form>
           )}
         </Formik>
+        {cropperIsOpen &&
+        <CropImageModal
+          isOpen={cropperIsOpen}
+          onClose={cropperOnClose}
+          initialImage={cropImage}
+          applyCrop={applyCrop}
+        />
+        }
       </ModalContent>
       }
       {screen === SettingsScreen.CONFIRM &&

@@ -89,13 +89,14 @@ export const CropImageModal: React.FC<IProps> = ({
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} mr={6} variant="link">
+          <Button onClick={onClose} fontSize={"14px"} mr={6} variant="link">
             Cancel
           </Button>
           <Button
             background="highlight.standard"
             color="white"
             type="submit"
+            fontSize={"14px"}
             _hover={{ bg: "highlight.hover" }}
             _active={{ bg: "highlight.active" }}
             _focus={{ boxShadow: "none" }}

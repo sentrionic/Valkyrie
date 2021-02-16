@@ -68,6 +68,7 @@ export class MessageService {
                   "user"."username",
                   "user"."image",
                   "user"."isOnline",
+                  ${!channel.dm ? "member.nickname, member.color," : ''}
                   exists(
                           select 1
                           from users
@@ -77,7 +78,9 @@ export class MessageService {
                       ) as "isFriend"
           FROM "messages" "message"
                    LEFT JOIN "users" "user" ON "user"."id" = "message"."userId"
+                   ${!channel.dm ? 'LEFT JOIN members member on "message"."userId" = member."userId"' : ''}
           WHERE message."channelId" = $1 
+          ${!channel.dm ? `AND member."guildId" = ${channel.guild.id}::text` : ''}
           ${cursor ? `AND message."createdAt" < (to_timestamp(${time}))` : ``}
           ORDER BY "message"."createdAt" DESC
               LIMIT 35
@@ -144,7 +147,18 @@ export class MessageService {
 
     await message.save();
 
-    this.socketService.sendMessage({ room: channelId, message: message.toJSON(userId) });
+    const member = await this.memberRepository.findOne({
+      where: {
+        userId,
+        guildId: channel.guild.id
+      }
+    });
+
+    const response = message.toJSON(userId);
+    response.user.nickname = member?.nickname;
+    response.user.color = member?.color;
+
+    this.socketService.sendMessage({ room: channelId, message: response });
 
     if (channel.dm) {
       // Open the DM and push it to the top
@@ -222,7 +236,14 @@ export class MessageService {
     return true;
   }
 
-  private async isChannelMember(channel: Channel, userId: string): Promise<boolean> {
+  /**
+   * Checks if the current user is a member of that channel or dm.
+   * Throws an UnauthorizedException if that's not the case
+   * @param channel
+   * @param userId
+   * @private
+   */
+  private async isChannelMember(channel: Channel, userId: string): Promise<void> {
     // Check if user has access to private channel
     if (!channel.isPublic) {
       // Channel is DM -> Check if one of the members
@@ -254,8 +275,5 @@ export class MessageService {
         throw new UnauthorizedException('Not Authorized');
       }
     }
-
-    return true;
   }
-
 }

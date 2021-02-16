@@ -6,6 +6,8 @@ export class GuildResponse {
   @ApiProperty({ type: String })
   name!: string;
   @ApiProperty({ type: String })
+  icon?: string;
+  @ApiProperty({ type: String })
   default_channel_id!: string;
   @ApiProperty({ type: String })
   ownerId!: string;

@@ -21,7 +21,7 @@ export function useGuildSocket() {
       cache.setQueryData<Guild[]>(gKey, (d) => {
         const index = d!.findIndex(c => c.id === editedGuild.id);
         if (index !== -1) {
-          d![index] = { ...d![index], name: editedGuild.name };
+          d![index] = { ...d![index], name: editedGuild.name, icon: editedGuild.icon };
         }
         return d!;
       });
