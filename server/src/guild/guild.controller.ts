@@ -24,7 +24,7 @@ import {
   ApiConsumes,
   ApiCookieAuth,
   ApiOkResponse,
-  ApiOperation,
+  ApiOperation, ApiTags,
   ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { GuildMemberInput } from "../models/input/GuildMemberInput";
@@ -32,6 +32,7 @@ import { MemberSchema } from "../validation/member.schema";
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferFile } from '../types/BufferFile';
 
+@ApiTags('Guild Operation')
 @Controller('guilds')
 export class GuildController {
   constructor(private readonly guildService: GuildService) {

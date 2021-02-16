@@ -24,10 +24,11 @@ import {
   ApiConsumes,
   ApiCookieAuth,
   ApiOkResponse,
-  ApiOperation,
-  ApiUnauthorizedResponse,
+  ApiOperation, ApiTags,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 
+@ApiTags('Message Operation')
 @Controller('messages')
 export class MessageController {
   constructor(

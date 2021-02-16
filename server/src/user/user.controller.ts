@@ -13,13 +13,14 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiConsumes,
   ApiCookieAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiOperation,
-  ApiUnauthorizedResponse,
+  ApiOperation, ApiTags,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { LoginInput } from '../models/input/LoginInput';
 import e from 'express';
@@ -46,14 +47,17 @@ import { BufferFile } from '../types/BufferFile';
 import { UserResponse } from '../models/response/UserResponse';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { RequestResponse } from '../models/response/RequestResponse';
+import { ValidationErrors } from '../utils/serializeValidationError';
 
+@ApiTags('Account Operation')
 @Controller('account')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('/register')
   @ApiOperation({ summary: 'Register Account' })
-  @ApiCreatedResponse({ description: 'Newly Created User' })
+  @ApiCreatedResponse({ description: 'Newly Created User', type: UserResponse })
+  @ApiBadRequestResponse({ type: ValidationErrors })
   @ApiBody({ type: RegisterInput })
   async register(
     @Body(new YupValidationPipe(RegisterSchema)) credentials: RegisterInput,
@@ -86,7 +90,7 @@ export class UserController {
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Change Current User Password' })
   @ApiCreatedResponse({ description: 'Successfully changed password' })
-  @ApiUnauthorizedResponse()
+  @ApiBadRequestResponse({ type: ValidationErrors })
   @ApiBody({ type: ChangePasswordInput })
   async changePassword(
     @Body(new YupValidationPipe(ChangePasswordSchema))
@@ -99,6 +103,7 @@ export class UserController {
   @Post('forgot-password')
   @ApiOperation({ summary: 'Forgot Password Request' })
   @ApiCreatedResponse({ description: 'Send Email' })
+  @ApiBadRequestResponse({ type: ValidationErrors })
   async forgotPassword(
     @Body(new YupValidationPipe(ForgotPasswordSchema))
     { email }: ForgotPasswordInput,
@@ -108,8 +113,9 @@ export class UserController {
 
   @Post('reset-password')
   @ApiOperation({ summary: 'Reset Password' })
-  @ApiCreatedResponse({ description: 'successfully reset password' })
+  @ApiCreatedResponse({ description: 'Successfully reset password' })
   @ApiBody({ type: ResetPasswordInput })
+  @ApiBadRequestResponse({ type: ValidationErrors })
   async resetPassword(
     @Body(new YupValidationPipe(ResetPasswordSchema))
     input: ResetPasswordInput,

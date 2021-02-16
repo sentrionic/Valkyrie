@@ -1,9 +1,12 @@
 import { ValidationError } from 'yup';
+import { ApiProperty } from '@nestjs/swagger';
 
-export type ValidationErrors = {
+export class ValidationErrors {
+  @ApiProperty({ type: String })
   field: string;
+  @ApiProperty({ type: String })
   message: string;
-};
+}
 
 /**
  * Creates an error array of the format

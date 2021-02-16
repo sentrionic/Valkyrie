@@ -4,7 +4,7 @@ import {
   ApiCookieAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiOperation,
+  ApiOperation, ApiTags,
   ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { ChannelService } from './channel.service';
@@ -17,6 +17,7 @@ import { ChannelInput } from '../models/input/ChannelInput';
 import { YupValidationPipe } from '../utils/yupValidationPipe';
 import { ChannelSchema } from '../validation/channel.schema';
 
+@ApiTags('Channel Operation')
 @Controller('channels')
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {

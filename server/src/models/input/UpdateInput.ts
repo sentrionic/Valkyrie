@@ -6,7 +6,7 @@ export class UpdateInput {
 
   @ApiProperty({
     type: String,
-    description: 'Unique. Min 3, max 30 characters.',
+    description: 'Min 3, max 30 characters.',
   })
   username!: string;
 
