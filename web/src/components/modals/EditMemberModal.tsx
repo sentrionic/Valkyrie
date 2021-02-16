@@ -1,10 +1,6 @@
 import {
-  Avatar,
-  Box,
   Button,
   Divider,
-  Flex,
-  LightMode,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,48 +8,52 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
-  Tooltip,
-  useDisclosure
+  Text
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import React, { useRef, useState } from 'react';
-import { FaRegTrashAlt } from 'react-icons/fa';
+import React from 'react';
+import { useQuery } from "react-query";
+import { TwitterPicker } from "react-color";
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
-import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
-import { GuildSchema } from '../../lib/utils/validation/guild.schema';
-import { deleteGuild, editGuild } from '../../lib/api/handler/guilds';
-import { CropImageModal } from './CropImageModal';
 import { userStore } from '../../lib/stores/userStore';
 import { MemberSchema } from '../../lib/utils/validation/member.schema';
+import { changeGuildMemberSettings, getGuildMemberSettings } from "../../lib/api/handler/guilds";
 
 interface IProps {
+  guildId: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const EditMemberModal: React.FC<IProps> = ({ isOpen, onClose }) => {
+export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
 
   const current = userStore(state => state.current);
+  const { data } = useQuery(`settings-${guildId}`, () => {
+    return getGuildMemberSettings(guildId).then(response => response.data);
+  });
+
+  if (!data) return null;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay/>
       <ModalContent bg='brandGray.light'>
         <Formik
           initialValues={{
-            color: '',
-            nickname: ''
+            color: data.color,
+            nickname: data.nickname
           }}
           validationSchema={MemberSchema}
-          onSubmit={async (values, { setErrors }) => {
+          onSubmit={async (values, { setErrors, setFieldValue }) => {
             try {
-              // const { data } = await editGuild(guildId, formData);
-              // if (data) {
-              //   resetForm();
-              //   onClose();
-              // }
+              // Default color --> Reset
+              if (values.color === '#fff') setFieldValue('color', null);
+
+              const { data } = await changeGuildMemberSettings(guildId, values);
+              if (data) {
+                onClose();
+              }
             } catch (err) {
               if (err?.response?.data?.errors) {
                 const errors = err?.response?.data?.errors;
@@ -63,16 +63,52 @@ export const EditMemberModal: React.FC<IProps> = ({ isOpen, onClose }) => {
           }
           }
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue, values }) => (
             <Form>
               <ModalHeader fontWeight='bold' pb={0}>
                 Change Appearance
               </ModalHeader>
-              <ModalCloseButton />
+              <ModalCloseButton/>
               <ModalBody>
-                <InputField label='nickname' name='nickname' />
+                <InputField color={values.color ?? undefined} label='nickname' name='nickname'
+                            value={values.nickname ?? current?.username} />
+                <Text
+                  mt={'2'}
+                  ml={"1"}
+                  color={'brandGray.accent'}
+                  _hover={{
+                    cursor: 'pointer',
+                    color: 'highlight.standard'
+                  }}
+                  fontSize={'14px'}
+                  onClick={() => setFieldValue('nickname', null)}
+                >
+                  Reset Nickname
+                </Text>
 
-                <Divider my={'4'} />
+                <Divider my={'4'}/>
+
+                <TwitterPicker
+                  color={values.color || '#fff'}
+                  onChangeComplete={(color) => {
+                    if (color) setFieldValue('color', color.hex);
+                  }}
+                  className={'picker'}
+                />
+
+                <Text
+                  mt={'2'}
+                  ml={"1"}
+                  color={'brandGray.accent'}
+                  _hover={{
+                    cursor: 'pointer',
+                    color: 'highlight.standard'
+                  }}
+                  fontSize={'14px'}
+                  onClick={() => setFieldValue('color', '#fff')}
+                >
+                  Reset Color
+                </Text>
 
               </ModalBody>
 
@@ -90,7 +126,7 @@ export const EditMemberModal: React.FC<IProps> = ({ isOpen, onClose }) => {
                   isLoading={isSubmitting}
                   fontSize={'14px'}
                 >
-                  Save Changes
+                  Save
                 </Button>
               </ModalFooter>
             </Form>

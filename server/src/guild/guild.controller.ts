@@ -59,7 +59,7 @@ export class GuildController {
   async getGuilds(
     @GetUser() userId: string
   ): Promise<GuildResponse[]> {
-    return this.guildService.getUserGuilds(userId);
+    return await this.guildService.getUserGuilds(userId);
   }
 
   @Post("/create")
@@ -74,7 +74,7 @@ export class GuildController {
     @GetUser() user: string,
   ): Promise<GuildResponse> {
     const { name } = input;
-    return this.guildService.createGuild(name, user);
+    return await this.guildService.createGuild(name, user);
   }
 
   @Get("/:guildId/invite")
@@ -85,7 +85,7 @@ export class GuildController {
   @ApiBody({ type: String, description: "The guildId" })
   @ApiOkResponse({ type: String, description: "The invite link" })
   async generateTeamInvite(@Param('guildId') id: string): Promise<string> {
-    return this.guildService.generateInviteLink(id);
+    return await this.guildService.generateInviteLink(id);
   }
 
   @Post("/join")
@@ -99,7 +99,19 @@ export class GuildController {
     @Body('link') link: string,
     @GetUser() user: string,
   ): Promise<GuildResponse> {
-    return this.guildService.joinGuild(link, user);
+    return await this.guildService.joinGuild(link, user);
+  }
+
+  @Get("/:guildId/member")
+  @UseGuards(MemberGuard)
+  @ApiOperation({ summary: 'Get Member Settings' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  async getMemberSettings(
+    @GetUser() user: string,
+    @Param('guildId') guildId: string,
+  ): Promise<GuildMemberInput> {
+    return await this.guildService.getMemberSettings(user, guildId);
   }
 
   @Put("/:guildId/member")
@@ -116,7 +128,7 @@ export class GuildController {
       new ValidationPipe({ transform: true })
     ) input: GuildMemberInput,
   ): Promise<boolean> {
-    return this.guildService.changeMemberSettings(user, guildId, input);
+    return await this.guildService.changeMemberSettings(user, guildId, input);
   }
 
   @Delete("/:guildId")
@@ -129,7 +141,7 @@ export class GuildController {
     @GetUser() userId: string,
     @Param("guildId") guildId: string
   ): Promise<boolean> {
-    return this.guildService.leaveGuild(userId, guildId);
+    return await this.guildService.leaveGuild(userId, guildId);
   }
 
   @Put("/:guildId")
@@ -150,7 +162,7 @@ export class GuildController {
     ) input: GuildInput,
     @UploadedFile() image?: BufferFile,
   ): Promise<boolean> {
-    return this.guildService.editGuild(user, guildId, input, image);
+    return await this.guildService.editGuild(user, guildId, input, image);
   }
 
   @Delete("/:guildId/delete")
@@ -163,6 +175,6 @@ export class GuildController {
     @GetUser() userId: string,
     @Param('guildId') guildId: string,
   ): Promise<boolean> {
-    return this.guildService.deleteGuild(userId, guildId);
+    return await this.guildService.deleteGuild(userId, guildId);
   }
 }

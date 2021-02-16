@@ -261,6 +261,23 @@ export class GuildService {
     return true;
   }
 
+  async getMemberSettings(userId: string, guildId: string): Promise<GuildMemberInput> {
+
+    const member = await this.memberRepository.findOne({
+      where: {
+        userId,
+        guildId
+      }
+    });
+
+    if (!member) throw new NotFoundException();
+
+    return {
+      nickname: member.nickname,
+      color: member.color
+    };
+  }
+
   /**
    * Check if the user is in less than 100 servers.
    * Throws a BadRequestException if that is not the case.

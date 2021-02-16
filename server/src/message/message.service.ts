@@ -80,7 +80,7 @@ export class MessageService {
                    LEFT JOIN "users" "user" ON "user"."id" = "message"."userId"
                    ${!channel.dm ? 'LEFT JOIN members member on "message"."userId" = member."userId"' : ''}
           WHERE message."channelId" = $1 
-          ${!channel.dm ? 'AND member."guildId" = (select guilds.id from guilds join channels c on guilds.id = c."guildId" where c.id = message."channelId")' : ''}
+          ${!channel.dm ? `AND member."guildId" = ${channel.guild.id}::text` : ''}
           ${cursor ? `AND message."createdAt" < (to_timestamp(${time}))` : ``}
           ORDER BY "message"."createdAt" DESC
               LIMIT 35

@@ -13,6 +13,7 @@ import { RouterProps } from '../../routes/Routes';
 import { userStore } from '../../lib/stores/userStore';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSettingsModal } from '../modals/GuildSettingsModal';
+import { EditMemberModal } from "../modals/EditMemberModal";
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -29,6 +30,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
   const isOwner = guild?.ownerId === user?.id;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: memberOpen, onOpen: memberOnOpen, onClose: memberOnClose } = useDisclosure();
 
   const handleLeave = async () => {
     const { data } = await leaveGuild(guildId);
@@ -79,7 +81,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
               <StyledMenuItem
                 label={'Change Appearance'}
                 icon={FaUserEdit}
-                handleClick={inviteOpen}
+                handleClick={memberOnOpen}
               />
               {!isOwner &&
                 <>
@@ -97,6 +99,9 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
       </Menu>
       {isOpen &&
         <GuildSettingsModal guildId={guildId} isOpen={isOpen} onClose={onClose} />
+      }
+      {memberOpen &&
+        <EditMemberModal guildId={guildId} isOpen={memberOpen} onClose={memberOnClose} />
       }
     </GridItem>
   );
