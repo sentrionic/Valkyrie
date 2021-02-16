@@ -868,6 +868,13 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.45.tgz#e9387572998e5ecdac221950dab3e8c3b16af884"
   integrity sha512-jnqIUKDUqJbDIUxm0Uj7bnlMnRm1T/eZ9N+AVMqhPgzrba2GhGG5o/jCTwmdPK709nEZsGoMzXEDUjcXHa3W0g==
 
+"@types/express-rate-limit@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@types/express-rate-limit/-/express-rate-limit-5.1.1.tgz#e5b0239d18c1580e52ae56dce4248333302a1dc8"
+  integrity sha512-6oMYZBLlhxC5sdcRXXz528QyfGz3zTy9YdHwqlxLfgx5Cd3zwYaUjjPpJcaTtHmRefLi9P8kLBPz2wB7yz4JtQ==
+  dependencies:
+    "@types/express" "*"
+
 "@types/express-serve-static-core@^4.17.18":
   version "4.17.18"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.18.tgz#8371e260f40e0e1ca0c116a9afcd9426fa094c40"
@@ -917,6 +924,13 @@
   integrity sha512-mWA/4zFQhfvOA8zWkXobwJvBD7vzcxgrOQ0J5CH1votGqdq9m7+FwtGaqyCZqC3NyyBkc9z4m+iry4LlqcMWJg==
   dependencies:
     "@types/node" "*"
+
+"@types/helmet@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/helmet/-/helmet-4.0.0.tgz#af7af46de26abe368b85360769ae9938bfb2318a"
+  integrity sha512-ONIn/nSNQA57yRge3oaMQESef/6QhoeX7llWeDli0UZIfz8TQMkfNPTXA8VnnyeA1WUjG2pGqdjEIueYonMdfQ==
+  dependencies:
+    helmet "*"
 
 "@types/ioredis@*":
   version "4.17.11"
@@ -1045,6 +1059,15 @@
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
+
+"@types/rate-limit-redis@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@types/rate-limit-redis/-/rate-limit-redis-1.7.1.tgz#ac5bd5772de41baba3edb41e2ac93ac3e803d99b"
+  integrity sha512-WceqhiLiZSYDbSIZg0i6qvB/W+rMgnyq0UNgr+YsBsK3LQPzBFUZrwxBGbfB/Gml+uvYaWXxlNVgL+1UErT+og==
+  dependencies:
+    "@types/ioredis" "*"
+    "@types/redis" "*"
+    express-rate-limit ">=3.4.0"
 
 "@types/redis@*":
   version "2.8.28"
@@ -3067,6 +3090,11 @@ expect@^26.6.2:
     jest-message-util "^26.6.2"
     jest-regex-util "^26.0.0"
 
+express-rate-limit@>=3.4.0, express-rate-limit@^5.2.5:
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-5.2.5.tgz#956fde02aaf28724c0fd01b932986baa35143ece"
+  integrity sha512-fv9mf4hWRKZHVlY8ChVNYnGxa49m0zQ6CrJxNiXe2IjJPqicrqoA/JOyBbvs4ufSSLZ6NTzhtgEyLcdfbe+Q6Q==
+
 express-session@^1.17.1:
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.17.1.tgz#36ecbc7034566d38c8509885c044d461c11bf357"
@@ -3637,6 +3665,11 @@ has@^1.0.3:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
+
+helmet@*, helmet@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/helmet/-/helmet-4.4.1.tgz#a17e1444d81d7a83ddc6e6f9bc6e2055b994efe7"
+  integrity sha512-G8tp0wUMI7i8wkMk2xLcEvESg5PiCitFMYgGRc/PwULB0RVhTP5GFdxOwvJwp9XVha8CuS8mnhmE8I/8dx/pbw==
 
 highlight.js@^10.0.0:
   version "10.5.0"
@@ -5763,6 +5796,14 @@ range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
+
+rate-limit-redis@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/rate-limit-redis/-/rate-limit-redis-2.0.0.tgz#a5953a9e502805a6bc84a597cf00fd7ef7344119"
+  integrity sha512-06EwXCcJYSKhKDyNPVgnAhwGk0uKxd0mpKdLpdJhnZGRoRzrxHWmponQn8Eq3hMLgbwPVvqdkgun3ZFWKKpuXg==
+  dependencies:
+    defaults "^1.0.3"
+    redis "^3.0.2"
 
 raw-body@2.4.0:
   version "2.4.0"

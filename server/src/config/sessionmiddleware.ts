@@ -16,7 +16,7 @@ export const sessionMiddleware =
       disableTouch: true,
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
       httpOnly: true,
       sameSite: 'lax', // csrf
       secure: __prod__, // cookie only works in https,
@@ -24,5 +24,6 @@ export const sessionMiddleware =
     },
     saveUninitialized: false,
     secret: process.env.SECRET as string,
-    resave: false,
+    resave: true,
+    rolling: true
   });

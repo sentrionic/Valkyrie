@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { MemberResponse } from '../models/response/MemberResponse';
@@ -35,10 +35,14 @@ export class SocketService {
   async joinChannel(client: Socket, room: string) {
     const id: string = client.handshake.session['userId'];
 
-    const channel = await this.channelRepository.findOneOrFail({
+    const channel = await this.channelRepository.findOne({
       where: { id: room },
       relations: ['guild']
     });
+
+    if (!channel) {
+      throw new WsException('Not Found');
+    }
 
     await this.isChannelMember(channel, id);
 

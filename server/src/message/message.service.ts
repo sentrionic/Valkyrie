@@ -46,6 +46,10 @@ export class MessageService {
       relations: ['guild']
     });
 
+    if (!channel) {
+      throw new NotFoundException();
+    }
+
     await this.isChannelMember(channel, userId);
     let time: string;
     if (cursor) {
@@ -147,16 +151,19 @@ export class MessageService {
 
     await message.save();
 
-    const member = await this.memberRepository.findOne({
-      where: {
-        userId,
-        guildId: channel.guild.id
-      }
-    });
-
     const response = message.toJSON(userId);
-    response.user.nickname = member?.nickname;
-    response.user.color = member?.color;
+
+    if (!channel.dm) {
+      const member = await this.memberRepository.findOne({
+        where: {
+          userId,
+          guildId: channel.guild.id
+        }
+      });
+
+      response.user.nickname = member?.nickname;
+      response.user.color = member?.color;
+    }
 
     this.socketService.sendMessage({ room: channelId, message: response });
 
