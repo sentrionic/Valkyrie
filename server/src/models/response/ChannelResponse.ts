@@ -15,4 +15,7 @@ export class ChannelResponse {
 
   @ApiProperty({ type: String })
   updatedAt!: string;
+
+  @ApiProperty()
+  hasNotification?: boolean;
 }

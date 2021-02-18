@@ -1,9 +1,6 @@
 import React from 'react';
 import { Avatar, AvatarBadge, Flex, ListItem, Text } from '@chakra-ui/react';
 import { Member } from '../../lib/api/models';
-import { userStore } from '../../lib/stores/userStore';
-import { useContextMenu } from 'react-contexify';
-import { MemberContextMenu } from '../menus/MemberContextMenu';
 
 interface MemberListItemProps {
   member: Member;
@@ -11,22 +8,12 @@ interface MemberListItemProps {
 
 export const MemberListItem: React.FC<MemberListItemProps> = ({ member }) => {
 
-  const current = userStore(state => state.current);
-  const self = current?.id !== member.id;
-
-  const { show } = useContextMenu({
-    id: member.id,
-  });
-
   return (
     <>
       <ListItem
-        p='5px'
-        m='0 10px'
+        p='2'
+        mx='10px'
         color={'brandGray.accent'}
-        onContextMenu={(e) => {
-          if (!self) show(e)
-        }}
         _hover={{ bg: 'brandGray.light', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
       >
         <Flex align='center'>
@@ -36,9 +23,6 @@ export const MemberListItem: React.FC<MemberListItemProps> = ({ member }) => {
           <Text ml='2'>{member.username}</Text>
         </Flex>
       </ListItem>
-      {!self &&
-        <MemberContextMenu id={member.id} isFriend={member.isFriend} />
-      }
     </>
   );
 };

@@ -37,6 +37,18 @@ export function useGuildSocket() {
       });
     });
 
+    socket.on('new_notification', (id: string) => {
+      if (!location.pathname.includes(id)) {
+        cache.setQueryData<Guild[]>(gKey, (d) => {
+          const index = d!.findIndex(c => c.id === id);
+          if (index !== -1) {
+            d![index] = { ...d![index], hasNotification: true };
+          }
+          return d!;
+        });
+      }
+    });
+
     return () => {
       socket.emit('leaveRoom', current?.id);
       socket.disconnect();

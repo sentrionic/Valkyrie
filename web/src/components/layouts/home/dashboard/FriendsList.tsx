@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { UnorderedList } from '@chakra-ui/react';
+import { Flex, Text, UnorderedList } from '@chakra-ui/react';
 import { fKey } from '../../../../lib/utils/querykeys';
 import { getFriends } from '../../../../lib/api/handler/account';
 import { OnlineLabel } from '../../../sections/OnlineLabel';
@@ -16,6 +16,16 @@ export const FriendsList: React.FC = () => {
   );
 
   useFriendSocket();
+
+  if (data?.length === 0) {
+    return (
+      <Flex justify={'center'} align={"center"} w={'full'}>
+        <Text textColor={"brandGray.accent"}>
+          No one here yet
+        </Text>
+      </Flex>
+    );
+  }
 
   return (
     <>

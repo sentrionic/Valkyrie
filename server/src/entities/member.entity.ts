@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, PrimaryColumn } from 'typeorm';
 import { User } from './user.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Guild } from './guild.entity';
@@ -24,5 +24,7 @@ export class Member extends AbstractEntity {
 
   @Column("varchar", { nullable: true })
   color?: string;
-}
 
+  @CreateDateColumn()
+  lastSeen?: string;
+}

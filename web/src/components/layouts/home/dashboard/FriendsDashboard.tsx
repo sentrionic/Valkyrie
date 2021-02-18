@@ -4,10 +4,10 @@ import { FriendsListHeader } from './FriendsListHeader';
 import { FriendsList } from './FriendsList';
 import { PendingList } from './PendingList';
 import { scrollbarCss } from '../../../../lib/utils/theme';
-import { friendStore } from '../../../../lib/stores/friendStore';
+import { homeStore } from '../../../../lib/stores/homeStore';
 
 export const FriendsDashboard: React.FC = () => {
-  const isPending = friendStore(state => state.isPending);
+  const isPending = homeStore(state => state.isPending);
 
   return (
     <>

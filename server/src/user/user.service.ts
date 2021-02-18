@@ -264,7 +264,6 @@ export class UserService {
           join friends_request fr on u.id = fr."receiverId"
           where fr."senderId" = $1
           order by username
-
       `,
       [userId],
     );
@@ -282,6 +281,7 @@ export class UserService {
     if (!user.friends.includes(member) && !user.requests.includes(member)) {
       user.requests.push(member);
       await user.save();
+      this.socketService.sendRequest(memberId);
     }
 
     return true;

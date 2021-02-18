@@ -9,7 +9,7 @@ export const sendMessage = (
   channelId: string,
   data: FormData,
   onUploadProgress?: (e: any) => void
-): Promise<AxiosResponse<boolean>> =>
+): Promise<AxiosResponse<void>> =>
   request.post(`messages/${channelId}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',

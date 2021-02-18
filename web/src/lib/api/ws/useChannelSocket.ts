@@ -48,8 +48,21 @@ export function useChannelSocket(guildId: string, key: string) {
       });
     });
 
+    socket.on('new_notification', (id: string) => {
+      const currentPath = `/channels/${guildId}/${id}`;
+      if (location.pathname !== currentPath) {
+        cache.setQueryData<Channel[]>(key, (d) => {
+          const index = d!.findIndex(c => c.id === id);
+          if (index !== -1) {
+            d![index] = { ...d![index], hasNotification: true };
+          }
+          return d!;
+        });
+      }
+    });
+
     return () => {
-      socket.emit('leaveRoom', guildId);
+      socket.emit('leaveGuild', guildId);
       socket.disconnect();
     };
   }, [guildId, key, cache, history, location, guild]);

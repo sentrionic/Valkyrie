@@ -51,6 +51,7 @@ export class MessageService {
     }
 
     await this.isChannelMember(channel, userId);
+
     let time: string;
     if (cursor) {
       const timeString = new Date(cursor).getTime().toString();
@@ -121,7 +122,7 @@ export class MessageService {
     channelId: string,
     input: MessageInput,
     file?: BufferFile,
-  ): Promise<boolean> {
+  ): Promise<void> {
 
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
@@ -178,9 +179,16 @@ export class MessageService {
         `, [channelId]
       );
       this.socketService.pushDMToTop({ room: channelId, channelId })
+    } else {
+      getManager().query(
+        `
+            update channels
+            set "lastActivity" = CURRENT_TIMESTAMP
+            where "id" = $1
+        `, [channel.id]
+      );
+      this.socketService.newNotification(message.channel.guild.id, channelId);
     }
-
-    return true;
   }
 
   async editMessage(

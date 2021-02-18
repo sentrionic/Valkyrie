@@ -63,6 +63,12 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     client.join(room);
   }
 
+  @SubscribeMessage('leaveGuild')
+  handleGuildLeave(client: Socket, room: string): void {
+    client.leave(room);
+    this.socketService.updateLastSeen(client, room);
+  }
+
   @SubscribeMessage('leaveRoom')
   handleRoomLeave(client: Socket, room: string): void {
     client.leave(room);
@@ -80,5 +86,12 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     const room = data[0];
     const username = data[1];
     this.socketService.stopTyping(room, username);
+  }
+
+  @UseGuards(WsAuthGuard)
+  @SubscribeMessage('getRequestCount')
+  async handleGetFriendRequestCount(client: Socket): Promise<void> {
+    const id: string = client.handshake.session['userId'];
+    await this.socketService.getPendingFriendRequestCount(id);
   }
 }

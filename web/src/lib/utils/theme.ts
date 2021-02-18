@@ -30,7 +30,8 @@ const colors = {
   },
   brandGreen: '#43b581',
   labelGray: '#72767d',
-  menuRed: '#f04747'
+  menuRed: '#f04747',
+  brandBorder: '#1A202C'
 }
 
 const fonts = {
@@ -50,7 +51,7 @@ export const scrollbarCss = {
     width: "10px",
   },
   "&::-webkit-scrollbar-thumb": {
-    background: "#202225",
+    background: "brandGray.darker",
     borderRadius: "18px",
   },
 }

@@ -35,7 +35,9 @@ export const ChatScreen: React.FC = () => {
   if (isLoading) {
     return (
       <ChatGrid>
-        <Flex align={'center'} justify={'center'} h={'full'} />
+        <Flex align={'center'} justify={'center'} h={'full'}>
+          <Spinner size={'xl'} thickness={'4px'} />
+        </Flex>
       </ChatGrid>
     );
   }

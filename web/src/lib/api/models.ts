@@ -34,6 +34,7 @@ export interface AccountResponse extends BaseModel {
 export interface Channel extends BaseModel {
   name: string;
   isPublic: boolean;
+  hasNotification?: boolean;
 }
 
 export interface Guild extends BaseModel {
@@ -41,6 +42,7 @@ export interface Guild extends BaseModel {
   ownerId: string;
   default_channel_id: string;
   icon?: string;
+  hasNotification?: boolean;
 }
 
 export interface DMChannel {

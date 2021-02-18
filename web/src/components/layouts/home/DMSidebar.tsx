@@ -1,5 +1,5 @@
 import React from 'react';
-import { GridItem, Text, UnorderedList } from '@chakra-ui/react';
+import { GridItem, Box, Text, UnorderedList } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import { AccountBar } from '../AccountBar';
 import { FriendsListButton } from '../../sections/FriendsListButton';
@@ -8,6 +8,7 @@ import { getUserDMs } from '../../../lib/api/handler/dm';
 import { dmKey } from '../../../lib/utils/querykeys';
 import { dmScrollerCss } from './css/dmScrollerCSS';
 import { useDMSocket } from '../../../lib/api/ws/useDMSocket';
+import { DMPlaceholder } from '../../sections/DMPlaceholder';
 
 export const DMSidebar: React.FC = () => {
 
@@ -21,25 +22,34 @@ export const DMSidebar: React.FC = () => {
     <GridItem
       gridColumn={'2'}
       gridRow={'1 / 4'}
-      bg="brandGray.dark"
-      overflowY="hidden"
+      bg='brandGray.dark'
+      overflowY='hidden'
       _hover={{ overflowY: 'auto' }}
       css={dmScrollerCss}
     >
       <FriendsListButton />
       <Text
-        ml="4"
-        textTransform="uppercase"
-        fontSize="12px"
-        fontWeight="semibold"
-        color="brandGray.accent"
+        ml='4'
+        textTransform='uppercase'
+        fontSize='12px'
+        fontWeight='semibold'
+        color='brandGray.accent'
       >
         DIRECT MESSAGES
       </Text>
-      <UnorderedList listStyleType="none" ml="0" mt="4">
+      <UnorderedList listStyleType='none' ml='0' mt='4'>
         {data?.map((dm) => (
           <DMListItem dm={dm} key={dm.id} />
         ))}
+        {data?.length === 0 &&
+        <Box>
+          <DMPlaceholder />
+          <DMPlaceholder />
+          <DMPlaceholder />
+          <DMPlaceholder />
+          <DMPlaceholder />
+        </Box>
+        }
       </UnorderedList>
       <AccountBar />
     </GridItem>
