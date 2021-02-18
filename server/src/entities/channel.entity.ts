@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Guild } from './guild.entity';
@@ -44,4 +44,7 @@ export class Channel extends AbstractEntity {
     (pcmember) => pcmember.channel
   )
   pcmembers: PCMember[];
+
+  @CreateDateColumn()
+  lastActivity?: string;
 }

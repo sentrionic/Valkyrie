@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { MemberResponse } from '../models/response/MemberResponse';
@@ -167,6 +167,19 @@ export class SocketService {
   }
 
   /**
+   * Emits an "new_notification" event
+   * @param guildId
+   * @param channelId
+   */
+  async newNotification(guildId: string, channelId: string) {
+    const members = await this.memberRepository.find({ where: { guildId } });
+    members.forEach(m => {
+      this.socket.to(m.userId).emit('new_notification', guildId);
+    });
+    this.socket.to(guildId).emit('new_notification', channelId);
+  }
+
+  /**
    * Set the user as online
    * @param client
    */
@@ -223,6 +236,18 @@ export class SocketService {
     });
   }
 
+  async updateLastSeen(client: Socket, room: string) {
+    const id: string = client.handshake.session['userId'];
+    const manager = getManager();
+    manager.query(
+      `
+          update members
+          set "lastSeen" = CURRENT_TIMESTAMP
+          where "userId" = $1 and "guildId" = $2
+      `, [id, room]
+    );
+  }
+
   async setOnlineStatus(userId: string, isOnline: boolean): Promise<void> {
     await this.userRepository.update(userId, { isOnline });
   }
@@ -243,6 +268,14 @@ export class SocketService {
    */
   stopTyping(room: string, username: string) {
     this.socket.to(room).emit('removeFromTyping', username);
+  }
+
+  /**
+   * Emits an "send_request" event
+   * @param room
+   */
+  sendRequest(room: string) {
+    this.socket.to(room).emit('send_request');
   }
 
   /**
@@ -305,6 +338,21 @@ export class SocketService {
     }
 
     return true;
+  }
+
+  async getPendingFriendRequestCount(userId: string): Promise<void> {
+    const manager = getManager();
+    const result = await manager.query(
+      `
+          select count(u.id)
+          from users u
+                   join friends_request fr on u.id = fr."senderId"
+          where fr."receiverId" = $1
+      `,
+      [userId],
+    );
+
+    this.socket.to(userId).emit('requestCount', result[0]['count']);
   }
 
   private async getGuildMemberIds(guildId: string): Promise<string[]> {

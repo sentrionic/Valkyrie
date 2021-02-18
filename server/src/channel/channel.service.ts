@@ -93,10 +93,13 @@ export class ChannelService {
     const manager = getManager();
     return await manager.query(
       `
-          select distinct on (c.id, c."createdAt") c.id, c.name, c."isPublic", c."createdAt", c."updatedAt"
+          select distinct on (c.id, c."createdAt") c.id, c.name, 
+                 c."isPublic", c."createdAt", c."updatedAt",
+                 (c."lastActivity" > m."lastSeen") as "hasNotification"
           from channels as c
                    left outer join pcmembers as pc
                                    on c."id"::text = pc."channelId"::text
+                    left outer join members m on c."guildId" = m."guildId"
           where c."guildId"::text = $1
             and (c."isPublic" = true or pc."userId"::text = $2)
           order by c."createdAt"

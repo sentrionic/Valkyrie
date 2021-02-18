@@ -63,7 +63,7 @@ export class MessageController {
     @Param('channelId') channelId: string,
     @Body(new YupValidationPipe(MessageSchema)) input: MessageInput,
     @UploadedFile() file?: BufferFile,
-  ): Promise<boolean> {
+  ): Promise<void> {
     return this.messageService.createMessage(userId, channelId, input, file);
   }
 

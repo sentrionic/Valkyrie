@@ -15,4 +15,6 @@ export class GuildResponse {
   createdAt!: string;
   @ApiProperty({ type: String })
   updatedAt!: string;
+  @ApiProperty({ type: Boolean })
+  hasNotification!: boolean;
 }

@@ -4,15 +4,18 @@ import { getSocket } from '../getSocket';
 import { Member } from '../models';
 import { userStore } from '../../stores/userStore';
 import { fKey } from '../../utils/querykeys';
+import { homeStore } from '../../stores/homeStore';
 
 export function useFriendSocket() {
 
   const current = userStore(state => state.current);
+  const setRequests = homeStore(state => state.setRequests);
   const cache = useQueryClient();
 
   useEffect((): any => {
     const socket = getSocket();
     socket.emit('joinUser', current?.id);
+    socket.emit('getRequestCount');
     socket.on('add_friend', (newFriend: Member) => {
       cache.setQueryData<Member[]>(fKey, (data) => {
         return [...data!, newFriend].sort((a, b) => a.username.localeCompare(b.username));
@@ -41,9 +44,13 @@ export function useFriendSocket() {
       });
     });
 
+    socket.on('requestCount', (count: number) => {
+      setRequests(count);
+    });
+
     return () => {
       socket.emit('leaveRoom', current?.id);
       socket.disconnect();
     };
-  }, [cache, current]);
+  }, [cache, current, setRequests]);
 }

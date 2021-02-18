@@ -30,6 +30,7 @@ export const GuildList: React.FC = () => {
       bg='brandGray.darker'
       overflowY='auto'
       css={guildScrollbarCss}
+      zIndex={2}
     >
       <HomeIcon />
       <UnorderedList listStyleType='none' ml='0'>

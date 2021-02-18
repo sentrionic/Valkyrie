@@ -16,6 +16,21 @@ export const NotificationIndicator: React.FC = () => {
   );
 };
 
+export const ChannelNotificationIndicator: React.FC = () => {
+  return (
+    <Box
+      w={'8px'}
+      h={'8px'}
+      bg={'white'}
+      position={'absolute'}
+      borderRadius={'0 4px 4px 0'}
+      ml={'-4px'}
+      mt={'8px'}
+      left={'75px'}
+    />
+  );
+};
+
 export const ActiveGuildPill: React.FC = () =>
     <Box
       w={'8px'}

@@ -70,6 +70,12 @@ export class GuildService {
                        g."icon",
                        g."createdAt",
                        g."updatedAt",
+                       ((select c."lastActivity"
+                         from channels c
+                                  join guilds g on g.id = c."guildId"
+                         where g.id = member."guildId"
+                         order by c."lastActivity" desc
+                         limit 1) > member."lastSeen") as "hasNotification",
                        (select c.id as "default_channel_id"
                         from channels c
                                  join guilds g on g.id = c."guildId"
@@ -299,6 +305,7 @@ export class GuildService {
       ownerId: guild.ownerId,
       createdAt: guild?.createdAt.toString(),
       updatedAt: guild?.updatedAt.toString(),
+      hasNotification: false,
     };
   }
 }

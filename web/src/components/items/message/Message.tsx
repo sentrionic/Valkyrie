@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Avatar, Box, Flex, Icon, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Flex,
+  Icon,
+  Text,
+  useDisclosure
+} from '@chakra-ui/react';
 import { Item, Menu, theme, useContextMenu } from 'react-contexify';
 import { useParams } from 'react-router-dom';
 import { MdEdit } from 'react-icons/md';
@@ -15,6 +22,7 @@ import { useGetCurrentGuild } from '../../../lib/utils/hooks/useGetCurrentGuild'
 import { RouterProps } from '../../../routes/Routes';
 import { MemberContextMenu } from '../../menus/MemberContextMenu';
 import '../css/ContextMenu.css';
+import { UserPopover } from '../../sections/UserPopover';
 
 interface MessageProps {
   message: MessageResponse;
@@ -55,7 +63,6 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
         mt={isCompact ? '0' : '3'}
         _hover={{ bg: 'brandGray.hover' }}
         justify='space-between'
-        onContextMenu={show}
         onMouseLeave={() => setShowSettings(false)}
         onMouseEnter={() => setShowSettings(true)}
       >
@@ -68,7 +75,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                 </Text>
               </Box>
 
-              <Box ml='3' w={'full'}>
+              <Box ml='3' w={'full'} onContextMenu={show}>
                 <MessageContent message={message} />
               </Box>
               {(showSettings && showMenu) ?
@@ -81,16 +88,23 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
             </>
             :
             <>
-              <Avatar
-                h='40px' w='40px' ml='4' mt={'1'}
-                src={message.user.image}
-                onContextMenu={(e) => {
-                  if (!isAuthor) profileShow(e);
-                }} />
-              <Box ml='3' w={'full'}>
+              <UserPopover member={message.user}>
+                <Avatar
+                  h='40px' w='40px' ml='4' mt={'1'}
+                  src={message.user.image}
+                  _hover={{
+                    cursor: 'pointer'
+                  }}
+                  onContextMenu={(e) => {
+                    if (!isAuthor) profileShow(e);
+                  }}
+                />
+              </UserPopover>
+              <Box ml='3' w={'full'} onContextMenu={show}>
                 <Flex alignItems='center' justify={'space-between'}>
                   <Flex alignItems={'center'}>
-                    <Text color={message.user.color ?? undefined}>{message.user.nickname ?? message.user.username}</Text>
+                    <Text
+                      color={message.user.color ?? undefined}>{message.user.nickname ?? message.user.username}</Text>
                     <Text fontSize='12px' color='brandGray.accent' ml='2'>
                       {getTime(message.createdAt)}
                     </Text>
@@ -141,7 +155,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
       </>
       }
       {!isAuthor &&
-        <MemberContextMenu id={message.user.id} isFriend={message.user.isFriend} />
+      <MemberContextMenu id={message.user.id} isFriend={message.user.isFriend} />
       }
     </>
   );

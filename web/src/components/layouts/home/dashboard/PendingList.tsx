@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { UnorderedList } from '@chakra-ui/react';
+import { Flex, UnorderedList, Text } from '@chakra-ui/react';
 import { rKey } from '../../../../lib/utils/querykeys';
 import { getPendingRequests } from '../../../../lib/api/handler/account';
 import { OnlineLabel } from '../../../sections/OnlineLabel';
 import { RequestListItem } from '../../../items/RequestListItem';
+import { homeStore } from '../../../../lib/stores/homeStore';
 
 export const PendingList: React.FC = () => {
   const { data } = useQuery(rKey, () =>
@@ -13,6 +14,22 @@ export const PendingList: React.FC = () => {
       staleTime: 0
     }
   );
+
+  const reset = homeStore(state => state.resetRequest);
+
+  useEffect(() => {
+    reset();
+  });
+
+  if (data?.length === 0) {
+    return (
+      <Flex justify={'center'} align={"center"} w={'full'}>
+        <Text textColor={"brandGray.accent"}>
+          There are no pending friend requests
+        </Text>
+      </Flex>
+    );
+  }
 
   return (
     <>
