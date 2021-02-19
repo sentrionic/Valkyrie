@@ -63,8 +63,8 @@ export const MessageInput: React.FC = () => {
   }
 
   return (
-    <GridItem gridColumn={3} gridRow={3} px='20px' pb={isTyping.length > 0 ? "0" : "26px"} bg='#36393f'>
-      <InputGroup size='md' bg='#40444b' alignItems='center' borderRadius='8px'>
+    <GridItem gridColumn={3} gridRow={3} px='20px' pb={isTyping.length > 0 ? "0" : "26px"} bg='brandGray.light'>
+      <InputGroup size='md' bg='messageInput' alignItems='center' borderRadius='8px'>
         <Textarea
           as={ResizeTextarea}
           minH="40px"

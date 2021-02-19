@@ -32,7 +32,7 @@ export const MemberList: React.FC = () => {
     <GridItem
       gridColumn={4}
       gridRow={'1 / 4'}
-      bg='#2f3136'
+      bg='memberList'
       overflowY='hidden'
       _hover={{ overflowY: 'auto' }}
       css={memberScrollbarCss}

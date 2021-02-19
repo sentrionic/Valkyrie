@@ -57,7 +57,7 @@ export const FileUploadButton: React.FC = () => {
   return (
     <>
       <InputLeftElement
-        color={'#b9bbbe'}
+        color={'iconColor'}
         _hover={{ cursor: 'pointer', color: '#fcfcfc' }}
         onClick={() => inputFile.current.click()}
       >

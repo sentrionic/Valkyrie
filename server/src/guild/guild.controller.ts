@@ -178,4 +178,62 @@ export class GuildController {
   ): Promise<boolean> {
     return await this.guildService.deleteGuild(userId, guildId);
   }
+
+  @Get("/:guildId/bans")
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Get Guild\'s ban list' })
+  @ApiOkResponse({ description: 'List of users', type: [MemberResponse] })
+  @ApiUnauthorizedResponse()
+  async getBannedUsers(
+    @GetUser() userId: string,
+    @Param('guildId') guildId: string,
+  ): Promise<MemberResponse[]> {
+    return await this.guildService.getBannedUsers(userId, guildId);
+  }
+
+  @Post("/:guildId/bans")
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Ban a user' })
+  @ApiOkResponse({ description: 'Successfully banned', type: Boolean })
+  @ApiBody({ type: String, description: "MemberId" })
+  @ApiUnauthorizedResponse()
+  async banUser(
+    @GetUser() userId: string,
+    @Param('guildId') guildId: string,
+    @Body('memberId') memberId: string
+  ): Promise<boolean> {
+    return await this.guildService.banMember(userId, guildId, memberId);
+  }
+
+  @Post("/:guildId/kick")
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Kick a user' })
+  @ApiOkResponse({ description: 'Successfully kicked', type: Boolean })
+  @ApiBody({ type: String, description: "MemberId" })
+  @ApiUnauthorizedResponse()
+  async kickUser(
+    @GetUser() userId: string,
+    @Param('guildId') guildId: string,
+    @Body('memberId') memberId: string
+  ): Promise<boolean> {
+    return await this.guildService.kickMember(userId, guildId, memberId);
+  }
+
+  @Delete("/:guildId/bans")
+  @UseGuards(AuthGuard)
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Unban a user' })
+  @ApiOkResponse({ description: 'Successfully unbanned', type: Boolean })
+  @ApiBody({ type: String, description: "MemberId" })
+  @ApiUnauthorizedResponse()
+  async unbanUser(
+    @GetUser() userId: string,
+    @Param('guildId') guildId: string,
+    @Body('memberId') memberId: string
+  ): Promise<boolean> {
+    return await this.guildService.unbanUser(userId, guildId, memberId);
+  }
 }

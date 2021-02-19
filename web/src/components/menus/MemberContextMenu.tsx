@@ -5,27 +5,29 @@ import { useHistory } from 'react-router-dom';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
 import { sendFriendRequest } from '../../lib/api/handler/account';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
+import { Member } from '../../lib/api/models';
 
 interface MemberContextMenuProps {
-  id: string;
-  isFriend: boolean;
+  member: Member;
+  isOwner: boolean;
 }
 
-export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ id, isFriend }) => {
+export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, isOwner }) => {
 
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: modIsOpen, onOpen: modOnOpen, onClose: modOnClose } = useDisclosure();
 
   const getOrCreateDM = async () => {
-    const { data } = await getOrCreateDirectMessage(id);
+    const { data } = await getOrCreateDirectMessage(member.id);
     if (data) {
       history.push(`/channels/me/${data.id}`);
     }
   };
 
   const handleFriendClick = async () => {
-    if (!isFriend) {
-      await sendFriendRequest(id);
+    if (!member.isFriend) {
+      await sendFriendRequest(member.id);
     } else {
       onOpen();
     }
@@ -33,7 +35,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ id, isFrie
 
   return (
     <>
-      <Menu id={id} theme={theme.dark}>
+      <Menu id={member.id} theme={theme.dark}>
         <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
           <Flex align='center' justify='space-between' w='full'>
             <Text>Message</Text>
@@ -41,12 +43,26 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ id, isFrie
         </Item>
         <Item onClick={handleFriendClick} className={'menu-item'}>
           <Flex align='center' justify='space-between' w='full'>
-            <Text>{isFriend ? 'Remove' : 'Add'} Friend</Text>
+            <Text>{member.isFriend ? 'Remove' : 'Add'} Friend</Text>
           </Flex>
         </Item>
+        {isOwner &&
+          <>
+            <Item onClick={handleFriendClick} className={'delete-item'}>
+              <Flex align='center' justify='space-between' w='full'>
+                <Text>Kick {member.username}</Text>
+              </Flex>
+            </Item>
+            <Item onClick={handleFriendClick} className={'delete-item'}>
+              <Flex align='center' justify='space-between' w='full'>
+                <Text>Ban {member.username}</Text>
+              </Flex>
+            </Item>
+          </>
+        }
       </Menu>
       {isOpen &&
-        <RemoveFriendModal id={id} isOpen onClose={onClose} />
+        <RemoveFriendModal id={member.id} isOpen onClose={onClose} />
       }
     </>
   );
