@@ -4,7 +4,6 @@
   <img src="https://harmony-cdn.s3.eu-central-1.amazonaws.com/logo.png">
 </p>
 
-
 A [Discord](https://discord.com) clone written in TypeScript.
 
 ## Features
@@ -18,6 +17,7 @@ A [Discord](https://discord.com) clone written in TypeScript.
 - Private Channels
 - Friend System
 - Notification System
+- Basic Moderation for the guild owner (delete messages, kick & ban members)
 - (Basically 2015 Discord features with 2021 Look)
 
 ## Stack
@@ -27,14 +27,17 @@ A [Discord](https://discord.com) clone written in TypeScript.
 - REST Endpoints
 - [React Query](https://react-query.tanstack.com/) & [Zustand](https://github.com/pmndrs/zustand) for state management
 
-----------
+---
 
-## Installation 
+## Installation
+
 ### Server
+
 1. Install PostgreSQL and create a DB
 2. Install Redis
 3. Run `yarn` to install the dependencies
 4. Copy .env.example and fill in the values
+
 - `Required`
 
         DATABASE_URL="postgresql://<username>:<password>@localhost:5432/db_name"
@@ -56,10 +59,13 @@ A [Discord](https://discord.com) clone written in TypeScript.
 5. Run `yarn start` to run the server
 
 ### Web
+
 1. Run `yarn` to install the dependencies
 2. Copy .env.example and fill in the values
 3. Run `yarn start` to start the client
 4. Go to `localhost:3000`
 
 ## Endpoints
+
 Once the server is running go to `localhost:4000/api` to see all the HTTP endpoints
+and `localhost:4000/ws` for all the websocket events.

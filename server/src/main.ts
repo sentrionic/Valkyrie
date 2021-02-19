@@ -10,12 +10,14 @@ import { COOKIE_NAME } from './utils/constants';
 import { sessionMiddleware } from './config/sessionmiddleware';
 import { RedisIoAdapter } from './config/redis.adapter';
 import { redis } from './config/redis';
+import { join } from 'path';
 
 config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useWebSocketAdapter(new RedisIoAdapter(app));
+  app.useStaticAssets(join(__dirname, '..', 'static'), { prefix: '/ws' });
   app.setGlobalPrefix('api');
   app.set('trust proxy', 1);
   app.use(helmet());
@@ -28,7 +30,7 @@ async function bootstrap() {
   app.use(
     rateLimit({
       store: new RedisStore({
-        client: redis
+        client: redis,
       }),
       windowMs: 60 * 1000, // 1 minutes
       max: 100, // limit each IP to 100 requests per windowMs

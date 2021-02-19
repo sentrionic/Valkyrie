@@ -1,0 +1,399 @@
+asyncapi: '2.0.0'
+info:
+  title: Valkyrie Websockets
+  version: '1.0.0'
+  description: This service is in charge of processing websocket events. Uses Express Sessions to authenticate. Connections are only possible using Version 2 of the socket.io client.
+
+servers:
+  production:
+    url: http://localhost:4000/ws
+    protocol: socket.io
+    protocolVersion: 'V2'
+
+channels:
+  /:
+    publish:
+      message:
+        oneOf:
+          - $ref: '#/components/messages/toggleOnline'
+          - $ref: '#/components/messages/toggleOffline'
+          - $ref: '#/components/messages/joinUser'
+          - $ref: '#/components/messages/joinChannel'
+          - $ref: '#/components/messages/joinGuild'
+          - $ref: '#/components/messages/startTyping'
+          - $ref: '#/components/messages/stopTyping'
+          - $ref: '#/components/messages/getRequestCount'
+          - $ref: '#/components/messages/leaveGuild'
+          - $ref: '#/components/messages/leaveRoom'
+    subscribe:
+      message:
+        oneOf:
+          - $ref: '#/components/messages/addChannel'
+          - $ref: '#/components/messages/deleteChannel'
+          - $ref: '#/components/messages/editChannel'
+          - $ref: '#/components/messages/editGuild'
+          - $ref: '#/components/messages/deleteGuild'
+          - $ref: '#/components/messages/addMember'
+          - $ref: '#/components/messages/removeMember'
+          - $ref: '#/components/messages/new_message'
+          - $ref: '#/components/messages/edit_message'
+          - $ref: '#/components/messages/delete_message'
+          - $ref: '#/components/messages/push_to_top'
+          - $ref: '#/components/messages/new_notification'
+          - $ref: '#/components/messages/toggle_online'
+          - $ref: '#/components/messages/toggle_offline'
+          - $ref: '#/components/messages/addToTyping'
+          - $ref: '#/components/messages/removeFromTyping'
+          - $ref: '#/components/messages/send_request'
+          - $ref: '#/components/messages/add_friend'
+          - $ref: '#/components/messages/remove_friend'
+          - $ref: '#/components/messages/requestCount'
+
+components:
+  securitySchemes:
+    token:
+      type: httpApiKey
+      name: token
+      in: query
+
+  schemas:
+    attachment:
+      type: object
+      properties:
+        fallback:
+          type: string
+        color:
+          type: string
+        pretext:
+          type: string
+        author_name:
+          type: string
+        author_link:
+          type: string
+          format: uri
+        author_icon:
+          type: string
+          format: uri
+        title:
+          type: string
+        title_link:
+          type: string
+          format: uri
+        text:
+          type: string
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              value:
+                type: string
+              short:
+                type: boolean
+        image_url:
+          type: string
+          format: uri
+        thumb_url:
+          type: string
+          format: uri
+        footer:
+          type: string
+        footer_icon:
+          type: string
+          format: uri
+        ts:
+          type: number
+
+  messages:
+    addChannel:
+      summary: 'A channel was created.'
+      payload:
+        type: object
+        description: 'see ChannelResponse'
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          isPublic:
+            type: boolean
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+          hasNotification:
+            type: boolean
+
+    deleteChannel:
+      summary: 'A channel was deleted.'
+      payload:
+        type: string
+        properties:
+          id:
+            type: string
+
+    editChannel:
+      summary: 'A channel was edited'
+      payload:
+        type: object
+        description: 'see ChannelResponse'
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          isPublic:
+            type: boolean
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+          hasNotification:
+            type: boolean
+
+    editGuild:
+      summary: 'A guild was edited'
+      payload:
+        type: object
+        description: 'see Guild'
+        properties:
+          name:
+            type: string
+          icon:
+            type: string
+
+    deleteGuild:
+      summary: 'A guild was deleted.'
+      payload:
+        type: string
+        properties:
+          id:
+            type: string
+
+    addMember:
+      summary: 'A member got added to the guild.'
+      payload:
+        type: object
+        description: 'see MemberResponse'
+        properties:
+          id:
+            type: string
+          username:
+            type: string
+          image:
+            type: string
+          isOnline:
+            type: string
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+          isFriend:
+            type: string
+
+    removeMember:
+      summary: 'A member was removed from the guild.'
+      payload:
+        type: string
+        properties:
+          id:
+            type: string
+
+    new_message:
+      summary: 'A new message was sent to a channel.'
+      payload:
+        type: object
+        properties:
+          user:
+            type: object
+            description: see MemberResponse
+          id:
+            type: string
+          text:
+            type: string
+          url:
+            type: string
+          filetype:
+            type: string
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+
+    edit_message:
+      summary: 'A message in this channel was edited.'
+      payload:
+        type: object
+        properties:
+          user:
+            type: object
+            description: see MemberResponse
+          id:
+            type: string
+          text:
+            type: string
+          url:
+            type: string
+          filetype:
+            type: string
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+
+    delete_message:
+      summary: 'A message in this channel was deleted.'
+      payload:
+        type: string
+        properties:
+          id:
+            type: string
+
+    push_to_top:
+      summary: 'A notification that pushes the DM to the top of the list.'
+      payload:
+        type: string
+        properties:
+          dmChannelId:
+            type: string
+
+    toggle_online:
+      summary: 'A notification that the user went online. Gets emited to guild members that currently view the guild and friends of the user.'
+      payload:
+        type: string
+        properties:
+          userId:
+            type: string
+
+    toggle_offline:
+      summary: 'A notification that the user went offline. Gets emited to guild members that currently view the guild and friends of the user.'
+      payload:
+        type: string
+        properties:
+          userId:
+            type: string
+
+    new_notification:
+      summary: 'A new message notification, published to all guild members. Additionally sends the channelId to members that currently view the guild.'
+      payload:
+        type: string
+        properties:
+          channelId:
+            type: string
+          guildId:
+            type: string
+
+    addToTyping:
+      summary: 'Emits the username to the channel the user is currently typing in.'
+      payload:
+        type: string
+        properties:
+          username:
+            type: string
+
+    removeFromTyping:
+      summary: 'Emits the username to the channel the user was typing in.'
+      payload:
+        type: string
+        properties:
+          username:
+            type: string
+
+    send_request:
+      summary: 'Emits a notification that a friends request was received'
+
+    add_friend:
+      summary: 'Adds the added person to the friends list.'
+      payload:
+        type: object
+        description: 'see MemberResponse'
+        properties:
+          member:
+            type: object
+
+    remove_friend:
+      summary: 'Removes the former friend from the friends list.'
+      payload:
+        type: string
+        properties:
+          id:
+            type: string
+
+    requestCount:
+      summary: 'The amount of friends requests the user has'
+      payload:
+        type: number
+        properties:
+          count:
+            type: number
+
+    toggleOnline:
+      summary: 'Changes the users status to online and broadcasts it to all friends and guilds they are part of.'
+
+    toggleOffline:
+      summary: 'Changes the users status to offline and broadcasts it to all friends and guilds they are part of. Leaves all connected rooms.'
+
+    joinUser:
+      summary: 'Joins the users room. This room receives guild, DM & friend notifications'
+      payload:
+        type: string
+        properties:
+          userId:
+            type: string
+
+    joinChannel:
+      summary: 'Joins the channels room. Checks if the user is a member of said channel. Receives message & typing events.'
+      payload:
+        type: string
+        properties:
+          channelId:
+            type: string
+
+    joinGuild:
+      summary: 'Joins the guilds room. Requires member access. Receives guild member & channel events.'
+      payload:
+        type: string
+        properties:
+          guildId:
+            type: string
+
+    startTyping:
+      summary: 'Emits the username to the channel they are typing in.'
+      payload:
+        type: string
+        properties:
+          channelId:
+            type: string
+          username:
+            type: string
+
+    stopTyping:
+      summary: 'Removes the username from the channel they were typing in.'
+      payload:
+        type: string
+        properties:
+          channelId:
+            type: string
+          username:
+            type: string
+
+    getRequestCount:
+      summary: 'Gets the amount of friend requests the user has.'
+
+    leaveGuild:
+      summary: 'Leaves the guild room.'
+      payload:
+        type: string
+        properties:
+          guildId:
+            type: string
+
+    leaveRoom:
+      summary: 'Leaves the room.'
+      payload:
+        type: string
+        properties:
+          roomId:
+            type: string
