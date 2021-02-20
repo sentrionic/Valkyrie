@@ -22,6 +22,7 @@ import { GuildInput } from '../models/input/GuildInput';
 import { GuildMemberInput } from "../models/input/GuildMemberInput";
 import { deleteFile, uploadAvatarToS3 } from '../utils/fileUtils';
 import { BufferFile } from '../types/BufferFile';
+import { BanEntity } from '../entities/ban.entity';
 
 @Injectable()
 export class GuildService {
@@ -30,6 +31,7 @@ export class GuildService {
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
+    @InjectRepository(BanEntity) private banRepository: Repository<BanEntity>,
     private socketService: SocketService,
   ) {
   }
@@ -149,14 +151,16 @@ export class GuildService {
     const guildId = await redis.get(INVITE_LINK_PREFIX + token);
 
     if (!guildId) {
-      throw new NotFoundException();
+      throw new NotFoundException('Invalid Link');
     }
 
     const guild = await this.guildRepository.findOne(guildId);
 
     if (!guild) {
-      throw new NotFoundException();
+      throw new NotFoundException('Invalid Link or the server got deleted');
     }
+
+    await this.checkIfBanned(userId, guildId);
 
     // Check if already member
     const isMember = await this.memberRepository.findOne({ where: { userId, guildId } });
@@ -239,6 +243,9 @@ export class GuildService {
     await manager.query('delete from pcmembers where "channelId" = (select id from channels where "guildId" = $1);',
       [guildId]
     );
+    await manager.query('delete from bans where "guildId" = $1;',
+      [guildId]
+    );
 
     await this.guildRepository.remove(guild);
     this.socketService.deleteGuild(memberIds[0], guildId);
@@ -284,16 +291,120 @@ export class GuildService {
     };
   }
 
+  async kickMember(userId: string, guildId: string, memberId: string): Promise<boolean> {
+
+    if (userId === memberId) {
+      throw new BadRequestException('You cannot kick yourself');
+    }
+
+    await this.checkGuildOwnership(userId, guildId);
+
+    const member = await this.memberRepository.findOne({ where: { guildId, userId: memberId } });
+
+    if (!member) {
+      throw new NotFoundException();
+    }
+
+    await this.memberRepository.delete({ id: member.id });
+    this.socketService.removeMember({ room: guildId, memberId });
+    this.socketService.removeFromGuild(memberId, guildId);
+
+    return true;
+  }
+
+  async banMember(userId: string, guildId: string, memberId: string): Promise<boolean> {
+
+    if (userId === memberId) {
+      throw new BadRequestException('You cannot ban yourself');
+    }
+
+    await this.checkGuildOwnership(userId, guildId);
+
+    const member = await this.memberRepository.findOne({ where: { guildId, userId: memberId } });
+
+    if (!member) {
+      throw new NotFoundException();
+    }
+
+    await this.memberRepository.delete({ id: member.id });
+    this.socketService.removeMember({ room: guildId, memberId: userId });
+    this.socketService.removeFromGuild(memberId, guildId);
+
+    await this.banRepository.insert({
+      id: await idGenerator(),
+      guildId,
+      userId: memberId,
+    })
+
+    return true;
+  }
+
+  async unbanUser(userId: string, guildId: string, memberId: string): Promise<boolean> {
+
+    await this.checkGuildOwnership(userId, guildId);
+
+    await this.banRepository.delete({
+      userId: memberId,
+      guildId
+    });
+
+    return true;
+  }
+
+  async getBannedUsers(userId: string, guildId: string): Promise<MemberResponse[]> {
+
+    await this.checkGuildOwnership(userId, guildId);
+
+    const manager = getManager();
+    return await manager.query(
+      `select u.id, u.username, u.image
+       from bans b join users u on b."userId" = u.id
+       where b."guildId" = $1`,
+      [guildId],
+    );
+  }
+
+  private async checkGuildOwnership(userId: string, guildId: string): Promise<void> {
+    const guild = await this.guildRepository.findOne(guildId);
+
+    if (!guild) {
+      throw new NotFoundException();
+    }
+
+    if (guild.ownerId !== userId) {
+      throw new UnauthorizedException();
+    }
+  }
+
   /**
    * Check if the user is in less than 100 servers.
    * Throws a BadRequestException if that is not the case.
    * @param userId
    */
-  async checkGuildLimit(userId: string) {
+  async checkGuildLimit(userId: string): Promise<void> {
     const count = await this.memberRepository.count({ userId });
 
     if (count >= 100) {
       throw new BadRequestException('Server Limit is 100');
+    }
+  }
+
+  /**
+   * Check if the user is banned.
+   * Throws a BadRequestException if that is the case.
+   * @param userId
+   * @param guildId
+   */
+  async checkIfBanned(userId: string, guildId: string): Promise<void> {
+    const isBanned = await this.banRepository.findOne({
+      where: {
+        userId,
+        guildId
+      }
+    });
+
+    if (isBanned) {
+      throw new BadRequestException('You are banned from this server');
     }
   }
 

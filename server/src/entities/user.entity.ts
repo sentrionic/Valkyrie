@@ -6,6 +6,7 @@ import { Member } from './member.entity';
 import { Channel } from './channel.entity';
 import { MemberResponse } from '../models/response/MemberResponse';
 import { PCMember } from './pcmember.entity';
+import { BanEntity } from './ban.entity';
 
 @Entity('users')
 export class User extends AbstractEntity {
@@ -53,6 +54,9 @@ export class User extends AbstractEntity {
   })
   @Exclude()
   requests!: User[];
+
+  @OneToMany(() => BanEntity, (bans) => bans.user)
+  bans!: BanEntity[];
 
   toJSON(): UserResponse {
     return <UserResponse>classToPlain(this, { groups: ['user'] });

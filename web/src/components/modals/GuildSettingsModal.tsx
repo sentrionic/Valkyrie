@@ -4,6 +4,7 @@ import {
   Button,
   Divider,
   Flex,
+  IconButton,
   LightMode,
   Modal,
   ModalBody,
@@ -19,12 +20,17 @@ import {
 import { Form, Formik } from 'formik';
 import React, { useRef, useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { IoPersonRemove } from 'react-icons/io5';
+import { ImHammer2 } from 'react-icons/im';
+import { useQuery, useQueryClient } from 'react-query';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
-import { deleteGuild, editGuild } from '../../lib/api/handler/guilds';
+import { deleteGuild, editGuild, getBanList, unbanMember } from '../../lib/api/handler/guilds';
 import { CropImageModal } from './CropImageModal';
+import { Member } from '../../lib/api/models';
+import { channelScrollbarCss } from '../layouts/guild/css/ChannelScrollerCSS';
 
 interface IProps {
   guildId: string;
@@ -34,7 +40,8 @@ interface IProps {
 
 enum SettingsScreen {
   START,
-  CONFIRM
+  CONFIRM,
+  BANLIST
 }
 
 export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
@@ -81,8 +88,8 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
           onSubmit={async (values, { setErrors, resetForm }) => {
             try {
               const formData = new FormData();
-              formData.append("name", values.name);
-              formData.append("image", croppedImage ?? imageUrl);
+              formData.append('name', values.name);
+              formData.append('image', croppedImage ?? imageUrl);
               const { data } = await editGuild(guildId, formData);
               if (data) {
                 resetForm();
@@ -111,7 +118,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                         size='xl'
                         name={guild?.name[0]}
                         bg={'brandGray.darker'}
-                        color={"#fff"}
+                        color={'#fff'}
                         src={imageUrl || ''}
                         _hover={{ cursor: 'pointer', opacity: 0.5 }}
                         onClick={() => inputFile.current.click()}
@@ -151,18 +158,27 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
 
                 <Divider my={'4'} />
 
-                <LightMode>
+                <Flex align={"center"} justify={'space-between'}>
+                  <LightMode>
+                    <Button
+                      onClick={() => setScreen(SettingsScreen.CONFIRM)}
+                      colorScheme={'red'}
+                      variant='ghost'
+                      fontSize={'14px'}
+                      textColor={'menuRed'}
+                      rightIcon={<FaRegTrashAlt />}
+                    >
+                      Delete Server
+                    </Button>
+                  </LightMode>
                   <Button
-                    onClick={() => setScreen(SettingsScreen.CONFIRM)}
-                    colorScheme={'red'}
-                    variant='ghost'
+                    onClick={() => setScreen(SettingsScreen.BANLIST)}
                     fontSize={'14px'}
-                    rightIcon={<FaRegTrashAlt />}
+                    rightIcon={<ImHammer2 />}
                   >
-                    Delete Server
+                    Bans
                   </Button>
-                </LightMode>
-
+                </Flex>
               </ModalBody>
 
               <ModalFooter bg='brandGray.dark'>
@@ -200,6 +216,12 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
         goBack={goBack}
         submitClose={submitClose}
         name={guild.name}
+        guildId={guildId}
+      />
+      }
+      {screen === SettingsScreen.BANLIST &&
+      <BanListModal
+        goBack={goBack}
         guildId={guildId}
       />
       }
@@ -241,6 +263,77 @@ const DeleteGuildModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, g
             Delete Server
           </Button>
         </LightMode>
+      </ModalFooter>
+    </ModalContent>
+  );
+};
+
+interface IBanScreenProps {
+  goBack: () => void;
+  guildId: string
+}
+
+const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
+
+  const key = `bans-${guildId}`;
+  const { data } = useQuery(key, () => getBanList(guildId).then(response => response.data));
+  const cache = useQueryClient();
+
+  const unbanUser = async (id: string) => {
+    const { data } = await unbanMember(guildId, id);
+    if (data) {
+      cache.setQueryData<Member[]>(key, (d) => {
+        return d!.filter(b => b.id !== id);
+      });
+    }
+  }
+
+  return (
+    <ModalContent bg='brandGray.light' maxH={'500px'}>
+      <ModalHeader fontWeight='bold' pb='0'>
+        {data?.length} Bans
+      </ModalHeader>
+      <ModalBody
+        pb={3}
+        overflowY={'auto'}
+        css={channelScrollbarCss}
+      >
+        <Text mb={2}>Bans are by account. Click on the icon to unban.</Text>
+
+        {data?.map(m =>
+          <Flex
+            p={'3'}
+            _hover={{
+              bg: 'brandGray.dark',
+              borderRadius: '5px'
+            }}
+            align='center'
+            justify='space-between'
+          >
+            <Flex align='center' w={'full'}>
+              <Avatar size='sm' src={m.image} />
+              <Text ml='2'>{m.username}</Text>
+            </Flex>
+            <IconButton
+              icon={<IoPersonRemove />}
+              borderRadius='50%'
+              aria-label='unban user'
+              onClick={async (e) => {
+                e.preventDefault();
+                await unbanUser(m.id);
+              }}
+            />
+          </Flex>
+        )}
+        {data?.length === 0 &&
+          <Text>No bans yet.</Text>
+        }
+      </ModalBody>
+
+      <ModalFooter bg='brandGray.dark'>
+        <Button mr={6} variant='link' onClick={goBack} fontSize={'14px'}>
+          Back
+        </Button>
       </ModalFooter>
     </ModalContent>
   );

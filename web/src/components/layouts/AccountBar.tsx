@@ -15,7 +15,7 @@ export const AccountBar: React.FC = () => {
       pos="absolute"
       bottom="0"
       w="240px"
-      bg="#292b2f"
+      bg="accountBar"
       align="center"
       justify="space-between"
     >

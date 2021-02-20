@@ -31,7 +31,11 @@ const colors = {
   brandGreen: '#43b581',
   labelGray: '#72767d',
   menuRed: '#f04747',
-  brandBorder: '#1A202C'
+  brandBorder: '#1A202C',
+  accountBar: '#292b2f',
+  memberList: '#2f3136',
+  iconColor: '#b9bbbe',
+  messageInput: '#40444b'
 }
 
 const fonts = {
