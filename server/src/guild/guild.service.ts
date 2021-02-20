@@ -151,14 +151,16 @@ export class GuildService {
     const guildId = await redis.get(INVITE_LINK_PREFIX + token);
 
     if (!guildId) {
-      throw new NotFoundException();
+      throw new NotFoundException('Invalid Link');
     }
 
     const guild = await this.guildRepository.findOne(guildId);
 
     if (!guild) {
-      throw new NotFoundException();
+      throw new NotFoundException('Invalid Link or the server got deleted');
     }
+
+    await this.checkIfBanned(userId, guildId);
 
     // Check if already member
     const isMember = await this.memberRepository.findOne({ where: { userId, guildId } });
@@ -304,7 +306,8 @@ export class GuildService {
     }
 
     await this.memberRepository.delete({ id: member.id });
-    this.socketService.removeMember({ room: guildId, memberId: userId });
+    this.socketService.removeMember({ room: guildId, memberId });
+    this.socketService.removeFromGuild(memberId, guildId);
 
     return true;
   }
@@ -325,6 +328,7 @@ export class GuildService {
 
     await this.memberRepository.delete({ id: member.id });
     this.socketService.removeMember({ room: guildId, memberId: userId });
+    this.socketService.removeFromGuild(memberId, guildId);
 
     await this.banRepository.insert({
       id: await idGenerator(),
@@ -377,11 +381,30 @@ export class GuildService {
    * Throws a BadRequestException if that is not the case.
    * @param userId
    */
-  async checkGuildLimit(userId: string) {
+  async checkGuildLimit(userId: string): Promise<void> {
     const count = await this.memberRepository.count({ userId });
 
     if (count >= 100) {
       throw new BadRequestException('Server Limit is 100');
+    }
+  }
+
+  /**
+   * Check if the user is banned.
+   * Throws a BadRequestException if that is the case.
+   * @param userId
+   * @param guildId
+   */
+  async checkIfBanned(userId: string, guildId: string): Promise<void> {
+    const isBanned = await this.banRepository.findOne({
+      where: {
+        userId,
+        guildId
+      }
+    });
+
+    if (isBanned) {
+      throw new BadRequestException('You are banned from this server');
     }
   }
 

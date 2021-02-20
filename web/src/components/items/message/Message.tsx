@@ -155,7 +155,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
       </>
       }
       {!isAuthor &&
-      <MemberContextMenu member={message.user} isOwner />
+      <MemberContextMenu member={message.user} isOwner={isOwner} />
       }
     </>
   );

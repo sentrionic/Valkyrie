@@ -37,6 +37,16 @@ export function useGuildSocket() {
       });
     });
 
+    socket.on('remove_from_guild', (guildId: string) => {
+      cache.setQueryData<Guild[]>(gKey, (d) => {
+        const isActive = location.pathname.includes(guildId);
+        if (isActive) {
+          history.replace('/channels/me');
+        }
+        return d!.filter(g => g.id !== guildId);
+      });
+    });
+
     socket.on('new_notification', (id: string) => {
       if (!location.pathname.includes(id)) {
         cache.setQueryData<Guild[]>(gKey, (d) => {

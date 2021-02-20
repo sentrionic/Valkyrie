@@ -132,8 +132,9 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 history.push(`/channels/${data.id}/${data.default_channel_id}`);
               }
             } catch (err) {
-              if (err?.response?.status === 400) {
-                setErrors({ link: 'The server limit is 100' });
+              const status = err?.response?.status;
+              if (status === 400 || status === 404) {
+                setErrors({ link: err?.response?.data?.message });
               }
               if (err?.response?.data?.errors) {
                 const errors = err?.response?.data?.errors;

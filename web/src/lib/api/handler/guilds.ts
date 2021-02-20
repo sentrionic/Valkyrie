@@ -46,7 +46,7 @@ export const kickMember = (guildId: string, memberId: string): Promise<AxiosResp
   request.post(`guilds/${guildId}/kick`, { memberId });
 
 export const banMember = (guildId: string, memberId: string): Promise<AxiosResponse<boolean>> =>
-  request.post(`guilds/${guildId}/ban`, { memberId });
+  request.post(`guilds/${guildId}/bans`, { memberId });
 
 export const unbanMember = (guildId: string, memberId: string): Promise<AxiosResponse<boolean>> =>
-  request.delete(`guilds/${guildId}/ban`, { data: { memberId } });
+  request.delete(`guilds/${guildId}/bans`, { data: { memberId } });

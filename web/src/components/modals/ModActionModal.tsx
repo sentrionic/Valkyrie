@@ -10,22 +10,25 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React from 'react';
-import { Member } from '../../lib/api/models';
-import { removeFriend } from '../../lib/api/handler/account';
-import { fKey } from '../../lib/utils/querykeys';
 import { useQueryClient } from 'react-query';
-import { useGetFriend } from '../../lib/utils/hooks/useGetFriend';
+import { useParams } from "react-router-dom";
+import { Member } from '../../lib/api/models';
+import { RouterProps } from "../../routes/Routes";
+import { mKey } from "../../lib/utils/querykeys";
+import { banMember, kickMember } from "../../lib/api/handler/guilds";
 
 interface IProps {
-  id: string;
+  member: Member;
   isOpen: boolean;
+  isBan: boolean;
   onClose: () => void;
 }
 
-export const ModActionModal: React.FC<IProps> = ({ id, isOpen, onClose }) => {
+export const ModActionModal: React.FC<IProps> = ({ member, isOpen, onClose, isBan }) => {
 
   const cache = useQueryClient();
-  const user = useGetFriend(id);
+  const action = isBan ? 'Ban ' : 'Kick ';
+  const { guildId } = useParams<RouterProps>();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -33,12 +36,13 @@ export const ModActionModal: React.FC<IProps> = ({ id, isOpen, onClose }) => {
 
       <ModalContent bg='brandGray.light'>
 
-        <ModalHeader textTransform={"uppercase"} fontWeight='bold' mb={0} pb={0}>
-          Remove '{user?.username}'
+        <ModalHeader textTransform={"uppercase"} fontWeight='bold' fontSize={'14px'} mb={0} pb={0}>
+          {action}'{member.username}'
         </ModalHeader>
         <ModalBody>
           <Text mb={"4"}>
-            Are you sure you want to permanently remove <b>{user?.username}</b> from your friends?
+            Are you sure you want to {action.toLocaleLowerCase()} @{member.username}?
+            {!isBan && ' They will be able to rejoin again with a new invite.'}
           </Text>
         </ModalBody>
 
@@ -52,15 +56,16 @@ export const ModActionModal: React.FC<IProps> = ({ id, isOpen, onClose }) => {
               fontSize={"14px"}
               onClick={async () => {
                 onClose();
-                const { data } = await removeFriend(id);
+                const { data } = isBan ? await banMember(guildId, member.id) : await kickMember(guildId, member.id);
                 if (data) {
-                  cache.setQueryData<Member[]>(fKey, (d) => {
-                    return d!.filter(f => f.id !== id);
+                  cache.setQueryData<Member[]>(mKey(guildId), (d) => {
+                    if (d !== undefined) return d!.filter(f => f.id !== member.id);
+                    return d!;
                   });
                 }
               }}
             >
-              Remove Friend
+              {action}
             </Button>
           </LightMode>
         </ModalFooter>

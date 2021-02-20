@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Flex, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme } from 'react-contexify';
 import { useHistory } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
 import { sendFriendRequest } from '../../lib/api/handler/account';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
 import { Member } from '../../lib/api/models';
+import { ModActionModal } from "../modals/ModActionModal";
 
 interface MemberContextMenuProps {
   member: Member;
@@ -17,6 +18,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: modIsOpen, onOpen: modOnOpen, onClose: modOnClose } = useDisclosure();
+  const [isBan, setIsBan] = useState(false);
 
   const getOrCreateDM = async () => {
     const { data } = await getOrCreateDirectMessage(member.id);
@@ -47,22 +49,31 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
           </Flex>
         </Item>
         {isOwner &&
-          <>
-            <Item onClick={handleFriendClick} className={'delete-item'}>
-              <Flex align='center' justify='space-between' w='full'>
-                <Text>Kick {member.username}</Text>
-              </Flex>
+        <>
+            <Item onClick={() => {
+              setIsBan(false);
+              modOnOpen();
+            }} className={'delete-item'}>
+                <Flex align='center' justify='space-between' w='full'>
+                    <Text>Kick {member.username}</Text>
+                </Flex>
             </Item>
-            <Item onClick={handleFriendClick} className={'delete-item'}>
-              <Flex align='center' justify='space-between' w='full'>
-                <Text>Ban {member.username}</Text>
-              </Flex>
+            <Item onClick={() => {
+              setIsBan(true);
+              modOnOpen();
+            }} className={'delete-item'}>
+                <Flex align='center' justify='space-between' w='full'>
+                    <Text>Ban {member.username}</Text>
+                </Flex>
             </Item>
-          </>
+        </>
         }
       </Menu>
       {isOpen &&
-        <RemoveFriendModal id={member.id} isOpen onClose={onClose} />
+      <RemoveFriendModal id={member.id} isOpen onClose={onClose}/>
+      }
+      {modIsOpen &&
+      <ModActionModal member={member} isOpen={modIsOpen} isBan={isBan} onClose={modOnClose}/>
       }
     </>
   );

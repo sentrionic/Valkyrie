@@ -157,6 +157,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                     colorScheme={'red'}
                     variant='ghost'
                     fontSize={'14px'}
+                    textColor={'menuRed'}
                     rightIcon={<FaRegTrashAlt />}
                   >
                     Delete Server

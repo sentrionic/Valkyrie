@@ -126,11 +126,20 @@ export class SocketService {
    * @param memberIds
    * @param guildId
    */
-  async deleteGuild(memberIds: string[], guildId: string) {
+  deleteGuild(memberIds: string[], guildId: string) {
     memberIds.forEach(id => {
       const uid = id['userId'];
       this.socket.to(uid).emit('delete_guild', guildId);
     });
+  }
+
+  /**
+   * Emits an "remove_from_guild" event
+   * @param memberId
+   * @param guildId
+   */
+  removeFromGuild(memberId: string, guildId: string) {
+    this.socket.to(memberId).emit('remove_from_guild', guildId);
   }
 
   /**
