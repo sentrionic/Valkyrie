@@ -11,9 +11,10 @@ import { ModActionModal } from "../modals/ModActionModal";
 interface MemberContextMenuProps {
   member: Member;
   isOwner: boolean;
+  id: string;
 }
 
-export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, isOwner }) => {
+export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, isOwner, id }) => {
 
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,7 +38,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
 
   return (
     <>
-      <Menu id={member.id} theme={theme.dark}>
+      <Menu id={id} theme={theme.dark}>
         <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
           <Flex align='center' justify='space-between' w='full'>
             <Text>Message</Text>

@@ -21,8 +21,8 @@ import { EditMessageModal } from '../../modals/EditMessageModal';
 import { useGetCurrentGuild } from '../../../lib/utils/hooks/useGetCurrentGuild';
 import { RouterProps } from '../../../routes/Routes';
 import { MemberContextMenu } from '../../menus/MemberContextMenu';
-import '../css/ContextMenu.css';
 import { UserPopover } from '../../sections/UserPopover';
+import '../css/ContextMenu.css';
 
 interface MessageProps {
   message: MessageResponse;
@@ -41,14 +41,13 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
 
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
+  const id = `${message.user.id}-${Math.random().toString(36).substr(2, 5)}`;
 
   const { show } = useContextMenu({
     id: message.id
   });
 
-  const { show: profileShow } = useContextMenu({
-    id: message.user.id
-  });
+  const { show: profileShow } = useContextMenu({ id });
 
   const openInNewTab = (url: string) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
@@ -155,7 +154,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
       </>
       }
       {!isAuthor &&
-      <MemberContextMenu member={message.user} isOwner={isOwner} />
+      <MemberContextMenu member={message.user} isOwner={isOwner} id={id} />
       }
     </>
   );
