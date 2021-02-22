@@ -24,6 +24,9 @@ export class Guild extends AbstractEntity {
   @Column('varchar', { nullable: true })
   icon?: string;
 
+  @Column("simple-array", { default: [] })
+  inviteLinks: string[];
+
   toJson(): GuildResponse {
     return <GuildResponse>classToPlain(this);
   }

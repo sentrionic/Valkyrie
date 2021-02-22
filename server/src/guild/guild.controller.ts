@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Post,
-  Put, UploadedFile,
+  Put, Query, UploadedFile,
   UseGuards,
   UseInterceptors,
   ValidationPipe
@@ -85,8 +85,25 @@ export class GuildController {
   @ApiCookieAuth()
   @ApiBody({ type: String, description: "The guildId" })
   @ApiOkResponse({ type: String, description: "The invite link" })
-  async generateTeamInvite(@Param('guildId') id: string): Promise<string> {
-    return await this.guildService.generateInviteLink(id);
+  async generateTeamInvite(
+    @Param('guildId') id: string,
+    @Query('isPermanent') isPermanent?: boolean
+  ): Promise<string> {
+    return await this.guildService.generateInviteLink(id, isPermanent);
+  }
+
+  @Delete("/:guildId/invite")
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Delete all permanent invite links' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiCookieAuth()
+  @ApiBody({ type: String, description: "The guildId" })
+  @ApiOkResponse({ type: Boolean })
+  async deleteAllInvites(
+    @Param('guildId') id: string,
+    @GetUser() userId: string,
+  ): Promise<boolean> {
+    return await this.guildService.invalidateGuildInvites(id, userId);
   }
 
   @Post("/join")

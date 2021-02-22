@@ -133,10 +133,41 @@ export class GuildService {
     }
   }
 
-  async generateInviteLink(guildId: string): Promise<string> {
+  async generateInviteLink(guildId: string, isPermanent: boolean = false): Promise<string> {
     const token = nanoid(8);
-    await redis.set(INVITE_LINK_PREFIX + token, guildId, 'ex', 60 * 60 * 24); // 1 day expiration
+    const json = JSON.stringify({
+      guildId,
+      isPermanent
+    });
+    if (isPermanent) {
+      await redis.set(INVITE_LINK_PREFIX + token, json);
+    } else {
+      await redis.set(INVITE_LINK_PREFIX + token, json, 'ex', 60 * 60 * 24); // 1 day expiration
+    }
+
+    if (isPermanent) {
+      const guild = await this.guildRepository.findOne(guildId);
+      if (!guild) throw new NotFoundException();
+      guild.inviteLinks.push(token);
+      await guild.save();
+    }
+
     return `${process.env.CORS_ORIGIN}/${token}`;
+  }
+
+  async invalidateGuildInvites(guildId: string, userId: string): Promise<boolean> {
+    const guild = await this.guildRepository.findOne(guildId);
+    if (!guild) throw new NotFoundException();
+    if (guild.ownerId !== userId) throw new NotFoundException();
+
+    guild.inviteLinks.forEach(token => {
+      redis.del(INVITE_LINK_PREFIX + token);
+    });
+
+    guild.inviteLinks = [];
+    await guild.save();
+
+    return true;
   }
 
   async joinGuild(token: string, userId: string): Promise<GuildResponse> {
@@ -148,11 +179,13 @@ export class GuildService {
       token = token.substring(token.lastIndexOf('/') + 1);
     }
 
-    const guildId = await redis.get(INVITE_LINK_PREFIX + token);
+    const args = await redis.get(INVITE_LINK_PREFIX + token);
 
-    if (!guildId) {
+    if (!args) {
       throw new NotFoundException('Invalid Link');
     }
+
+    const { guildId, isPermanent } = JSON.parse(args);
 
     const guild = await this.guildRepository.findOne(guildId);
 
@@ -166,12 +199,12 @@ export class GuildService {
     const isMember = await this.memberRepository.findOne({ where: { userId, guildId } });
 
     if (isMember) {
-      throw new BadRequestException();
+      throw new BadRequestException('You are already a member of this guild');
     }
 
     await this.memberRepository.insert({ id: await idGenerator(), userId, guildId });
 
-    await redis.del(INVITE_LINK_PREFIX + token);
+    if (!isPermanent) await redis.del(INVITE_LINK_PREFIX + token);
 
     const defaultChannel = await this.channelRepository.findOneOrFail({
       where: { guild },

@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Input,
   InputGroup,
   InputRightElement,
@@ -28,17 +29,18 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
   const { guildId } = useParams<RouterProps>();
   const [inviteLink, setInviteLink] = useState('');
   const { hasCopied, onCopy } = useClipboard(inviteLink);
+  const [isPermanent, setPermanent] = useState(false);
 
   useEffect(() => {
       if (isOpen) {
         const fetchLink = async () => {
-          const { data } = await getInviteLink(guildId);
+          const { data } = await getInviteLink(guildId, isPermanent);
           if (data) setInviteLink(data);
         };
         fetchLink();
       }
     },
-    [isOpen, setInviteLink, guildId]
+    [isOpen, setInviteLink, guildId, isPermanent]
   );
 
   return (
@@ -52,6 +54,9 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
         <ModalBody>
 
           <Text mb='4'>Share this link with others to grant access to this server</Text>
+
+          <Checkbox onChange={(e) => setPermanent(e.target.checked)} mb={4}>Make it unlimited / Never reset</Checkbox>
+
           <InputGroup>
             <Input
               bg='brandGray.dark'
@@ -78,7 +83,9 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
             </InputRightElement>
           </InputGroup>
 
-          <Text my={'2'} fontSize={'12px'}>Your invite link expires in 1 day</Text>
+          <Text my={'2'} fontSize={'12px'}>
+            {isPermanent ? 'Your invite link won\'t expire' : 'Your invite link expires in 1 day and can only be used once' }
+          </Text>
 
         </ModalBody>
 

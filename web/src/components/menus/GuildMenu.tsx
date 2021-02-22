@@ -14,6 +14,9 @@ import { userStore } from '../../lib/stores/userStore';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSettingsModal } from '../modals/GuildSettingsModal';
 import { EditMemberModal } from "../modals/EditMemberModal";
+import { Guild, Member } from '../../lib/api/models';
+import { gKey, mKey } from '../../lib/utils/querykeys';
+import { useQueryClient } from 'react-query';
 
 interface GuildMenuProps {
   channelOpen: () => void;
@@ -25,6 +28,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
   const { guildId } = useParams<RouterProps>();
   const guild = useGetCurrentGuild(guildId);
   const history = useHistory();
+  const cache = useQueryClient();
 
   const user = userStore(state => state.current);
   const isOwner = guild?.ownerId === user?.id;
@@ -35,6 +39,9 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
   const handleLeave = async () => {
     const { data } = await leaveGuild(guildId);
     if (data) {
+      cache.setQueryData<Guild[]>(gKey, (d) => {
+        return d!.filter(g => g.id !== guild?.id);
+      });
       history.replace('/channels/me');
     }
   };

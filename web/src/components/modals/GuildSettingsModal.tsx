@@ -20,14 +20,15 @@ import {
 import { Form, Formik } from 'formik';
 import React, { useRef, useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { IoPersonRemove } from 'react-icons/io5';
+import { IoPersonRemove, IoCheckmarkCircle } from 'react-icons/io5';
 import { ImHammer2 } from 'react-icons/im';
+import { BiUnlink } from 'react-icons/bi';
 import { useQuery, useQueryClient } from 'react-query';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
-import { deleteGuild, editGuild, getBanList, unbanMember } from '../../lib/api/handler/guilds';
+import { deleteGuild, editGuild, getBanList, invalidateInviteLinks, unbanMember } from '../../lib/api/handler/guilds';
 import { CropImageModal } from './CropImageModal';
 import { Member } from '../../lib/api/models';
 import { channelScrollbarCss } from '../layouts/guild/css/ChannelScrollerCSS';
@@ -49,6 +50,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
   const guild = useGetCurrentGuild(guildId);
 
   const [screen, setScreen] = useState(SettingsScreen.START);
+  const [isReset, setIsReset] = useState(false);
 
   const goBack = () => setScreen(SettingsScreen.START);
   const submitClose = () => {
@@ -74,6 +76,14 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
   };
 
   if (!guild) return null;
+
+  const invalidateInvites = async () => {
+    const { data } = await invalidateInviteLinks(guild!.id);
+    if (data) {
+      setIsReset(true);
+    }
+  }
+
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -158,7 +168,28 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
 
                 <Divider my={'4'} />
 
-                <Flex align={"center"} justify={'space-between'}>
+                <Text fontWeight={"semibold"} mb={2}>
+                  Additional Configuration
+                </Text>
+
+                <Flex align={"center"} justify={'space-between'} mb={"2"}>
+                  <Button
+                    onClick={invalidateInvites}
+                    fontSize={'14px'}
+                    rightIcon={isReset ? <IoCheckmarkCircle /> : <BiUnlink />}
+                    colorScheme={isReset ? 'green' : 'gray'}
+                  >
+                    Invalidate Links
+                  </Button>
+                  <Button
+                    onClick={() => setScreen(SettingsScreen.BANLIST)}
+                    fontSize={'14px'}
+                    rightIcon={<ImHammer2 />}
+                  >
+                    Bans
+                  </Button>
+                </Flex>
+                <Flex align={"center"} justify={'space-between'} mb={"2"}>
                   <LightMode>
                     <Button
                       onClick={() => setScreen(SettingsScreen.CONFIRM)}
@@ -171,13 +202,6 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                       Delete Server
                     </Button>
                   </LightMode>
-                  <Button
-                    onClick={() => setScreen(SettingsScreen.BANLIST)}
-                    fontSize={'14px'}
-                    rightIcon={<ImHammer2 />}
-                  >
-                    Bans
-                  </Button>
                 </Flex>
               </ModalBody>
 
