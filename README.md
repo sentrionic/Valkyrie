@@ -36,7 +36,7 @@ A [Discord](https://discord.com) clone written in TypeScript.
 1. Install PostgreSQL and create a DB
 2. Install Redis
 3. Run `yarn` to install the dependencies
-4. Copy .env.example and fill in the values
+4. Rename `.env.example` to `.env` and fill in the values
 
 - `Required`
 
@@ -44,14 +44,17 @@ A [Discord](https://discord.com) clone written in TypeScript.
         REDIS_URL=localhost:6379
         CORS_ORIGIN=http://localhost:3000
         SECRET=SUPERSECRET
-        REDIS_URL_PUB_SUB=localhost
+        REDIS_HOST=192.168.2.123
+        REDIS_PORT=6379
+        REDIS_PASSWORD=password
 
-- `Optional: Not needed to run the app, but you wont be able to use file upload or send emails`
+Redis Info is needed twice because the RedisCache Module can't use the `REDIS_URL` directly. 
+
+- `Optional: Not needed to run the app, but you wont be able to use file upload or send emails.`
 
         AWS_ACCESS_KEY=ACCESS_KEY
         AWS_SECRET_ACCESS_KEY=SECRET_ACCESS_KEY
         AWS_STORAGE_BUCKET_NAME=STORAGE_BUCKET_NAME
-        AWS_S3_CUSTOM_DOMAIN=S3_CUSTOM_DOMAIN
         AWS_S3_REGION=S3_REGION
         GMAIL_USER=GMAIL_USER
         GMAIL_PASSWORD=GMAIL_PASSWORD

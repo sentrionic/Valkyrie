@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { PRODUCTION } from '../utils/constants';
 
 @Injectable()
 export class DatabaseConnectionService implements TypeOrmOptionsFactory {
@@ -8,10 +9,11 @@ export class DatabaseConnectionService implements TypeOrmOptionsFactory {
       name: 'default',
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      synchronize: true,
+      synchronize: !PRODUCTION,
       dropSchema: false,
       logging: true,
       entities: ['dist/**/*.entity.js'],
+      migrations: ["dist/migrations/*.js"]
     };
   }
 }
