@@ -17,6 +17,7 @@ import { useParams } from 'react-router-dom';
 import { sendMessage } from '../../../../lib/api/handler/messages';
 import { FileSchema } from '../../../../lib/utils/validation/message.schema';
 import { RouterProps } from '../../../../routes/Routes';
+import { StyledTooltip } from '../../../sections/StyledTooltip';
 
 export const FileUploadButton: React.FC = () => {
   const { channelId } = useParams<RouterProps>();
@@ -26,6 +27,7 @@ export const FileUploadButton: React.FC = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [errors, setErrors] = useState({});
+  const disable = !process.env.REACT_APP_PRODUCTION;
 
   const closeModal = () => {
     setErrors({});
@@ -55,7 +57,7 @@ export const FileUploadButton: React.FC = () => {
   };
 
   return (
-    <>
+    <StyledTooltip disabled={!disable} label="File Upload is disabled on the test site" position="top">
       <InputLeftElement
         color={'iconColor'}
         _hover={{ cursor: 'pointer', color: '#fcfcfc' }}
@@ -66,7 +68,7 @@ export const FileUploadButton: React.FC = () => {
           type="file"
           ref={inputFile}
           hidden
-          disabled={isSubmitting}
+          disabled={isSubmitting || disable}
           onChange={async (e) => {
             if (!e.currentTarget.files) return;
             handleSubmit(e.currentTarget.files[0]).then(() => {
@@ -89,7 +91,7 @@ export const FileUploadButton: React.FC = () => {
             </ModalContent>
           </Modal>
         )}
-        {(progress > 0) && (
+        {progress > 0 && (
           <Modal size="sm" isOpen={progress > 0} closeOnOverlayClick={false} onClose={closeModal} isCentered>
             <ModalContent bg="brandGray.darker" textAlign="center">
               <ModalHeader pb="0">Upload Progress</ModalHeader>
@@ -100,6 +102,6 @@ export const FileUploadButton: React.FC = () => {
           </Modal>
         )}
       </InputLeftElement>
-    </>
+    </StyledTooltip>
   );
 };
