@@ -11,9 +11,15 @@ export class DatabaseConnectionService implements TypeOrmOptionsFactory {
       url: process.env.DATABASE_URL,
       synchronize: !PRODUCTION,
       dropSchema: false,
-      logging: true,
+      logging: !PRODUCTION,
       entities: ['dist/**/*.entity.js'],
-      migrations: ["dist/migrations/*.js"]
+      migrations: ["dist/migrations/*.js"],
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
+      ssl: true,
     };
   }
 }
