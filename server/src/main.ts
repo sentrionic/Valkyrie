@@ -1,16 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as helmet from 'helmet';
 import { config } from 'dotenv';
 import * as rateLimit from 'express-rate-limit';
-const RedisStore = require('rate-limit-redis');
 import { AppModule } from './app.module';
 import { COOKIE_NAME } from './utils/constants';
 import { sessionMiddleware } from './config/sessionmiddleware';
 import { RedisIoAdapter } from './config/redis.adapter';
 import { redis } from './config/redis';
 import { join } from 'path';
+
+const RedisStore = require('rate-limit-redis');
 
 config();
 
@@ -23,26 +24,30 @@ async function bootstrap() {
   app.use(helmet());
   app.enableCors({
     origin: process.env.CORS_ORIGIN,
-    credentials: true,
+    credentials: true
   });
 
   app.use(sessionMiddleware);
   app.use(
     rateLimit({
       store: new RedisStore({
-        client: redis,
+        client: redis
       }),
       windowMs: 60 * 1000, // 1 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
-    }),
+      max: 100 // limit each IP to 100 requests per windowMs
+    })
   );
 
   const options = new DocumentBuilder()
     .setTitle('Valkyrie API')
-    .setDescription('Valkyrie API Spec')
+    .setDescription('Valkyrie REST API Specs. ' +
+      'For the Websocket Endpoints and events go <a href="/ws">here</a>. ' +
+      'Both services use <a href="https://github.com/expressjs/session">Express Sessions</a> ' +
+      'for authentication.'
+    )
     .setVersion('1.0.0')
     .addCookieAuth(COOKIE_NAME, {
-      type: 'http',
+      type: 'http'
     })
     .build();
 

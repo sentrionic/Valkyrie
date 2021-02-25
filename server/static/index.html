@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  
+
   <title>Valkyrie Websockets 1.0.0 documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <link href="css/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/atom-one-dark.min.css" />
-  
+
 </head>
 <body>
   <div class="relative md:flex lg:flex xl:flex">
-    
+
 
 <input id="burger-menu" type="checkbox" />
 <label for="burger-menu" class="shadow">
@@ -25,310 +25,310 @@
 
 <div class="sidebar-panel fixed top-0 left-0 bottom-0 w-64 bg-gray-200 font-sans pt-8 pr-4 pb-4 pl-4">
   <div class="sidebar-panel__content">
-    
+
       <h1 class="text-2xl font-thin">
         Valkyrie Websockets 1.0.0
       </h1>
-    
+
     <ul class="text-sm mt-10 list-reset mt-2">
       <li class="mb-3">
         <a class="js-menu-item text-gray-700 no-underline" href="#introduction">Introduction</a>
       </li>
-      
+
         <li class="mb-3">
           <a class="js-menu-item text-gray-700 no-underline" href="#servers">Servers</a>
         </li>
-      
+
     </ul>
 
-    
+
       <h2 class="text-xs uppercase text-gray-500 mt-10 mb-4 font-thin">Operations</h2>
       <ul class="text-sm list-reset mt-2">
         <!-- With tags in sidebar -->
-        
+
           <!--Without tags in sidebar-->
-          
+
             <li>
-              
+
                 <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#operation-publish-/">
                   <span class="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded" style="height: 21px;font-size: 11px;" title="Publish">
                     Pub
                   </span>
-                  
+
                     <div style="display:inline-block;">
-                      
+
 <span class="string-chunk" style="padding-top: 2px;">/</span>
 
                     </div>
-                  
-                </a>
-              
 
-              
+                </a>
+
+
+
                 <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#operation-subscribe-/">
                   <span class="bg-green-600 font-bold no-underline text-white uppercase p-1 mr-2 rounded" style="height: 21px;font-size: 11px;" title="Subscribe">
                     Sub
                   </span>
-                  
+
                     <div style="display:inline-block;">
-                      
+
 <span class="string-chunk" style="padding-top: 2px;">/</span>
 
                     </div>
-                  
+
                 </a>
-              
+
               </a>
             </li>
-          
-        
+
+
       </ul>
 
       <h2 class="text-xs uppercase text-gray-500 mt-10 mb-4 font-thin">Messages</h2>
       <ul class="text-sm list-reset mt-2">
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-toggleOnline">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">toggleOnline</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-toggleOffline">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">toggleOffline</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-joinUser">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">joinUser</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-joinChannel">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">joinChannel</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-joinGuild">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">joinGuild</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-startTyping">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">startTyping</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-stopTyping">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">stopTyping</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-getRequestCount">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">getRequestCount</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-leaveGuild">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">leaveGuild</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-leaveRoom">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">leaveRoom</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-addChannel">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">addChannel</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-deleteChannel">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">deleteChannel</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-editChannel">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">editChannel</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-editGuild">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">editGuild</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-deleteGuild">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">deleteGuild</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-addMember">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">addMember</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-removeMember">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">removeMember</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-new_message">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">new_message</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-edit_message">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">edit_message</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-delete_message">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">delete_message</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-push_to_top">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">push_to_top</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-new_notification">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">new_notification</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-toggle_online">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">toggle_online</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-toggle_offline">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">toggle_offline</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-addToTyping">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">addToTyping</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-removeFromTyping">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">removeFromTyping</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-send_request">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">send_request</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-add_friend">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">add_friend</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-remove_friend">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">remove_friend</span>
 
             </div>
           </a>
-        
+
           <a class="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3" href="#message-requestCount">
             <div style="display:inline-block;">
-              
+
 <span class="string-chunk" style="padding-top: 2px;">requestCount</span>
 
             </div>
           </a>
-        
+
       </ul>
-    
+
   </div>
 </div>
     <div class="content-panel flex-1 leading-loose z-10">
@@ -336,8 +336,8 @@
   <a name="introduction"></a>
   <h1>Valkyrie Websockets 1.0.0</h1>
   <div class="leading-normal mb-4">
-    
-    
+
+
   </div>
 
   <div class="markdown">
@@ -347,7 +347,7 @@
 
 
   <div class="leading-normal mb-4">
-    
+
   </div>
 </div>
 
@@ -358,36 +358,36 @@
 
   <h2 class="mb-4">Servers</h2>
 
-  
+
     <div class="shadow bg-gray-200 mb-3 px-4 py-3">
       <div class="flex">
         <div>
           <div class="pr-4 font-mono">
-            
+
 <span class="string-chunk" >http://localhost:4000/ws</span>
 
 
-            
+
             <span class="bg-teal-500 font-bold no-underline text-white uppercase rounded ml-2"
               style="height: 20px;font-size: 11px;padding: 3px;">socket.io
               V2</span>
-            
+
           </div>
           <div class="text-xs text-gray-600">
-            
+
           </div>
         </div>
       </div>
 
-      
-        <div>
-          
-        </div>
-      
 
-      
+        <div>
+
+        </div>
+
+
+
     </div>
-  
+
 
 </div>
 
@@ -400,18 +400,18 @@
 
 
   <div class="responsive-container">
-    
-      
+
+
 
 <a name="operation-publish-/"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
-      
+
       <span class="font-mono border border-blue-500 text-blue-500 uppercase p-1 rounded" title="Publish">Pub</span>
-      
-      
-      
+
+
+
 <span class="string-chunk" >/</span>
 
     </h3>
@@ -423,106 +423,106 @@
 
 
 
-    
 
 
-    
+
+
     <p>Accepts <strong>one of</strong> the following messages:</p>
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#1</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggleOnline</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Changes the users status to online and broadcasts it to all friends and guilds they are part of.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#2</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggleOffline</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Changes the users status to offline and broadcasts it to all friends and guilds they are part of. Leaves all connected rooms.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#3</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">joinUser</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Joins the users room. This room receives guild, DM &amp; friend notifications</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -537,7 +537,7 @@
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -550,31 +550,31 @@
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -589,80 +589,80 @@ string
           style="word-break: break-word"
           >userId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#4</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">joinChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Joins the channels room. Checks if the user is a member of said channel. Receives message &amp; typing events.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -677,7 +677,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -690,31 +690,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -729,80 +729,80 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#5</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">joinGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Joins the guilds room. Requires member access. Receives guild member &amp; channel events.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -817,7 +817,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -830,31 +830,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -869,80 +869,80 @@ string
           style="word-break: break-word"
           >guildId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#6</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">startTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits the username to the channel they are typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -957,7 +957,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -970,31 +970,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -1009,35 +1009,35 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -1052,80 +1052,80 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#7</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">stopTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Removes the username from the channel they were typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -1140,7 +1140,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -1153,31 +1153,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -1192,35 +1192,35 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -1235,112 +1235,112 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#8</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">getRequestCount</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Gets the amount of friend requests the user has.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#9</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">leaveGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Leaves the guild room.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -1355,7 +1355,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -1368,31 +1368,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -1407,80 +1407,80 @@ string
           style="word-break: break-word"
           >guildId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#10</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">leaveRoom</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Leaves the room.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -1495,7 +1495,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -1508,31 +1508,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -1547,56 +1547,56 @@ string
           style="word-break: break-word"
           >roomId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
 
-    
+
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
@@ -1607,265 +1607,265 @@ string
 <div class="right-block p-8">
   <h4 class="text-lg text-white mb-4">Examples</h4>
 
-  
-  
-  
+
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">toggleOnline</h5>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">toggleOffline</h5>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">joinUser</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">joinChannel</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">joinGuild</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">startTyping</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">stopTyping</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">getRequestCount</h5>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">leaveGuild</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">leaveRoom</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 </div>
 
 
 
-    
+
   </div>
   <div class="responsive-container">
-    
-      
+
+
 
 <a name="operation-subscribe-/"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
-      
-      
+
+
       <span class="font-mono border border-green-600 text-green-600 uppercase p-1 rounded"
         title="Subscribe">Sub</span>
-      
-      
+
+
 <span class="string-chunk" >/</span>
 
     </h3>
@@ -1877,42 +1877,42 @@ string
 
 
 
-    
 
 
-    
+
+
     <p>Accepts <strong>one of</strong> the following messages:</p>
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#1</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">addChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A channel was created.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -1927,7 +1927,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -1940,32 +1940,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see ChannelResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -1980,31 +1980,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2019,31 +2019,31 @@ string
           style="word-break: break-word"
           >name</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2058,31 +2058,31 @@ string
           style="word-break: break-word"
           >isPublic</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2097,31 +2097,31 @@ boolean
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2136,31 +2136,31 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2175,80 +2175,80 @@ string
           style="word-break: break-word"
           >hasNotification</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#2</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">deleteChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A channel was deleted.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -2263,7 +2263,7 @@ boolean
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -2276,31 +2276,31 @@ boolean
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2315,80 +2315,80 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#3</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">editChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A channel was edited</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -2403,7 +2403,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -2416,32 +2416,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see ChannelResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2456,31 +2456,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2495,31 +2495,31 @@ string
           style="word-break: break-word"
           >name</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2534,31 +2534,31 @@ string
           style="word-break: break-word"
           >isPublic</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2573,31 +2573,31 @@ boolean
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2612,31 +2612,31 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2651,80 +2651,80 @@ string
           style="word-break: break-word"
           >hasNotification</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#4</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">editGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A guild was edited</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -2739,7 +2739,7 @@ boolean
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -2752,32 +2752,32 @@ boolean
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see Guild</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2792,31 +2792,31 @@ object
           style="word-break: break-word"
           >name</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2831,80 +2831,80 @@ string
           style="word-break: break-word"
           >icon</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#5</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">deleteGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A guild was deleted.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -2919,7 +2919,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -2932,31 +2932,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -2971,80 +2971,80 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#6</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">addMember</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A member got added to the guild.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -3059,7 +3059,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -3072,32 +3072,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3112,31 +3112,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3151,31 +3151,31 @@ string
           style="word-break: break-word"
           >username</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3190,31 +3190,31 @@ string
           style="word-break: break-word"
           >image</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3229,31 +3229,31 @@ string
           style="word-break: break-word"
           >isOnline</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3268,31 +3268,31 @@ string
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3307,31 +3307,31 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3346,80 +3346,80 @@ string
           style="word-break: break-word"
           >isFriend</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#7</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">removeMember</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A member was removed from the guild.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -3434,7 +3434,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -3447,31 +3447,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3486,80 +3486,80 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#8</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">new_message</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A new message was sent to a channel.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -3574,7 +3574,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -3587,31 +3587,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3626,7 +3626,7 @@ object
           style="word-break: break-word"
           >user</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -3639,43 +3639,43 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-200 py-4 rounded"
     >
-             
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3690,31 +3690,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3729,31 +3729,31 @@ string
           style="word-break: break-word"
           >text</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3768,31 +3768,31 @@ string
           style="word-break: break-word"
           >url</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3807,31 +3807,31 @@ string
           style="word-break: break-word"
           >filetype</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3846,31 +3846,31 @@ string
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -3885,80 +3885,80 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#9</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">edit_message</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A message in this channel was edited.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -3973,7 +3973,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -3986,31 +3986,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4025,7 +4025,7 @@ object
           style="word-break: break-word"
           >user</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -4038,43 +4038,43 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-200 py-4 rounded"
     >
-             
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4089,31 +4089,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4128,31 +4128,31 @@ string
           style="word-break: break-word"
           >text</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4167,31 +4167,31 @@ string
           style="word-break: break-word"
           >url</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4206,31 +4206,31 @@ string
           style="word-break: break-word"
           >filetype</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4245,31 +4245,31 @@ string
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4284,80 +4284,80 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#10</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">delete_message</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A message in this channel was deleted.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -4372,7 +4372,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -4385,31 +4385,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4424,80 +4424,80 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#11</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">push_to_top</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A notification that pushes the DM to the top of the list.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -4512,7 +4512,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -4525,31 +4525,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4564,80 +4564,80 @@ string
           style="word-break: break-word"
           >dmChannelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#12</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">new_notification</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A new message notification, published to all guild members. Additionally sends the channelId to members that currently view the guild.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -4652,7 +4652,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -4665,31 +4665,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4704,35 +4704,35 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4747,80 +4747,80 @@ string
           style="word-break: break-word"
           >guildId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#13</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggle_online</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A notification that the user went online. Gets emited to guild members that currently view the guild and friends of the user.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -4835,7 +4835,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -4848,31 +4848,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -4887,80 +4887,80 @@ string
           style="word-break: break-word"
           >userId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#14</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggle_offline</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A notification that the user went offline. Gets emited to guild members that currently view the guild and friends of the user.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -4975,7 +4975,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -4988,31 +4988,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -5027,80 +5027,80 @@ string
           style="word-break: break-word"
           >userId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#15</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">addToTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits the username to the channel the user is currently typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -5115,7 +5115,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -5128,31 +5128,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -5167,80 +5167,80 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#16</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">removeFromTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits the username to the channel the user was typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -5255,7 +5255,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -5268,31 +5268,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -5307,112 +5307,112 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#17</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">send_request</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits a notification that a friends request was received</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#18</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">add_friend</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Adds the added person to the friends list.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -5427,7 +5427,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -5440,32 +5440,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -5480,7 +5480,7 @@ object
           style="word-break: break-word"
           >member</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -5493,91 +5493,91 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-200 py-4 rounded"
     >
-             
-      <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
-        Additional properties are allowed.
-      </p>
-        
-       
-    </div>
-    
-  </div>
-</div>
 
-        
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
+      <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
+        Additional properties are allowed.
+      </p>
+
+
+    </div>
+
+  </div>
 </div>
 
-  
-  
+
 </div>
 
 
-    
-    
+
+</div>
+
+
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#19</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">remove_friend</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Removes the former friend from the friends list.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -5592,7 +5592,7 @@ object
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -5605,31 +5605,31 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -5644,80 +5644,80 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
+
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#20</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">requestCount</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">The amount of friends requests the user has</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -5732,7 +5732,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -5745,31 +5745,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-number   
+
+number
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -5784,56 +5784,56 @@ number
           style="word-break: break-word"
           >count</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-number   
+
+number
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-    
-    
 
-    
+
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
@@ -5844,25 +5844,25 @@ number
 <div class="right-block p-8">
   <h4 class="text-lg text-white mb-4">Examples</h4>
 
-  
-  
-  
+
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">addChannel</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>{
   "id": "string",
   "name": "string",
@@ -5872,62 +5872,62 @@ number
   "hasNotification": true
 }</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">deleteChannel</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">editChannel</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>{
   "id": "string",
   "name": "string",
@@ -5937,94 +5937,94 @@ number
   "hasNotification": true
 }</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">editGuild</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>{
   "name": "string",
   "icon": "string"
 }</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">deleteGuild</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">addMember</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>{
   "id": "string",
   "username": "string",
@@ -6035,62 +6035,62 @@ number
   "isFriend": "string"
 }</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">removeMember</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">new_message</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>{
   "user": {},
   "id": "string",
@@ -6101,33 +6101,33 @@ number
   "updatedAt": "string"
 }</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">edit_message</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>{
   "user": {},
   "id": "string",
@@ -6138,325 +6138,325 @@ number
   "updatedAt": "string"
 }</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">delete_message</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">push_to_top</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">new_notification</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">toggle_online</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">toggle_offline</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">addToTyping</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">removeFromTyping</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">send_request</h5>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">add_friend</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>{
   "member": {}
 }</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">remove_friend</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>"string"</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 
 <form>
   <h5 class="examples-uid text-orange-600 mt-4">requestCount</h5>
-  
+
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
         <span class="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
+
           <svg class="expand inline align-baseline" version="1.1" viewBox="0 0 24 24" x="0"
             xmlns="http://www.w3.org/2000/svg" y="0">
             <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
           </svg>
-        
+
       </div>
       <div class="children payload-examples mt-4">
-        
+
         <pre class="hljs mb-4 border border-gray-800 rounded"><code>""</code></pre>
         <h6 class="text-xs font-bold text-gray-700 italic">This example has been generated automatically.</h6>
-        
+
       </div>
     </div>
-  
 
-  
+
+
 </form>
 
 
-  
-  
+
+
 </div>
 
 
 
-    
+
   </div>
 
 
@@ -6469,104 +6469,104 @@ number
 <div class="responsive-container">
   <div class="center-block p-8">
     <div class="all-messages pb-8">
-      
+
       <a name="message-toggleOnline"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#1</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggleOnline</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Changes the users status to online and broadcasts it to all friends and guilds they are part of.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-toggleOffline"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#2</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggleOffline</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Changes the users status to offline and broadcasts it to all friends and guilds they are part of. Leaves all connected rooms.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-joinUser"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#3</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">joinUser</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Joins the users room. This room receives guild, DM &amp; friend notifications</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -6581,7 +6581,7 @@ number
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -6594,31 +6594,31 @@ number
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -6633,81 +6633,81 @@ string
           style="word-break: break-word"
           >userId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-joinChannel"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#4</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">joinChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Joins the channels room. Checks if the user is a member of said channel. Receives message &amp; typing events.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -6722,7 +6722,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -6735,31 +6735,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -6774,81 +6774,81 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-joinGuild"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#5</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">joinGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Joins the guilds room. Requires member access. Receives guild member &amp; channel events.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -6863,7 +6863,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -6876,31 +6876,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -6915,81 +6915,81 @@ string
           style="word-break: break-word"
           >guildId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-startTyping"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#6</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">startTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits the username to the channel they are typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -7004,7 +7004,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -7017,31 +7017,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7056,35 +7056,35 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7099,81 +7099,81 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-stopTyping"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#7</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">stopTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Removes the username from the channel they were typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -7188,7 +7188,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -7201,31 +7201,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7240,35 +7240,35 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7283,114 +7283,114 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-getRequestCount"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#8</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">getRequestCount</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Gets the amount of friend requests the user has.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-leaveGuild"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#9</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">leaveGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Leaves the guild room.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -7405,7 +7405,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -7418,31 +7418,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7457,81 +7457,81 @@ string
           style="word-break: break-word"
           >guildId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-leaveRoom"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#10</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">leaveRoom</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Leaves the room.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -7546,7 +7546,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -7559,31 +7559,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7598,81 +7598,81 @@ string
           style="word-break: break-word"
           >roomId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-addChannel"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#11</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">addChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A channel was created.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -7687,7 +7687,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -7700,32 +7700,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see ChannelResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7740,31 +7740,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7779,31 +7779,31 @@ string
           style="word-break: break-word"
           >name</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7818,31 +7818,31 @@ string
           style="word-break: break-word"
           >isPublic</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7857,31 +7857,31 @@ boolean
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7896,31 +7896,31 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -7935,81 +7935,81 @@ string
           style="word-break: break-word"
           >hasNotification</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-deleteChannel"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#12</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">deleteChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A channel was deleted.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -8024,7 +8024,7 @@ boolean
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -8037,31 +8037,31 @@ boolean
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8076,81 +8076,81 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-editChannel"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#13</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">editChannel</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A channel was edited</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -8165,7 +8165,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -8178,32 +8178,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see ChannelResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8218,31 +8218,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8257,31 +8257,31 @@ string
           style="word-break: break-word"
           >name</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8296,31 +8296,31 @@ string
           style="word-break: break-word"
           >isPublic</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8335,31 +8335,31 @@ boolean
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8374,31 +8374,31 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8413,81 +8413,81 @@ string
           style="word-break: break-word"
           >hasNotification</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-boolean   
+
+boolean
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-editGuild"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#14</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">editGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A guild was edited</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -8502,7 +8502,7 @@ boolean
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -8515,32 +8515,32 @@ boolean
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see Guild</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8555,31 +8555,31 @@ object
           style="word-break: break-word"
           >name</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8594,81 +8594,81 @@ string
           style="word-break: break-word"
           >icon</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-deleteGuild"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#15</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">deleteGuild</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A guild was deleted.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -8683,7 +8683,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -8696,31 +8696,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8735,81 +8735,81 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-addMember"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#16</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">addMember</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A member got added to the guild.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -8824,7 +8824,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -8837,32 +8837,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8877,31 +8877,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8916,31 +8916,31 @@ string
           style="word-break: break-word"
           >username</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8955,31 +8955,31 @@ string
           style="word-break: break-word"
           >image</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -8994,31 +8994,31 @@ string
           style="word-break: break-word"
           >isOnline</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9033,31 +9033,31 @@ string
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9072,31 +9072,31 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9111,81 +9111,81 @@ string
           style="word-break: break-word"
           >isFriend</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-removeMember"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#17</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">removeMember</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A member was removed from the guild.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -9200,7 +9200,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -9213,31 +9213,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9252,81 +9252,81 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-new_message"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#18</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">new_message</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A new message was sent to a channel.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -9341,7 +9341,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -9354,31 +9354,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9393,7 +9393,7 @@ object
           style="word-break: break-word"
           >user</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -9406,43 +9406,43 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-200 py-4 rounded"
     >
-             
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9457,31 +9457,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9496,31 +9496,31 @@ string
           style="word-break: break-word"
           >text</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9535,31 +9535,31 @@ string
           style="word-break: break-word"
           >url</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9574,31 +9574,31 @@ string
           style="word-break: break-word"
           >filetype</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9613,31 +9613,31 @@ string
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9652,81 +9652,81 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-edit_message"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#19</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">edit_message</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A message in this channel was edited.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -9741,7 +9741,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -9754,31 +9754,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9793,7 +9793,7 @@ object
           style="word-break: break-word"
           >user</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -9806,43 +9806,43 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-200 py-4 rounded"
     >
-             
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9857,31 +9857,31 @@ object
           style="word-break: break-word"
           >id</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9896,31 +9896,31 @@ string
           style="word-break: break-word"
           >text</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9935,31 +9935,31 @@ string
           style="word-break: break-word"
           >url</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -9974,31 +9974,31 @@ string
           style="word-break: break-word"
           >filetype</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10013,31 +10013,31 @@ string
           style="word-break: break-word"
           >createdAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10052,81 +10052,81 @@ string
           style="word-break: break-word"
           >updatedAt</span
         >
-            
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
+
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-delete_message"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#20</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">delete_message</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A message in this channel was deleted.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -10141,7 +10141,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -10154,31 +10154,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10193,81 +10193,81 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-push_to_top"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#21</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">push_to_top</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A notification that pushes the DM to the top of the list.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -10282,7 +10282,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -10295,31 +10295,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10334,81 +10334,81 @@ string
           style="word-break: break-word"
           >dmChannelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-new_notification"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#22</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">new_notification</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A new message notification, published to all guild members. Additionally sends the channelId to members that currently view the guild.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -10423,7 +10423,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -10436,31 +10436,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10475,35 +10475,35 @@ string
           style="word-break: break-word"
           >channelId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-      
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10518,81 +10518,81 @@ string
           style="word-break: break-word"
           >guildId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-toggle_online"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#23</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggle_online</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A notification that the user went online. Gets emited to guild members that currently view the guild and friends of the user.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -10607,7 +10607,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -10620,31 +10620,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10659,81 +10659,81 @@ string
           style="word-break: break-word"
           >userId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-toggle_offline"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#24</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">toggle_offline</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">A notification that the user went offline. Gets emited to guild members that currently view the guild and friends of the user.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -10748,7 +10748,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -10761,31 +10761,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10800,81 +10800,81 @@ string
           style="word-break: break-word"
           >userId</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-addToTyping"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#25</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">addToTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits the username to the channel the user is currently typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -10889,7 +10889,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -10902,31 +10902,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -10941,81 +10941,81 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-removeFromTyping"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#26</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">removeFromTyping</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits the username to the channel the user was typing in.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -11030,7 +11030,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -11043,31 +11043,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -11082,114 +11082,114 @@ string
           style="word-break: break-word"
           >username</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-send_request"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#27</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">send_request</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Emits a notification that a friends request was received</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-add_friend"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#28</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">add_friend</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Adds the added person to the friends list.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -11204,7 +11204,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -11217,32 +11217,32 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"><p>see MemberResponse</p>
 </div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -11257,7 +11257,7 @@ object
           style="word-break: break-word"
           >member</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -11270,92 +11270,92 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-object   
+
+object
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-200 py-4 rounded"
     >
-             
-      <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
-        Additional properties are allowed.
-      </p>
-        
-       
-    </div>
-    
-  </div>
-</div>
 
-        
       <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
+      <p class="pl-6 mb-2 mt-4 text-xs text-gray-700">
+        Additional properties are allowed.
+      </p>
+
+
+    </div>
+
+  </div>
 </div>
 
-  
-  
+
 </div>
 
 
-      
+
+</div>
+
+
+
       <a name="message-remove_friend"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#29</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">remove_friend</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">Removes the former friend from the friends list.</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -11370,7 +11370,7 @@ object
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -11383,31 +11383,31 @@ object
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -11422,81 +11422,81 @@ string
           style="word-break: break-word"
           >id</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-string   
+
+string
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
       <a name="message-requestCount"></a>
-      
+
 
 <div class="bg-gray-200 rounded p-4 mt-2">
   <div class="text-sm text-gray-700 mb-2">
-    
+
     <span class="text-gray-700 font-bold mr-2">#30</span>
-    
-    
+
+
       <span class="border text-orange-600 rounded text-s py-0 px-2">requestCount</span>
-    
+
   </div>
   <p class="text-gray-600 text-sm">The amount of friends requests the user has</p>
-  
-  
+
+
 
 <div class="mt-4">
-  
+
 </div>
 
 
 
 
-  
-  
+
+
 
   <div class="mt-4 mb-4 markdown"></div>
-  
-    
+
+
 <div>
-  
+
 
 <div
   class="bg-gray-200  rounded"
@@ -11511,7 +11511,7 @@ string
           style="word-break: break-word"
           >Payload</span
         >
-          
+
         <svg
           class="expand inline align-baseline"
           version="1.1"
@@ -11524,31 +11524,31 @@ string
             points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "
           ></polygon>
         </svg>
-          
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-number   
+
+number
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
     <div
       class="children bg-gray-100 py-4 rounded"
     >
-           
+
 
 <div
   class="bg-gray-100 pl-8 pr-8 rounded"
@@ -11563,50 +11563,50 @@ number
           style="word-break: break-word"
           >count</span
         >
-         
+
         <span class="border text-orange-600 rounded text-xs ml-3 py-0 px-2"
           ></span
         >
-           
+
       </div>
 
       <div>
         <div class="capitalize text-sm text-teal-500 font-bold">
-          
-number   
+
+number
           <div class="inline-block">
-                      
+
           </div>
         </div>
 
-        
+
 
 <div class="text-sm markdown"></div>
 
-    
+
       </div>
     </div>
 
-    
+
   </div>
 </div>
 
-        
-       
+
+
     </div>
-    
+
   </div>
 </div>
 
 
 </div>
 
-  
-  
+
+
 </div>
 
 
-      
+
     </div>
   </div>
 </div>
@@ -11615,9 +11615,9 @@ number
     </div>
     <div class="examples-panel absolute top-0 right-0 bottom-0"></div>
   </div>
-  
+
   <script src="js/highlight.min.js" type="application/javascript"></script>
   <script src="js/main.js" type="application/javascript"></script>
-  
+
 </body>
 </html>

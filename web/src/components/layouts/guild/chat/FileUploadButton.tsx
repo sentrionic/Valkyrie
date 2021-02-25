@@ -27,7 +27,7 @@ export const FileUploadButton: React.FC = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [errors, setErrors] = useState({});
-  const disable = !process.env.REACT_APP_PRODUCTION;
+  const disable = process.env.NODE_ENV === 'production';
 
   const closeModal = () => {
     setErrors({});

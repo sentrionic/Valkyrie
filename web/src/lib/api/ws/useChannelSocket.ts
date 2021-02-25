@@ -16,6 +16,11 @@ export function useChannelSocket(guildId: string, key: string) {
     const socket = getSocket();
     socket.emit('joinGuild', guildId);
 
+    const disconnect = () => {
+      socket.emit('leaveGuild', guildId);
+      socket.disconnect();
+    }
+
     socket.on('add_channel', (newChannel: Channel) => {
       cache.setQueryData<Channel[]>(key, (data) => {
         return [...data!, newChannel];
@@ -61,9 +66,8 @@ export function useChannelSocket(guildId: string, key: string) {
       }
     });
 
-    return () => {
-      socket.emit('leaveGuild', guildId);
-      socket.disconnect();
-    };
+    window.addEventListener('beforeunload', disconnect);
+
+    return () => disconnect();
   }, [guildId, key, cache, history, location, guild]);
 }

@@ -12,6 +12,7 @@ import { SocketService } from '../socket/socket.service';
 import { PCMember } from '../entities/pcmember.entity';
 import { Member } from '../entities/member.entity';
 import { DMMember } from '../entities/dmmember.entity';
+import { PRODUCTION } from '../utils/constants';
 
 @Injectable()
 export class MessageService {
@@ -137,7 +138,7 @@ export class MessageService {
 
     const message = this.messageRepository.create({ ...input });
 
-    if (file) {
+    if (file && !PRODUCTION) {
       const directory = `channels/${channelId}`;
       const url = await uploadToS3(
         directory,
