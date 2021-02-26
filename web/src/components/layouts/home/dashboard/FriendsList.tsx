@@ -10,9 +10,6 @@ import { useFriendSocket } from '../../../../lib/api/ws/useFriendSocket';
 export const FriendsList: React.FC = () => {
   const { data } = useQuery(fKey, () =>
       getFriends().then(response => response.data),
-    {
-      cacheTime: Infinity
-    }
   );
 
   useFriendSocket();

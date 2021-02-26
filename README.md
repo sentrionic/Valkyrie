@@ -6,6 +6,12 @@
 
 A [Discord](https://discord.com) clone written in TypeScript.
 
+[Live Demo](https://valkyrieapp.xyz) (Note: File Upload is disabled on the public demo to reduce hosting cost) 
+
+## Video
+
+![Game](preview.gif)
+
 ## Features
 
 - Message, Channel, Server CRUD
@@ -50,7 +56,7 @@ A [Discord](https://discord.com) clone written in TypeScript.
 
 Redis Info is needed twice because the RedisCache Module can't use the `REDIS_URL` directly. 
 
-- `Optional: Not needed to run the app, but you wont be able to use file upload or send emails.`
+- `Optional: Not needed to run the app, but you won't be able to upload files or send emails.`
 
         AWS_ACCESS_KEY=ACCESS_KEY
         AWS_SECRET_ACCESS_KEY=SECRET_ACCESS_KEY

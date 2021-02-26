@@ -170,7 +170,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 hTKzmak
               </Text>
               <Text fontSize='12px' textColor='brandGray.accent'>
-                http://localhost:3000/hTKzmak
+                https://valkyrieapp.xyz/hTKzmak
               </Text>
             </ModalBody>
 

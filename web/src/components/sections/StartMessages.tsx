@@ -37,6 +37,7 @@ const DMStartMessages: React.FC = () => {
 
   return (
     <Box m='4'>
+      <Box h={'40px'} />
       <Avatar h={'80px'} w={'80px'} src={channel?.user.image} />
       <Heading mt={2}>{channel?.user.username}</Heading>
       <Text textColor={'brandGray.accent'}>

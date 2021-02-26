@@ -31,7 +31,7 @@ export function useFriendSocket() {
     socket.on('toggle_online', (memberId: string) => {
       cache.setQueryData<Member[]>(fKey, (data) => {
         const index = data!.findIndex(m => m.id === memberId);
-        data![index].isOnline = true;
+        if (index !== -1 ) data![index].isOnline = true;
         return data!;
       });
     });
@@ -39,7 +39,7 @@ export function useFriendSocket() {
     socket.on('toggle_offline', (memberId: string) => {
       cache.setQueryData<Member[]>(fKey, (data) => {
         const index = data!.findIndex(m => m.id === memberId);
-        data![index].isOnline = false;
+        if (index !== -1 ) data![index].isOnline = false;
         return data!;
       });
     });

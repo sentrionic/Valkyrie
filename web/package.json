@@ -11,6 +11,7 @@
     "dayjs": "^1.10.4",
     "formik": "^2.2.6",
     "framer-motion": ">=3.3.0",
+    "netlify-cli": "^3.8.6",
     "react": "^17.0.1",
     "react-color": "^2.19.3",
     "react-contexify": "^5.0.0",

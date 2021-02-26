@@ -9,6 +9,7 @@ import { ViewGuild } from './ViewGuild';
 import { AuthRoute } from './AuthRoute';
 import { Account } from './Account';
 import { Landing } from './Landing';
+import { Invite } from './Invite';
 
 export interface RouterProps {
   guildId: string;
@@ -38,6 +39,7 @@ export const Routes: React.FC = () => {
         <AuthRoute exact path='/channels/me/:channelId' component={Home} />
         <AuthRoute exact path='/channels/:guildId/:channelId' component={ViewGuild} />
         <AuthRoute exact path='/account' component={Account} />
+        <AuthRoute exact path='/:link' component={Invite} />
       </Switch>
     </BrowserRouter>
   );
