@@ -20,9 +20,14 @@ export interface Member extends BaseModel {
 
 export interface Message extends BaseModel {
   text?: string;
-  filetype?: string;
-  url?: string;
+  attachment?: Attachment;
   user: Member;
+}
+
+export interface Attachment extends BaseModel {
+  filename: string;
+  filetype: string;
+  url: string;
 }
 
 export interface AccountResponse extends BaseModel {

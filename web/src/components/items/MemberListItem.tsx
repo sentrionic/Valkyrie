@@ -36,7 +36,7 @@ export const MemberListItem: React.FC<MemberListItemProps> = ({ member }) => {
           <Avatar size='sm' src={member.image}>
             <AvatarBadge boxSize='1.25em' bg={member.isOnline ? 'green.500' : 'gray.500'} />
           </Avatar>
-          <Text ml='2'>{member.username}</Text>
+          <Text ml='2' color={member.color ?? undefined}>{member.nickname ?? member.username}</Text>
         </Flex>
       </ListItem>
       {member.id !== current?.id &&

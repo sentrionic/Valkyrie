@@ -12,7 +12,17 @@ export function useMemberSocket(guildId: string, key: string) {
     socket.emit('joinGuild', guildId);
     socket.on('add_member', (newMember: Member) => {
       cache.setQueryData<Member[]>(key, (data) => {
-        return [...data!, newMember].sort((a, b) => a.username.localeCompare(b.username));
+        return [...data!, newMember].sort((a, b) => {
+          if (a.nickname && b.nickname) {
+            return a.nickname.localeCompare(b.nickname);
+          } else if (a.nickname && !b.nickname) {
+            return a.nickname.localeCompare(b.username);
+          } else if (!a.nickname && b.nickname) {
+            return a.username.localeCompare(b.nickname);
+          } else {
+            return a.username.localeCompare(b.username);
+          }
+        });
       });
     });
 

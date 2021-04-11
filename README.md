@@ -6,7 +6,10 @@
 
 A [Discord](https://discord.com) clone written in TypeScript.
 
-[Live Demo](https://valkyrieapp.xyz) (Note: File Upload is disabled on the public demo to reduce hosting cost) 
+[Live Demo](https://valkyrieapp.xyz) *(**Note**: File Upload is disabled.)* 
+
+Once you registered you can also join the server that is open for all by either clicking on this
+[link](https://valkyrieapp.xyz/n94dXT4W) or manually using the invite code `n94dXT4W`.
 
 ## Video
 
@@ -50,7 +53,7 @@ A [Discord](https://discord.com) clone written in TypeScript.
         REDIS_URL=localhost:6379
         CORS_ORIGIN=http://localhost:3000
         SECRET=SUPERSECRET
-        REDIS_HOST=192.168.2.123
+        REDIS_HOST=localhost
         REDIS_PORT=6379
         REDIS_PASSWORD=password
 

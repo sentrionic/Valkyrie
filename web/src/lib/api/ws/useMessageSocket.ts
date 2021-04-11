@@ -34,7 +34,8 @@ export function useMessageSocket(channelId: string, key: string) {
         });
 
         if (index !== -1 && editId !== -1) {
-          d!.pages[index][editId] = editMessage;
+          d!.pages[index][editId].text = editMessage.text;
+          d!.pages[index][editId].updatedAt = editMessage.updatedAt;
         }
         return d!;
       });

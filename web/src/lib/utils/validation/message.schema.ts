@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'audio/mp3', 'image/png'];
+const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'audio/mp3', 'audio/mpeg', 'image/png'];
 
 export const FileSchema = yup.object().shape({
   file: yup

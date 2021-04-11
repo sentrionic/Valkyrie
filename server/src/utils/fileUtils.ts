@@ -57,18 +57,22 @@ export const uploadAvatarToS3 = async (
 
 /**
  * Uploads a file to S3
+ * @param filename
  * @param directory
  * @param file
  */
 export const uploadToS3 = async (
+  filename: string,
   directory: string,
   file: BufferFile,
 ): Promise<string> => {
-  const { buffer, originalname, mimetype } = await file;
+  const { buffer, mimetype } = await file;
+  const date = Date.now();
+  const key = `files/${directory}/${date}-${filename}`
 
   const params = {
     Bucket: process.env.AWS_STORAGE_BUCKET_NAME as string,
-    Key: `files/${directory}/${formatName(originalname)}`,
+    Key: key,
     Body: buffer,
     ContentType: mimetype,
   };
@@ -78,13 +82,12 @@ export const uploadToS3 = async (
   return response.Location;
 };
 
-const formatName = (filename: string): string => {
+export const formatName = (filename: string): string => {
   const file = path.parse(filename);
   const name = file.name;
   const ext = file.ext
-  const date = Date.now();
   const cleanFileName = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-  return `${date}-${cleanFileName}${ext}`;
+  return `${cleanFileName}${ext}`;
 };
 
 export const deleteFile = async (filename: string): Promise<void> => {

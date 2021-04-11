@@ -43,17 +43,19 @@ export class GuildService {
   async getGuildMembers(guildId: string): Promise<MemberResponse[]> {
     const manager = getManager();
     return await manager.query(
-      `select distinct u.id,
-                       u.username,
-                       u.image,
-                       u."isOnline",
-                       u."createdAt",
-                       u."updatedAt",
-                       exists(select 1 from friends f where f.user = u.id) as "isFriend"
+      `select u.id,
+              u.username,
+              u.image,
+              u."isOnline",
+              u."createdAt",
+              u."updatedAt",
+              m.nickname,
+              m.color,
+              exists(select 1 from friends f where f.user = u.id) as "isFriend"
        from users as u
                 join members m on u."id"::text = m."userId"
        where m."guildId" = $1
-       order by u.username
+       order by (CASE when m.nickname notnull then m.nickname else u.username end)
       `,
       [guildId],
     );

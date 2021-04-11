@@ -1,7 +1,8 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { AbstractEntity } from './abstract.entity';
 import { Channel } from './channel.entity';
 import { User } from './user.entity';
-import { AbstractEntity } from './abstract.entity';
+import { Attachment } from './attachment.entity';
 import { classToPlain, Exclude } from 'class-transformer';
 import { MessageResponse } from '../models/response/MessageResponse';
 
@@ -10,12 +11,6 @@ export class Message extends AbstractEntity {
   @Column('text', { nullable: true })
   text!: string;
 
-  @Column('text', { nullable: true })
-  url!: string;
-
-  @Column('varchar', { length: 50, nullable: true })
-  filetype!: string;
-
   @ManyToOne(() => Channel, { onDelete: 'CASCADE' })
   @Exclude()
   channel!: Channel;
@@ -23,6 +18,14 @@ export class Message extends AbstractEntity {
   @ManyToOne(() => User, (user) => user.id)
   @Exclude()
   user!: User;
+
+  @OneToOne(
+    () => Attachment,
+    attachment => attachment.message,
+    { nullable: true }
+  )
+  @JoinColumn()
+  attachment?: Attachment;
 
   toJSON(userId: string): MessageResponse {
     const response = <MessageResponse>classToPlain(this);

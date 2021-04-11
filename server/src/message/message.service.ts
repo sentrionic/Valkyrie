@@ -4,7 +4,7 @@ import { getManager, Repository } from 'typeorm';
 import { Message } from '../entities/message.entity';
 import { User } from '../entities/user.entity';
 import { Channel } from '../entities/channel.entity';
-import { deleteFile, uploadToS3 } from '../utils/fileUtils';
+import { deleteFile, formatName, uploadToS3 } from '../utils/fileUtils';
 import { BufferFile } from '../types/BufferFile';
 import { MessageResponse } from '../models/response/MessageResponse';
 import { MessageInput } from '../models/input/MessageInput';
@@ -13,6 +13,7 @@ import { PCMember } from '../entities/pcmember.entity';
 import { Member } from '../entities/member.entity';
 import { DMMember } from '../entities/dmmember.entity';
 import { PRODUCTION } from '../utils/constants';
+import { Attachment } from '../entities/attachment.entity';
 
 @Injectable()
 export class MessageService {
@@ -25,6 +26,8 @@ export class MessageService {
     private pcMemberRepository: Repository<PCMember>,
     @InjectRepository(DMMember)
     private dmMemberRepository: Repository<DMMember>,
+    @InjectRepository(Attachment)
+    private attachmentRepository: Repository<Attachment>,
     private readonly socketService: SocketService
   ) {
   }
@@ -40,7 +43,7 @@ export class MessageService {
   async getMessages(
     channelId: string,
     userId: string,
-    cursor?: string | null,
+    cursor?: string | null
   ): Promise<MessageResponse[]> {
     const channel = await this.channelRepository.findOne({
       where: { id: channelId },
@@ -63,45 +66,49 @@ export class MessageService {
     const results = await manager.query(
       `
           SELECT "message".id,
-                  "message".text,
-                  "message".filetype,
-                  "message".url,
-                  "message"."createdAt",
-                  "message"."updatedAt",
-                  "user"."id" as "userId",
-                  "user"."createdAt" as "ucreatedAt",
-                  "user"."updatedAt" as "uupdatedAt",
-                  "user"."username",
-                  "user"."image",
-                  "user"."isOnline",
-                  ${!channel.dm ? "member.nickname, member.color," : ''}
-                  exists(
+                 "message".text,
+                 "message"."createdAt",
+                 "message"."updatedAt",
+                 "message"."attachmentId",
+                 a.filetype,
+                 a.url,
+                 a.filename,
+                 "user"."id"        as "userId",
+                 "user"."createdAt" as "ucreatedAt",
+                 "user"."updatedAt" as "uupdatedAt",
+                 "user"."username",
+                 "user"."image",
+                 "user"."isOnline",
+                 ${!channel.dm ? 'member.nickname, member.color,' : ''} exists(
                           select 1
                           from users
                                    left join friends f on users.id = f."user"
                           where f."friend" = "message"."userId"
-                            and f."user" = $2
-                      ) as "isFriend"
+                            and f."user" = $2 ) as "isFriend"
           FROM "messages" "message"
-                   LEFT JOIN "users" "user" ON "user"."id" = "message"."userId"
-                   ${!channel.dm ? 'LEFT JOIN members member on "message"."userId" = member."userId"' : ''}
-          WHERE message."channelId" = $1 
-          ${!channel.dm ? `AND member."guildId" = ${channel.guild.id}::text` : ''}
-          ${cursor ? `AND message."createdAt" < (to_timestamp(${time}))` : ``}
+              LEFT JOIN "users" "user"
+          ON "user"."id" = "message"."userId"
+              LEFT JOIN attachments a
+          ON a."id" = "message"."attachmentId"
+              ${!channel.dm ? 'LEFT JOIN members member on "message"."userId" = member."userId"' : ''}
+          WHERE message."channelId" = $1 ${!channel.dm ? `AND member."guildId" = ${channel.guild.id}::text` : ''} ${cursor ? `AND message."createdAt" < (to_timestamp(${time}))` : ``}
           ORDER BY "message"."createdAt" DESC
               LIMIT 35
       `,
-      [channelId, userId],
+      [channelId, userId]
     );
 
     const messages: MessageResponse[] = [];
     results.map(m => messages.push({
       id: m.id,
       text: m.text,
-      filetype: m.filetype,
-      url: m.url,
       createdAt: m.createdAt,
       updatedAt: m.updatedAt,
+      attachment: m.attachmentId ? {
+        filetype: m.filetype,
+        url: m.url,
+        filename: m.filename,
+      } : null,
       user: {
         id: m.userId,
         username: m.username,
@@ -122,7 +129,7 @@ export class MessageService {
     userId: string,
     channelId: string,
     input: MessageInput,
-    file?: BufferFile,
+    file?: BufferFile
   ): Promise<void> {
 
     const channel = await this.channelRepository.findOneOrFail({
@@ -133,19 +140,37 @@ export class MessageService {
     await this.isChannelMember(channel, userId);
 
     if (!file && !input.text) {
-      throw new BadRequestException();
+      throw new BadRequestException('Either a message or a file are required.');
     }
 
     const message = this.messageRepository.create({ ...input });
 
     if (file && !PRODUCTION) {
+      const filename = formatName(file.originalname);
       const directory = `channels/${channelId}`;
       const url = await uploadToS3(
+        filename,
         directory,
         file
       );
-      message.filetype = file.mimetype;
-      message.url = url;
+      const attachment = this.attachmentRepository.create({
+        message,
+        url,
+        filetype: file.mimetype,
+        filename,
+      });
+      await attachment.save();
+      message.attachment = attachment;
+    } else if (file) {
+      const filename = ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+      const attachment = this.attachmentRepository.create({
+        message,
+        url: `https://picsum.photos/seed/${filename}/600`,
+        filetype: 'image/jpeg',
+        filename,
+      });
+      await attachment.save();
+      message.attachment = attachment;
     }
 
     message.user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
@@ -174,12 +199,12 @@ export class MessageService {
       getManager().query(
         `
             update dm_members
-            set "isOpen" = true,
+            set "isOpen"    = true,
                 "updatedAt" = CURRENT_TIMESTAMP
             where "channelId" = $1
         `, [channelId]
       );
-      this.socketService.pushDMToTop({ room: channelId, channelId })
+      this.socketService.pushDMToTop({ room: channelId, channelId });
     } else {
       getManager().query(
         `
@@ -195,12 +220,12 @@ export class MessageService {
   async editMessage(
     userId: string,
     id: string,
-    text: string,
+    text: string
   ): Promise<boolean> {
 
     let message = await this.messageRepository.findOneOrFail({
       where: { id },
-      relations: ['user', 'channel'],
+      relations: ['user', 'channel']
     });
 
     if (!message) {
@@ -215,7 +240,7 @@ export class MessageService {
 
     message = await this.messageRepository.findOneOrFail({
       where: { id },
-      relations: ['user', 'channel', 'friends'],
+      relations: ['user', 'channel']
     });
 
     this.socketService.editMessage({ room: message.channel.id, message: message.toJSON(userId) });
@@ -226,7 +251,7 @@ export class MessageService {
   async deleteMessage(userId: string, id: string): Promise<boolean> {
     const message: Message = await this.messageRepository.findOneOrFail({
       where: { id },
-      relations: ['user', 'channel'],
+      relations: ['user', 'channel', 'attachment']
     });
 
     if (!message) {
@@ -239,11 +264,12 @@ export class MessageService {
 
     const deleteId = message.id;
 
-    if (message.url) {
-      await deleteFile(message.url);
-    }
-
     await this.messageRepository.remove(message);
+
+    if (message.attachment) {
+      await this.attachmentRepository.remove(message.attachment);
+      await deleteFile(message.attachment.url);
+    }
 
     message.id = deleteId;
 
@@ -265,7 +291,7 @@ export class MessageService {
       // Channel is DM -> Check if one of the members
       if (channel.dm) {
         const member = await this.dmMemberRepository.findOne({
-          where: { channelId: channel.id, userId },
+          where: { channelId: channel.id, userId }
         });
 
         if (!member) {
@@ -274,7 +300,7 @@ export class MessageService {
         // Channel is private
       } else {
         const member = await this.pcMemberRepository.findOne({
-          where: { channelId: channel.id, userId },
+          where: { channelId: channel.id, userId }
         });
 
         if (!member) {
@@ -284,7 +310,7 @@ export class MessageService {
       // Check if user has access to the channel
     } else {
       const member = await this.memberRepository.findOneOrFail({
-        where: { guildId: channel.guild.id, userId },
+        where: { guildId: channel.guild.id, userId }
       });
 
       if (!member) {

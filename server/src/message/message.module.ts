@@ -9,13 +9,15 @@ import { SocketModule } from '../socket/socket.module';
 import { PCMember } from '../entities/pcmember.entity';
 import { Member } from '../entities/member.entity';
 import { DMMember } from '../entities/dmmember.entity';
+import { Attachment } from '../entities/attachment.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message, Channel, User, PCMember, Member, DMMember]),
+    TypeOrmModule.forFeature([Message, Channel, User, PCMember, Member, DMMember, Attachment]),
     SocketModule
   ],
   controllers: [MessageController],
   providers: [MessageService]
 })
-export class MessageModule {}
+export class MessageModule {
+}

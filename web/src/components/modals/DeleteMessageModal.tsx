@@ -52,7 +52,7 @@ export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose 
                     {getTime(message.createdAt)}
                   </Text>
                 </Flex>
-                <Text>{message.url ?? message.text}</Text>
+                <Text>{message.attachment?.filename ?? message.text}</Text>
               </Box>
             </Flex>
           </Flex>

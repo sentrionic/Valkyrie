@@ -6,8 +6,9 @@ interface MessageProps {
   message: MessageResponse;
 }
 
-export const MessageContent: React.FC<MessageProps> = ({ message: { url, text, filetype, createdAt, updatedAt } }) => {
-  if (url && filetype) {
+export const MessageContent: React.FC<MessageProps> = ({ message: { attachment, text, createdAt, updatedAt } }) => {
+  if (attachment) {
+    const { filetype, url } = attachment;
     if (filetype.startsWith('image/')) {
       return (
         <Box boxSize='sm' my={'2'} h={'full'}>

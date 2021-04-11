@@ -37,7 +37,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
   const { guildId } = useParams<RouterProps>();
   const guild = useGetCurrentGuild(guildId);
   const isOwner = guild !== undefined && guild.ownerId === current?.id;
-  const showMenu = (isAuthor || isOwner || message.url);
+  const showMenu = (isAuthor || isOwner || message.attachment?.url);
 
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
@@ -123,9 +123,9 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
       {(showMenu) &&
       <>
         <Menu id={message.id} theme={theme.dark}>
-          {message.filetype ?
+          {message.attachment?.filetype ?
             <Item className={'menu-item'} onClick={() => {
-              if (message.url) openInNewTab(message.url);
+              if (message.attachment?.url) openInNewTab(message.attachment.url);
             }}>
               <Flex align='center' justify='space-between' w='full'>
                 <Text>Open Link</Text>
