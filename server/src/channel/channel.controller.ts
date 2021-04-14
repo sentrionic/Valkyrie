@@ -57,7 +57,7 @@ export class ChannelController {
   @ApiBody({ type: ChannelInput })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiCookieAuth()
-  @ApiCreatedResponse({ type: Boolean })
+  @ApiCreatedResponse({ type: ChannelResponse })
   async createChannel(
     @GetUser() userId: string,
     @Param('guildId') guildId: string,
@@ -65,7 +65,7 @@ export class ChannelController {
       new YupValidationPipe(ChannelSchema),
       new ValidationPipe({ transform: true })
     ) input: ChannelInput
-  ): Promise<boolean> {
+  ): Promise<ChannelResponse> {
     return this.channelService.createChannel(
       guildId,
       userId,

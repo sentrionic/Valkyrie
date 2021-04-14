@@ -6,7 +6,7 @@ import { ChannelInput } from '../dtos/ChannelInput';
 export const getChannels = (id: string): Promise<AxiosResponse<Channel[]>> =>
   request.get(`channels/${id}`);
 
-export const createChannel = (id: string, input: ChannelInput): Promise<AxiosResponse<boolean>> =>
+export const createChannel = (id: string, input: ChannelInput): Promise<AxiosResponse<Channel>> =>
   request.post(`channels/${id}`, input);
 
 export const editChannel = (guildId: string, channelId: string, input: ChannelInput): Promise<AxiosResponse<boolean>> =>

@@ -30,7 +30,7 @@ export class ChannelService {
     guildId: string,
     userId: string,
     input: ChannelInput
-  ): Promise<boolean> {
+  ): Promise<ChannelResponse> {
 
     const { name, isPublic } = input;
     let { members } = input;
@@ -79,8 +79,10 @@ export class ChannelService {
       await entityManager.save(channel);
     });
 
-    this.socketService.addChannel({ room: guildId, channel: this.toChannelResponse(channel) });
-    return true;
+    const respones = this.toChannelResponse(channel);
+    this.socketService.addChannel({ room: guildId, channel: respones });
+
+    return respones;
   }
 
   /**

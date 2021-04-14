@@ -26,6 +26,7 @@ import { ChannelSchema } from '../../lib/utils/validation/channel.schema';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import { mKey } from '../../lib/utils/querykeys';
 import { createChannel } from '../../lib/api/handler/channel';
+import { useHistory } from 'react-router-dom';
 
 interface IProps {
   guildId: string;
@@ -42,6 +43,7 @@ interface Item {
 export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
 
   const key = mKey(guildId);
+  const history = useHistory();
   const { data } = useQuery(key, () =>
     getGuildMembers(guildId).then(response => response.data)
   );
@@ -88,6 +90,7 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
               if (data) {
                 resetForm();
                 onClose();
+                history.push(`/channels/${guildId}/${data.id}`);
               }
             } catch (err) {
               if (err?.response?.data?.errors) {
