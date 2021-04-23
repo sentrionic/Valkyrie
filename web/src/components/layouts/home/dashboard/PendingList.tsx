@@ -6,6 +6,7 @@ import { getPendingRequests } from '../../../../lib/api/handler/account';
 import { OnlineLabel } from '../../../sections/OnlineLabel';
 import { RequestListItem } from '../../../items/RequestListItem';
 import { homeStore } from '../../../../lib/stores/homeStore';
+import { useRequestSocket } from '../../../../lib/api/ws/useRequestSocket';
 
 export const PendingList: React.FC = () => {
   const { data } = useQuery(rKey, () =>
@@ -14,6 +15,8 @@ export const PendingList: React.FC = () => {
       staleTime: 0
     }
   );
+
+  useRequestSocket();
 
   const reset = homeStore(state => state.resetRequest);
 

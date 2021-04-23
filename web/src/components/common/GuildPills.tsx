@@ -26,7 +26,7 @@ export const ChannelNotificationIndicator: React.FC = () => {
       borderRadius={'0 4px 4px 0'}
       ml={'-4px'}
       mt={'8px'}
-      left={'75px'}
+      left={'-10px'}
     />
   );
 };

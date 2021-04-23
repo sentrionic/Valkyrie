@@ -11,7 +11,8 @@ import { Member } from '../entities/member.entity';
 import { PCMember } from '../entities/pcmember.entity';
 import { WsException } from '@nestjs/websockets';
 import { DMMember } from '../entities/dmmember.entity';
-import { Guild } from '../entities/guild.entity';
+import { GuildResponse } from '../models/response/GuildResponse';
+import { RequestResponse } from '../models/response/RequestResponse';
 
 @Injectable()
 export class SocketService {
@@ -113,7 +114,7 @@ export class SocketService {
    * Emits an "edit_guild" event
    * @param guild
    */
-  async editGuild(guild: Guild) {
+  async editGuild(guild: GuildResponse) {
     const ids = await this.getGuildMemberIds(guild.id);
     ids.forEach(id => {
       const uid = id['userId'];
@@ -288,21 +289,34 @@ export class SocketService {
   }
 
   /**
-   * Emits an "add_friend" event
+   * Emits an "add_request" event
    * @param room
+   * @param request
+   */
+  addRequest(room: string, request: RequestResponse) {
+    this.sendRequest(room);
+    this.socket.to(room).emit('add_request', request);
+  }
+
+  /**
+   * Emits an "add_friend" event
+   * @param memberId
+   * @param user
    * @param member
    */
-  addFriend(room: string, member: MemberResponse) {
-    this.socket.to(room).emit('add_friend', member);
+  addFriend(memberId: string, user: MemberResponse, member: MemberResponse) {
+    this.socket.to(memberId).emit('add_friend', user);
+    this.socket.to(user.id).emit('add_friend', member);
   }
 
   /**
    * Emits an "remove_friend" event
-   * @param room
+   * @param userId
    * @param memberId
    */
-  removeFriend(room: string, memberId: string) {
-    this.socket.to(room).emit('remove_friend', memberId);
+  removeFriend(userId: string, memberId: string) {
+    this.socket.to(userId).emit('remove_friend', memberId);
+    this.socket.to(memberId).emit('remove_friend', userId);
   }
 
   /**

@@ -12,18 +12,17 @@ import { useQueryClient } from 'react-query';
 import { cKey } from '../../lib/utils/querykeys';
 
 interface ChannelListItemProps {
-  channel: Channel,
-  guildId: string,
+  channel: Channel;
+  guildId: string;
 }
 
 export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guildId }) => {
-
   const currentPath = `/channels/${guildId}/${channel.id}`;
   const location = useLocation();
   const isActive = location.pathname === currentPath;
   const [showSettings, setShowSettings] = useState(false);
 
-  const current = userStore(state => state.current);
+  const current = userStore((state) => state.current);
   const guild = useGetCurrentGuild(guildId);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,7 +32,7 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
   useEffect(() => {
     if (channel.hasNotification && isActive) {
       cache.setQueryData<Channel[]>(cKey(guildId), (d) => {
-        const index = d!.findIndex(c => c.id === channel.id);
+        const index = d!.findIndex((c) => c.id === channel.id);
         if (index !== -1) {
           d![index] = { ...d![index], hasNotification: false };
         }
@@ -45,43 +44,39 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
   return (
     <Link to={currentPath}>
       <ListItem
-        p='5px'
-        m='0 10px'
-        color={(isActive || channel.hasNotification) ? '#fff' : 'brandGray.accent'}
+        p="5px"
+        m="0 10px"
+        color={isActive || channel.hasNotification ? '#fff' : 'brandGray.accent'}
         _hover={{ bg: 'brandGray.light', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
         bg={isActive ? 'brandGray.active' : undefined}
-        mb='2px'
+        mb="2px"
+        position={'relative'}
         onMouseLeave={() => setShowSettings(false)}
         onMouseEnter={() => setShowSettings(true)}
       >
-        { channel.hasNotification && <ChannelNotificationIndicator /> }
-        <Flex align='center' justify={'space-between'}>
-          <Flex align='center'>
+        {channel.hasNotification && <ChannelNotificationIndicator />}
+        <Flex align="center" justify={'space-between'}>
+          <Flex align="center">
             <Icon as={channel.isPublic ? FaHashtag : FaUserLock} color={'brandGray.accent'} />
-            <Text ml='2'>{channel.name}</Text>
+            <Text ml="2">{channel.name}</Text>
           </Flex>
-          {(current?.id === guild?.ownerId && (showSettings || isOpen)) &&
-          <>
-            <Icon
-              as={MdSettings}
-              color={'brandGray.accent'}
-              fontSize={'12px'}
-              _hover={{ color: '#fff' }}
-              onClick={(e) => {
-                e.preventDefault();
-                onOpen();
-              }}
-            />
-            {isOpen &&
-              <ChannelSettingsModal
-                guildId={guildId}
-                channelId={channel.id}
-                isOpen={isOpen}
-                onClose={onClose}
+          {current?.id === guild?.ownerId && (showSettings || isOpen) && (
+            <>
+              <Icon
+                as={MdSettings}
+                color={'brandGray.accent'}
+                fontSize={'12px'}
+                _hover={{ color: '#fff' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onOpen();
+                }}
               />
-            }
-          </>
-          }
+              {isOpen && (
+                <ChannelSettingsModal guildId={guildId} channelId={channel.id} isOpen={isOpen} onClose={onClose} />
+              )}
+            </>
+          )}
         </Flex>
       </ListItem>
     </Link>

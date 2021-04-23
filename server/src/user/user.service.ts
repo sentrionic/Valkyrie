@@ -281,7 +281,12 @@ export class UserService {
     if (!user.friends.includes(member) && !user.requests.includes(member)) {
       user.requests.push(member);
       await user.save();
-      this.socketService.sendRequest(memberId);
+      this.socketService.addRequest(memberId, {
+        id: user.id,
+        image: user.image,
+        username: user.username,
+        type: 1
+      });
     }
 
     return true;
@@ -300,11 +305,11 @@ export class UserService {
 
     if (hasRequest) {
       user.friends.push(member);
-      member.requests = member.requests.filter(r => r === user);
+      member.requests = member.requests.filter(r => r.id !== user.id);
       member.friends.push(user);
       await user.save();
       await member.save();
-      this.socketService.addFriend(memberId, user.toFriend());
+      this.socketService.addFriend(memberId, user.toFriend(), member.toFriend());
     }
 
     return true;
@@ -326,8 +331,8 @@ export class UserService {
     const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
     const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['friends'] });
 
-    user.friends = user.friends.filter(m => m === member);
-    member.friends = member.friends.filter(m => m === user);
+    user.friends = user.friends.filter(m => m.id !== memberId);
+    member.friends = member.friends.filter(m => m.id !== userId);
     await user.save();
     await member.save();
     this.socketService.removeFriend(memberId, userId);

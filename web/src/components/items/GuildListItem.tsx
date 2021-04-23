@@ -31,7 +31,7 @@ export const GuildListItem: React.FC<GuildListItemProps> = ({ guild }) => {
   });
 
   return (
-    <Flex mb={'2'} justify={'center'}>
+    <Flex mb={'2'} justify={'center'} position={'relative'}>
       { isActive && <ActiveGuildPill />}
       { isHover && <HoverGuildPill /> }
       { guild.hasNotification && <NotificationIndicator /> }

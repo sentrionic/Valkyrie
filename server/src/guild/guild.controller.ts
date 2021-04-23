@@ -48,7 +48,7 @@ export class GuildController {
     @Param('guildId') guildId: string,
     @GetUser() userId: string,
   ): Promise<MemberResponse[]> {
-    return await this.guildService.getGuildMembers(guildId);
+    return await this.guildService.getGuildMembers(userId, guildId);
   }
 
   @Get()

@@ -19,7 +19,7 @@ import { GuildResponse } from '../models/response/GuildResponse';
 import { SocketService } from '../socket/socket.service';
 import { idGenerator } from '../utils/idGenerator';
 import { GuildInput } from '../models/input/GuildInput';
-import { GuildMemberInput } from "../models/input/GuildMemberInput";
+import { GuildMemberInput } from '../models/input/GuildMemberInput';
 import { deleteFile, uploadAvatarToS3 } from '../utils/fileUtils';
 import { BufferFile } from '../types/BufferFile';
 import { BanEntity } from '../entities/ban.entity';
@@ -32,15 +32,16 @@ export class GuildService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(BanEntity) private banRepository: Repository<BanEntity>,
-    private socketService: SocketService,
+    private socketService: SocketService
   ) {
   }
 
   /**
    * Get the members of the given guild
+   * @param userId
    * @param guildId
    */
-  async getGuildMembers(guildId: string): Promise<MemberResponse[]> {
+  async getGuildMembers(userId: string, guildId: string): Promise<MemberResponse[]> {
     const manager = getManager();
     return await manager.query(
       `select u.id,
@@ -51,13 +52,18 @@ export class GuildService {
               u."updatedAt",
               m.nickname,
               m.color,
-              exists(select 1 from friends f where f.user = u.id) as "isFriend"
+              exists(
+                      select 1
+                      from users
+                               left join friends f on users.id = f."user"
+                      where f."friend" = u.id
+                        and f."user" = $2) as "isFriend"
        from users as u
                 join members m on u."id"::text = m."userId"
        where m."guildId" = $1
        order by (CASE when m.nickname notnull then m.nickname else u.username end)
       `,
-      [guildId],
+      [guildId, userId]
     );
   }
 
@@ -91,7 +97,7 @@ export class GuildService {
                      on g."id"::text = member."guildId"
        where member."userId" = $1
        order by g."createdAt";`,
-      [userId],
+      [userId]
     );
   }
 
@@ -125,7 +131,7 @@ export class GuildService {
         await entityManager.insert(Member, {
           id: await idGenerator(),
           guildId: guild.id,
-          userId,
+          userId
         });
       });
 
@@ -211,7 +217,7 @@ export class GuildService {
     const defaultChannel = await this.channelRepository.findOneOrFail({
       where: { guild },
       relations: ['guild'],
-      order: { createdAt: 'ASC' },
+      order: { createdAt: 'ASC' }
     });
 
     const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
@@ -248,16 +254,44 @@ export class GuildService {
     }
 
     // Frontend sets the null as string
-    if (icon === "null") icon = null;
+    if (icon === 'null' || input.image === '') icon = null;
 
     await this.guildRepository.update(guildId, {
       name: input.name ?? guild.name,
       icon
     });
 
-    const updatedGuild = await this.guildRepository.findOneOrFail(guildId);
+    const manager = getManager();
+    const updatedGuild = await manager.query(
+      `select distinct g."id",
+                       g."name",
+                       g."ownerId",
+                       g."icon",
+                       g."createdAt",
+                       g."updatedAt",
+                       ((select c."lastActivity"
+                         from channels c
+                                  join guilds g on g.id = c."guildId"
+                         where g.id = member."guildId"
+                         order by c."lastActivity" desc
+                         limit 1) > member."lastSeen") as "hasNotification",
+                       (select c.id as "default_channel_id"
+                        from channels c
+                                 join guilds g on g.id = c."guildId"
+                        where g.id = member."guildId"
+                        order by c."createdAt"
+                        limit 1)
+       from guilds g
+                join members as member
+                     on g."id"::text = member."guildId"
+       where g."id" = $1
+         AND member."userId" = $2
+       limit 1;
+      `,
+      [guildId, userId]
+    );
 
-    this.socketService.editGuild(updatedGuild);
+    this.socketService.editGuild(updatedGuild[0]);
 
     return true;
   }
@@ -368,8 +402,8 @@ export class GuildService {
     await this.banRepository.insert({
       id: await idGenerator(),
       guildId,
-      userId: memberId,
-    })
+      userId: memberId
+    });
 
     return true;
   }
@@ -393,9 +427,10 @@ export class GuildService {
     const manager = getManager();
     return await manager.query(
       `select u.id, u.username, u.image
-       from bans b join users u on b."userId" = u.id
+       from bans b
+                join users u on b."userId" = u.id
        where b."guildId" = $1`,
-      [guildId],
+      [guildId]
     );
   }
 
@@ -451,7 +486,7 @@ export class GuildService {
       ownerId: guild.ownerId,
       createdAt: guild?.createdAt.toString(),
       updatedAt: guild?.updatedAt.toString(),
-      hasNotification: false,
+      hasNotification: false
     };
   }
 }
