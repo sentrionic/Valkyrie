@@ -204,7 +204,7 @@ export class MessageService {
             where "channelId" = $1
         `, [channelId]
       );
-      this.socketService.pushDMToTop({ room: channelId, channelId });
+      this.socketService.newDMNotification(channelId, message.user.toMember());
     } else {
       getManager().query(
         `

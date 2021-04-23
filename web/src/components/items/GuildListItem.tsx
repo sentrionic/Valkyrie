@@ -40,8 +40,7 @@ export const GuildListItem: React.FC<GuildListItemProps> = ({ guild }) => {
           {guild.icon ?
             <Avatar
               src={guild.icon}
-              borderRadius={isActive ? '35%' : '50%'}
-              _hover={{ borderRadius: "35%"}}
+              borderRadius={(isActive || isHover) ? '35%' : '50%'}
               name={guild.name}
               color={'#fff'}
               bg={'brandGray.light'}

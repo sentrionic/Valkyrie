@@ -54,7 +54,7 @@ export const ChatScreen: React.FC = () => {
     <ChatGrid>
       <Box h={'10px'} mt={4} />
       <Box
-        as={InfiniteScroll}
+        as={InfiniteScroll as any}
         css={guildScrollbarCss}
         dataLength={messages.length}
         next={() => fetchNextPage()}

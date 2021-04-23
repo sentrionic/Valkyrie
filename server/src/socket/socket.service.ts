@@ -164,15 +164,15 @@ export class SocketService {
   }
 
   /**
-   * Emits an "push_to_top" event
-   * @param message
+   * Emits an "new_dm_notification" event
+   * @param channelId
+   * @param user
    */
-  async pushDMToTop(
-    message: { room: string, channelId: string }
-  ) {
-    const members = await this.dmMemberRepository.find({ where: { channelId: message.channelId } });
+  async newDMNotification(channelId: string, user: MemberResponse) {
+    const members = await this.dmMemberRepository.find({ where: { channelId } });
     members.forEach(m => {
-      this.socket.to(m.userId).emit('push_to_top', message.channelId);
+      this.socket.to(m.userId).emit('new_dm_notification', { id: channelId, user });
+      this.socket.to(m.userId).emit('push_to_top', channelId);
     });
   }
 

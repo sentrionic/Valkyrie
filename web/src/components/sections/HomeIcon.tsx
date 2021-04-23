@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Flex, useColorModeValue } from '@chakra-ui/react';
+import { Flex, useColorModeValue } from '@chakra-ui/react';
 import { Link, useLocation } from "react-router-dom";
 import { StyledTooltip } from './StyledTooltip';
 import { ActiveGuildPill, HoverGuildPill } from '../common/GuildPills';
@@ -49,7 +49,6 @@ export const HomeIcon: React.FC = () => {
             }
           </Flex>
         </Link>
-        <Divider mt="2" w="40px" />
       </Flex>
     </StyledTooltip>
   );

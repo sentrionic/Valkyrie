@@ -55,6 +55,10 @@ export interface DMChannel {
   user: Member;
 }
 
+export interface DMNotification extends DMChannel {
+  count: number;
+}
+
 export interface RequestResponse {
   id: string;
   username: string;
