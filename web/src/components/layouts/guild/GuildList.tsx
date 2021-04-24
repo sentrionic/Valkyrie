@@ -23,7 +23,7 @@ export const GuildList: React.FC = () => {
     }
   );
 
-  const { data: dmData } = useQuery<DMNotification[]>(nKey,{
+  const { data: dmData } = useQuery<DMNotification[]>(nKey, () => [], {
     cacheTime: Infinity
   });
 

@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link as RLink, useHistory, useParams } from 'react-router-dom';
 import { Box, Flex, Image, Link, Text } from '@chakra-ui/react';
 import { joinGuild } from '../lib/api/handler/guilds';
-import { Guild } from '../lib/api/models';
-import { gKey } from '../lib/utils/querykeys';
-import { useQueryClient } from 'react-query';
 
 interface InviteRouter {
   link: string;
@@ -14,7 +11,6 @@ export const Invite: React.FC = () => {
 
   const { link } = useParams<InviteRouter>();
   const [errors, setErrors] = useState<string | null>(null);
-  const cache = useQueryClient();
   const history = useHistory();
 
   useEffect(() => {
@@ -22,10 +18,6 @@ export const Invite: React.FC = () => {
       try {
         const { data } = await joinGuild({ link });
         if (data) {
-          console.log(data);
-          cache.setQueryData<Guild[]>(gKey, (old) => {
-            return [...old! || [], data];
-          });
           history.replace(`/channels/${data.id}/${data.default_channel_id}`);
         }
       } catch (err) {
@@ -39,7 +31,7 @@ export const Invite: React.FC = () => {
       }
     };
     handleJoin();
-  }, [link, history, cache]);
+  }, [link, history]);
 
   return (
     <Flex minHeight='100vh' align={'center'} justify={'center'} h={'full'}>

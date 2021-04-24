@@ -204,7 +204,7 @@ export class MessageService {
             where "channelId" = $1
         `, [channelId]
       );
-      this.socketService.newDMNotification(channelId, message.user.toMember());
+      this.socketService.newDMNotification(channelId, message.user.toMember(userId));
     } else {
       getManager().query(
         `
@@ -258,7 +258,12 @@ export class MessageService {
       throw new NotFoundException();
     }
 
-    if (message.user.id !== userId) {
+    const channel = await this.channelRepository.findOneOrFail({
+      where: { id: message.channel.id },
+      relations: ['guild']
+    })
+
+    if (message.user.id !== userId && userId !== channel.guild.ownerId) {
       throw new UnauthorizedException();
     }
 

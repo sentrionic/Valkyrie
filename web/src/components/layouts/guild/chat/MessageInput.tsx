@@ -56,6 +56,8 @@ export const MessageInput: React.FC = () => {
   }
 
   const getPlaceholder = (): string => {
+    if (!channel) return "";
+
     if (channel?.user) {
       return `Message @${channel?.user.username}`;
     }
