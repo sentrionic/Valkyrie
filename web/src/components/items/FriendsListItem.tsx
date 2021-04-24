@@ -67,7 +67,7 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
         />
       </Flex>
       {isOpen &&
-        <RemoveFriendModal id={friend.id} isOpen onClose={onClose} />
+        <RemoveFriendModal member={friend} isOpen onClose={onClose} />
       }
     </ListItem>
   );

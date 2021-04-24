@@ -14,18 +14,16 @@ import { Member } from '../../lib/api/models';
 import { removeFriend } from '../../lib/api/handler/account';
 import { fKey } from '../../lib/utils/querykeys';
 import { useQueryClient } from 'react-query';
-import { useGetFriend } from '../../lib/utils/hooks/useGetFriend';
 
 interface IProps {
-  id: string;
+  member: Member;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const RemoveFriendModal: React.FC<IProps> = ({ id, isOpen, onClose }) => {
+export const RemoveFriendModal: React.FC<IProps> = ({ member, isOpen, onClose }) => {
 
   const cache = useQueryClient();
-  const user = useGetFriend(id);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -34,11 +32,11 @@ export const RemoveFriendModal: React.FC<IProps> = ({ id, isOpen, onClose }) => 
       <ModalContent bg='brandGray.light'>
 
         <ModalHeader textTransform={"uppercase"} fontWeight='bold' mb={0} pb={0}>
-          Remove '{user?.username}'
+          Remove '{member?.username}'
         </ModalHeader>
         <ModalBody>
           <Text mb={"4"}>
-            Are you sure you want to permanently remove <b>{user?.username}</b> from your friends?
+            Are you sure you want to permanently remove <b>{member?.username}</b> from your friends?
           </Text>
         </ModalBody>
 
@@ -52,10 +50,10 @@ export const RemoveFriendModal: React.FC<IProps> = ({ id, isOpen, onClose }) => 
               fontSize={"14px"}
               onClick={async () => {
                 onClose();
-                const { data } = await removeFriend(id);
+                const { data } = await removeFriend(member.id);
                 if (data) {
                   cache.setQueryData<Member[]>(fKey, (d) => {
-                    return d!.filter(f => f.id !== id);
+                    return d!.filter(f => f.id !== member.id);
                   });
                 }
               }}

@@ -71,7 +71,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
         }
       </Menu>
       {isOpen &&
-      <RemoveFriendModal id={member.id} isOpen onClose={onClose}/>
+      <RemoveFriendModal member={member} isOpen onClose={onClose}/>
       }
       {modIsOpen &&
       <ModActionModal member={member} isOpen={modIsOpen} isBan={isBan} onClose={modOnClose}/>
