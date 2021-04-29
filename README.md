@@ -36,6 +36,8 @@ Once you registered you can also join the server that is open for all by either 
 - REST Endpoints
 - [React Query](https://react-query.tanstack.com/) & [Zustand](https://github.com/pmndrs/zustand) for state management
 
+For the mobile app check out [ValkyrieApp](https://github.com/sentrionic/ValkyrieApp)
+
 ---
 
 ## Installation
