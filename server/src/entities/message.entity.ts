@@ -19,11 +19,9 @@ export class Message extends AbstractEntity {
   @Exclude()
   user!: User;
 
-  @OneToOne(
-    () => Attachment,
-    attachment => attachment.message,
-    { nullable: true }
-  )
+  @OneToOne(() => Attachment, (attachment) => attachment.message, {
+    nullable: true,
+  })
   @JoinColumn()
   attachment?: Attachment;
 

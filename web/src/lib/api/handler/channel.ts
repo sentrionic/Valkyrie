@@ -3,8 +3,7 @@ import { Channel } from '../models';
 import { request } from '../setupAxios';
 import { ChannelInput } from '../dtos/ChannelInput';
 
-export const getChannels = (id: string): Promise<AxiosResponse<Channel[]>> =>
-  request.get(`channels/${id}`);
+export const getChannels = (id: string): Promise<AxiosResponse<Channel[]>> => request.get(`channels/${id}`);
 
 export const createChannel = (id: string, input: ChannelInput): Promise<AxiosResponse<Channel>> =>
   request.post(`channels/${id}`, input);

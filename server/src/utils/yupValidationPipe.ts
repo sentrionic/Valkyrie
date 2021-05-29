@@ -1,10 +1,15 @@
-import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform } from '@nestjs/common';
+import {
+  ArgumentMetadata,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common';
 import { serializeValidationError } from './serializeValidationError';
 
 @Injectable()
 export class YupValidationPipe implements PipeTransform {
-  constructor(private readonly schema: any) {
-  }
+  constructor(private readonly schema: any) {}
 
   async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
     try {
@@ -18,5 +23,4 @@ export class YupValidationPipe implements PipeTransform {
     }
     return value;
   }
-
 }

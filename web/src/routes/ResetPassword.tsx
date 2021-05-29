@@ -1,20 +1,12 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Image,
-  Link,
-  Text,
-} from "@chakra-ui/react";
-import { Form, Formik } from "formik";
-import React, { useState } from "react";
-import { Link as RLink, useHistory, useParams } from "react-router-dom";
-import { InputField } from "../components/common/InputField";
-import { toErrorMap } from "../lib/utils/toErrorMap";
-import { userStore } from "../lib/stores/userStore";
-import { ResetPasswordSchema } from "../lib/utils/validation/auth.schema";
-import { resetPassword } from "../lib/api/handler/auth";
+import { Box, Button, Flex, Heading, Image, Link, Text } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import React, { useState } from 'react';
+import { Link as RLink, useHistory, useParams } from 'react-router-dom';
+import { InputField } from '../components/common/InputField';
+import { toErrorMap } from '../lib/utils/toErrorMap';
+import { userStore } from '../lib/stores/userStore';
+import { ResetPasswordSchema } from '../lib/utils/validation/auth.schema';
+import { resetPassword } from '../lib/api/handler/auth';
 
 interface TokenProps {
   token: string;
@@ -23,7 +15,7 @@ interface TokenProps {
 export const ResetPassword = () => {
   const history = useHistory();
   const { token } = useParams<TokenProps>();
-  const [tokenError, setTokenError] = useState("");
+  const [tokenError, setTokenError] = useState('');
   const setUser = userStore((state) => state.setUser);
 
   return (
@@ -38,20 +30,20 @@ export const ResetPassword = () => {
           </Box>
           <Box my={4} textAlign="left">
             <Formik
-              initialValues={{ newPassword: "", confirmNewPassword: "" }}
+              initialValues={{ newPassword: '', confirmNewPassword: '' }}
               validationSchema={ResetPasswordSchema}
               onSubmit={async (values, { setErrors }) => {
                 try {
                   const { data } = await resetPassword({ ...values, token });
                   if (data) {
                     setUser(data);
-                    history.push("/channels/me");
+                    history.push('/channels/me');
                   }
                 } catch (err) {
                   const errors = err?.response?.data?.errors;
                   const errorMap = toErrorMap(errors);
 
-                  if ("token" in errorMap) {
+                  if ('token' in errorMap) {
                     setTokenError(errorMap.token);
                   }
                   setErrors(errorMap);
@@ -60,18 +52,9 @@ export const ResetPassword = () => {
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <InputField
-                    label="New Password"
-                    name="newPassword"
-                    autoComplete="new-password"
-                    type="password"
-                  />
+                  <InputField label="New Password" name="newPassword" autoComplete="new-password" type="password" />
 
-                  <InputField
-                    label="Confirm New Password"
-                    name="confirmNewPassword"
-                    type="password"
-                  />
+                  <InputField label="Confirm New Password" name="confirmNewPassword" type="password" />
 
                   <Button
                     background="highlight.standard"
@@ -80,9 +63,9 @@ export const ResetPassword = () => {
                     mt={4}
                     type="submit"
                     isLoading={isSubmitting}
-                    _hover={{ bg: "highlight.hover" }}
-                    _active={{ bg: "highlight.active" }}
-                    _focus={{ boxShadow: "none" }}
+                    _hover={{ bg: 'highlight.hover' }}
+                    _active={{ bg: 'highlight.active' }}
+                    _focus={{ boxShadow: 'none' }}
                   >
                     Reset Password
                   </Button>

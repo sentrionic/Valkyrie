@@ -20,26 +20,26 @@ export const Routes: React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path='/login'>
+        <Route path="/login">
           <Login />
         </Route>
-        <Route path='/register'>
+        <Route path="/register">
           <Register />
         </Route>
-        <Route path='/forgot-password'>
+        <Route path="/forgot-password">
           <ForgotPassword />
         </Route>
-        <Route path='/reset-password/:token'>
+        <Route path="/reset-password/:token">
           <ResetPassword />
         </Route>
-        <Route exact path='/'>
+        <Route exact path="/">
           <Landing />
         </Route>
-        <AuthRoute exact path='/channels/me' component={Home} />
-        <AuthRoute exact path='/channels/me/:channelId' component={Home} />
-        <AuthRoute exact path='/channels/:guildId/:channelId' component={ViewGuild} />
-        <AuthRoute exact path='/account' component={Account} />
-        <AuthRoute exact path='/:link' component={Invite} />
+        <AuthRoute exact path="/channels/me" component={Home} />
+        <AuthRoute exact path="/channels/me/:channelId" component={Home} />
+        <AuthRoute exact path="/channels/:guildId/:channelId" component={ViewGuild} />
+        <AuthRoute exact path="/account" component={Account} />
+        <AuthRoute exact path="/:link" component={Invite} />
       </Switch>
     </BrowserRouter>
   );

@@ -1,11 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   ApiBody,
   ApiCookieAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiOperation, ApiTags,
-  ApiUnauthorizedResponse
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ChannelService } from './channel.service';
 import { AuthGuard } from '../guards/http/auth.guard';
@@ -20,8 +31,7 @@ import { ChannelSchema } from '../validation/channel.schema';
 @ApiTags('Channel Operation')
 @Controller('channels')
 export class ChannelController {
-  constructor(private readonly channelService: ChannelService) {
-  }
+  constructor(private readonly channelService: ChannelService) {}
 
   @Get('/:guildId')
   @UseGuards(MemberGuard)
@@ -32,7 +42,7 @@ export class ChannelController {
   @ApiOkResponse({ type: [ChannelResponse] })
   async getGuildChannels(
     @Param('guildId') guildId: string,
-    @GetUser() userId: string
+    @GetUser() userId: string,
   ): Promise<ChannelResponse[]> {
     return this.channelService.getGuildChannels(guildId, userId);
   }
@@ -46,7 +56,7 @@ export class ChannelController {
   @ApiOkResponse({ description: 'Member Ids', type: [String] })
   async getPrivateChannelMembers(
     @Param('channelId') channelId: string,
-    @GetUser() userId: string
+    @GetUser() userId: string,
   ): Promise<string[]> {
     return this.channelService.getPrivateChannelMembers(userId, channelId);
   }
@@ -63,24 +73,21 @@ export class ChannelController {
     @Param('guildId') guildId: string,
     @Body(
       new YupValidationPipe(ChannelSchema),
-      new ValidationPipe({ transform: true })
-    ) input: ChannelInput
+      new ValidationPipe({ transform: true }),
+    )
+    input: ChannelInput,
   ): Promise<ChannelResponse> {
-    return this.channelService.createChannel(
-      guildId,
-      userId,
-      input
-    );
+    return this.channelService.createChannel(guildId, userId, input);
   }
 
   @Get('/me/dm')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get User\'s DMs' })
+  @ApiOperation({ summary: "Get User's DMs" })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiCookieAuth()
   @ApiOkResponse({ type: [DMChannelResponse] })
   async getDirectMessageChannels(
-    @GetUser() userId: string
+    @GetUser() userId: string,
   ): Promise<DMChannelResponse[]> {
     return this.channelService.getDirectMessageChannels(userId);
   }
@@ -93,12 +100,12 @@ export class ChannelController {
   @ApiOkResponse({ type: DMChannelResponse })
   async getOrCreateChannel(
     @GetUser() userId: string,
-    @Param('memberId') memberId: string
+    @Param('memberId') memberId: string,
   ): Promise<DMChannelResponse> {
     return this.channelService.getOrCreateChannel(userId, memberId);
   }
 
-  @Put("/:guildId/:channelId")
+  @Put('/:guildId/:channelId')
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Edit Channel' })
@@ -110,8 +117,9 @@ export class ChannelController {
     @Param('channelId') channelId: string,
     @Body(
       new YupValidationPipe(ChannelSchema),
-      new ValidationPipe({ transform: true })
-    ) input: ChannelInput,
+      new ValidationPipe({ transform: true }),
+    )
+    input: ChannelInput,
   ): Promise<boolean> {
     return this.channelService.editChannel(user, channelId, input);
   }
@@ -129,7 +137,7 @@ export class ChannelController {
     return this.channelService.setDirectMessageStatus(channelId, userId, false);
   }
 
-  @Delete("/:guildId/:channelId")
+  @Delete('/:guildId/:channelId')
   @UseGuards(MemberGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Delete Channel' })

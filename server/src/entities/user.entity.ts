@@ -1,4 +1,11 @@
-import {Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany} from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+} from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { classToPlain, Exclude, Expose } from 'class-transformer';
 import { UserResponse } from '../models/response/UserResponse';
@@ -41,7 +48,7 @@ export class User extends AbstractEntity {
   @JoinTable({
     name: 'friends',
     joinColumn: { name: 'user' },
-    inverseJoinColumn: { name: 'friend' }
+    inverseJoinColumn: { name: 'friend' },
   })
   @Exclude()
   friends!: User[];
@@ -50,7 +57,7 @@ export class User extends AbstractEntity {
   @JoinTable({
     name: 'friends_request',
     joinColumn: { name: 'senderId' },
-    inverseJoinColumn: { name: 'receiverId' }
+    inverseJoinColumn: { name: 'receiverId' },
   })
   @Exclude()
   requests!: User[];
@@ -64,7 +71,8 @@ export class User extends AbstractEntity {
 
   toMember(userId: string = null): MemberResponse {
     const response = <MemberResponse>classToPlain(this);
-    response.isFriend = (userId && this.friends?.findIndex(f => f.id === userId) !== -1);
+    response.isFriend =
+      userId && this.friends?.findIndex((f) => f.id === userId) !== -1;
     return response;
   }
 

@@ -12,10 +12,10 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-} from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
-import Cropper from "react-easy-crop";
-import getCroppedImg from "../../lib/utils/cropImage";
+} from '@chakra-ui/react';
+import React, { useCallback, useState } from 'react';
+import Cropper from 'react-easy-crop';
+import getCroppedImg from '../../lib/utils/cropImage';
 
 interface IProps {
   isOpen: boolean;
@@ -24,12 +24,7 @@ interface IProps {
   onClose: () => void;
 }
 
-export const CropImageModal: React.FC<IProps> = ({
-  isOpen,
-  onClose,
-  applyCrop,
-  initialImage,
-}) => {
+export const CropImageModal: React.FC<IProps> = ({ isOpen, onClose, applyCrop, initialImage }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -48,12 +43,7 @@ export const CropImageModal: React.FC<IProps> = ({
   }, [croppedAreaPixels, initialImage, applyCrop]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-      closeOnOverlayClick={false}
-    >
+    <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnOverlayClick={false}>
       <ModalOverlay />
 
       <ModalContent bg="brandGray.light">
@@ -89,17 +79,17 @@ export const CropImageModal: React.FC<IProps> = ({
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} fontSize={"14px"} mr={6} variant="link">
+          <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link">
             Cancel
           </Button>
           <Button
             background="highlight.standard"
             color="white"
             type="submit"
-            fontSize={"14px"}
-            _hover={{ bg: "highlight.hover" }}
-            _active={{ bg: "highlight.active" }}
-            _focus={{ boxShadow: "none" }}
+            fontSize={'14px'}
+            _hover={{ bg: 'highlight.hover' }}
+            _active={{ bg: 'highlight.active' }}
+            _focus={{ boxShadow: 'none' }}
             onClick={showCroppedImage}
           >
             Apply

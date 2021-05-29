@@ -5,7 +5,7 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { SocketService } from './socket.service';
@@ -14,24 +14,27 @@ import { sessionMiddleware } from '../config/sessionmiddleware';
 import { WsMemberGuard } from '../guards/ws/ws.guild.guard';
 import { WsAuthGuard } from '../guards/ws/ws.auth.guard';
 
-@WebSocketGateway({ namespace: '/ws', transports: ['websocket'], upgrade: false })
-export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+@WebSocketGateway({
+  namespace: '/ws',
+  transports: ['websocket'],
+  upgrade: false,
+})
+export class AppGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server!: Server;
 
-  constructor(private socketService: SocketService) {
-  }
+  constructor(private socketService: SocketService) {}
 
   afterInit(server: Server) {
     server.use(sharedsession(sessionMiddleware, { autoSave: true }));
     this.socketService.socket = server;
   }
 
-  async handleConnection(socket: Socket) {
-  }
+  async handleConnection(socket: Socket) {}
 
-  async handleDisconnect(client: Socket): Promise<any> {
-  }
+  async handleDisconnect(client: Socket): Promise<any> {}
 
   @UseGuards(WsAuthGuard)
   @SubscribeMessage('toggleOnline')

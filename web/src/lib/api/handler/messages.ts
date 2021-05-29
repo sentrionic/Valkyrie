@@ -3,7 +3,7 @@ import { Message } from '../models';
 import { request } from '../setupAxios';
 
 export const getMessages = (id: string, cursor?: string): Promise<AxiosResponse<Message[]>> =>
-  request.get(`messages/${id}/${cursor ? `?cursor=${cursor}` : ''}`);
+  request.get(`messages/${id}${cursor ? `?cursor=${cursor}` : ''}`);
 
 export const sendMessage = (
   channelId: string,

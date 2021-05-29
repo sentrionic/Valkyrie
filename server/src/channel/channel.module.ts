@@ -12,11 +12,17 @@ import { DMMember } from '../entities/dmmember.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Channel, Guild, Member, User, PCMember, DMMember]),
-    SocketModule
+    TypeOrmModule.forFeature([
+      Channel,
+      Guild,
+      Member,
+      User,
+      PCMember,
+      DMMember,
+    ]),
+    SocketModule,
   ],
   controllers: [ChannelController],
-  providers: [ChannelService]
+  providers: [ChannelService],
 })
-export class ChannelModule {
-}
+export class ChannelModule {}

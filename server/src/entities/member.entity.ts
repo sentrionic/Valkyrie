@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Guild } from './guild.entity';
@@ -15,14 +22,17 @@ export class Member extends AbstractEntity {
   @JoinColumn({ name: 'userId' })
   user!: User;
 
-  @ManyToMany(() => Guild, (guild) => guild.members, { primary: true, onDelete: 'CASCADE' })
+  @ManyToMany(() => Guild, (guild) => guild.members, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'guildId' })
   guild!: Guild;
 
-  @Column("varchar", { nullable: true })
+  @Column('varchar', { nullable: true })
   nickname?: string;
 
-  @Column("varchar", { nullable: true })
+  @Column('varchar', { nullable: true })
   color?: string;
 
   @CreateDateColumn()

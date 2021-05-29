@@ -16,17 +16,17 @@ import { RequestResponse } from '../models/response/RequestResponse';
 
 @Injectable()
 export class SocketService {
-
   public socket: Server = null;
 
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
-    @InjectRepository(PCMember) private pcMemberRepository: Repository<PCMember>,
-    @InjectRepository(DMMember) private dmMemberRepository: Repository<DMMember>
-  ) {
-  }
+    @InjectRepository(PCMember)
+    private pcMemberRepository: Repository<PCMember>,
+    @InjectRepository(DMMember)
+    private dmMemberRepository: Repository<DMMember>,
+  ) {}
 
   /**
    * Joins the given room if the user is a member of the room
@@ -38,7 +38,7 @@ export class SocketService {
 
     const channel = await this.channelRepository.findOne({
       where: { id: room },
-      relations: ['guild']
+      relations: ['guild'],
     });
 
     if (!channel) {
@@ -54,9 +54,7 @@ export class SocketService {
    * Emits a "new_message" event
    * @param message
    */
-  sendMessage(
-    message: { room: string; message: MessageResponse }
-  ) {
+  sendMessage(message: { room: string; message: MessageResponse }) {
     this.socket.to(message.room).emit('new_message', message.message);
   }
 
@@ -64,9 +62,7 @@ export class SocketService {
    * Emits an "edit_message" event
    * @param message
    */
-  editMessage(
-    message: { room: string; message: MessageResponse }
-  ) {
+  editMessage(message: { room: string; message: MessageResponse }) {
     this.socket.to(message.room).emit('edit_message', message.message);
   }
 
@@ -74,9 +70,7 @@ export class SocketService {
    * Emits a "delete_message" event
    * @param message
    */
-  deleteMessage(
-    message: { room: string; message: MessageResponse }
-  ) {
+  deleteMessage(message: { room: string; message: MessageResponse }) {
     this.socket.to(message.room).emit('delete_message', message.message);
   }
 
@@ -84,9 +78,7 @@ export class SocketService {
    * Emits an "add_channel" event
    * @param message
    */
-  addChannel(
-    message: { room: string; channel: ChannelResponse }
-  ) {
+  addChannel(message: { room: string; channel: ChannelResponse }) {
     this.socket.to(message.room).emit('add_channel', message.channel);
   }
 
@@ -94,9 +86,7 @@ export class SocketService {
    * Emits an "edit_channel" event
    * @param message
    */
-  editChannel(
-    message: { room: string; channel: ChannelResponse }
-  ) {
+  editChannel(message: { room: string; channel: ChannelResponse }) {
     this.socket.to(message.room).emit('edit_channel', message.channel);
   }
 
@@ -104,9 +94,7 @@ export class SocketService {
    * Emits an "delete_channel" event
    * @param message
    */
-  deleteChannel(
-    message: { room: string, channelId: string }
-  ) {
+  deleteChannel(message: { room: string; channelId: string }) {
     this.socket.to(message.room).emit('delete_channel', message.channelId);
   }
 
@@ -116,7 +104,7 @@ export class SocketService {
    */
   async editGuild(guild: GuildResponse) {
     const ids = await this.getGuildMemberIds(guild.id);
-    ids.forEach(id => {
+    ids.forEach((id) => {
       const uid = id['userId'];
       this.socket.to(uid).emit('edit_guild', guild);
     });
@@ -128,7 +116,7 @@ export class SocketService {
    * @param guildId
    */
   deleteGuild(memberIds: string[], guildId: string) {
-    memberIds.forEach(id => {
+    memberIds.forEach((id) => {
       const uid = id['userId'];
       this.socket.to(uid).emit('delete_guild', guildId);
     });
@@ -147,9 +135,7 @@ export class SocketService {
    * Emits an "add_member" event
    * @param message
    */
-  addMember(
-    message: { room: string, member: MemberResponse }
-  ) {
+  addMember(message: { room: string; member: MemberResponse }) {
     this.socket.to(message.room).emit('add_member', message.member);
   }
 
@@ -157,9 +143,7 @@ export class SocketService {
    * Emits an "remove_member" event
    * @param message
    */
-  removeMember(
-    message: { room: string, memberId: string }
-  ) {
+  removeMember(message: { room: string; memberId: string }) {
     this.socket.to(message.room).emit('remove_member', message.memberId);
   }
 
@@ -169,9 +153,13 @@ export class SocketService {
    * @param user
    */
   async newDMNotification(channelId: string, user: MemberResponse) {
-    const members = await this.dmMemberRepository.find({ where: { channelId } });
-    members.forEach(m => {
-      this.socket.to(m.userId).emit('new_dm_notification', { id: channelId, user });
+    const members = await this.dmMemberRepository.find({
+      where: { channelId },
+    });
+    members.forEach((m) => {
+      this.socket
+        .to(m.userId)
+        .emit('new_dm_notification', { id: channelId, user });
       this.socket.to(m.userId).emit('push_to_top', channelId);
     });
   }
@@ -183,7 +171,7 @@ export class SocketService {
    */
   async newNotification(guildId: string, channelId: string) {
     const members = await this.memberRepository.find({ where: { guildId } });
-    members.forEach(m => {
+    members.forEach((m) => {
       this.socket.to(m.userId).emit('new_notification', guildId);
     });
     this.socket.to(guildId).emit('new_notification', channelId);
@@ -209,9 +197,9 @@ export class SocketService {
               JOIN "users" "User__friends" ON "User__friends"."id"="User_User__friends"."friend"
           WHERE ( "User"."id" = $1 )
       `,
-      [id]
+      [id],
     );
-    ids.forEach(i => {
+    ids.forEach((i) => {
       const dId = i['id'];
       this.socket.to(dId).emit('toggle_online', id);
     });
@@ -238,9 +226,9 @@ export class SocketService {
           WHERE ( "User"."id" = $1 )
 
        `,
-      [id]
+      [id],
     );
-    ids.forEach(i => {
+    ids.forEach((i) => {
       const dId = i['id'];
       this.socket.to(dId).emit('toggle_offline', id);
     });
@@ -254,7 +242,8 @@ export class SocketService {
           update members
           set "lastSeen" = CURRENT_TIMESTAMP
           where "userId" = $1 and "guildId" = $2
-      `, [id, room]
+      `,
+      [id, room],
     );
   }
 
@@ -327,10 +316,12 @@ export class SocketService {
    * @param userId
    * @private
    */
-  private async isChannelMember(channel: Channel, userId: string): Promise<boolean> {
+  private async isChannelMember(
+    channel: Channel,
+    userId: string,
+  ): Promise<boolean> {
     // Check if user has access to private channel
     if (!channel.isPublic) {
-
       if (channel.dm) {
         const member = await this.dmMemberRepository.findOne({
           where: { channelId: channel.id, userId },
@@ -339,10 +330,9 @@ export class SocketService {
         if (!member) {
           throw new WsException('Not Authorized');
         }
-
       } else {
         const member = await this.pcMemberRepository.findOne({
-          where: { channelId: channel.id, userId }
+          where: { channelId: channel.id, userId },
         });
 
         if (!member) {
@@ -352,7 +342,7 @@ export class SocketService {
       // Check if user has access to the channel
     } else {
       const member = await this.memberRepository.findOneOrFail({
-        where: { guildId: channel.guild.id, userId }
+        where: { guildId: channel.guild.id, userId },
       });
 
       if (!member) {
@@ -387,7 +377,7 @@ export class SocketService {
                    join members m on m."guildId" = g."id"
           where g.id = $1
       `,
-      [guildId]
+      [guildId],
     );
   }
 }

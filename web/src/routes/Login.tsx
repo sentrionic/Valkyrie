@@ -1,20 +1,12 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Image,
-  Link,
-  Text,
-} from "@chakra-ui/react";
-import { Form, Formik } from "formik";
-import React from "react";
-import { Link as RLink, useHistory } from "react-router-dom";
-import { InputField } from "../components/common/InputField";
-import { toErrorMap } from "../lib/utils/toErrorMap";
-import { userStore } from "../lib/stores/userStore";
-import { LoginSchema } from "../lib/utils/validation/auth.schema";
-import { login } from "../lib/api/handler/auth";
+import { Box, Button, Flex, Heading, Image, Link, Text } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { Link as RLink, useHistory } from 'react-router-dom';
+import { InputField } from '../components/common/InputField';
+import { toErrorMap } from '../lib/utils/toErrorMap';
+import { userStore } from '../lib/stores/userStore';
+import { LoginSchema } from '../lib/utils/validation/auth.schema';
+import { login } from '../lib/api/handler/auth';
 
 export const Login = () => {
   const history = useHistory();
@@ -32,18 +24,18 @@ export const Login = () => {
           </Box>
           <Box my={4} textAlign="left">
             <Formik
-              initialValues={{ email: "", password: "" }}
+              initialValues={{ email: '', password: '' }}
               validationSchema={LoginSchema}
               onSubmit={async (values, { setErrors }) => {
                 try {
                   const { data } = await login(values);
                   if (data) {
                     setUser(data);
-                    history.push("/channels/me");
+                    history.push('/channels/me');
                   }
                 } catch (err) {
                   if (err?.response?.status === 401) {
-                    setErrors({ password: "Invalid Credentials" });
+                    setErrors({ password: 'Invalid Credentials' });
                   }
                   if (err?.response?.data?.errors) {
                     const errors = err?.response?.data?.errors;
@@ -54,26 +46,12 @@ export const Login = () => {
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <InputField
-                    label="Email"
-                    name="email"
-                    autoComplete="email"
-                    type="email"
-                  />
+                  <InputField label="Email" name="email" autoComplete="email" type="email" />
 
-                  <InputField
-                    label="password"
-                    name="password"
-                    autoComplete="password"
-                    type="password"
-                  />
+                  <InputField label="password" name="password" autoComplete="password" type="password" />
 
                   <Box mt={4}>
-                    <Link
-                      as={RLink}
-                      to="/forgot-password"
-                      textColor="highlight.standard"
-                    >
+                    <Link as={RLink} to="/forgot-password" textColor="highlight.standard">
                       Forgot Password?
                     </Link>
                   </Box>
@@ -85,19 +63,15 @@ export const Login = () => {
                     mt={4}
                     type="submit"
                     isLoading={isSubmitting}
-                    _hover={{ bg: "highlight.hover" }}
-                    _active={{ bg: "highlight.active" }}
-                    _focus={{ boxShadow: "none" }}
+                    _hover={{ bg: 'highlight.hover' }}
+                    _active={{ bg: 'highlight.active' }}
+                    _focus={{ boxShadow: 'none' }}
                   >
                     Login
                   </Button>
                   <Text mt="4">
-                    Don't have an account yet?{" "}
-                    <Link
-                      as={RLink}
-                      to="/register"
-                      textColor="highlight.standard"
-                    >
+                    Don't have an account yet?{' '}
+                    <Link as={RLink} to="/register" textColor="highlight.standard">
                       Sign Up
                     </Link>
                   </Text>

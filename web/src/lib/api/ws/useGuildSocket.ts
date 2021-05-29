@@ -7,10 +7,9 @@ import { userStore } from '../../stores/userStore';
 import { gKey } from '../../utils/querykeys';
 
 export function useGuildSocket() {
-
   const history = useHistory();
   const cache = useQueryClient();
-  const current = userStore(state => state.current);
+  const current = userStore((state) => state.current);
   const location = useLocation();
 
   useEffect((): any => {
@@ -19,7 +18,7 @@ export function useGuildSocket() {
 
     socket.on('edit_guild', (editedGuild: Guild) => {
       cache.setQueryData<Guild[]>(gKey, (d) => {
-        const index = d!.findIndex(c => c.id === editedGuild.id);
+        const index = d!.findIndex((c) => c.id === editedGuild.id);
         if (index !== -1) {
           d![index] = { ...d![index], name: editedGuild.name, icon: editedGuild.icon };
         }
@@ -33,7 +32,7 @@ export function useGuildSocket() {
         if (isActive) {
           history.replace('/channels/me');
         }
-        return d!.filter(g => g.id !== deleteId);
+        return d!.filter((g) => g.id !== deleteId);
       });
     });
 
@@ -43,14 +42,14 @@ export function useGuildSocket() {
         if (isActive) {
           history.replace('/channels/me');
         }
-        return d!.filter(g => g.id !== guildId);
+        return d!.filter((g) => g.id !== guildId);
       });
     });
 
     socket.on('new_notification', (id: string) => {
       if (!location.pathname.includes(id)) {
         cache.setQueryData<Guild[]>(gKey, (d) => {
-          const index = d!.findIndex(c => c.id === id);
+          const index = d!.findIndex((c) => c.id === id);
           if (index !== -1) {
             d![index] = { ...d![index], hasNotification: true };
           }

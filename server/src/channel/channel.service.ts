@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getManager, Repository } from 'typeorm';
 import { Channel } from '../entities/channel.entity';
@@ -20,25 +25,25 @@ export class ChannelService {
     @InjectRepository(Guild) private guildRepository: Repository<Guild>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(PCMember) private pcMemberRepository: Repository<PCMember>,
-    @InjectRepository(DMMember) private dmMemberRepository: Repository<DMMember>,
-    private readonly socketService: SocketService
-  ) {
-  }
+    @InjectRepository(PCMember)
+    private pcMemberRepository: Repository<PCMember>,
+    @InjectRepository(DMMember)
+    private dmMemberRepository: Repository<DMMember>,
+    private readonly socketService: SocketService,
+  ) {}
 
   async createChannel(
     guildId: string,
     userId: string,
-    input: ChannelInput
+    input: ChannelInput,
   ): Promise<ChannelResponse> {
-
     const { name, isPublic } = input;
     let { members } = input;
 
     const data = { name: name.trim(), public: isPublic };
 
     const guild = await this.guildRepository.findOneOrFail({
-      where: { id: guildId }
+      where: { id: guildId },
     });
 
     if (guild.ownerId !== userId) throw new UnauthorizedException();
@@ -62,14 +67,14 @@ export class ChannelService {
         members.push(userId);
         const pcmembers = members.map((m) => ({
           userId: m,
-          channelId: channel.id
+          channelId: channel.id,
         }));
 
         pcmembers.forEach((member) => {
           entityManager.insert(PCMember, {
             id: idGenerator(),
             channelId: channel.id,
-            userId: member.userId
+            userId: member.userId,
           });
         });
 
@@ -91,7 +96,10 @@ export class ChannelService {
    * @param guildId
    * @param userId
    */
-  async getGuildChannels(guildId: string, userId: string): Promise<ChannelResponse[]> {
+  async getGuildChannels(
+    guildId: string,
+    userId: string,
+  ): Promise<ChannelResponse[]> {
     const manager = getManager();
     return await manager.query(
       `
@@ -106,7 +114,7 @@ export class ChannelService {
             and (c."isPublic" = true or pc."userId"::text = $2)
           order by c."createdAt"
       `,
-      [guildId, userId]
+      [guildId, userId],
     );
   }
 
@@ -117,10 +125,10 @@ export class ChannelService {
    */
   async getOrCreateChannel(
     userId: string,
-    memberId: string
+    memberId: string,
   ): Promise<DMChannelResponse> {
     const member = await this.userRepository.findOne({
-      where: { id: memberId }
+      where: { id: memberId },
     });
 
     if (!member) {
@@ -136,14 +144,14 @@ export class ChannelService {
         group by c."id"
         having array_agg(dm."userId"::text) @> Array['${memberId}', '${userId}']
         and count(dm."userId") = 2;
-        `
+        `,
     );
 
     if (data.length) {
       this.setDirectMessageStatus(data[0].id, userId, true);
       return {
         id: data[0].id,
-        user: member.toMember(userId)
+        user: member.toMember(userId),
       };
     }
 
@@ -152,7 +160,7 @@ export class ChannelService {
       const channel = await this.channelRepository.create({
         name: idGenerator(),
         isPublic: false,
-        dm: true
+        dm: true,
       });
       await channel.save();
       await entityManager.save(channel);
@@ -165,7 +173,7 @@ export class ChannelService {
           id: idGenerator(),
           channelId,
           userId: member.userId,
-          isOpen: member.userId === userId
+          isOpen: member.userId === userId,
         });
       });
 
@@ -174,7 +182,7 @@ export class ChannelService {
 
     return {
       id: channelId,
-      user: member.toMember(userId)
+      user: member.toMember(userId),
     };
   }
 
@@ -204,22 +212,24 @@ export class ChannelService {
           )
           order by dm."updatedAt" DESC 
       `,
-      [userId]
+      [userId],
     );
 
     const dms: DMChannelResponse[] = [];
-    result.map(r => dms.push({
-      id: r.channelId,
-      user: {
-        id: r.id,
-        username: r.username,
-        image: r.image,
-        isOnline: r.isOnline,
-        createdAt: r.createdAt,
-        updatedAt: r.updatedAt,
-        isFriend: false
-      }
-    }));
+    result.map((r) =>
+      dms.push({
+        id: r.channelId,
+        user: {
+          id: r.id,
+          username: r.username,
+          image: r.image,
+          isOnline: r.isOnline,
+          createdAt: r.createdAt,
+          updatedAt: r.updatedAt,
+          isFriend: false,
+        },
+      }),
+    );
     return dms;
   }
 
@@ -230,10 +240,14 @@ export class ChannelService {
    * @param channelId
    * @param input
    */
-  async editChannel(userId: string, channelId: string, input: ChannelInput): Promise<boolean> {
+  async editChannel(
+    userId: string,
+    channelId: string,
+    input: ChannelInput,
+  ): Promise<boolean> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
-      relations: ['guild']
+      relations: ['guild'],
     });
 
     if (!channel) {
@@ -251,54 +265,61 @@ export class ChannelService {
     if (isPublic && !channel.isPublic) {
       await getManager().query(
         'delete from pcmembers where "channelId" = $1;',
-        [channelId]
+        [channelId],
       );
     }
 
     await this.channelRepository.update(channelId, {
       name: name ?? channel.name,
-      isPublic: isPublic ?? channel.isPublic
+      isPublic: isPublic ?? channel.isPublic,
     });
 
     // Member Changes
     if (!isPublic && members) {
-
       await getManager().transaction(async (entityManager) => {
         members = members.filter((m) => m !== userId);
         members.push(userId);
 
-        const current = await this.pcMemberRepository.find({ where: { channelId } });
-        const newMembers = members.filter((m => !current.map(c => c.userId).includes(m)));
-        const remove = current.filter((c => !members.map(m => m).includes(c.userId)));
+        const current = await this.pcMemberRepository.find({
+          where: { channelId },
+        });
+        const newMembers = members.filter(
+          (m) => !current.map((c) => c.userId).includes(m),
+        );
+        const remove = current.filter(
+          (c) => !members.map((m) => m).includes(c.userId),
+        );
 
         const pcmembers = newMembers.map((m) => ({
           userId: m,
-          channelId: channel.id
+          channelId: channel.id,
         }));
 
         pcmembers.forEach((member) => {
           entityManager.insert(PCMember, {
             id: idGenerator(),
             channelId: channel.id,
-            userId: member.userId
+            userId: member.userId,
           });
         });
 
         if (remove.length > 0) {
           await entityManager.query(
             'delete from pcmembers where "userId" IN ($1) and "channelId" = $2;',
-            [...remove.map(r => r.userId), channelId]
+            [...remove.map((r) => r.userId), channelId],
           );
         }
       });
-
     }
 
     const updatedChannel = await this.channelRepository.findOne({
-      where: { id: channelId }
+      where: { id: channelId },
     });
 
-    this.socketService.editChannel({ room: channel.guild.id, channel: this.toChannelResponse(updatedChannel) });
+    this.socketService.editChannel({
+      room: channel.guild.id,
+      channel: this.toChannelResponse(updatedChannel),
+    });
 
     return true;
   }
@@ -306,7 +327,7 @@ export class ChannelService {
   async deleteChannel(userId: string, channelId: string): Promise<boolean> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
-      relations: ['guild', 'members']
+      relations: ['guild', 'members'],
     });
 
     if (!channel) {
@@ -320,14 +341,14 @@ export class ChannelService {
     const count = await this.channelRepository.count({ guild: channel.guild });
 
     if (count === 1) {
-      throw new BadRequestException("A server needs at least one channel");
+      throw new BadRequestException('A server needs at least one channel');
     }
 
     // Delete all private channel members before deletion
     if (!channel.isPublic) {
       await getManager().query(
         'delete from pcmembers where "channelId" = $1;',
-        [channelId]
+        [channelId],
       );
     }
 
@@ -344,10 +365,13 @@ export class ChannelService {
    * @param userId
    * @param channelId
    */
-  async getPrivateChannelMembers(userId: string, channelId: string): Promise<string[]> {
+  async getPrivateChannelMembers(
+    userId: string,
+    channelId: string,
+  ): Promise<string[]> {
     const channel = await this.channelRepository.findOneOrFail({
       where: { id: channelId },
-      relations: ['guild']
+      relations: ['guild'],
     });
 
     if (!channel) {
@@ -367,12 +391,12 @@ export class ChannelService {
                    join channels c on pc."channelId" = c.id
           where c.id = $1
       `,
-      [channelId]
+      [channelId],
     );
 
     if (ids.length === 0) return [];
 
-    return ids.map(i => i.userId);
+    return ids.map((i) => i.userId);
   }
 
   /**
@@ -381,16 +405,23 @@ export class ChannelService {
    * @param userId
    * @param isOpen
    */
-  async setDirectMessageStatus(channelId: string, userId: string, isOpen: boolean): Promise<boolean> {
+  async setDirectMessageStatus(
+    channelId: string,
+    userId: string,
+    isOpen: boolean,
+  ): Promise<boolean> {
     const channel = await this.dmMemberRepository.findOneOrFail({
-      where: { channelId, userId }
+      where: { channelId, userId },
     });
 
     if (!channel) throw new NotFoundException();
 
-    await this.dmMemberRepository.update({ id: channel.id }, {
-      isOpen
-    });
+    await this.dmMemberRepository.update(
+      { id: channel.id },
+      {
+        isOpen,
+      },
+    );
 
     return true;
   }
@@ -401,7 +432,7 @@ export class ChannelService {
       name: channel!.name,
       isPublic: channel!.isPublic,
       createdAt: channel!.createdAt.toString(),
-      updatedAt: channel!.updatedAt.toString()
-    }
+      updatedAt: channel!.updatedAt.toString(),
+    };
   }
 }

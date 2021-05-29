@@ -9,7 +9,7 @@ import { AppLayout } from '../components/layouts/AppLayout';
 import { settingsStore } from '../lib/stores/settingsStore';
 
 export const ViewGuild: React.FC = () => {
-  const showMemberList = settingsStore(state => state.showMembers);
+  const showMemberList = settingsStore((state) => state.showMembers);
 
   return (
     <AppLayout showLastColumn={showMemberList}>

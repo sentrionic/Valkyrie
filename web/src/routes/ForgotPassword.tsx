@@ -1,10 +1,10 @@
-import { Box, Button, Flex, Heading, Image, useToast } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { InputField } from "../components/common/InputField";
-import { toErrorMap } from "../lib/utils/toErrorMap";
-import { ForgotPasswordSchema } from "../lib/utils/validation/auth.schema";
+import { Box, Button, Flex, Heading, Image, useToast } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { InputField } from '../components/common/InputField';
+import { toErrorMap } from '../lib/utils/toErrorMap';
+import { ForgotPasswordSchema } from '../lib/utils/validation/auth.schema';
 import { forgotPassword } from '../lib/api/handler/auth';
 
 export const ForgotPassword = () => {
@@ -23,21 +23,20 @@ export const ForgotPassword = () => {
           </Box>
           <Box my={4} textAlign="left">
             <Formik
-              initialValues={{ email: "" }}
+              initialValues={{ email: '' }}
               validationSchema={ForgotPasswordSchema}
               onSubmit={async (values, { setErrors }) => {
                 try {
                   const { data } = await forgotPassword(values.email);
                   if (data) {
                     toast({
-                      title: "Reset Mail.",
-                      description:
-                        "If an account with that email already exists, we sent you an email",
-                      status: "success",
+                      title: 'Reset Mail.',
+                      description: 'If an account with that email already exists, we sent you an email',
+                      status: 'success',
                       duration: 5000,
                       isClosable: true,
                     });
-                    history.push("/");
+                    history.push('/');
                   }
                 } catch (err) {
                   if (err?.response?.data?.errors) {
@@ -49,12 +48,7 @@ export const ForgotPassword = () => {
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <InputField
-                    label="Email"
-                    name="email"
-                    autoComplete="email"
-                    type="email"
-                  />
+                  <InputField label="Email" name="email" autoComplete="email" type="email" />
 
                   <Button
                     background="highlight.standard"
@@ -63,9 +57,9 @@ export const ForgotPassword = () => {
                     mt={4}
                     type="submit"
                     isLoading={isSubmitting}
-                    _hover={{ bg: "highlight.hover" }}
-                    _active={{ bg: "highlight.active" }}
-                    _focus={{ boxShadow: "none" }}
+                    _hover={{ bg: 'highlight.hover' }}
+                    _active={{ bg: 'highlight.active' }}
+                    _focus={{ boxShadow: 'none' }}
                     fontSize={'14px'}
                   >
                     Send Mail

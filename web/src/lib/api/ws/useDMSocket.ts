@@ -6,8 +6,7 @@ import { userStore } from '../../stores/userStore';
 import { dmKey } from '../../utils/querykeys';
 
 export function useDMSocket() {
-
-  const current = userStore(state => state.current);
+  const current = userStore((state) => state.current);
   const cache = useQueryClient();
 
   useEffect(() => {
@@ -16,10 +15,10 @@ export function useDMSocket() {
 
     socket.on('push_to_top', (dmId: string) => {
       cache.setQueryData<DMChannel[]>(dmKey, (data) => {
-        const index = data!.findIndex(d => d.id === dmId);
+        const index = data!.findIndex((d) => d.id === dmId);
         if (index === 0 || index === -1) return [...data!];
         const dm = data![index];
-        return [dm!, ...data!.filter(d => d.id !== dmId)];
+        return [dm!, ...data!.filter((d) => d.id !== dmId)];
       });
     });
 

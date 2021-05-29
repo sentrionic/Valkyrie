@@ -9,39 +9,36 @@ import { homeStore } from '../../../../lib/stores/homeStore';
 import { useRequestSocket } from '../../../../lib/api/ws/useRequestSocket';
 
 export const PendingList: React.FC = () => {
-  const { data } = useQuery(rKey, () =>
-      getPendingRequests().then(response => response.data),
-    {
-      staleTime: 0
-    }
-  );
+  const { data } = useQuery(rKey, () => getPendingRequests().then((response) => response.data), {
+    staleTime: 0,
+  });
 
   useRequestSocket();
 
-  const reset = homeStore(state => state.resetRequest);
+  const reset = homeStore((state) => state.resetRequest);
 
   useEffect(() => {
     reset();
   });
 
-  if (data?.length === 0) {
+  if (!data) return null;
+
+  if (data.length === 0) {
     return (
-      <Flex justify={'center'} align={"center"} w={'full'}>
-        <Text textColor={"brandGray.accent"}>
-          There are no pending friend requests
-        </Text>
+      <Flex justify={'center'} align={'center'} w={'full'}>
+        <Text textColor={'brandGray.accent'}>There are no pending friend requests</Text>
       </Flex>
     );
   }
 
   return (
     <>
-      <UnorderedList listStyleType='none' ml='0' w='full' mt='2'>
+      <UnorderedList listStyleType="none" ml="0" w="full" mt="2">
         <OnlineLabel label={`Pending — ${data?.length || 0}`} />
-        {data?.map((r) =>
+        {data.map((r) => (
           <RequestListItem request={r} key={r.id} />
-        )}
+        ))}
       </UnorderedList>
     </>
   );
-}
+};

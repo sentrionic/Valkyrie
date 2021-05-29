@@ -9,9 +9,9 @@ import { Member } from '../../entities/member.entity';
 export class WsMemberGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const client = context.switchToWs().getClient();
-    if (!client?.handshake?.session["userId"]) return false;
+    if (!client?.handshake?.session['userId']) return false;
 
-    const id = client?.handshake?.session["userId"];
+    const id = client?.handshake?.session['userId'];
     const guildId = context.getArgs()[1];
 
     if (!guildId) return false;

@@ -8,14 +8,14 @@ interface LabelProps {
 export const OnlineLabel: React.FC<LabelProps> = ({ label }) => {
   return (
     <Text
-      fontSize='12px'
+      fontSize="12px"
       color={'brandGray.accent'}
       textTransform={'uppercase'}
       fontWeight={'semibold'}
       mx={'4'}
       mt={'4'}
       mb={'1'}
-      w={"50%"}
+      w={'50%'}
     >
       {label}
     </Text>

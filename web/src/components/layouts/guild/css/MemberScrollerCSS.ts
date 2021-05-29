@@ -1,12 +1,12 @@
 export const memberScrollbarCss = {
   '&::-webkit-scrollbar': {
-    width: '4px'
+    width: '4px',
   },
   '&::-webkit-scrollbar-track': {
-    width: '4px'
+    width: '4px',
   },
   '&::-webkit-scrollbar-thumb': {
     background: 'brandGray.darker',
-    borderRadius: '18px'
-  }
-}
+    borderRadius: '18px',
+  },
+};

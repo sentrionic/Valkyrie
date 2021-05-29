@@ -10,12 +10,12 @@ import e from 'express';
 export class MemberGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: e.Request = context.switchToHttp().getRequest();
-    if (!(request?.session["userId"])) return false;
+    if (!request?.session['userId']) return false;
 
     const { guildId } = request.params;
 
     const member = await Member.findOne({
-      where: { guildId, userId: request.session["userId"] },
+      where: { guildId, userId: request.session['userId'] },
     });
     return !!member;
   }

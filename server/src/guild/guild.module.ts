@@ -9,8 +9,10 @@ import { Channel } from '../entities/channel.entity';
 import { BanEntity } from '../entities/ban.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Guild, User, Member, Channel, BanEntity])],
+  imports: [
+    TypeOrmModule.forFeature([Guild, User, Member, Channel, BanEntity]),
+  ],
   controllers: [GuildController],
-  providers: [GuildService]
+  providers: [GuildService],
 })
 export class GuildModule {}

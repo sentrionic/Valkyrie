@@ -1,4 +1,11 @@
-import { BaseEntity, BeforeInsert, CreateDateColumn, Index, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  BeforeInsert,
+  CreateDateColumn,
+  Index,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { idGenerator } from '../utils/idGenerator';
 
 /**
@@ -6,7 +13,6 @@ import { idGenerator } from '../utils/idGenerator';
  * snowflake ID, createdAt and updatedAt column
  */
 export abstract class AbstractEntity extends BaseEntity {
-
   @PrimaryColumn()
   id!: string;
 

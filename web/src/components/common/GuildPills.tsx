@@ -31,19 +31,20 @@ export const ChannelNotificationIndicator: React.FC = () => {
   );
 };
 
-export const ActiveGuildPill: React.FC = () =>
-    <Box
-      w={'8px'}
-      h={'40px'}
-      bg={'white'}
-      position={'absolute'}
-      borderRadius={'0 4px 4px 0'}
-      ml={'-4px'}
-      left={0}
-      mt={"4px"}
-    />
+export const ActiveGuildPill: React.FC = () => (
+  <Box
+    w={'8px'}
+    h={'40px'}
+    bg={'white'}
+    position={'absolute'}
+    borderRadius={'0 4px 4px 0'}
+    ml={'-4px'}
+    left={0}
+    mt={'4px'}
+  />
+);
 
-export const HoverGuildPill: React.FC = () =>
+export const HoverGuildPill: React.FC = () => (
   <Box
     w={'8px'}
     h={'24px'}
@@ -52,5 +53,6 @@ export const HoverGuildPill: React.FC = () =>
     borderRadius={'0 4px 4px 0'}
     ml={'-4px'}
     left={0}
-    mt={"12px"}
+    mt={'12px'}
   />
+);

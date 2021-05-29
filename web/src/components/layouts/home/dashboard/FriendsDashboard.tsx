@@ -7,7 +7,7 @@ import { scrollbarCss } from '../../../../lib/utils/theme';
 import { homeStore } from '../../../../lib/stores/homeStore';
 
 export const FriendsDashboard: React.FC = () => {
-  const isPending = homeStore(state => state.isPending);
+  const isPending = homeStore((state) => state.isPending);
 
   return (
     <>
@@ -15,14 +15,14 @@ export const FriendsDashboard: React.FC = () => {
       <GridItem
         gridColumn={3}
         gridRow={'2'}
-        bg='brandGray.light'
-        mr='5px'
-        display='flex'
-        overflowY='auto'
+        bg="brandGray.light"
+        mr="5px"
+        display="flex"
+        overflowY="auto"
         css={scrollbarCss}
       >
         {isPending ? <PendingList /> : <FriendsList />}
       </GridItem>
     </>
   );
-}
+};

@@ -13,11 +13,18 @@ import { Attachment } from '../entities/attachment.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message, Channel, User, PCMember, Member, DMMember, Attachment]),
-    SocketModule
+    TypeOrmModule.forFeature([
+      Message,
+      Channel,
+      User,
+      PCMember,
+      Member,
+      DMMember,
+      Attachment,
+    ]),
+    SocketModule,
   ],
   controllers: [MessageController],
-  providers: [MessageService]
+  providers: [MessageService],
 })
-export class MessageModule {
-}
+export class MessageModule {}

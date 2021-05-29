@@ -7,6 +7,6 @@ export class RequestResponse {
   username!: string;
   @ApiProperty({ type: String })
   image!: string;
-  @ApiProperty({ type: Number, description: "1: Incoming, 0: Outgoing" })
+  @ApiProperty({ type: Number, description: '1: Incoming, 0: Outgoing' })
   type!: number;
 }

@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  AvatarBadge,
-  Flex,
-  IconButton,
-  ListItem,
-  Text, useDisclosure
-} from '@chakra-ui/react';
+import { Avatar, AvatarBadge, Flex, IconButton, ListItem, Text, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { FaEllipsisV } from 'react-icons/fa';
 import { DMChannel, Member } from '../../lib/api/models';
@@ -16,11 +9,10 @@ import { useQueryClient } from 'react-query';
 import { dmKey } from '../../lib/utils/querykeys';
 
 interface FriendsListItemProp {
-  friend: Member
+  friend: Member;
 }
 
 export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
-
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cache = useQueryClient();
@@ -29,13 +21,13 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
     const { data } = await getOrCreateDirectMessage(friend.id);
     if (data) {
       cache.setQueryData<DMChannel[]>(dmKey, (d) => {
-        const index = d!.findIndex(d => d.id);
+        const index = d!.findIndex((d) => d.id === data.id);
         if (index === -1) return [data, ...d!];
         return d!;
       });
       history.push(`/channels/me/${data.id}`);
     }
-  }
+  };
 
   return (
     <ListItem
@@ -47,12 +39,9 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
       }}
     >
       <Flex align="center" justify="space-between">
-        <Flex align="center" w={"full"}
-          onClick={getDMChannel}
-          _hover={{ cursor: 'pointer' }}
-        >
+        <Flex align="center" w={'full'} onClick={getDMChannel} _hover={{ cursor: 'pointer' }}>
           <Avatar size="sm" src={friend.image}>
-            <AvatarBadge boxSize="1.25em" bg={ friend.isOnline ? 'green.500' : 'gray.500'} />
+            <AvatarBadge boxSize="1.25em" bg={friend.isOnline ? 'green.500' : 'gray.500'} />
           </Avatar>
           <Text ml="2">{friend.username}</Text>
         </Flex>
@@ -66,9 +55,7 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
           }}
         />
       </Flex>
-      {isOpen &&
-        <RemoveFriendModal member={friend} isOpen onClose={onClose} />
-      }
+      {isOpen && <RemoveFriendModal member={friend} isOpen onClose={onClose} />}
     </ListItem>
   );
 };

@@ -11,9 +11,8 @@ import { useDMSocket } from '../../../lib/api/ws/useDMSocket';
 import { DMPlaceholder } from '../../sections/DMPlaceholder';
 
 export const DMSidebar: React.FC = () => {
-
   const { data } = useQuery(dmKey, () => {
-    return getUserDMs().then(result => result.data);
+    return getUserDMs().then((result) => result.data);
   });
 
   useDMSocket();
@@ -22,34 +21,28 @@ export const DMSidebar: React.FC = () => {
     <GridItem
       gridColumn={'2'}
       gridRow={'1 / 4'}
-      bg='brandGray.dark'
-      overflowY='hidden'
+      bg="brandGray.dark"
+      overflowY="hidden"
       _hover={{ overflowY: 'auto' }}
       css={dmScrollerCss}
     >
       <FriendsListButton />
-      <Text
-        ml='4'
-        textTransform='uppercase'
-        fontSize='12px'
-        fontWeight='semibold'
-        color='brandGray.accent'
-      >
+      <Text ml="4" textTransform="uppercase" fontSize="12px" fontWeight="semibold" color="brandGray.accent">
         DIRECT MESSAGES
       </Text>
-      <UnorderedList listStyleType='none' ml='0' mt='4'>
+      <UnorderedList listStyleType="none" ml="0" mt="4">
         {data?.map((dm) => (
           <DMListItem dm={dm} key={dm.id} />
         ))}
-        {data?.length === 0 &&
-        <Box>
-          <DMPlaceholder />
-          <DMPlaceholder />
-          <DMPlaceholder />
-          <DMPlaceholder />
-          <DMPlaceholder />
-        </Box>
-        }
+        {data?.length === 0 && (
+          <Box>
+            <DMPlaceholder />
+            <DMPlaceholder />
+            <DMPlaceholder />
+            <DMPlaceholder />
+            <DMPlaceholder />
+          </Box>
+        )}
       </UnorderedList>
       <AccountBar />
     </GridItem>

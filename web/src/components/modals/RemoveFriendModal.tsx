@@ -22,38 +22,36 @@ interface IProps {
 }
 
 export const RemoveFriendModal: React.FC<IProps> = ({ member, isOpen, onClose }) => {
-
   const cache = useQueryClient();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
 
-      <ModalContent bg='brandGray.light'>
-
-        <ModalHeader textTransform={"uppercase"} fontWeight='bold' mb={0} pb={0}>
+      <ModalContent bg="brandGray.light">
+        <ModalHeader textTransform={'uppercase'} fontWeight="bold" mb={0} pb={0}>
           Remove '{member?.username}'
         </ModalHeader>
         <ModalBody>
-          <Text mb={"4"}>
+          <Text mb={'4'}>
             Are you sure you want to permanently remove <b>{member?.username}</b> from your friends?
           </Text>
         </ModalBody>
 
-        <ModalFooter bg='brandGray.dark'>
-          <Button onClick={onClose} mr={6} variant='link' fontSize={"14px"}>
+        <ModalFooter bg="brandGray.dark">
+          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
             Cancel
           </Button>
           <LightMode>
             <Button
-              colorScheme='red'
-              fontSize={"14px"}
+              colorScheme="red"
+              fontSize={'14px'}
               onClick={async () => {
                 onClose();
                 const { data } = await removeFriend(member.id);
                 if (data) {
                   cache.setQueryData<Member[]>(fKey, (d) => {
-                    return d!.filter(f => f.id !== member.id);
+                    return d!.filter((f) => f.id !== member.id);
                   });
                 }
               }}

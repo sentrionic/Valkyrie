@@ -28,13 +28,13 @@ export const AddGuildIcon: React.FC<AddGuildIconProps> = ({ onOpen }) => {
             cursor: 'pointer',
             borderRadius: '35%',
             bg: 'brandGreen',
-            color: 'white'
+            color: 'white',
           }}
           onClick={onOpen}
           onMouseLeave={() => setHover(false)}
           onMouseEnter={() => setHover(true)}
         >
-          <AiOutlinePlus fontSize='25px' />
+          <AiOutlinePlus fontSize="25px" />
         </Flex>
       </StyledTooltip>
     </>

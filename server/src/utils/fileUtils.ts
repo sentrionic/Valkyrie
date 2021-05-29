@@ -68,7 +68,7 @@ export const uploadToS3 = async (
 ): Promise<string> => {
   const { buffer, mimetype } = await file;
   const date = Date.now();
-  const key = `files/${directory}/${date}-${filename}`
+  const key = `files/${directory}/${date}-${filename}`;
 
   const params = {
     Bucket: process.env.AWS_STORAGE_BUCKET_NAME as string,
@@ -85,7 +85,7 @@ export const uploadToS3 = async (
 export const formatName = (filename: string): string => {
   const file = path.parse(filename);
   const name = file.name;
-  const ext = file.ext
+  const ext = file.ext;
   const cleanFileName = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
   return `${cleanFileName}${ext}`;
 };

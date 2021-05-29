@@ -1,9 +1,9 @@
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image();
-    image.addEventListener("load", () => resolve(image));
-    image.addEventListener("error", (error) => reject(error));
-    image.setAttribute("crossOrigin", "anonymous"); // needed to avoid cross-origin issues on CodeSandbox
+    image.addEventListener('load', () => resolve(image));
+    image.addEventListener('error', (error) => reject(error));
+    image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues on CodeSandbox
     image.src = url;
   });
 
@@ -17,14 +17,10 @@ function getRadianAngle(degreeValue: number) {
  * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
  * @param {number} rotation - optional rotation parameter
  */
-export default async function getCroppedImg(
-  imageSrc: string,
-  pixelCrop: any,
-  rotation = 0
-): Promise<Blob> {
+export default async function getCroppedImg(imageSrc: string, pixelCrop: any, rotation = 0): Promise<Blob> {
   const image = await createImage(imageSrc);
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
   const maxSize = Math.max(image.width, image.height);
   const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2));
@@ -40,11 +36,7 @@ export default async function getCroppedImg(
   ctx!.translate(-safeArea / 2, -safeArea / 2);
 
   // draw rotated image and store data.
-  ctx!.drawImage(
-    image,
-    safeArea / 2 - image.width * 0.5,
-    safeArea / 2 - image.height * 0.5
-  );
+  ctx!.drawImage(image, safeArea / 2 - image.width * 0.5, safeArea / 2 - image.height * 0.5);
   const data = ctx!.getImageData(0, 0, safeArea, safeArea);
 
   // set canvas width to final desired crop size - this will clear existing context
@@ -65,6 +57,6 @@ export default async function getCroppedImg(
   return new Promise((resolve) => {
     canvas.toBlob((file) => {
       resolve(file!);
-    }, "image/jpeg");
+    }, 'image/jpeg');
   });
 }

@@ -4,7 +4,6 @@ import { Member } from '../models';
 import { useQueryClient } from 'react-query';
 
 export function useMemberSocket(guildId: string, key: string) {
-
   const cache = useQueryClient();
 
   useEffect((): any => {
@@ -28,13 +27,13 @@ export function useMemberSocket(guildId: string, key: string) {
 
     socket.on('remove_member', (memberId: string) => {
       cache.setQueryData<Member[]>(key, (data) => {
-        return [...data!.filter(m => m.id !== memberId)];
+        return [...data!.filter((m) => m.id !== memberId)];
       });
     });
 
     socket.on('toggle_online', (memberId: string) => {
       cache.setQueryData<Member[]>(key, (data) => {
-        const index = data!.findIndex(m => m.id === memberId);
+        const index = data!.findIndex((m) => m.id === memberId);
         if (index !== -1) data![index].isOnline = true;
         return data!;
       });
@@ -42,7 +41,7 @@ export function useMemberSocket(guildId: string, key: string) {
 
     socket.on('toggle_offline', (memberId: string) => {
       cache.setQueryData<Member[]>(key, (data) => {
-        const index = data!.findIndex(m => m.id === memberId);
+        const index = data!.findIndex((m) => m.id === memberId);
         if (index !== -1) data![index].isOnline = false;
         return data!;
       });

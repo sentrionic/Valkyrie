@@ -14,6 +14,6 @@ export const settingsStore = create<SettingsState>(
     }),
     {
       name: 'settings-storage',
-    },
-  ),
+    }
+  )
 );

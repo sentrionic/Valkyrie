@@ -7,9 +7,8 @@ import { rKey } from '../../utils/querykeys';
 import { homeStore } from '../../stores/homeStore';
 
 export function useRequestSocket() {
-
-  const current = userStore(state => state.current);
-  const setRequests = homeStore(state => state.setRequests);
+  const current = userStore((state) => state.current);
+  const setRequests = homeStore((state) => state.setRequests);
   const cache = useQueryClient();
 
   useEffect((): any => {

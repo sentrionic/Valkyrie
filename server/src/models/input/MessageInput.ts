@@ -4,7 +4,7 @@ export class MessageInput {
   @ApiProperty({
     type: String,
     required: false,
-    description: "The message. Must not be empty"
+    description: 'The message. Must not be empty',
   })
   text?: string;
 

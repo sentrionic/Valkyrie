@@ -5,7 +5,8 @@ import {
   Get,
   Param,
   Post,
-  Put, Query,
+  Put,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -24,18 +25,17 @@ import {
   ApiConsumes,
   ApiCookieAuth,
   ApiOkResponse,
-  ApiOperation, ApiTags,
-  ApiUnauthorizedResponse
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @ApiTags('Message Operation')
 @Controller('messages')
 export class MessageController {
-  constructor(
-    private readonly messageService: MessageService,
-  ) {}
+  constructor(private readonly messageService: MessageService) {}
 
-  @Get("/:channelId")
+  @Get('/:channelId')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get Channel Messages' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
@@ -49,7 +49,7 @@ export class MessageController {
     return this.messageService.getMessages(channelId, userId, cursor);
   }
 
-  @Post("/:channelId")
+  @Post('/:channelId')
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
@@ -67,7 +67,7 @@ export class MessageController {
     return this.messageService.createMessage(userId, channelId, input, file);
   }
 
-  @Put("/:messageId")
+  @Put('/:messageId')
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Edit Message' })
@@ -82,7 +82,7 @@ export class MessageController {
     return this.messageService.editMessage(user, messageId, input.text);
   }
 
-  @Delete("/:messageId")
+  @Delete('/:messageId')
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Delete Message' })

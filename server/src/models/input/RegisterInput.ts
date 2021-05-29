@@ -10,7 +10,7 @@ export class RegisterInput implements Partial<User> {
 
   @ApiProperty({
     type: String,
-    description: 'Unique. Must be a valid email.'
+    description: 'Unique. Must be a valid email.',
   })
   email!: string;
 

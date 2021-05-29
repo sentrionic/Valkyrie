@@ -20,6 +20,6 @@ export const userStore = create<AccountState>(
     }),
     {
       name: 'user-storage',
-    },
-  ),
+    }
+  )
 );

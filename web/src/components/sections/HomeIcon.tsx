@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, useColorModeValue } from '@chakra-ui/react';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom';
 import { StyledTooltip } from './StyledTooltip';
 import { ActiveGuildPill, HoverGuildPill } from '../common/GuildPills';
 import { homeStore } from '../../lib/stores/homeStore';
@@ -8,11 +8,11 @@ import { NotificationIcon } from '../common/NotificationIcon';
 
 export const HomeIcon: React.FC = () => {
   const location = useLocation();
-  const isActive = location.pathname === "/channels/me";
+  const isActive = location.pathname === '/channels/me';
   const [isHover, setHover] = useState(false);
 
-  const notification = homeStore(state => state.notifCount);
-  const reset = homeStore(state => state.reset);
+  const notification = homeStore((state) => state.notifCount);
+  const reset = homeStore((state) => state.reset);
 
   useEffect(() => {
     if (isActive) reset();
@@ -21,32 +21,30 @@ export const HomeIcon: React.FC = () => {
   return (
     <StyledTooltip label={'Home'} position={'right'}>
       <Flex direction="column" my="2" align="center">
-        { isActive && <ActiveGuildPill />}
-        { isHover && <HoverGuildPill /> }
+        {isActive && <ActiveGuildPill />}
+        {isHover && <HoverGuildPill />}
         <Link to="/channels/me">
           <Flex
             direction="column"
             m="auto"
             align="center"
             justify="center"
-            bg={isActive ? "highlight.standard" : "brandGray.light"}
-            borderRadius={isActive ? "35%" : "50%"}
+            bg={isActive ? 'highlight.standard' : 'brandGray.light'}
+            borderRadius={isActive ? '35%' : '50%'}
             h="48px"
             w="48px"
             color="white"
-            position={"relative"}
+            position={'relative'}
             _hover={{
-              cursor: "pointer",
-              borderRadius: "35%",
-              bg: "highlight.standard",
+              cursor: 'pointer',
+              borderRadius: '35%',
+              bg: 'highlight.standard',
             }}
             onMouseLeave={() => setHover(false)}
             onMouseEnter={() => setHover(true)}
           >
             <Logo />
-            { notification > 0 &&
-              <NotificationIcon count={notification} />
-            }
+            {notification > 0 && <NotificationIcon count={notification} />}
           </Flex>
         </Link>
       </Flex>
@@ -55,7 +53,7 @@ export const HomeIcon: React.FC = () => {
 };
 
 const Logo = () => {
-  const fill = useColorModeValue("#2D3748", "#fff");
+  const fill = useColorModeValue('#2D3748', '#fff');
   return (
     <svg width="27pt" height="22pt" viewBox="0 0 27 22" version="1.1">
       <g id="surface1" fill={fill}>

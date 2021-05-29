@@ -8,30 +8,28 @@ import { FriendsListItem } from '../../../items/FriendsListItem';
 import { useFriendSocket } from '../../../../lib/api/ws/useFriendSocket';
 
 export const FriendsList: React.FC = () => {
-  const { data } = useQuery(fKey, () =>
-      getFriends().then(response => response.data),
-  );
+  const { data } = useQuery(fKey, () => getFriends().then((response) => response.data));
 
   useFriendSocket();
 
-  if (data?.length === 0) {
+  if (!data) return null;
+
+  if (data.length === 0) {
     return (
-      <Flex justify={'center'} align={"center"} w={'full'}>
-        <Text textColor={"brandGray.accent"}>
-          No one here yet
-        </Text>
+      <Flex justify={'center'} align={'center'} w={'full'}>
+        <Text textColor={'brandGray.accent'}>No one here yet</Text>
       </Flex>
     );
   }
 
   return (
     <>
-      <UnorderedList listStyleType='none' ml='0' w='full' mt='2'>
+      <UnorderedList listStyleType="none" ml="0" w="full" mt="2">
         <OnlineLabel label={`friends — ${data?.length || 0}`} />
-        {data?.map((f) =>
+        {data.map((f) => (
           <FriendsListItem key={f.id} friend={f} />
-        )}
+        ))}
       </UnorderedList>
     </>
   );
-}
+};

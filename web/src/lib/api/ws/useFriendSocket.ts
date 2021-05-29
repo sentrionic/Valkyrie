@@ -7,9 +7,8 @@ import { fKey } from '../../utils/querykeys';
 import { homeStore } from '../../stores/homeStore';
 
 export function useFriendSocket() {
-
-  const current = userStore(state => state.current);
-  const setRequests = homeStore(state => state.setRequests);
+  const current = userStore((state) => state.current);
+  const setRequests = homeStore((state) => state.setRequests);
   const cache = useQueryClient();
 
   useEffect((): any => {
@@ -24,22 +23,22 @@ export function useFriendSocket() {
 
     socket.on('remove_friend', (memberId: string) => {
       cache.setQueryData<Member[]>(fKey, (data) => {
-        return [...data!.filter(m => m.id !== memberId)];
+        return [...data!.filter((m) => m.id !== memberId)];
       });
     });
 
     socket.on('toggle_online', (memberId: string) => {
       cache.setQueryData<Member[]>(fKey, (data) => {
-        const index = data!.findIndex(m => m.id === memberId);
-        if (index !== -1 ) data![index].isOnline = true;
+        const index = data!.findIndex((m) => m.id === memberId);
+        if (index !== -1) data![index].isOnline = true;
         return data!;
       });
     });
 
     socket.on('toggle_offline', (memberId: string) => {
       cache.setQueryData<Member[]>(fKey, (data) => {
-        const index = data!.findIndex(m => m.id === memberId);
-        if (index !== -1 ) data![index].isOnline = false;
+        const index = data!.findIndex((m) => m.id === memberId);
+        if (index !== -1) data![index].isOnline = false;
         return data!;
       });
     });

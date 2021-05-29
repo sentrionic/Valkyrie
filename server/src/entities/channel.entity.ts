@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { User } from './user.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Guild } from './guild.entity';
@@ -15,14 +23,10 @@ export class Channel extends AbstractEntity {
   @Column('boolean', { default: false })
   dm!: boolean;
 
-  @ManyToOne(
-    () => Guild,
-    (guild) => guild.id,
-    {
-      nullable: true,
-      onDelete: 'CASCADE'
-    }
-  )
+  @ManyToOne(() => Guild, (guild) => guild.id, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   guild!: Guild;
 
   @ManyToMany(() => User, { onDelete: 'CASCADE' })
@@ -30,19 +34,16 @@ export class Channel extends AbstractEntity {
     name: 'channel_member',
     joinColumn: {
       name: 'channels',
-      referencedColumnName: 'id'
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
       name: 'users',
-      referencedColumnName: 'id'
-    }
+      referencedColumnName: 'id',
+    },
   })
   members!: User[];
 
-  @OneToMany(
-    () => PCMember,
-    (pcmember) => pcmember.channel
-  )
+  @OneToMany(() => PCMember, (pcmember) => pcmember.channel)
   pcmembers: PCMember[];
 
   @CreateDateColumn()

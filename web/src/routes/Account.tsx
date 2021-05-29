@@ -10,43 +10,37 @@ import {
   Tooltip,
   useDisclosure,
   useToast,
-} from "@chakra-ui/react";
-import { Form, Formik } from "formik";
-import React, { useRef, useState } from "react";
+} from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import React, { useRef, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { useHistory } from "react-router-dom";
-import { InputField } from "../components/common/InputField";
-import { ChangePasswordModal } from "../components/modals/ChangePasswordModal";
-import { toErrorMap } from "../lib/utils/toErrorMap";
-import { userStore } from "../lib/stores/userStore";
-import { UserSchema } from "../lib/utils/validation/auth.schema";
-import { getAccount, updateAccount } from "../lib/api/handler/account";
-import { AccountResponse } from "../lib/api/models";
-import { logout } from "../lib/api/handler/auth";
-import { CropImageModal } from "../components/modals/CropImageModal";
+import { useHistory } from 'react-router-dom';
+import { InputField } from '../components/common/InputField';
+import { ChangePasswordModal } from '../components/modals/ChangePasswordModal';
+import { toErrorMap } from '../lib/utils/toErrorMap';
+import { userStore } from '../lib/stores/userStore';
+import { UserSchema } from '../lib/utils/validation/auth.schema';
+import { getAccount, updateAccount } from '../lib/api/handler/account';
+import { AccountResponse } from '../lib/api/models';
+import { logout } from '../lib/api/handler/auth';
+import { CropImageModal } from '../components/modals/CropImageModal';
 import { aKey } from '../lib/utils/querykeys';
 
 export const Account = () => {
   const history = useHistory();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: cropperIsOpen,
-    onOpen: cropperOnOpen,
-    onClose: cropperOnClose,
-  } = useDisclosure();
+  const { isOpen: cropperIsOpen, onOpen: cropperOnOpen, onClose: cropperOnClose } = useDisclosure();
 
-  const { data: user } = useQuery<AccountResponse>(aKey, () =>
-    getAccount().then((response) => response.data)
-  );
+  const { data: user } = useQuery<AccountResponse>(aKey, () => getAccount().then((response) => response.data));
   const cache = useQueryClient();
 
   const logoutUser = userStore((state) => state.logout);
   const setUser = userStore((state) => state.setUser);
 
   const inputFile: any = useRef(null);
-  const [imageUrl, setImageUrl] = useState(user?.image || "");
-  const [cropImage, setCropImage] = useState("");
+  const [imageUrl, setImageUrl] = useState(user?.image || '');
+  const [cropImage, setCropImage] = useState('');
   const [croppedImage, setCroppedImage] = useState<any>(null);
 
   const closeClicked = () => {
@@ -55,7 +49,7 @@ export const Account = () => {
 
   const applyCrop = (file: Blob) => {
     setImageUrl(URL.createObjectURL(file));
-    setCroppedImage(new File([file], "avatar"));
+    setCroppedImage(new File([file], 'avatar', { type: 'image/jpeg' }));
     cropperOnClose();
   };
 
@@ -64,7 +58,7 @@ export const Account = () => {
     if (data) {
       cache.clear();
       logoutUser();
-      history.replace("/");
+      history.replace('/');
     }
   };
 
@@ -88,15 +82,15 @@ export const Account = () => {
               onSubmit={async (values, { setErrors }) => {
                 try {
                   const formData = new FormData();
-                  formData.append("email", values.email);
-                  formData.append("username", values.username);
-                  formData.append("image", croppedImage ?? imageUrl);
+                  formData.append('email', values.email);
+                  formData.append('username', values.username);
+                  formData.append('image', croppedImage ?? imageUrl);
                   const { data } = await updateAccount(formData);
                   if (data) {
                     setUser(data);
                     toast({
-                      title: "Account Updated.",
-                      status: "success",
+                      title: 'Account Updated.',
+                      status: 'success',
                       duration: 3000,
                       isClosable: true,
                     });
@@ -117,7 +111,7 @@ export const Account = () => {
                         size="xl"
                         name={user?.username}
                         src={imageUrl || user?.image}
-                        _hover={{ cursor: "pointer", opacity: 0.5 }}
+                        _hover={{ cursor: 'pointer', opacity: 0.5 }}
                         onClick={() => inputFile.current.click()}
                       />
                     </Tooltip>
@@ -129,9 +123,7 @@ export const Account = () => {
                       hidden
                       onChange={async (e) => {
                         if (!e.currentTarget.files) return;
-                        setCropImage(
-                          URL.createObjectURL(e.currentTarget.files[0])
-                        );
+                        setCropImage(URL.createObjectURL(e.currentTarget.files[0]));
                         cropperOnOpen();
                       }}
                     />
@@ -156,23 +148,12 @@ export const Account = () => {
 
                     <Flex my={8} align={'end'}>
                       <Spacer />
-                      <Button
-                        mr={4}
-                        colorScheme="white"
-                        variant="outline"
-                        onClick={closeClicked}
-                        fontSize={"14px"}
-                      >
+                      <Button mr={4} colorScheme="white" variant="outline" onClick={closeClicked} fontSize={'14px'}>
                         Close
                       </Button>
 
                       <LightMode>
-                        <Button
-                          type="submit"
-                          colorScheme="green"
-                          isLoading={isSubmitting}
-                          fontSize={"14px"}
-                        >
+                        <Button type="submit" colorScheme="green" isLoading={isSubmitting} fontSize={'14px'}>
                           Update
                         </Button>
                       </LightMode>
@@ -182,7 +163,7 @@ export const Account = () => {
               )}
             </Formik>
           </Box>
-          <Divider my={"4"} />
+          <Divider my={'4'} />
           <Flex>
             <Heading fontSize="18px">PASSWORD AND AUTHENTICATION</Heading>
           </Flex>
@@ -191,33 +172,31 @@ export const Account = () => {
               background="highlight.standard"
               color="white"
               type="submit"
-              _hover={{ bg: "highlight.hover" }}
-              _active={{ bg: "highlight.active" }}
-              _focus={{ boxShadow: "none" }}
+              _hover={{ bg: 'highlight.hover' }}
+              _active={{ bg: 'highlight.active' }}
+              _focus={{ boxShadow: 'none' }}
               onClick={onOpen}
-              fontSize={"14px"}
+              fontSize={'14px'}
             >
               Change Password
             </Button>
 
             <Spacer />
-            <Button colorScheme="red" variant="outline" onClick={logoutClicked} fontSize={"14px"}>
+            <Button colorScheme="red" variant="outline" onClick={logoutClicked} fontSize={'14px'}>
               Logout
             </Button>
           </Flex>
         </Box>
       </Box>
-      {isOpen &&
-        <ChangePasswordModal isOpen={isOpen} onClose={onClose} />
-      }
-      {cropperIsOpen &&
+      {isOpen && <ChangePasswordModal isOpen={isOpen} onClose={onClose} />}
+      {cropperIsOpen && (
         <CropImageModal
           isOpen={cropperIsOpen}
           onClose={cropperOnClose}
           initialImage={cropImage}
           applyCrop={applyCrop}
         />
-      }
+      )}
     </Flex>
   );
 };

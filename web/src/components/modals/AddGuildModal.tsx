@@ -9,7 +9,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
@@ -44,34 +44,31 @@ export const AddGuildModal: React.FC<IProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={submitClose} isCentered size='sm'>
+    <Modal isOpen={isOpen} onClose={submitClose} isCentered size="sm">
       <ModalOverlay />
 
       {screen === AddGuildScreen.INVITE && <JoinServerModal goBack={goBack} submitClose={submitClose} />}
-      {screen === AddGuildScreen.CREATE && (
-        <CreateServerModal goBack={goBack} submitClose={submitClose} />
-      )}
+      {screen === AddGuildScreen.CREATE && <CreateServerModal goBack={goBack} submitClose={submitClose} />}
       {screen === AddGuildScreen.START && (
-        <ModalContent bg='brandGray.light'>
-          <ModalHeader textAlign='center' fontWeight='bold'>
+        <ModalContent bg="brandGray.light">
+          <ModalHeader textAlign="center" fontWeight="bold">
             Create a server
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <VStack spacing='5'>
-              <Text textAlign='center'>
-                Your server is where you and your friends hang out. Make yours
-                and start talking.
+            <VStack spacing="5">
+              <Text textAlign="center">
+                Your server is where you and your friends hang out. Make yours and start talking.
               </Text>
 
               <Button
-                background='highlight.standard'
-                color='white'
-                type='submit'
+                background="highlight.standard"
+                color="white"
+                type="submit"
                 _hover={{ bg: 'highlight.hover' }}
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
-                w='full'
+                w="full"
                 onClick={() => setScreen(AddGuildScreen.CREATE)}
               >
                 Create My Own
@@ -82,14 +79,14 @@ export const AddGuildModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               <Text>Have an invite already?</Text>
 
               <Button
-                mt='4'
-                background='highlight.standard'
-                color='white'
-                type='submit'
+                mt="4"
+                background="highlight.standard"
+                color="white"
+                type="submit"
                 _hover={{ bg: 'highlight.hover' }}
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
-                w='full'
+                w="full"
                 onClick={() => setScreen(AddGuildScreen.INVITE)}
               >
                 Join a Server
@@ -108,15 +105,14 @@ interface IScreenProps {
 }
 
 const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
-
   const cache = useQueryClient();
   const history = useHistory();
 
   return (
-    <ModalContent bg='brandGray.light'>
+    <ModalContent bg="brandGray.light">
       <Formik
         initialValues={{
-          link: ''
+          link: '',
         }}
         onSubmit={async (values, { setErrors }) => {
           if (values.link === '') {
@@ -146,47 +142,41 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <ModalHeader textAlign='center' fontWeight='bold' pb='0'>
+            <ModalHeader textAlign="center" fontWeight="bold" pb="0">
               Join a Server
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={3}>
-              <Text fontSize='14px' textColor='brandGray.accent'>
+              <Text fontSize="14px" textColor="brandGray.accent">
                 Enter an invite below to join an existing server
               </Text>
-              <InputField label='invite link' name='link' />
+              <InputField label="invite link" name="link" />
 
-              <Text
-                mt='4'
-                fontSize='12px'
-                fontWeight='semibold'
-                textColor='brandGray.accent'
-                textTransform='uppercase'
-              >
+              <Text mt="4" fontSize="12px" fontWeight="semibold" textColor="brandGray.accent" textTransform="uppercase">
                 invite links should look like
               </Text>
 
-              <Text mt='2' fontSize='12px' textColor='brandGray.accent'>
+              <Text mt="2" fontSize="12px" textColor="brandGray.accent">
                 hTKzmak
               </Text>
-              <Text fontSize='12px' textColor='brandGray.accent'>
+              <Text fontSize="12px" textColor="brandGray.accent">
                 https://valkyrieapp.xyz/hTKzmak
               </Text>
             </ModalBody>
 
-            <ModalFooter bg='brandGray.dark'>
-              <Button mr={6} variant='link' onClick={goBack} fontSize={"14px"}>
+            <ModalFooter bg="brandGray.dark">
+              <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'}>
                 Back
               </Button>
               <Button
-                background='highlight.standard'
-                color='white'
-                type='submit'
+                background="highlight.standard"
+                color="white"
+                type="submit"
                 _hover={{ bg: 'highlight.hover' }}
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
                 isLoading={isSubmitting}
-                fontSize={"14px"}
+                fontSize={'14px'}
               >
                 Join Server
               </Button>
@@ -199,16 +189,15 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
 };
 
 const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
-
-  const user = userStore(state => state.current);
+  const user = userStore((state) => state.current);
   const cache = useQueryClient();
   const history = useHistory();
 
   return (
-    <ModalContent bg='brandGray.light'>
+    <ModalContent bg="brandGray.light">
       <Formik
         initialValues={{
-          name: `${user?.username}'s server`
+          name: `${user?.username}'s server`,
         }}
         validationSchema={GuildSchema}
         onSubmit={async (values, { setErrors }) => {
@@ -234,31 +223,27 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
       >
         {({ isSubmitting, values }) => (
           <Form>
-            <ModalHeader textAlign='center' fontWeight='bold' pb='0'>
+            <ModalHeader textAlign="center" fontWeight="bold" pb="0">
               Create your server
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={3}>
-              <InputField
-                label='server name'
-                name='name'
-                value={values.name}
-              />
+              <InputField label="server name" name="name" value={values.name} />
             </ModalBody>
 
-            <ModalFooter bg='brandGray.dark'>
-              <Button mr={6} fontSize={"14px"} variant='link' onClick={goBack}>
+            <ModalFooter bg="brandGray.dark">
+              <Button mr={6} fontSize={'14px'} variant="link" onClick={goBack}>
                 Back
               </Button>
               <Button
-                background='highlight.standard'
-                color='white'
-                type='submit'
+                background="highlight.standard"
+                color="white"
+                type="submit"
                 _hover={{ bg: 'highlight.hover' }}
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
                 isLoading={isSubmitting}
-                fontSize={"14px"}
+                fontSize={'14px'}
               >
                 Create
               </Button>

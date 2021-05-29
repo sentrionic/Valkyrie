@@ -4,7 +4,7 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
@@ -32,18 +32,17 @@ import { SocketService } from '../socket/socket.service';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    private readonly socketService: SocketService
-  ) {
-  }
+    private readonly socketService: SocketService,
+  ) {}
 
   async register(
     credentials: RegisterInput,
-    req: e.Request
+    req: e.Request,
   ): Promise<UserResponse> {
     const { email, username, password } = credentials;
 
     const emailTaken = await this.userRepository.findOne({
-      where: { email }
+      where: { email },
     });
 
     if (emailTaken) {
@@ -52,18 +51,18 @@ export class UserService {
           errors: [
             {
               field: 'email',
-              message: 'Email must be unique.'
-            }
-          ]
+              message: 'Email must be unique.',
+            },
+          ],
         },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
     const user = this.userRepository.create({
       email: email.trim(),
       username: username.trim(),
-      password: await argon2.hash(password)
+      password: await argon2.hash(password),
     });
     user.image = `https://gravatar.com/avatar/${md5(email)}?d=identicon`;
     await user.save();
@@ -73,15 +72,11 @@ export class UserService {
     return user.toJSON();
   }
 
-  async login(
-    credentials: LoginInput,
-    req: e.Request
-  ): Promise<UserResponse> {
-
+  async login(credentials: LoginInput, req: e.Request): Promise<UserResponse> {
     const { email, password } = credentials;
 
     const user = await this.userRepository.findOne({
-      where: { email }
+      where: { email },
     });
 
     if (!user) {
@@ -112,11 +107,11 @@ export class UserService {
       FORGET_PASSWORD_PREFIX + token,
       user.id,
       'ex',
-      1000 * 60 * 60 * 24 * 3
+      1000 * 60 * 60 * 24 * 3,
     ); // 3 days
     await sendEmail(
       email,
-      `<a href='${process.env.CORS_ORIGIN}/reset-password/${token}'>Reset Password</a>`
+      `<a href='${process.env.CORS_ORIGIN}/reset-password/${token}'>Reset Password</a>`,
     );
 
     return true;
@@ -124,7 +119,7 @@ export class UserService {
 
   async resetPassword(
     input: ResetPasswordInput,
-    req: e.Request
+    req: e.Request,
   ): Promise<UserResponse> {
     const { newPassword, token } = input;
 
@@ -136,16 +131,16 @@ export class UserService {
           errors: [
             {
               field: 'token',
-              message: 'Token expired'
-            }
-          ]
+              message: 'Token expired',
+            },
+          ],
         },
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
     const user = await this.userRepository.findOne({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!user) throw new NotFoundException();
@@ -164,7 +159,7 @@ export class UserService {
 
   async changePassword(
     input: ChangePasswordInput,
-    userId: string
+    userId: string,
   ): Promise<boolean> {
     const { newPassword, currentPassword } = input;
 
@@ -191,7 +186,7 @@ export class UserService {
     const user = await this.userRepository.findOne(id);
     if (!user) {
       throw new NotFoundException({
-        message: 'An account with that username or email does not exist.'
+        message: 'An account with that username or email does not exist.',
       });
     }
     return user.toJSON();
@@ -200,7 +195,7 @@ export class UserService {
   async updateUser(
     id: string,
     data: UpdateInput,
-    image?: BufferFile
+    image?: BufferFile,
   ): Promise<UserResponse> {
     const { email } = data;
 
@@ -214,11 +209,11 @@ export class UserService {
             errors: [
               {
                 field: 'email',
-                message: 'Email must be unique.'
-              }
-            ]
+                message: 'Email must be unique.',
+              },
+            ],
           },
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       }
     }
@@ -237,10 +232,13 @@ export class UserService {
   }
 
   async getFriends(userId: string): Promise<MemberResponse[]> {
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      relations: ['friends'],
+    });
     const friends: MemberResponse[] = [];
 
-    user.friends.map(f => friends.push(f.toFriend()));
+    user.friends.map((f) => friends.push(f.toFriend()));
 
     return friends.sort((a, b) => a.username.localeCompare(b.username));
   }
@@ -270,13 +268,18 @@ export class UserService {
   }
 
   async sendFriendRequest(userId: string, memberId: string): Promise<boolean> {
-
     if (userId === memberId) {
       throw new BadRequestException('You cannot add yourself');
     }
 
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['requests', 'friends'] });
-    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['requests'] });
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      relations: ['requests', 'friends'],
+    });
+    const member = await this.userRepository.findOneOrFail({
+      where: { id: memberId },
+      relations: ['requests'],
+    });
 
     if (!user.friends.includes(member) && !user.requests.includes(member)) {
       user.requests.push(member);
@@ -285,42 +288,64 @@ export class UserService {
         id: user.id,
         image: user.image,
         username: user.username,
-        type: 1
+        type: 1,
       });
     }
 
     return true;
   }
 
-  async acceptFriendRequest(userId: string, memberId: string): Promise<boolean> {
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
-    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['friends', 'requests'] });
+  async acceptFriendRequest(
+    userId: string,
+    memberId: string,
+  ): Promise<boolean> {
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      relations: ['friends'],
+    });
+    const member = await this.userRepository.findOneOrFail({
+      where: { id: memberId },
+      relations: ['friends', 'requests'],
+    });
 
     let hasRequest = false;
-    member.requests.map(r => {
+    member.requests.map((r) => {
       if (r.id === userId) {
         hasRequest = true;
       }
-    })
+    });
 
     if (hasRequest) {
       user.friends.push(member);
-      member.requests = member.requests.filter(r => r.id !== user.id);
+      member.requests = member.requests.filter((r) => r.id !== user.id);
       member.friends.push(user);
       await user.save();
       await member.save();
-      this.socketService.addFriend(memberId, user.toFriend(), member.toFriend());
+      this.socketService.addFriend(
+        memberId,
+        user.toFriend(),
+        member.toFriend(),
+      );
     }
 
     return true;
   }
 
-  async cancelFriendRequest(userId: string, memberId: string): Promise<boolean> {
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['requests'] });
-    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['requests'] });
+  async cancelFriendRequest(
+    userId: string,
+    memberId: string,
+  ): Promise<boolean> {
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      relations: ['requests'],
+    });
+    const member = await this.userRepository.findOneOrFail({
+      where: { id: memberId },
+      relations: ['requests'],
+    });
 
-    user.requests = user.requests.filter(r => r === member);
-    member.requests = member.requests.filter(r => r === user);
+    user.requests = user.requests.filter((r) => r === member);
+    member.requests = member.requests.filter((r) => r === user);
     await user.save();
     await member.save();
 
@@ -328,11 +353,17 @@ export class UserService {
   }
 
   async removeFriend(userId: string, memberId: string): Promise<boolean> {
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
-    const member = await this.userRepository.findOneOrFail({ where: { id: memberId }, relations: ['friends'] });
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      relations: ['friends'],
+    });
+    const member = await this.userRepository.findOneOrFail({
+      where: { id: memberId },
+      relations: ['friends'],
+    });
 
-    user.friends = user.friends.filter(m => m.id !== memberId);
-    member.friends = member.friends.filter(m => m.id !== userId);
+    user.friends = user.friends.filter((m) => m.id !== memberId);
+    member.friends = member.friends.filter((m) => m.id !== userId);
     await user.save();
     await member.save();
     this.socketService.removeFriend(memberId, userId);

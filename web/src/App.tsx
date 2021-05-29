@@ -8,15 +8,15 @@ const client = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       staleTime: Infinity,
-      cacheTime: 0
-    }
-  }
+      cacheTime: 0,
+    },
+  },
 });
 
 export const App = () => (
   <QueryClientProvider client={client}>
     <GlobalState>
       <Routes />
-    </ GlobalState>
+    </GlobalState>
   </QueryClientProvider>
 );

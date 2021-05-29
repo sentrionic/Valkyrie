@@ -7,18 +7,16 @@ import { useQueryClient } from 'react-query';
 import { nKey } from '../../lib/utils/querykeys';
 
 export const GlobalState: React.FC = ({ children }) => {
-
-  const current = userStore(state => state.current);
-  const inc = homeStore(state => state.increment);
+  const current = userStore((state) => state.current);
+  const inc = homeStore((state) => state.increment);
   const cache = useQueryClient();
 
   useEffect(() => {
     if (current) {
-
       const disconnect = () => {
         socket.emit('toggleOffline');
         socket.disconnect();
-      }
+      };
 
       const socket = getSocket();
       socket.emit('toggleOnline');
@@ -27,11 +25,11 @@ export const GlobalState: React.FC = ({ children }) => {
       socket.on('new_dm_notification', (channel: DMChannel) => {
         if (channel.user.id !== current.id) {
           cache.setQueryData<DMNotification[]>(nKey, (data) => {
-            const index = data?.findIndex(c => c.id === channel.id);
+            const index = data?.findIndex((c) => c.id === channel.id);
             if (index !== -1 && index !== undefined) {
-              return [{ ...channel, count: data![index].count + 1 }, ...data!.filter(c => c.id !== channel.id)];
+              return [{ ...channel, count: data![index].count + 1 }, ...data!.filter((c) => c.id !== channel.id)];
             } else {
-              return [{ ...channel, count: 1 }, ...data || []];
+              return [{ ...channel, count: 1 }, ...(data || [])];
             }
           });
         }
@@ -49,9 +47,5 @@ export const GlobalState: React.FC = ({ children }) => {
     }
   }, [current, inc, cache]);
 
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };

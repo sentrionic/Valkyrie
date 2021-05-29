@@ -3,7 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { getManager, Repository } from 'typeorm';
 import { Guild } from '../entities/guild.entity';
@@ -32,16 +32,18 @@ export class GuildService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Member) private memberRepository: Repository<Member>,
     @InjectRepository(BanEntity) private banRepository: Repository<BanEntity>,
-    private socketService: SocketService
-  ) {
-  }
+    private socketService: SocketService,
+  ) {}
 
   /**
    * Get the members of the given guild
    * @param userId
    * @param guildId
    */
-  async getGuildMembers(userId: string, guildId: string): Promise<MemberResponse[]> {
+  async getGuildMembers(
+    userId: string,
+    guildId: string,
+  ): Promise<MemberResponse[]> {
     const manager = getManager();
     return await manager.query(
       `select u.id,
@@ -63,7 +65,7 @@ export class GuildService {
        where m."guildId" = $1
        order by (CASE when m.nickname notnull then m.nickname else u.username end)
       `,
-      [guildId, userId]
+      [guildId, userId],
     );
   }
 
@@ -97,7 +99,7 @@ export class GuildService {
                      on g."id"::text = member."guildId"
        where member."userId" = $1
        order by g."createdAt";`,
-      [userId]
+      [userId],
     );
   }
 
@@ -108,7 +110,6 @@ export class GuildService {
    * @param userId
    */
   async createGuild(name: string, userId: string): Promise<GuildResponse> {
-
     await this.checkGuildLimit(userId);
 
     try {
@@ -131,7 +132,7 @@ export class GuildService {
         await entityManager.insert(Member, {
           id: await idGenerator(),
           guildId: guild.id,
-          userId
+          userId,
         });
       });
 
@@ -141,11 +142,14 @@ export class GuildService {
     }
   }
 
-  async generateInviteLink(guildId: string, isPermanent: boolean = false): Promise<string> {
+  async generateInviteLink(
+    guildId: string,
+    isPermanent: boolean = false,
+  ): Promise<string> {
     const token = nanoid(8);
     const json = JSON.stringify({
       guildId,
-      isPermanent
+      isPermanent,
     });
     if (isPermanent) {
       await redis.set(INVITE_LINK_PREFIX + token, json);
@@ -163,12 +167,15 @@ export class GuildService {
     return `${process.env.CORS_ORIGIN}/${token}`;
   }
 
-  async invalidateGuildInvites(guildId: string, userId: string): Promise<boolean> {
+  async invalidateGuildInvites(
+    guildId: string,
+    userId: string,
+  ): Promise<boolean> {
     const guild = await this.guildRepository.findOne(guildId);
     if (!guild) throw new NotFoundException();
     if (guild.ownerId !== userId) throw new NotFoundException();
 
-    guild.inviteLinks.forEach(token => {
+    guild.inviteLinks.forEach((token) => {
       redis.del(INVITE_LINK_PREFIX + token);
     });
 
@@ -179,7 +186,6 @@ export class GuildService {
   }
 
   async joinGuild(token: string, userId: string): Promise<GuildResponse> {
-
     await this.checkGuildLimit(userId);
 
     // Link includes the domain part
@@ -204,43 +210,66 @@ export class GuildService {
     await this.checkIfBanned(userId, guildId);
 
     // Check if already member
-    const isMember = await this.memberRepository.findOne({ where: { userId, guildId } });
+    const isMember = await this.memberRepository.findOne({
+      where: { userId, guildId },
+    });
 
     if (isMember) {
       throw new BadRequestException('You are already a member of this guild');
     }
 
-    await this.memberRepository.insert({ id: await idGenerator(), userId, guildId });
+    await this.memberRepository.insert({
+      id: await idGenerator(),
+      userId,
+      guildId,
+    });
 
     if (!isPermanent) await redis.del(INVITE_LINK_PREFIX + token);
 
     const defaultChannel = await this.channelRepository.findOneOrFail({
       where: { guild },
       relations: ['guild'],
-      order: { createdAt: 'ASC' }
+      order: { createdAt: 'ASC' },
     });
 
-    const user = await this.userRepository.findOneOrFail({ where: { id: userId }, relations: ['friends'] });
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      relations: ['friends'],
+    });
 
-    this.socketService.addMember({ room: guild.id, member: user.toMember(userId) });
+    this.socketService.addMember({
+      room: guild.id,
+      member: user.toMember(userId),
+    });
 
     return this.toGuildResponse(guild, defaultChannel.id);
   }
 
   async leaveGuild(userId: string, guildId: string): Promise<boolean> {
-    const member = await this.memberRepository.findOneOrFail({ where: { guildId, userId } });
-    const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
+    const member = await this.memberRepository.findOneOrFail({
+      where: { guildId, userId },
+    });
+    const guild = await this.guildRepository.findOneOrFail({
+      where: { id: guildId },
+    });
 
-    if (guild.ownerId === userId) throw new BadRequestException('The owner cannot leave their server');
+    if (guild.ownerId === userId)
+      throw new BadRequestException('The owner cannot leave their server');
 
     await this.memberRepository.delete({ id: member.id });
     this.socketService.removeMember({ room: guildId, memberId: userId });
     return true;
   }
 
-  async editGuild(userId: string, guildId: string, input: GuildInput, image: BufferFile): Promise<boolean> {
-
-    const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
+  async editGuild(
+    userId: string,
+    guildId: string,
+    input: GuildInput,
+    image: BufferFile,
+  ): Promise<boolean> {
+    const guild = await this.guildRepository.findOneOrFail({
+      where: { id: guildId },
+    });
 
     if (guild.ownerId !== userId) {
       throw new UnauthorizedException();
@@ -258,7 +287,7 @@ export class GuildService {
 
     await this.guildRepository.update(guildId, {
       name: input.name ?? guild.name,
-      icon
+      icon,
     });
 
     const manager = getManager();
@@ -288,7 +317,7 @@ export class GuildService {
          AND member."userId" = $2
        limit 1;
       `,
-      [guildId, userId]
+      [guildId, userId],
     );
 
     this.socketService.editGuild(updatedGuild[0]);
@@ -297,7 +326,9 @@ export class GuildService {
   }
 
   async deleteGuild(userId: string, guildId: string): Promise<boolean> {
-    const guild = await this.guildRepository.findOneOrFail({ where: { id: guildId } });
+    const guild = await this.guildRepository.findOneOrFail({
+      where: { id: guildId },
+    });
 
     if (guild.ownerId !== userId) {
       throw new UnauthorizedException();
@@ -306,15 +337,15 @@ export class GuildService {
     let memberIds: any[];
 
     const manager = getManager();
-    memberIds = await manager.query('delete from members where "guildId" = $1 returning members."userId";',
-      [guildId]
+    memberIds = await manager.query(
+      'delete from members where "guildId" = $1 returning members."userId";',
+      [guildId],
     );
-    await manager.query('delete from pcmembers where "channelId" = (select id from channels where "guildId" = $1);',
-      [guildId]
+    await manager.query(
+      'delete from pcmembers where "channelId" = (select id from channels where "guildId" = $1);',
+      [guildId],
     );
-    await manager.query('delete from bans where "guildId" = $1;',
-      [guildId]
-    );
+    await manager.query('delete from bans where "guildId" = $1;', [guildId]);
 
     await this.guildRepository.remove(guild);
     this.socketService.deleteGuild(memberIds[0], guildId);
@@ -322,53 +353,66 @@ export class GuildService {
     return true;
   }
 
-  async changeMemberSettings(userId: string, guildId: string, input: GuildMemberInput): Promise<boolean> {
-
+  async changeMemberSettings(
+    userId: string,
+    guildId: string,
+    input: GuildMemberInput,
+  ): Promise<boolean> {
     const member = await this.memberRepository.findOne({
       where: {
         userId,
-        guildId
-      }
+        guildId,
+      },
     });
 
     if (!member) throw new NotFoundException();
 
     const { nickname, color } = input;
 
-    await this.memberRepository.update({ id: member.id }, {
-      color,
-      nickname
-    });
+    await this.memberRepository.update(
+      { id: member.id },
+      {
+        color,
+        nickname,
+      },
+    );
 
     return true;
   }
 
-  async getMemberSettings(userId: string, guildId: string): Promise<GuildMemberInput> {
-
+  async getMemberSettings(
+    userId: string,
+    guildId: string,
+  ): Promise<GuildMemberInput> {
     const member = await this.memberRepository.findOne({
       where: {
         userId,
-        guildId
-      }
+        guildId,
+      },
     });
 
     if (!member) throw new NotFoundException();
 
     return {
       nickname: member.nickname,
-      color: member.color
+      color: member.color,
     };
   }
 
-  async kickMember(userId: string, guildId: string, memberId: string): Promise<boolean> {
-
+  async kickMember(
+    userId: string,
+    guildId: string,
+    memberId: string,
+  ): Promise<boolean> {
     if (userId === memberId) {
       throw new BadRequestException('You cannot kick yourself');
     }
 
     await this.checkGuildOwnership(userId, guildId);
 
-    const member = await this.memberRepository.findOne({ where: { guildId, userId: memberId } });
+    const member = await this.memberRepository.findOne({
+      where: { guildId, userId: memberId },
+    });
 
     if (!member) {
       throw new NotFoundException();
@@ -381,15 +425,20 @@ export class GuildService {
     return true;
   }
 
-  async banMember(userId: string, guildId: string, memberId: string): Promise<boolean> {
-
+  async banMember(
+    userId: string,
+    guildId: string,
+    memberId: string,
+  ): Promise<boolean> {
     if (userId === memberId) {
       throw new BadRequestException('You cannot ban yourself');
     }
 
     await this.checkGuildOwnership(userId, guildId);
 
-    const member = await this.memberRepository.findOne({ where: { guildId, userId: memberId } });
+    const member = await this.memberRepository.findOne({
+      where: { guildId, userId: memberId },
+    });
 
     if (!member) {
       throw new NotFoundException();
@@ -402,26 +451,31 @@ export class GuildService {
     await this.banRepository.insert({
       id: await idGenerator(),
       guildId,
-      userId: memberId
+      userId: memberId,
     });
 
     return true;
   }
 
-  async unbanUser(userId: string, guildId: string, memberId: string): Promise<boolean> {
-
+  async unbanUser(
+    userId: string,
+    guildId: string,
+    memberId: string,
+  ): Promise<boolean> {
     await this.checkGuildOwnership(userId, guildId);
 
     await this.banRepository.delete({
       userId: memberId,
-      guildId
+      guildId,
     });
 
     return true;
   }
 
-  async getBannedUsers(userId: string, guildId: string): Promise<MemberResponse[]> {
-
+  async getBannedUsers(
+    userId: string,
+    guildId: string,
+  ): Promise<MemberResponse[]> {
     await this.checkGuildOwnership(userId, guildId);
 
     const manager = getManager();
@@ -430,11 +484,14 @@ export class GuildService {
        from bans b
                 join users u on b."userId" = u.id
        where b."guildId" = $1`,
-      [guildId]
+      [guildId],
     );
   }
 
-  private async checkGuildOwnership(userId: string, guildId: string): Promise<void> {
+  private async checkGuildOwnership(
+    userId: string,
+    guildId: string,
+  ): Promise<void> {
     const guild = await this.guildRepository.findOne(guildId);
 
     if (!guild) {
@@ -469,8 +526,8 @@ export class GuildService {
     const isBanned = await this.banRepository.findOne({
       where: {
         userId,
-        guildId
-      }
+        guildId,
+      },
     });
 
     if (isBanned) {
@@ -486,7 +543,7 @@ export class GuildService {
       ownerId: guild.ownerId,
       createdAt: guild?.createdAt.toString(),
       updatedAt: guild?.updatedAt.toString(),
-      hasNotification: false
+      hasNotification: false,
     };
   }
 }

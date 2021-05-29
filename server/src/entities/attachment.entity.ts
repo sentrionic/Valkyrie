@@ -16,11 +16,9 @@ export class Attachment extends AbstractEntity {
   filename!: string;
 
   @Exclude()
-  @OneToOne(
-    () => Message,
-    message => message.attachment,
-    { onDelete: 'CASCADE' }
-  )
+  @OneToOne(() => Message, (message) => message.attachment, {
+    onDelete: 'CASCADE',
+  })
   message: Message;
 
   toJSON(): AttachmentResponse {

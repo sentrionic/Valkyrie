@@ -6,13 +6,11 @@ import { userStore } from '../../stores/userStore';
 import { channelStore } from '../../stores/channelStore';
 
 export function useMessageSocket(channelId: string, key: string) {
-
-  const current = userStore(state => state.current);
+  const current = userStore((state) => state.current);
   const store = channelStore();
   const cache = useQueryClient();
 
   useEffect((): any => {
-
     store.reset();
     const socket = getSocket();
     socket.emit('joinChannel', channelId);
@@ -29,7 +27,7 @@ export function useMessageSocket(channelId: string, key: string) {
         let index = -1;
         let editId = -1;
         d!.pages.forEach((p, i) => {
-          editId = p.findIndex(m => m.id === editMessage.id);
+          editId = p.findIndex((m) => m.id === editMessage.id);
           if (editId !== -1) index = i;
         });
 
@@ -45,21 +43,19 @@ export function useMessageSocket(channelId: string, key: string) {
       cache.setQueryData<InfiniteData<MessageResponse[]>>(key, (d) => {
         let index = -1;
         d!.pages.forEach((p, i) => {
-          if (p.findIndex(m => m.id === toBeRemoved.id) !== -1) index = i;
+          if (p.findIndex((m) => m.id === toBeRemoved.id) !== -1) index = i;
         });
-        if (index !== -1) d!.pages[index] = d!.pages[index].filter(m => m.id !== toBeRemoved.id);
+        if (index !== -1) d!.pages[index] = d!.pages[index].filter((m) => m.id !== toBeRemoved.id);
         return d!;
       });
     });
 
     socket.on('addToTyping', (username: string) => {
-      if (username !== current?.username)
-        store.addTyping(username);
+      if (username !== current?.username) store.addTyping(username);
     });
 
     socket.on('removeFromTyping', (username: string) => {
-      if (username !== current?.username)
-        store.removeTyping(username);
+      if (username !== current?.username) store.removeTyping(username);
     });
 
     return () => {

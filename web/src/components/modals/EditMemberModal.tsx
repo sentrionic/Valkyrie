@@ -8,17 +8,17 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React from 'react';
-import { useQuery } from "react-query";
-import { TwitterPicker } from "react-color";
+import { useQuery } from 'react-query';
+import { TwitterPicker } from 'react-color';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { userStore } from '../../lib/stores/userStore';
 import { MemberSchema } from '../../lib/utils/validation/member.schema';
-import { changeGuildMemberSettings, getGuildMemberSettings } from "../../lib/api/handler/guilds";
+import { changeGuildMemberSettings, getGuildMemberSettings } from '../../lib/api/handler/guilds';
 
 interface IProps {
   guildId: string;
@@ -27,22 +27,21 @@ interface IProps {
 }
 
 export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
-
-  const current = userStore(state => state.current);
+  const current = userStore((state) => state.current);
   const { data } = useQuery(`settings-${guildId}`, () => {
-    return getGuildMemberSettings(guildId).then(response => response.data);
+    return getGuildMemberSettings(guildId).then((response) => response.data);
   });
 
   if (!data) return null;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay/>
-      <ModalContent bg='brandGray.light'>
+      <ModalOverlay />
+      <ModalContent bg="brandGray.light">
         <Formik
           initialValues={{
             color: data.color,
-            nickname: data.nickname
+            nickname: data.nickname,
           }}
           validationSchema={MemberSchema}
           onSubmit={async (values, { setErrors, setFieldValue }) => {
@@ -60,25 +59,28 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
                 setErrors(toErrorMap(errors));
               }
             }
-          }
-          }
+          }}
         >
           {({ isSubmitting, setFieldValue, values }) => (
             <Form>
-              <ModalHeader fontWeight='bold' pb={0}>
+              <ModalHeader fontWeight="bold" pb={0}>
                 Change Appearance
               </ModalHeader>
-              <ModalCloseButton/>
+              <ModalCloseButton />
               <ModalBody>
-                <InputField color={values.color ?? undefined} label='nickname' name='nickname'
-                            value={values.nickname ?? current?.username} />
+                <InputField
+                  color={values.color ?? undefined}
+                  label="nickname"
+                  name="nickname"
+                  value={values.nickname ?? current?.username}
+                />
                 <Text
                   mt={'2'}
-                  ml={"1"}
+                  ml={'1'}
                   color={'brandGray.accent'}
                   _hover={{
                     cursor: 'pointer',
-                    color: 'highlight.standard'
+                    color: 'highlight.standard',
                   }}
                   fontSize={'14px'}
                   onClick={() => setFieldValue('nickname', null)}
@@ -86,7 +88,7 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
                   Reset Nickname
                 </Text>
 
-                <Divider my={'4'}/>
+                <Divider my={'4'} />
 
                 <TwitterPicker
                   color={values.color || '#fff'}
@@ -98,28 +100,27 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
 
                 <Text
                   mt={'2'}
-                  ml={"1"}
+                  ml={'1'}
                   color={'brandGray.accent'}
                   _hover={{
                     cursor: 'pointer',
-                    color: 'highlight.standard'
+                    color: 'highlight.standard',
                   }}
                   fontSize={'14px'}
                   onClick={() => setFieldValue('color', '#fff')}
                 >
                   Reset Color
                 </Text>
-
               </ModalBody>
 
-              <ModalFooter bg='brandGray.dark'>
-                <Button onClick={onClose} mr={6} variant='link' fontSize={'14px'}>
+              <ModalFooter bg="brandGray.dark">
+                <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
                   Cancel
                 </Button>
                 <Button
-                  background='highlight.standard'
-                  color='white'
-                  type='submit'
+                  background="highlight.standard"
+                  color="white"
+                  type="submit"
                   _hover={{ bg: 'highlight.hover' }}
                   _active={{ bg: 'highlight.active' }}
                   _focus={{ boxShadow: 'none' }}

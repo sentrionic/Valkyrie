@@ -9,12 +9,12 @@ import {
   ModalOverlay,
   Text,
   useToast,
-} from "@chakra-ui/react";
-import { Form, Formik } from "formik";
-import React from "react";
-import { toErrorMap } from "../../lib/utils/toErrorMap";
-import { ChangePasswordSchema } from "../../lib/utils/validation/auth.schema";
-import { InputField } from "../common/InputField";
+} from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { toErrorMap } from '../../lib/utils/toErrorMap';
+import { ChangePasswordSchema } from '../../lib/utils/validation/auth.schema';
+import { InputField } from '../common/InputField';
 import { changePassword } from '../../lib/api/handler/auth';
 
 interface IProps {
@@ -32,9 +32,9 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
       <ModalContent bg="brandGray.light">
         <Formik
           initialValues={{
-            currentPassword: "",
-            newPassword: "",
-            confirmNewPassword: "",
+            currentPassword: '',
+            newPassword: '',
+            confirmNewPassword: '',
           }}
           validationSchema={ChangePasswordSchema}
           onSubmit={async (values, { setErrors }) => {
@@ -42,8 +42,8 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               const { data } = await changePassword(values);
               if (data) {
                 toast({
-                  title: "Changed Password",
-                  status: "success",
+                  title: 'Changed Password',
+                  status: 'success',
                   duration: 5000,
                   isClosable: true,
                 });
@@ -65,19 +65,9 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               <ModalCloseButton />
               <ModalBody pb={6}>
                 <Text>Enter your current password and a new password</Text>
-                <InputField
-                  label="current password"
-                  name="currentPassword"
-                  autoComplete="password"
-                  type="password"
-                />
+                <InputField label="current password" name="currentPassword" autoComplete="password" type="password" />
 
-                <InputField
-                  label="new password"
-                  name="newPassword"
-                  autoComplete="password"
-                  type="password"
-                />
+                <InputField label="new password" name="newPassword" autoComplete="password" type="password" />
 
                 <InputField
                   label="confirm new password"
@@ -88,18 +78,18 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               </ModalBody>
 
               <ModalFooter bg="brandGray.dark">
-                <Button onClick={onClose} fontSize={"14px"} mr={6} variant="link">
+                <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link">
                   Cancel
                 </Button>
                 <Button
                   background="highlight.standard"
                   color="white"
                   type="submit"
-                  _hover={{ bg: "highlight.hover" }}
-                  _active={{ bg: "highlight.active" }}
-                  _focus={{ boxShadow: "none" }}
+                  _hover={{ bg: 'highlight.hover' }}
+                  _active={{ bg: 'highlight.active' }}
+                  _focus={{ boxShadow: 'none' }}
                   isLoading={isSubmitting}
-                  fontSize={"14px"}
+                  fontSize={'14px'}
                 >
                   Done
                 </Button>

@@ -10,7 +10,7 @@ export class ChannelInput {
   @ApiProperty({
     type: [String],
     required: false,
-    description: 'Member IDs that are allowed in the channel'
+    description: 'Member IDs that are allowed in the channel',
   })
   members?: string[] = [];
 }

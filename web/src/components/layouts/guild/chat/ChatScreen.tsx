@@ -15,20 +15,23 @@ import { DateDivider } from '../../../sections/DateDivider';
 import { ChatGrid } from './ChatGrid';
 
 export const ChatScreen: React.FC = () => {
-
   const { channelId } = useParams<RouterProps>();
   const [hasMore, setHasMore] = useState(true);
   const qKey = `messages-${channelId}`;
 
-  const { data, isLoading, fetchNextPage } = useInfiniteQuery<MessageResponse[]>(qKey, async ({ pageParam = null }) => {
-    const { data } = await getMessages(channelId, pageParam);
-    if (data.length !== 35) setHasMore(false);
-    return data;
-  }, {
-    staleTime: 0,
-    cacheTime: 0,
-    getNextPageParam: lastPage => hasMore && lastPage.length ? lastPage[lastPage.length - 1].createdAt : ''
-  });
+  const { data, isLoading, fetchNextPage } = useInfiniteQuery<MessageResponse[]>(
+    qKey,
+    async ({ pageParam = null }) => {
+      const { data } = await getMessages(channelId, pageParam);
+      if (data.length !== 35) setHasMore(false);
+      return data;
+    },
+    {
+      staleTime: 0,
+      cacheTime: 0,
+      getNextPageParam: (lastPage) => (hasMore && lastPage.length ? lastPage[lastPage.length - 1].createdAt : ''),
+    }
+  );
 
   useMessageSocket(channelId, qKey);
 
@@ -48,7 +51,7 @@ export const ChatScreen: React.FC = () => {
     return getTimeDifference(message1.createdAt, message2.createdAt) <= 5;
   };
 
-  const messages = data ? data!.pages.map(p => p.map(p => p)).flat() : [];
+  const messages = data ? data!.pages.map((p) => p.map((p) => p)).flat() : [];
 
   return (
     <ChatGrid>
@@ -62,29 +65,22 @@ export const ChatScreen: React.FC = () => {
         inverse={true}
         hasMore={hasMore}
         loader={
-          messages.length > 0 &&
-          <Flex align={'center'} justify={'center'} h={'50px'}>
-            <Spinner />
-          </Flex>
+          messages.length > 0 && (
+            <Flex align={'center'} justify={'center'} h={'50px'}>
+              <Spinner />
+            </Flex>
+          )
         }
-        scrollableTarget='chatGrid'
+        scrollableTarget="chatGrid"
       >
-        {messages.map((m, i) =>
+        {messages.map((m, i) => (
           <React.Fragment key={m.id}>
-            <Message
-              message={m}
-              isCompact={
-                checkIfWithinTime(
-                  m,
-                  messages[Math.min(i + 1, messages.length - 1)]
-                )}
-            />
-            {checkNewDay(m.createdAt, messages[Math.min(i + 1, messages.length - 1)].createdAt) &&
+            <Message message={m} isCompact={checkIfWithinTime(m, messages[Math.min(i + 1, messages.length - 1)])} />
+            {checkNewDay(m.createdAt, messages[Math.min(i + 1, messages.length - 1)].createdAt) && (
               <DateDivider date={m.createdAt} />
-            }
+            )}
           </React.Fragment>
-        )
-        }
+        ))}
       </Box>
       {!hasMore && <StartMessages />}
     </ChatGrid>

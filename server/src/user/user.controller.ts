@@ -1,7 +1,9 @@
 import {
   Body,
-  Controller, Delete,
-  Get, Param,
+  Controller,
+  Delete,
+  Get,
+  Param,
   Post,
   Put,
   Req,
@@ -19,8 +21,9 @@ import {
   ApiCookieAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiOperation, ApiTags,
-  ApiUnauthorizedResponse
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { LoginInput } from '../models/input/LoginInput';
 import e from 'express';
@@ -158,7 +161,7 @@ export class UserController {
   @Get('/me/friends')
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
-  @ApiOperation({ summary: 'Get Current User\'s friends' })
+  @ApiOperation({ summary: "Get Current User's friends" })
   @ApiOkResponse({ description: 'List of users', type: [MemberResponse] })
   @ApiUnauthorizedResponse()
   async getFriends(@GetUser() id: string): Promise<MemberResponse[]> {
@@ -168,7 +171,7 @@ export class UserController {
   @Get('/me/pending')
   @UseGuards(AuthGuard)
   @ApiCookieAuth()
-  @ApiOperation({ summary: 'Get Current User\'s friend requests' })
+  @ApiOperation({ summary: "Get Current User's friend requests" })
   @ApiOkResponse({ description: 'List of users', type: [RequestResponse] })
   @ApiUnauthorizedResponse()
   async getFriendRequests(@GetUser() id: string): Promise<RequestResponse[]> {
@@ -182,7 +185,7 @@ export class UserController {
   @ApiCookieAuth()
   async sendFriendRequest(
     @Param('memberId') memberId: string,
-    @GetUser() userId: string
+    @GetUser() userId: string,
   ): Promise<boolean> {
     return await this.userService.sendFriendRequest(userId, memberId);
   }
@@ -194,7 +197,7 @@ export class UserController {
   @ApiCookieAuth()
   async addFriend(
     @Param('memberId') memberId: string,
-    @GetUser() userId: string
+    @GetUser() userId: string,
   ): Promise<boolean> {
     return await this.userService.acceptFriendRequest(userId, memberId);
   }
@@ -206,7 +209,7 @@ export class UserController {
   @ApiCookieAuth()
   async cancelFriendRequest(
     @Param('memberId') memberId: string,
-    @GetUser() userId: string
+    @GetUser() userId: string,
   ): Promise<boolean> {
     return await this.userService.cancelFriendRequest(userId, memberId);
   }
@@ -218,7 +221,7 @@ export class UserController {
   @ApiCookieAuth()
   async removeFriend(
     @Param('memberId') memberId: string,
-    @GetUser() userId: string
+    @GetUser() userId: string,
   ): Promise<boolean> {
     return await this.userService.removeFriend(userId, memberId);
   }

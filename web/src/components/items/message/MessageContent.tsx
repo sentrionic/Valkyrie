@@ -11,13 +11,8 @@ export const MessageContent: React.FC<MessageProps> = ({ message: { attachment, 
     const { filetype, url } = attachment;
     if (filetype.startsWith('image/')) {
       return (
-        <Box boxSize='sm' my={'2'} h={'full'}>
-          <Image
-            fit={'contain'}
-            src={url}
-            alt={''}
-            borderRadius='md'
-          />
+        <Box boxSize="sm" my={'2'} h={'full'}>
+          <Image fit={'contain'} src={url} alt={''} borderRadius="md" />
         </Box>
       );
     } else if (filetype.startsWith('audio/')) {
@@ -33,9 +28,11 @@ export const MessageContent: React.FC<MessageProps> = ({ message: { attachment, 
   return (
     <Flex alignItems={'center'}>
       <Text>{text}</Text>
-      {createdAt !== updatedAt &&
-        <Text fontSize={'10px'} ml={'1'} color={'labelGray'}>(edited)</Text>
-      }
+      {createdAt !== updatedAt && (
+        <Text fontSize={'10px'} ml={'1'} color={'labelGray'}>
+          (edited)
+        </Text>
+      )}
     </Flex>
   );
 };

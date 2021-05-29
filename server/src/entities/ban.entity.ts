@@ -15,8 +15,10 @@ export class BanEntity extends AbstractEntity {
   @JoinColumn({ name: 'userId' })
   user!: User;
 
-  @ManyToMany(() => Guild, (guild) => guild.bans, { primary: true, onDelete: 'CASCADE' })
+  @ManyToMany(() => Guild, (guild) => guild.bans, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'guildId' })
   guild!: Guild;
-
 }

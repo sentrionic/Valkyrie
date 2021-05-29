@@ -10,17 +10,10 @@ export const DMHeader: React.FC = () => {
   const channel = useGetCurrentDM(channelId);
 
   return (
-    <GridItem
-      gridColumn={3}
-      gridRow={'1'}
-      bg='brandGray.light'
-      padding='10px'
-      zIndex='2'
-      boxShadow='md'
-    >
-      <Flex align='center' ml={2}>
+    <GridItem gridColumn={3} gridRow={'1'} bg="brandGray.light" padding="10px" zIndex="2" boxShadow="md">
+      <Flex align="center" ml={2}>
         <Icon as={FaAt} fontSize={'20px'} color={'brandGray.accent'} />
-        <Text ml='2' fontWeight='semibold'>
+        <Text ml="2" fontWeight="semibold">
           {channel?.user.username}
         </Text>
         <Box

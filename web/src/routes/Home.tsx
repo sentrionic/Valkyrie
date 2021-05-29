@@ -10,22 +10,21 @@ import { DMHeader } from '../components/layouts/home/DMHeader';
 import { MessageInput } from '../components/layouts/guild/chat/MessageInput';
 
 export const Home: React.FC = () => {
-
   const { channelId } = useParams<RouterProps>();
 
   return (
     <AppLayout>
       <GuildList />
       <DMSidebar />
-      {channelId === undefined ?
+      {channelId === undefined ? (
         <FriendsDashboard />
-        :
+      ) : (
         <>
           <DMHeader />
           <ChatScreen />
           <MessageInput />
         </>
-      }
+      )}
     </AppLayout>
   );
-}
+};

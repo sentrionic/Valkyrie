@@ -11,18 +11,17 @@ export class PCMember extends AbstractEntity {
   @PrimaryColumn()
   channelId: string;
 
-  @ManyToMany(() => User,
-  (user) => user.channels,
-  { primary: true, onDelete: 'CASCADE' }
-  )
+  @ManyToMany(() => User, (user) => user.channels, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ManyToMany(
-    () => Channel,
-    (channel) => channel.members,
-    { primary: true, onDelete: 'CASCADE' }
-  )
+  @ManyToMany(() => Channel, (channel) => channel.members, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'channelId' })
   channel: Channel;
 }

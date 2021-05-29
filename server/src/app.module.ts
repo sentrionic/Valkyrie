@@ -31,9 +31,7 @@ import { PRODUCTION } from './utils/constants';
   providers: [],
 })
 export class AppModule implements OnModuleInit {
-
-  constructor(private readonly connection: Connection) {
-  }
+  constructor(private readonly connection: Connection) {}
 
   async onModuleInit(): Promise<void> {
     if (PRODUCTION) {

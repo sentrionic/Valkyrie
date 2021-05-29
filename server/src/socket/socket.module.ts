@@ -11,7 +11,7 @@ import { DMMember } from '../entities/dmmember.entity';
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Channel, Member, PCMember, DMMember])
+    TypeOrmModule.forFeature([User, Channel, Member, PCMember, DMMember]),
   ],
   providers: [SocketService, AppGateway],
   exports: [SocketService],

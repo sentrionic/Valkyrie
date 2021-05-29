@@ -13,7 +13,7 @@ export class DatabaseConnectionService implements TypeOrmOptionsFactory {
       dropSchema: false,
       logging: !PRODUCTION,
       entities: ['dist/**/*.entity.js'],
-      migrations: ["dist/migrations/*.js"],
+      migrations: ['dist/migrations/*.js'],
       extra: {
         ssl: {
           rejectUnauthorized: false,

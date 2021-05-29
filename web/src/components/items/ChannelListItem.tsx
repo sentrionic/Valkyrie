@@ -47,7 +47,12 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
         p="5px"
         m="0 10px"
         color={isActive || channel.hasNotification ? '#fff' : 'brandGray.accent'}
-        _hover={{ bg: 'brandGray.light', borderRadius: '5px', cursor: 'pointer', color: '#fff' }}
+        _hover={{
+          bg: 'brandGray.light',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          color: '#fff',
+        }}
         bg={isActive ? 'brandGray.active' : undefined}
         mb="2px"
         position={'relative'}

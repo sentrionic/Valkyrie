@@ -8,15 +8,7 @@ export const NavBar: React.FC = () => {
   const current = userStore((state) => state.current);
 
   return (
-    <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      w="100%"
-      mb={8}
-      p={8}
-    >
+    <Flex as="nav" align="center" justify="space-between" wrap="wrap" w="100%" mb={8} p={8}>
       <Flex align="center">
         <Logo />
       </Flex>

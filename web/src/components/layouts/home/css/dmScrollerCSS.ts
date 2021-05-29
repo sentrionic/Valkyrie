@@ -9,4 +9,4 @@ export const dmScrollerCss = {
     background: 'brandGray.darker',
     borderRadius: '18px',
   },
-}
+};

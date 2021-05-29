@@ -6,7 +6,6 @@ import { useQueryClient } from 'react-query';
 import { useGetCurrentGuild } from '../../utils/hooks/useGetCurrentGuild';
 
 export function useChannelSocket(guildId: string, key: string) {
-
   const location = useLocation();
   const history = useHistory();
   const cache = useQueryClient();
@@ -19,7 +18,7 @@ export function useChannelSocket(guildId: string, key: string) {
     const disconnect = () => {
       socket.emit('leaveGuild', guildId);
       socket.disconnect();
-    }
+    };
 
     socket.on('add_channel', (newChannel: Channel) => {
       cache.setQueryData<Channel[]>(key, (data) => {
@@ -29,7 +28,7 @@ export function useChannelSocket(guildId: string, key: string) {
 
     socket.on('edit_channel', (editedChannel: Channel) => {
       cache.setQueryData<Channel[]>(key, (d) => {
-        const index = d!.findIndex(c => c.id === editedChannel.id);
+        const index = d!.findIndex((c) => c.id === editedChannel.id);
         if (index !== -1) {
           d![index] = editedChannel;
         } else if (editedChannel.isPublic) {
@@ -44,12 +43,12 @@ export function useChannelSocket(guildId: string, key: string) {
         const currentPath = `/channels/${guildId}/${deleteId}`;
         if (location.pathname === currentPath && guild) {
           if (deleteId === guild.default_channel_id) {
-            history.replace('/channels/me')
+            history.replace('/channels/me');
           } else {
             history.replace(`${guild.default_channel_id}`);
           }
         }
-        return d!.filter(c => c.id !== deleteId);
+        return d!.filter((c) => c.id !== deleteId);
       });
     });
 
@@ -57,7 +56,7 @@ export function useChannelSocket(guildId: string, key: string) {
       const currentPath = `/channels/${guildId}/${id}`;
       if (location.pathname !== currentPath) {
         cache.setQueryData<Channel[]>(key, (d) => {
-          const index = d!.findIndex(c => c.id === id);
+          const index = d!.findIndex((c) => c.id === id);
           if (index !== -1) {
             d![index] = { ...d![index], hasNotification: true };
           }
