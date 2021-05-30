@@ -6,6 +6,8 @@ import { userStore } from '../../stores/userStore';
 import { rKey } from '../../utils/querykeys';
 import { homeStore } from '../../stores/homeStore';
 
+type WSMessage = { action: 'add_request'; data: RequestResponse };
+
 export function useRequestSocket() {
   const current = userStore((state) => state.current);
   const setRequests = homeStore((state) => state.setRequests);
@@ -13,16 +15,24 @@ export function useRequestSocket() {
 
   useEffect((): any => {
     const socket = getSocket();
-    socket.emit('joinUser', current?.id);
-    socket.on('add_request', (newRequest: RequestResponse) => {
-      cache.setQueryData<RequestResponse[]>(rKey, (data) => {
-        return [...data!, newRequest].sort((a, b) => a.username.localeCompare(b.username));
-      });
+
+    socket.send(JSON.stringify({ action: 'joinUser', room: current?.id }));
+
+    socket.addEventListener('message', (event) => {
+      const response: WSMessage = JSON.parse(event.data);
+      switch (response.action) {
+        case 'add_request': {
+          cache.setQueryData<RequestResponse[]>(rKey, (data) => {
+            return [...data!, response.data].sort((a, b) => a.username.localeCompare(b.username));
+          });
+          break;
+        }
+      }
     });
 
     return () => {
-      socket.emit('leaveRoom', current?.id);
-      socket.disconnect();
+      socket.send(JSON.stringify({ action: 'leaveRoom', room: current?.id }));
+      socket.close();
     };
   }, [cache, current, setRequests]);
 }

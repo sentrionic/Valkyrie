@@ -111,7 +111,7 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
               try {
                 const ids: string[] = [];
                 selectedItems.map((i) => ids.push(i.value));
-                const { data } = await editChannel(guildId, channelId, {
+                const { data } = await editChannel(channelId, {
                   ...values,
                   members: ids,
                 });
@@ -245,7 +245,7 @@ const DeleteChannelModal: React.FC<IScreenProps> = ({ goBack, submitClose, name,
             fontSize={'14px'}
             onClick={async () => {
               submitClose();
-              await deleteChannel(guildId, channelId);
+              await deleteChannel(channelId);
             }}
           >
             Delete Channel

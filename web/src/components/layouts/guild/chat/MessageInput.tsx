@@ -32,7 +32,13 @@ export const MessageInput: React.FC = () => {
       return;
     }
 
-    socket.emit('stopTyping', channelId, current?.username);
+    socket.send(
+      JSON.stringify({
+        action: 'stopTyping',
+        room: channelId,
+        message: current?.username,
+      })
+    );
     setSubmitting(true);
     setCurrentlyTyping(false);
     const data = new FormData();
@@ -84,10 +90,22 @@ export const MessageInput: React.FC = () => {
           onChange={(e) => {
             const value = e.target.value;
             if (value.trim().length === 1 && !currentlyTyping) {
-              socket.emit('startTyping', channelId, current?.username);
+              socket.send(
+                JSON.stringify({
+                  action: 'startTyping',
+                  room: channelId,
+                  message: current?.username,
+                })
+              );
               setCurrentlyTyping(true);
             } else if (value.length === 0) {
-              socket.emit('stopTyping', channelId, current?.username);
+              socket.send(
+                JSON.stringify({
+                  action: 'stopTyping',
+                  room: channelId,
+                  message: current?.username,
+                })
+              );
               setCurrentlyTyping(false);
             }
             if (value.length <= 2000) setText(value);

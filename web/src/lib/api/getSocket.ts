@@ -1,18 +1,11 @@
-import socketIOClient from 'socket.io-client';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
-export const getSocket = () =>
-  socketIOClient(`${process.env.REACT_APP_API!}/ws`, {
-    transports: ['websocket'],
-    upgrade: false,
-  });
+export const getSocket = () => new ReconnectingWebSocket(process.env.REACT_APP_WS!);
 
-let socket: SocketIOClient.Socket | null = null;
+let socket: ReconnectingWebSocket | null = null;
 export const getSameSocket = () => {
   if (!socket) {
-    socket = socketIOClient(`${process.env.REACT_APP_API!}/ws`, {
-      transports: ['websocket'],
-      upgrade: false,
-    });
+    socket = new ReconnectingWebSocket(process.env.REACT_APP_WS!);
   }
 
   return socket;

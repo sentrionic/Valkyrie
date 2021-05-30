@@ -93,8 +93,11 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
               try {
                 const formData = new FormData();
                 formData.append('name', values.name);
-                formData.append('name', values.name);
-                formData.append('image', croppedImage ?? imageUrl);
+                if (cropImage) {
+                  formData.append('image', croppedImage);
+                } else if (imageUrl) {
+                  formData.append('icon', imageUrl);
+                }
 
                 const { data } = await editGuild(guildId, formData);
                 if (data) {

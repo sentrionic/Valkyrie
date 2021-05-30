@@ -22,7 +22,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-textarea-autosize": "^8.3.2",
-    "socket.io-client": "2.4.0",
+    "reconnecting-websocket": "^4.4.0",
     "yup": "^0.32.9",
     "zustand": "^3.5.1"
   },

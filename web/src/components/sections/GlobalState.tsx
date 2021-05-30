@@ -6,6 +6,8 @@ import { DMChannel, DMNotification } from '../../lib/api/models';
 import { useQueryClient } from 'react-query';
 import { nKey } from '../../lib/utils/querykeys';
 
+type WSMessage = { action: 'new_dm_notification'; data: DMChannel } | { action: 'send_request' };
+
 export const GlobalState: React.FC = ({ children }) => {
   const current = userStore((state) => state.current);
   const inc = homeStore((state) => state.increment);
@@ -14,30 +16,38 @@ export const GlobalState: React.FC = ({ children }) => {
   useEffect(() => {
     if (current) {
       const disconnect = () => {
-        socket.emit('toggleOffline');
-        socket.disconnect();
+        socket.send(JSON.stringify({ action: 'toggleOffline' }));
+        socket.close();
       };
 
       const socket = getSocket();
-      socket.emit('toggleOnline');
-      socket.emit('joinUser', current?.id);
+      socket.send(JSON.stringify({ action: 'toggleOnline' }));
+      socket.send(JSON.stringify({ action: 'joinUser', room: current?.id }));
 
-      socket.on('new_dm_notification', (channel: DMChannel) => {
-        if (channel.user.id !== current.id) {
-          cache.setQueryData<DMNotification[]>(nKey, (data) => {
-            const index = data?.findIndex((c) => c.id === channel.id);
-            if (index !== -1 && index !== undefined) {
-              return [{ ...channel, count: data![index].count + 1 }, ...data!.filter((c) => c.id !== channel.id)];
-            } else {
-              return [{ ...channel, count: 1 }, ...(data || [])];
+      socket.addEventListener('message', (event) => {
+        const response: WSMessage = JSON.parse(event.data);
+        switch (response.action) {
+          case 'new_dm_notification': {
+            const channel = response.data;
+            if (channel.user.id !== current.id) {
+              cache.setQueryData<DMNotification[]>(nKey, (data) => {
+                const index = data?.findIndex((c) => c.id === channel.id);
+                if (index !== -1 && index !== undefined) {
+                  return [{ ...channel, count: data![index].count + 1 }, ...data!.filter((c) => c.id !== channel.id)];
+                } else {
+                  return [{ ...channel, count: 1 }, ...(data || [])];
+                }
+              });
             }
-          });
-        }
-      });
+            break;
+          }
 
-      socket.on('send_request', () => {
-        if (!window.location.pathname.includes('/channels/me')) {
-          inc();
+          case 'send_request': {
+            if (!window.location.pathname.includes('/channels/me')) {
+              inc();
+            }
+            break;
+          }
         }
       });
 

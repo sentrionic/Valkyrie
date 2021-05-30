@@ -43,7 +43,7 @@ export const Footer: React.FC = () => (
       <Text fontSize="xl">
         <span>Valkyrie | 2021</span>
       </Text>
-      <Text>This app was made for educational purposes.</Text>
+      <Text>This is not a real commercial app.</Text>
       <Stack mt={2} isInline justify="center">
         {links.map((link) => (
           <FooterLink key={link.href} {...link} />
