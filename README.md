@@ -6,10 +6,11 @@
 
 A [Discord](https://discord.com) clone written in TypeScript.
 
-[Live Demo](https://valkyrieapp.xyz) *(**Note**: File Upload is disabled.)* 
+[Live Demo](https://valkyrieapp.xyz)
 
-Once you registered you can also join the server that is open for all by either clicking on this
-[link](https://valkyrieapp.xyz/n94dXT4W) or manually using the invite code `n94dXT4W`.
+**Notes:**
+  - File Upload is disabled.
+  - The live demo currently runs on the [Go backend](https://github.com/sentrionic/ValkyrieGo) and uses [websockets](https://github.com/sentrionic/Valkyrie/tree/websocket).
 
 ## Video
 
@@ -27,7 +28,6 @@ Once you registered you can also join the server that is open for all by either 
 - Friend System
 - Notification System
 - Basic Moderation for the guild owner (delete messages, kick & ban members)
-- (Basically 2015 Discord features with 2021 Look)
 
 ## Stack
 
@@ -35,6 +35,8 @@ Once you registered you can also join the server that is open for all by either 
 - React with [Chakra UI](https://chakra-ui.com/)
 - REST Endpoints
 - [React Query](https://react-query.tanstack.com/) & [Zustand](https://github.com/pmndrs/zustand) for state management
+
+For the websocket version check out the [Websocket branch](https://github.com/sentrionic/Valkyrie/tree/websocket)
 
 For the mobile app check out [ValkyrieApp](https://github.com/sentrionic/ValkyrieApp)
 
@@ -44,6 +46,7 @@ For the mobile app check out [ValkyrieApp](https://github.com/sentrionic/Valkyri
 
 ### Server
 
+0. Install NodeJS
 1. Install PostgreSQL and create a DB
 2. Install Redis
 3. Run `yarn` to install the dependencies
