@@ -28,12 +28,12 @@ const links = [
   {
     icon: AiOutlineApi,
     label: 'REST API',
-    href: process.env.REACT_APP_API!,
+    href: `${process.env.REACT_APP_API!}/swagger/index.html`,
   },
   {
     icon: SiSocketDotIo,
     label: 'Websocket',
-    href: `${process.env.REACT_APP_API!}/ws`,
+    href: `${process.env.REACT_APP_API!}`,
   },
 ];
 
