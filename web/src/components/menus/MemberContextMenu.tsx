@@ -21,15 +21,19 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
   const [isBan, setIsBan] = useState(false);
 
   const getOrCreateDM = async () => {
-    const { data } = await getOrCreateDirectMessage(member.id);
-    if (data) {
-      history.push(`/channels/me/${data.id}`);
-    }
+    try {
+      const { data } = await getOrCreateDirectMessage(member.id);
+      if (data) {
+        history.push(`/channels/me/${data.id}`);
+      }
+    } catch (err) {}
   };
 
   const handleFriendClick = async () => {
     if (!member.isFriend) {
-      await sendFriendRequest(member.id);
+      try {
+        await sendFriendRequest(member.id);
+      } catch (err) {}
     } else {
       onOpen();
     }

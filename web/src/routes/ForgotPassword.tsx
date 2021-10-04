@@ -38,7 +38,7 @@ export const ForgotPassword = () => {
                     });
                     history.push('/');
                   }
-                } catch (err) {
+                } catch (err: any) {
                   if (err?.response?.data?.errors) {
                     const errors = err?.response?.data?.errors;
                     setErrors(toErrorMap(errors));

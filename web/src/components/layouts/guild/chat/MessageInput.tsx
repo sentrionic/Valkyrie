@@ -39,11 +39,14 @@ export const MessageInput: React.FC = () => {
         message: current?.username,
       })
     );
-    setSubmitting(true);
-    setCurrentlyTyping(false);
-    const data = new FormData();
-    data.append('text', text.trim());
-    await sendMessage(channelId, data);
+
+    try {
+      setSubmitting(true);
+      setCurrentlyTyping(false);
+      const data = new FormData();
+      data.append('text', text.trim());
+      await sendMessage(channelId, data);
+    } catch (err) {}
   };
 
   const getTypingString = (members: string[]): string => {

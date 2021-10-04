@@ -50,6 +50,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
 
   const [screen, setScreen] = useState(SettingsScreen.START);
   const [isReset, setIsReset] = useState(false);
+  const [showError, toggleShow] = useState(false);
 
   const goBack = () => setScreen(SettingsScreen.START);
   const submitClose = () => {
@@ -73,10 +74,12 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
   if (!guild) return null;
 
   const invalidateInvites = async () => {
-    const { data } = await invalidateInviteLinks(guild!.id);
-    if (data) {
-      setIsReset(true);
-    }
+    try {
+      const { data } = await invalidateInviteLinks(guild!.id);
+      if (data) {
+        setIsReset(true);
+      }
+    } catch (err) {}
   };
 
   return (
@@ -104,7 +107,10 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                   resetForm();
                   onClose();
                 }
-              } catch (err) {
+              } catch (err: any) {
+                if (err?.response?.status === 500) {
+                  toggleShow(true);
+                }
                 if (err?.response?.data?.errors) {
                   const errors = err?.response?.data?.errors;
                   setErrors(toErrorMap(errors));
@@ -117,7 +123,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                 <ModalHeader textAlign="center" fontWeight="bold" pb={0}>
                   Server Overview
                 </ModalHeader>
-                <ModalCloseButton />
+                <ModalCloseButton _focus={{ outline: 'none' }} />
                 <ModalBody>
                   <Flex mb="4" justify="center">
                     <Box textAlign={'center'}>
@@ -199,6 +205,11 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                       </Button>
                     </LightMode>
                   </Flex>
+                  {showError && (
+                    <Text my="2" color="menuRed" align="center">
+                      Server Error. Try again later
+                    </Text>
+                  )}
                 </ModalBody>
 
                 <ModalFooter bg="brandGray.dark">
@@ -247,6 +258,21 @@ interface IScreenProps {
 }
 
 const DeleteGuildModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, guildId }) => {
+  const [showError, toggleShow] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      const { data } = await deleteGuild(guildId);
+      if (data) {
+        submitClose();
+      }
+    } catch (err: any) {
+      if (err?.response?.status === 500) {
+        toggleShow(true);
+      }
+    }
+  };
+
   return (
     <ModalContent bg="brandGray.light">
       <ModalHeader fontWeight="bold" pb="0">
@@ -256,21 +282,20 @@ const DeleteGuildModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, g
         <Text>
           Are you sure you want to delete <b>{name}</b>? This cannot be undone.
         </Text>
+
+        {showError && (
+          <Text my="2" color="menuRed" align="center">
+            Server Error. Try again later
+          </Text>
+        )}
       </ModalBody>
 
       <ModalFooter bg="brandGray.dark">
-        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'}>
+        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
           Cancel
         </Button>
         <LightMode>
-          <Button
-            colorScheme="red"
-            fontSize={'14px'}
-            onClick={async () => {
-              submitClose();
-              await deleteGuild(guildId);
-            }}
-          >
+          <Button colorScheme="red" fontSize={'14px'} onClick={() => handleDelete()}>
             Delete Server
           </Button>
         </LightMode>
@@ -290,12 +315,14 @@ const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
   const cache = useQueryClient();
 
   const unbanUser = async (id: string) => {
-    const { data } = await unbanMember(guildId, id);
-    if (data) {
-      cache.setQueryData<Member[]>(key, (d) => {
-        return d!.filter((b) => b.id !== id);
-      });
-    }
+    try {
+      const { data } = await unbanMember(guildId, id);
+      if (data) {
+        cache.setQueryData<Member[]>(key, (d) => {
+          return d!.filter((b) => b.id !== id);
+        });
+      }
+    } catch (err) {}
   };
 
   return (
@@ -335,7 +362,7 @@ const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
       </ModalBody>
 
       <ModalFooter bg="brandGray.dark">
-        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'}>
+        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
           Back
         </Button>
       </ModalFooter>

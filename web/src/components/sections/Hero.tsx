@@ -43,7 +43,7 @@ export const Hero: React.FC<HeroProps> = ({ title, subtitle, image, ctaLink, cta
         </Link>
         <Text fontSize="xs" mt={2} textAlign="center" opacity="0.6">
           Got an account already?{' '}
-          <CLink as={Link} to="/login">
+          <CLink as={Link} to="/login" ml="1" color="highlight.standard" _focus={{ outline: 'none' }}>
             Sign in
           </CLink>
         </Text>

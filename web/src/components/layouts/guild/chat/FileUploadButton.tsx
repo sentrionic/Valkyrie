@@ -41,7 +41,7 @@ export const FileUploadButton: React.FC = () => {
 
     try {
       await FileSchema.validate({ file });
-    } catch (err) {
+    } catch (err: any) {
       setErrors(err.errors);
       onOpen();
       return;
@@ -82,7 +82,7 @@ export const FileUploadButton: React.FC = () => {
             <ModalOverlay />
             <ModalContent bg="brandGray.light" textAlign="center">
               <ModalHeader pb="0">Error Uploading File</ModalHeader>
-              <ModalCloseButton />
+              <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody>
                 <Text mb="2">Reason: {errors}</Text>
                 <Text>Max file size is 5.00 MB</Text>

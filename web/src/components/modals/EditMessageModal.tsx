@@ -26,11 +26,17 @@ interface IProps {
 
 export const EditMessageModal: React.FC<IProps> = ({ message, isOpen, onClose }) => {
   const [text, setNewText] = useState(message.text!);
+  const [showError, toggleShow] = useState(false);
 
   const handleSubmit = async () => {
     if (!text || !text.trim()) return;
-    await editMessage(message.id, text.trim());
-    onClose();
+
+    try {
+      await editMessage(message.id, text.trim());
+      onClose();
+    } catch (err) {
+      toggleShow(true);
+    }
   };
 
   return (
@@ -63,10 +69,16 @@ export const EditMessageModal: React.FC<IProps> = ({ message, isOpen, onClose })
               </Box>
             </Flex>
           </Flex>
+
+          {showError && (
+            <Text my="2" color="menuRed" align="center">
+              Server Error. Try again later
+            </Text>
+          )}
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
+          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
             Cancel
           </Button>
           <LightMode>

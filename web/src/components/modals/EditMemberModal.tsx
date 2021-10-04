@@ -11,7 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { TwitterPicker } from 'react-color';
 import { InputField } from '../common/InputField';
@@ -31,6 +31,7 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
   const { data } = useQuery(`settings-${guildId}`, () => {
     return getGuildMemberSettings(guildId).then((response) => response.data);
   });
+  const [showError, toggleShow] = useState(false);
 
   if (!data) return null;
 
@@ -53,7 +54,10 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
               if (data) {
                 onClose();
               }
-            } catch (err) {
+            } catch (err: any) {
+              if (err?.response?.status === 500) {
+                toggleShow(true);
+              }
               if (err?.response?.data?.errors) {
                 const errors = err?.response?.data?.errors;
                 setErrors(toErrorMap(errors));
@@ -66,7 +70,7 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
               <ModalHeader fontWeight="bold" pb={0}>
                 Change Appearance
               </ModalHeader>
-              <ModalCloseButton />
+              <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody>
                 <InputField
                   color={values.color ?? undefined}
@@ -111,10 +115,16 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
                 >
                   Reset Color
                 </Text>
+
+                {showError && (
+                  <Text mt="4" color="menuRed" align="center">
+                    Server Error. Try again later
+                  </Text>
+                )}
               </ModalBody>
 
               <ModalFooter bg="brandGray.dark">
-                <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
+                <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button

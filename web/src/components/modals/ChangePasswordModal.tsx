@@ -49,7 +49,16 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
                 });
                 onClose();
               }
-            } catch (err) {
+            } catch (err: any) {
+              if (err?.response?.status === 500) {
+                toast({
+                  title: 'Server Error',
+                  description: 'Try again later',
+                  status: 'error',
+                  duration: 3000,
+                  isClosable: true,
+                });
+              }
               if (err?.response?.data?.errors) {
                 const errors = err?.response?.data?.errors;
                 setErrors(toErrorMap(errors));
@@ -62,7 +71,7 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               <ModalHeader textAlign="center" fontWeight="bold">
                 Change your password
               </ModalHeader>
-              <ModalCloseButton />
+              <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody pb={6}>
                 <Text>Enter your current password and a new password</Text>
                 <InputField label="current password" name="currentPassword" autoComplete="password" type="password" />
@@ -78,7 +87,7 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               </ModalBody>
 
               <ModalFooter bg="brandGray.dark">
-                <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link">
+                <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link" _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button

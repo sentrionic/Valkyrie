@@ -20,13 +20,15 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
   const cache = useQueryClient();
 
   const closeDM = async () => {
-    await closeDirectMessage(dm.id);
-    cache.setQueryData<DMChannel[]>(dmKey, (d) => {
-      return d!.filter((c) => c.id !== dm.id);
-    });
-    if (isActive) {
-      history.replace('/channels/me');
-    }
+    try {
+      await closeDirectMessage(dm.id);
+      cache.setQueryData<DMChannel[]>(dmKey, (d) => {
+        return d!.filter((c) => c.id !== dm.id);
+      });
+      if (isActive) {
+        history.replace('/channels/me');
+      }
+    } catch (err) {}
   };
 
   return (

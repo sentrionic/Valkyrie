@@ -12,7 +12,7 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Message } from '../../lib/api/models';
 import { deleteMessage } from '../../lib/api/handler/messages';
 import { getTime } from '../../lib/utils/dateUtils';
@@ -24,6 +24,19 @@ interface IProps {
 }
 
 export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose }) => {
+  const [showError, toggleShow] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      const { data } = await deleteMessage(message.id);
+      if (data) {
+        onClose();
+      }
+    } catch (err) {
+      toggleShow(true);
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
@@ -49,21 +62,20 @@ export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose 
               </Box>
             </Flex>
           </Flex>
+
+          {showError && (
+            <Text my="2" color="menuRed" align="center">
+              Server Error. Try again later
+            </Text>
+          )}
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
+          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
             Cancel
           </Button>
           <LightMode>
-            <Button
-              colorScheme="red"
-              fontSize={'14px'}
-              onClick={async () => {
-                onClose();
-                await deleteMessage(message.id);
-              }}
-            >
+            <Button colorScheme="red" fontSize={'14px'} onClick={() => handleDelete()}>
               Delete
             </Button>
           </LightMode>

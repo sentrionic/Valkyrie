@@ -39,7 +39,7 @@ export const RemoveFriendModal: React.FC<IProps> = ({ member, isOpen, onClose })
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
+          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
             Cancel
           </Button>
           <LightMode>
@@ -48,12 +48,14 @@ export const RemoveFriendModal: React.FC<IProps> = ({ member, isOpen, onClose })
               fontSize={'14px'}
               onClick={async () => {
                 onClose();
-                const { data } = await removeFriend(member.id);
-                if (data) {
-                  cache.setQueryData<Member[]>(fKey, (d) => {
-                    return d!.filter((f) => f.id !== member.id);
-                  });
-                }
+                try {
+                  const { data } = await removeFriend(member.id);
+                  if (data) {
+                    cache.setQueryData<Member[]>(fKey, (d) => {
+                      return d!.filter((f) => f.id !== member.id);
+                    });
+                  }
+                } catch (err) {}
               }}
             >
               Remove Friend

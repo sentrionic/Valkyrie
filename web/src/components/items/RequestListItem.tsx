@@ -16,22 +16,26 @@ export const RequestListItem: React.FC<RequestListItemProps> = ({ request }) => 
   const cache = useQueryClient();
 
   const acceptRequest = async () => {
-    const { data } = await acceptFriendRequest(request.id);
-    if (data) {
-      cache.setQueryData<RequestResponse[]>(rKey, (d) => {
-        return d!.filter((r) => r.id !== request.id);
-      });
-      await cache.invalidateQueries(fKey);
-    }
+    try {
+      const { data } = await acceptFriendRequest(request.id);
+      if (data) {
+        cache.setQueryData<RequestResponse[]>(rKey, (d) => {
+          return d!.filter((r) => r.id !== request.id);
+        });
+        await cache.invalidateQueries(fKey);
+      }
+    } catch (err) {}
   };
 
   const declineRequest = async () => {
-    const { data } = await declineFriendRequest(request.id);
-    if (data) {
-      cache.setQueryData<RequestResponse[]>(rKey, (d) => {
-        return d!.filter((r) => r.id !== request.id);
-      });
-    }
+    try {
+      const { data } = await declineFriendRequest(request.id);
+      if (data) {
+        cache.setQueryData<RequestResponse[]>(rKey, (d) => {
+          return d!.filter((r) => r.id !== request.id);
+        });
+      }
+    } catch (err) {}
   };
 
   return (

@@ -44,6 +44,7 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
   const key = mKey(guildId);
   const history = useHistory();
   const { data } = useQuery(key, () => getGuildMembers(guildId).then((response) => response.data));
+  const [showError, toggleError] = useState(false);
 
   const members: Item[] = [];
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
@@ -92,7 +93,10 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                 onClose();
                 history.push(`/channels/${guildId}/${data.id}`);
               }
-            } catch (err) {
+            } catch (err: any) {
+              if (err?.response?.status === 500) {
+                toggleError(true);
+              }
               if (err?.response?.data?.errors) {
                 const errors = err?.response?.data?.errors;
                 setErrors(toErrorMap(errors));
@@ -105,7 +109,7 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
               <ModalHeader textAlign="center" fontWeight="bold">
                 Create Text Channel
               </ModalHeader>
-              <ModalCloseButton />
+              <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody>
                 <InputField label="channel name" name="name" />
 
@@ -138,10 +142,16 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                     />
                   </Box>
                 )}
+
+                {showError && (
+                  <Text my="2" color="menuRed" align="center">
+                    Server Error. Try again later
+                  </Text>
+                )}
               </ModalBody>
 
               <ModalFooter bg="brandGray.dark">
-                <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link">
+                <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link" _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button

@@ -33,7 +33,7 @@ export const Login = () => {
                     setUser(data);
                     history.push('/channels/me');
                   }
-                } catch (err) {
+                } catch (err: any) {
                   if (err?.response?.status === 401) {
                     setErrors({ password: 'Invalid Credentials' });
                   }
@@ -51,7 +51,7 @@ export const Login = () => {
                   <InputField label="password" name="password" autoComplete="password" type="password" />
 
                   <Box mt={4}>
-                    <Link as={RLink} to="/forgot-password" textColor="highlight.standard">
+                    <Link as={RLink} to="/forgot-password" textColor="highlight.standard" _focus={{ outline: 'none' }}>
                       Forgot Password?
                     </Link>
                   </Box>
@@ -71,7 +71,7 @@ export const Login = () => {
                   </Button>
                   <Text mt="4">
                     Don't have an account yet?{' '}
-                    <Link as={RLink} to="/register" textColor="highlight.standard">
+                    <Link as={RLink} to="/register" textColor="highlight.standard" _focus={{ outline: 'none' }}>
                       Sign Up
                     </Link>
                   </Text>

@@ -14,7 +14,7 @@ type FooterLinkProps = {
 const FooterLink: React.FC<FooterLinkProps> = ({ icon, href, label }) => (
   <StyledTooltip label={label!} position={'top'}>
     <Link display="inline-block" href={href} aria-label={label} isExternal mx={2}>
-      <Box as={icon} width="24px" height="24px" color="gray.400" />
+      <Box as={icon} width="24px" height="24px" color="gray.400" _hover={{ color: 'gray.100' }} />
     </Link>
   </StyledTooltip>
 );
@@ -44,7 +44,7 @@ export const Footer: React.FC = () => (
         <span>Valkyrie | 2021</span>
       </Text>
       <Text>This is not a real commercial app.</Text>
-      <Stack mt={2} isInline justify="center">
+      <Stack mt={2} isInline justify="center" spacing="6">
         {links.map((link) => (
           <FooterLink key={link.href} {...link} />
         ))}

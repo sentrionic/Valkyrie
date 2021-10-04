@@ -1,16 +1,17 @@
 import { Box, Button, Flex, Heading, Image, Link, Text } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import React from 'react';
 import { Link as RLink, useHistory } from 'react-router-dom';
 import { InputField } from '../components/common/InputField';
 import { toErrorMap } from '../lib/utils/toErrorMap';
 import { userStore } from '../lib/stores/userStore';
 import { RegisterSchema } from '../lib/utils/validation/auth.schema';
 import { register } from '../lib/api/handler/auth';
+import { useState } from 'react';
 
 export const Register = () => {
   const history = useHistory();
   const setUser = userStore((state) => state.setUser);
+  const [error, showError] = useState(false);
 
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
@@ -33,7 +34,10 @@ export const Register = () => {
                     setUser(data);
                     history.push('/channels/me');
                   }
-                } catch (err) {
+                } catch (err: any) {
+                  if (err?.response?.status === 500) {
+                    showError(true);
+                  }
                   if (err?.response?.data?.errors) {
                     const errors = err?.response?.data?.errors;
                     setErrors(toErrorMap(errors));
@@ -62,9 +66,14 @@ export const Register = () => {
                   >
                     Register
                   </Button>
+                  {error && (
+                    <Text mt="4" color="menuRed" align="center">
+                      Server Error. Try again later
+                    </Text>
+                  )}
                   <Text mt="4">
                     Already have an account?{' '}
-                    <Link as={RLink} to="/login" textColor="highlight.standard">
+                    <Link as={RLink} to="/login" textColor="highlight.standard" _focus={{ outline: 'none' }}>
                       Sign In
                     </Link>
                   </Text>

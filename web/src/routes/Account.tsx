@@ -39,9 +39,9 @@ export const Account = () => {
   const setUser = userStore((state) => state.setUser);
 
   const inputFile: any = useRef(null);
-  const [imageUrl, setImageUrl] = useState(user?.image || '');
+  const [imageUrl, setImageUrl] = useState<string | null>(user?.image ?? null);
   const [cropImage, setCropImage] = useState('');
-  const [croppedImage, setCroppedImage] = useState<any>(null);
+  const [croppedImage, setCroppedImage] = useState<File | null>(null);
 
   const closeClicked = () => {
     history.goBack();
@@ -84,7 +84,10 @@ export const Account = () => {
                   const formData = new FormData();
                   formData.append('email', values.email);
                   formData.append('username', values.username);
-                  formData.append('image', croppedImage ?? imageUrl);
+
+                  if (croppedImage) {
+                    formData.append('image', croppedImage);
+                  }
                   const { data } = await updateAccount(formData);
                   if (data) {
                     setUser(data);
@@ -95,7 +98,16 @@ export const Account = () => {
                       isClosable: true,
                     });
                   }
-                } catch (err) {
+                } catch (err: any) {
+                  if (err?.response?.status === 500) {
+                    toast({
+                      title: 'Server Error',
+                      description: 'Try again later',
+                      status: 'error',
+                      duration: 3000,
+                      isClosable: true,
+                    });
+                  }
                   if (err?.response?.data?.errors) {
                     const errors = err?.response?.data?.errors;
                     setErrors(toErrorMap(errors));

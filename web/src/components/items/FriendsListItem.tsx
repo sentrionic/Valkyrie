@@ -18,15 +18,17 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
   const cache = useQueryClient();
 
   const getDMChannel = async () => {
-    const { data } = await getOrCreateDirectMessage(friend.id);
-    if (data) {
-      cache.setQueryData<DMChannel[]>(dmKey, (d) => {
-        const index = d!.findIndex((d) => d.id === data.id);
-        if (index === -1) return [data, ...d!];
-        return d!;
-      });
-      history.push(`/channels/me/${data.id}`);
-    }
+    try {
+      const { data } = await getOrCreateDirectMessage(friend.id);
+      if (data) {
+        cache.setQueryData<DMChannel[]>(dmKey, (d) => {
+          const index = d!.findIndex((d) => d.id === data.id);
+          if (index === -1) return [data, ...d!];
+          return d!;
+        });
+        history.push(`/channels/me/${data.id}`);
+      }
+    } catch (err) {}
   };
 
   return (

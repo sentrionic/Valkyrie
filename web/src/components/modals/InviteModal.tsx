@@ -33,8 +33,10 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
   useEffect(() => {
     if (isOpen) {
       const fetchLink = async () => {
-        const { data } = await getInviteLink(guildId, isPermanent);
-        if (data) setInviteLink(data);
+        try {
+          const { data } = await getInviteLink(guildId, isPermanent);
+          if (data) setInviteLink(data);
+        } catch (err) {}
       };
       fetchLink();
     }
@@ -47,7 +49,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
         <ModalHeader textAlign="center" fontWeight="bold" pb={'0'}>
           Invite Link
         </ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton _focus={{ outline: 'none' }} />
         <ModalBody>
           <Text mb="4">Share this link with others to grant access to this server</Text>
 

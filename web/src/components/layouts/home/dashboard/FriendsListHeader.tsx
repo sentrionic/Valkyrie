@@ -28,6 +28,7 @@ export const FriendsListHeader: React.FC = () => {
               if (isPending) toggle();
             }}
             variant={!isPending ? 'solid' : 'ghost'}
+            _focus={{ boxShadow: 'none' }}
           >
             Friends
           </Button>
@@ -40,6 +41,7 @@ export const FriendsListHeader: React.FC = () => {
             onClick={() => {
               if (!isPending) toggle();
             }}
+            _focus={{ boxShadow: 'none' }}
           >
             Pending
             {requests > 0 && <PingIcon count={requests} />}

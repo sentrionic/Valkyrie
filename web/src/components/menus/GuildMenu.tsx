@@ -36,13 +36,15 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
   const { isOpen: memberOpen, onOpen: memberOnOpen, onClose: memberOnClose } = useDisclosure();
 
   const handleLeave = async () => {
-    const { data } = await leaveGuild(guildId);
-    if (data) {
-      cache.setQueryData<Guild[]>(gKey, (d) => {
-        return d!.filter((g) => g.id !== guild?.id);
-      });
-      history.replace('/channels/me');
-    }
+    try {
+      const { data } = await leaveGuild(guildId);
+      if (data) {
+        cache.setQueryData<Guild[]>(gKey, (d) => {
+          return d!.filter((g) => g.id !== guild?.id);
+        });
+        history.replace('/channels/me');
+      }
+    } catch (err) {}
   };
 
   return (

@@ -5,7 +5,14 @@
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://192.168.2.123:5432/valkyrie</jdbc-url>
+      <jdbc-url>jdbc:postgresql://192.168.2.123:5432/valkyrie_test</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="Prod" uuid="46aedef3-f64b-4c81-bd5d-d37edbba65fe">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-54-216-185-51.eu-west-1.compute.amazonaws.com:5432/d3hdt8ejbf4p81</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

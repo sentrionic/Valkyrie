@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { userStore } from '../../lib/stores/userStore';
-import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { InputField } from '../common/InputField';
 import { sendFriendRequest } from '../../lib/api/handler/account';
 import { rKey } from '../../lib/utils/querykeys';
@@ -51,10 +50,10 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
                   onClose();
                   await cache.invalidateQueries(rKey);
                 }
-              } catch (err) {
-                if (err?.response?.data?.errors) {
-                  const errors = err?.response?.data?.errors;
-                  setErrors(toErrorMap(errors));
+              } catch (err: any) {
+                if (err?.response?.data?.error) {
+                  const error = err?.response?.data?.error?.message;
+                  setErrors({ id: error });
                 }
               }
             }
@@ -65,7 +64,7 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
               <ModalHeader fontWeight="bold" pb={'0'}>
                 ADD FRIEND
               </ModalHeader>
-              <ModalCloseButton />
+              <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody>
                 <Text mb="4">You can add a friend with their UID.</Text>
                 <InputGroup mb={2}>
@@ -97,7 +96,7 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
                 <InputField label="Enter a user ID" name="id" />
               </ModalBody>
               <ModalFooter bg="brandGray.dark" mt="2">
-                <Button mr={6} variant="link" onClick={onClose} fontSize={'14px'}>
+                <Button mr={6} variant="link" onClick={onClose} fontSize={'14px'} _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button

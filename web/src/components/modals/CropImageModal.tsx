@@ -48,7 +48,7 @@ export const CropImageModal: React.FC<IProps> = ({ isOpen, onClose, applyCrop, i
 
       <ModalContent bg="brandGray.light">
         <ModalHeader fontWeight="bold">EDIT MEDIA</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton _focus={{ outline: 'none' }} />
         <ModalBody>
           <Box h="400px" overflow="hidden" position="relative">
             <Cropper

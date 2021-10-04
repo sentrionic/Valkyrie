@@ -58,6 +58,7 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
   const members: Item[] = [];
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const [screen, setScreen] = useState(ChannelScreen.START);
+  const [showError, toggleShow] = useState(false);
 
   const goBack = () => setScreen(ChannelScreen.START);
   const submitClose = () => {
@@ -119,7 +120,10 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
                   resetForm();
                   onClose();
                 }
-              } catch (err) {
+              } catch (err: any) {
+                if (err?.response?.status === 500) {
+                  toggleShow(true);
+                }
                 if (err?.response?.data?.errors) {
                   const errors = err?.response?.data?.errors;
                   setErrors(toErrorMap(errors));
@@ -132,7 +136,7 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
                 <ModalHeader textAlign="center" fontWeight="bold">
                   Channel Settings
                 </ModalHeader>
-                <ModalCloseButton />
+                <ModalCloseButton _focus={{ outline: 'none' }} />
                 <ModalBody>
                   <InputField label="channel name" name="name" />
 
@@ -180,10 +184,16 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
                       Delete Channel
                     </Button>
                   </LightMode>
+
+                  {showError && (
+                    <Text my="2" color="menuRed" align="center">
+                      Server Error. Try again later
+                    </Text>
+                  )}
                 </ModalBody>
 
                 <ModalFooter bg="brandGray.dark">
-                  <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
+                  <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
                     Cancel
                   </Button>
                   <Button
@@ -226,6 +236,18 @@ interface IScreenProps {
 }
 
 const DeleteChannelModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, channelId, guildId }) => {
+  const [showError, toggleShow] = useState(false);
+  const handleDelete = async () => {
+    try {
+      const { data } = await deleteChannel(channelId);
+      if (data) {
+        submitClose();
+      }
+    } catch (err) {
+      toggleShow(true);
+    }
+  };
+
   return (
     <ModalContent bg="brandGray.light">
       <ModalHeader fontWeight="bold" pb="0">
@@ -233,21 +255,20 @@ const DeleteChannelModal: React.FC<IScreenProps> = ({ goBack, submitClose, name,
       </ModalHeader>
       <ModalBody pb={3}>
         <Text>Are you sure you want to delete #{name}? This cannot be undone.</Text>
+
+        {showError && (
+          <Text my="2" color="menuRed" align="center">
+            Server Error. Try again later
+          </Text>
+        )}
       </ModalBody>
 
       <ModalFooter bg="brandGray.dark">
-        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'}>
+        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
           Cancel
         </Button>
         <LightMode>
-          <Button
-            colorScheme="red"
-            fontSize={'14px'}
-            onClick={async () => {
-              submitClose();
-              await deleteChannel(channelId);
-            }}
-          >
+          <Button colorScheme="red" fontSize={'14px'} onClick={() => handleDelete()}>
             Delete Channel
           </Button>
         </LightMode>

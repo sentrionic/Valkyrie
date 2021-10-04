@@ -54,7 +54,7 @@ export const AddGuildModal: React.FC<IProps> = ({ isOpen, onClose }) => {
           <ModalHeader textAlign="center" fontWeight="bold">
             Create a server
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton _focus={{ outline: 'none' }} />
           <ModalBody pb={6}>
             <VStack spacing="5">
               <Text textAlign="center">
@@ -127,14 +127,10 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 submitClose();
                 history.push(`/channels/${data.id}/${data.default_channel_id}`);
               }
-            } catch (err) {
+            } catch (err: any) {
               const status = err?.response?.status;
-              if (status === 400 || status === 404) {
-                setErrors({ link: err?.response?.data?.message });
-              }
-              if (err?.response?.data?.errors) {
-                const errors = err?.response?.data?.errors;
-                setErrors(toErrorMap(errors));
+              if (status === 400 || status === 500) {
+                setErrors({ link: err?.response?.data?.error.message });
               }
             }
           }
@@ -145,7 +141,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             <ModalHeader textAlign="center" fontWeight="bold" pb="0">
               Join a Server
             </ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton _focus={{ outline: 'none' }} />
             <ModalBody pb={3}>
               <Text fontSize="14px" textColor="brandGray.accent">
                 Enter an invite below to join an existing server
@@ -165,7 +161,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             </ModalBody>
 
             <ModalFooter bg="brandGray.dark">
-              <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'}>
+              <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
                 Back
               </Button>
               <Button
@@ -210,7 +206,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
               submitClose();
               history.push(`/channels/${data.id}/${data.default_channel_id}`);
             }
-          } catch (err) {
+          } catch (err: any) {
             if (err?.response?.status === 400) {
               setErrors({ name: 'The server limit is 100' });
             }
@@ -226,13 +222,13 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             <ModalHeader textAlign="center" fontWeight="bold" pb="0">
               Create your server
             </ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton _focus={{ outline: 'none' }} />
             <ModalBody pb={3}>
               <InputField label="server name" name="name" value={values.name} />
             </ModalBody>
 
             <ModalFooter bg="brandGray.dark">
-              <Button mr={6} fontSize={'14px'} variant="link" onClick={goBack}>
+              <Button mr={6} fontSize={'14px'} variant="link" onClick={goBack} _focus={{ outline: 'none' }}>
                 Back
               </Button>
               <Button

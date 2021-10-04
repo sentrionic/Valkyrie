@@ -4,12 +4,16 @@
   <img src="https://harmony-cdn.s3.eu-central-1.amazonaws.com/logo.png">
 </p>
 
-A [Discord](https://discord.com) clone written in TypeScript.
+A [Discord](https://discord.com) clone using React and Go.
 
-[Live Demo](https://valkyrieapp.xyz) *(**Note**: File Upload is disabled.)* 
+[Live Demo](https://valkyrieapp.xyz)
 
-Once you registered you can also join the server that is open for all by either clicking on this
-[link](https://valkyrieapp.xyz/n94dXT4W) or manually using the invite code `n94dXT4W`.
+**Notes:**
+
+- File Upload is disabled.
+- The live demo currently runs on the [Go backend](https://github.com/sentrionic/ValkyrieGo).
+- Design does not fully match current Discord anymore.
+- Data regularly gets wiped, so you can use any valid email and password.
 
 ## Video
 
@@ -27,16 +31,16 @@ Once you registered you can also join the server that is open for all by either 
 - Friend System
 - Notification System
 - Basic Moderation for the guild owner (delete messages, kick & ban members)
-- (Basically 2015 Discord features with 2021 Look)
 
 ## Stack
 
-- [NestJS](https://nestjs.com/) with [socket.io](https://socket.io/)
+- [Gin](https://gin-gonic.com/) for the HTTP server
+- [Gorilla Websockets](https://github.com/gorilla/websocket) for WS communication
 - React with [Chakra UI](https://chakra-ui.com/)
 - REST Endpoints
 - [React Query](https://react-query.tanstack.com/) & [Zustand](https://github.com/pmndrs/zustand) for state management
 
-For the mobile app check out [ValkyrieApp](https://github.com/sentrionic/ValkyrieApp)
+For the mobile app using Flutter check out [ValkyrieApp](https://github.com/sentrionic/ValkyrieApp)
 
 ---
 
@@ -44,42 +48,16 @@ For the mobile app check out [ValkyrieApp](https://github.com/sentrionic/Valkyri
 
 ### Server
 
-1. Install PostgreSQL and create a DB
-2. Install Redis
-3. Run `yarn` to install the dependencies
-4. Rename `.env.example` to `.env` and fill in the values
-
-- `Required`
-
-        DATABASE_URL="postgresql://<username>:<password>@localhost:5432/db_name"
-        REDIS_URL=localhost:6379
-        CORS_ORIGIN=http://localhost:3000
-        SECRET=SUPERSECRET
-        REDIS_HOST=localhost
-        REDIS_PORT=6379
-        REDIS_PASSWORD=password
-
-Redis Info is needed twice because the RedisCache Module can't use the `REDIS_URL` directly. 
-
-- `Optional: Not needed to run the app, but you won't be able to upload files or send emails.`
-
-        AWS_ACCESS_KEY=ACCESS_KEY
-        AWS_SECRET_ACCESS_KEY=SECRET_ACCESS_KEY
-        AWS_STORAGE_BUCKET_NAME=STORAGE_BUCKET_NAME
-        AWS_S3_REGION=S3_REGION
-        GMAIL_USER=GMAIL_USER
-        GMAIL_PASSWORD=GMAIL_PASSWORD
-
-5. Run `yarn start` to run the server
+Go to the [ValkyrieGo](https://github.com/sentrionic/ValkyrieGo) repository and follow the instructions there.
 
 ### Web
 
+0. Install the latest or LTS version of Node.
 1. Run `yarn` to install the dependencies
-2. Copy .env.example and fill in the values
+2. Rename `.env.development.example` to `.env.development`.
 3. Run `yarn start` to start the client
 4. Go to `localhost:3000`
 
-## Endpoints
+## Credits
 
-Once the server is running go to `localhost:4000/api` to see all the HTTP endpoints
-and `localhost:4000/ws` for all the websocket events.
+[Ben Awad](https://github.com/benawad): The inital project is based on his Slack tutorial series and I always look at his repositories for inspiration.

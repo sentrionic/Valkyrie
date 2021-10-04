@@ -15,6 +15,7 @@ interface TokenProps {
 export const ResetPassword = () => {
   const history = useHistory();
   const { token } = useParams<TokenProps>();
+  const [showError, setShowError] = useState(false);
   const [tokenError, setTokenError] = useState('');
   const setUser = userStore((state) => state.setUser);
 
@@ -39,14 +40,18 @@ export const ResetPassword = () => {
                     setUser(data);
                     history.push('/channels/me');
                   }
-                } catch (err) {
-                  const errors = err?.response?.data?.errors;
-                  const errorMap = toErrorMap(errors);
+                } catch (err: any) {
+                  if (err?.response?.status === 500) {
+                    setShowError(true);
+                  } else {
+                    const errors = err?.response?.data?.errors;
+                    const errorMap = toErrorMap(errors);
 
-                  if ('token' in errorMap) {
-                    setTokenError(errorMap.token);
+                    if ('token' in errorMap) {
+                      setTokenError(errorMap.token);
+                    }
+                    setErrors(errorMap);
                   }
-                  setErrors(errorMap);
                 }
               }}
             >
@@ -72,14 +77,19 @@ export const ResetPassword = () => {
                 </Form>
               )}
             </Formik>
-            {tokenError ? (
+            {showError && (
+              <Text mt="4" color="menuRed" align="center">
+                Server Error. Try again later
+              </Text>
+            )}
+            {tokenError && (
               <Flex direction="column" mt="4" justify="center" align="center">
-                <Text>Invalid or expired token.</Text>
-                <Link as={RLink} to="/forgot-password" color="red">
+                <Text color="menuRed">Invalid or expired token.</Text>
+                <Link as={RLink} to="/forgot-password" _focus={{ outline: 'none' }}>
                   Click here to get a new token
                 </Link>
               </Flex>
-            ) : null}
+            )}
           </Box>
         </Box>
       </Box>

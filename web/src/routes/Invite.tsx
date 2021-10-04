@@ -19,13 +19,10 @@ export const Invite: React.FC = () => {
         if (data) {
           history.replace(`/channels/${data.id}/${data.default_channel_id}`);
         }
-      } catch (err) {
+      } catch (err: any) {
         const status = err?.response?.status;
-        if (status === 400 || status === 404) {
-          setErrors(err?.response?.data?.message);
-        }
-        if (err?.response?.data?.errors) {
-          setErrors('An error occurred. Please try again later');
+        if (status === 400 || status === 404 || status === 500) {
+          setErrors(err?.response?.data?.error?.message);
         }
       }
     };
@@ -47,7 +44,7 @@ export const Invite: React.FC = () => {
             </Text>
             <Text>
               Click{' '}
-              <Link as={RLink} to="/channels/me" color="highlight.standard">
+              <Link as={RLink} to="/channels/me" color="highlight.standard" _focus={{ outline: 'none' }}>
                 here
               </Link>{' '}
               to return.

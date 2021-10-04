@@ -45,7 +45,7 @@ export const ModActionModal: React.FC<IProps> = ({ member, isOpen, onClose, isBa
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
+          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
             Cancel
           </Button>
           <LightMode>
@@ -54,13 +54,15 @@ export const ModActionModal: React.FC<IProps> = ({ member, isOpen, onClose, isBa
               fontSize={'14px'}
               onClick={async () => {
                 onClose();
-                const { data } = isBan ? await banMember(guildId, member.id) : await kickMember(guildId, member.id);
-                if (data) {
-                  cache.setQueryData<Member[]>(mKey(guildId), (d) => {
-                    if (d !== undefined) return d!.filter((f) => f.id !== member.id);
-                    return d!;
-                  });
-                }
+                try {
+                  const { data } = isBan ? await banMember(guildId, member.id) : await kickMember(guildId, member.id);
+                  if (data) {
+                    cache.setQueryData<Member[]>(mKey(guildId), (d) => {
+                      if (d !== undefined) return d!.filter((f) => f.id !== member.id);
+                      return d!;
+                    });
+                  }
+                } catch (err) {}
               }}
             >
               {action}
