@@ -4,23 +4,28 @@ import { Channel } from '../models';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { useGetCurrentGuild } from '../../utils/hooks/useGetCurrentGuild';
+import { userStore } from '../../stores/userStore';
 
 type WSMessage =
   | { action: 'delete_channel' | 'new_notification'; data: string }
-  | { action: 'add_channel' | 'edit_channel'; data: Channel };
+  | { action: 'add_channel' | 'add_private_channel' | 'edit_channel'; data: Channel };
 
 export function useChannelSocket(guildId: string, key: string) {
   const location = useLocation();
   const history = useHistory();
   const cache = useQueryClient();
   const guild = useGetCurrentGuild(guildId);
+  const current = userStore((state) => state.current);
+
   useEffect((): any => {
     const socket = getSocket();
 
     socket.send(JSON.stringify({ action: 'joinGuild', room: guildId }));
+    socket.send(JSON.stringify({ action: 'joinUser', room: current?.id }));
 
     const disconnect = () => {
       socket.send(JSON.stringify({ action: 'leaveGuild', room: guildId }));
+      socket.send(JSON.stringify({ action: 'leaveRoom', room: current?.id }));
       socket.close();
     };
 
@@ -28,6 +33,13 @@ export function useChannelSocket(guildId: string, key: string) {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'add_channel': {
+          cache.setQueryData<Channel[]>(key, (data) => {
+            return [...data!, response.data];
+          });
+          break;
+        }
+
+        case 'add_private_channel': {
           cache.setQueryData<Channel[]>(key, (data) => {
             return [...data!, response.data];
           });
@@ -84,5 +96,5 @@ export function useChannelSocket(guildId: string, key: string) {
     window.addEventListener('beforeunload', disconnect);
 
     return () => disconnect();
-  }, [guildId, key, cache, history, location, guild]);
+  }, [guildId, key, cache, history, location, guild, current]);
 }
