@@ -16,8 +16,8 @@ import { MdAddCircle } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { sendMessage } from '../../../../lib/api/handler/messages';
 import { FileSchema } from '../../../../lib/utils/validation/message.schema';
-import { RouterProps } from '../../../../routes/Routes';
 import { StyledTooltip } from '../../../sections/StyledTooltip';
+import { RouterProps } from '../../../../lib/api/models';
 
 export const FileUploadButton: React.FC = () => {
   const { channelId } = useParams<RouterProps>();
@@ -29,13 +29,13 @@ export const FileUploadButton: React.FC = () => {
   const [errors, setErrors] = useState({});
   const disable = process.env.NODE_ENV === 'production';
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setErrors({});
     setProgress(0);
     onClose();
   };
 
-  const handleSubmit = async (file: File) => {
+  const handleSubmit = async (file: File): Promise<void> => {
     if (!file) return;
     setSubmitting(true);
 
@@ -59,11 +59,14 @@ export const FileUploadButton: React.FC = () => {
   return (
     <StyledTooltip disabled={!disable} label="File Upload is disabled on the test site" position="top">
       <InputLeftElement
-        color={'iconColor'}
-        _hover={{ cursor: 'pointer', color: '#fcfcfc' }}
+        color="iconColor"
+        _hover={{
+          cursor: 'pointer',
+          color: '#fcfcfc',
+        }}
         onClick={() => inputFile.current.click()}
       >
-        <Icon as={MdAddCircle} boxSize={'20px'} />
+        <Icon as={MdAddCircle} boxSize="20px" />
         <input
           type="file"
           ref={inputFile}
@@ -84,7 +87,10 @@ export const FileUploadButton: React.FC = () => {
               <ModalHeader pb="0">Error Uploading File</ModalHeader>
               <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody>
-                <Text mb="2">Reason: {errors}</Text>
+                <Text mb="2">
+                  Reason:
+                  {errors}
+                </Text>
                 <Text>Max file size is 5.00 MB</Text>
                 <Text>Only Images and mp3 allowed</Text>
               </ModalBody>

@@ -13,15 +13,15 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { useHistory } from 'react-router-dom';
 import { InputField } from '../common/InputField';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
 import { createGuild, joinGuild } from '../../lib/api/handler/guilds';
 import { userStore } from '../../lib/stores/userStore';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
-import { useQueryClient } from 'react-query';
 import { Guild } from '../../lib/api/models';
 import { gKey } from '../../lib/utils/querykeys';
-import { useHistory } from 'react-router-dom';
 
 interface IProps {
   isOpen: boolean;
@@ -37,8 +37,8 @@ enum AddGuildScreen {
 export const AddGuildModal: React.FC<IProps> = ({ isOpen, onClose }) => {
   const [screen, setScreen] = useState(AddGuildScreen.START);
 
-  const goBack = () => setScreen(AddGuildScreen.START);
-  const submitClose = () => {
+  const goBack = (): void => setScreen(AddGuildScreen.START);
+  const submitClose = (): void => {
     setScreen(AddGuildScreen.START);
     onClose();
   };
@@ -121,9 +121,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             try {
               const { data } = await joinGuild(values);
               if (data) {
-                cache.setQueryData<Guild[]>(gKey, (old) => {
-                  return [...old!, data];
-                });
+                cache.setQueryData<Guild[]>(gKey, (old) => [...old!, data]);
                 submitClose();
                 history.push(`/channels/${data.id}/${data.default_channel_id}`);
               }
@@ -161,7 +159,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             </ModalBody>
 
             <ModalFooter bg="brandGray.dark">
-              <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
+              <Button mr={6} variant="link" onClick={goBack} fontSize="14px" _focus={{ outline: 'none' }}>
                 Back
               </Button>
               <Button
@@ -172,7 +170,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
                 isLoading={isSubmitting}
-                fontSize={'14px'}
+                fontSize="14px"
               >
                 Join Server
               </Button>
@@ -200,9 +198,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
           try {
             const { data } = await createGuild(values);
             if (data) {
-              cache.setQueryData<Guild[]>(gKey, (old) => {
-                return [...old!, data];
-              });
+              cache.setQueryData<Guild[]>(gKey, (old) => [...old!, data]);
               submitClose();
               history.push(`/channels/${data.id}/${data.default_channel_id}`);
             }
@@ -228,7 +224,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             </ModalBody>
 
             <ModalFooter bg="brandGray.dark">
-              <Button mr={6} fontSize={'14px'} variant="link" onClick={goBack} _focus={{ outline: 'none' }}>
+              <Button mr={6} fontSize="14px" variant="link" onClick={goBack} _focus={{ outline: 'none' }}>
                 Back
               </Button>
               <Button
@@ -239,7 +235,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
                 isLoading={isSubmitting}
-                fontSize={'14px'}
+                fontSize="14px"
               >
                 Create
               </Button>

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import { useQueryClient } from 'react-query';
 import { userStore } from '../../lib/stores/userStore';
 import { getSocket } from '../../lib/api/getSocket';
 import { homeStore } from '../../lib/stores/homeStore';
 import { DMChannel, DMNotification } from '../../lib/api/models';
-import { useQueryClient } from 'react-query';
 import { nKey } from '../../lib/utils/querykeys';
 
 type WSMessage = { action: 'new_dm_notification'; data: DMChannel } | { action: 'send_request' };
@@ -13,16 +13,22 @@ export const GlobalState: React.FC = ({ children }) => {
   const inc = homeStore((state) => state.increment);
   const cache = useQueryClient();
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (current) {
-      const disconnect = () => {
+      const disconnect = (): void => {
         socket.send(JSON.stringify({ action: 'toggleOffline' }));
         socket.close();
       };
 
       const socket = getSocket();
       socket.send(JSON.stringify({ action: 'toggleOnline' }));
-      socket.send(JSON.stringify({ action: 'joinUser', room: current?.id }));
+      socket.send(
+        JSON.stringify({
+          action: 'joinUser',
+          room: current?.id,
+        })
+      );
 
       socket.addEventListener('message', (event) => {
         const response: WSMessage = JSON.parse(event.data);
@@ -33,10 +39,21 @@ export const GlobalState: React.FC = ({ children }) => {
               cache.setQueryData<DMNotification[]>(nKey, (data) => {
                 const index = data?.findIndex((c) => c.id === channel.id);
                 if (index !== -1 && index !== undefined) {
-                  return [{ ...channel, count: data![index].count + 1 }, ...data!.filter((c) => c.id !== channel.id)];
-                } else {
-                  return [{ ...channel, count: 1 }, ...(data || [])];
+                  return [
+                    {
+                      ...channel,
+                      count: data![index].count + 1,
+                    },
+                    ...data!.filter((c) => c.id !== channel.id),
+                  ];
                 }
+                return [
+                  {
+                    ...channel,
+                    count: 1,
+                  },
+                  ...(data || []),
+                ];
               });
             }
             break;
@@ -48,6 +65,9 @@ export const GlobalState: React.FC = ({ children }) => {
             }
             break;
           }
+
+          default:
+            break;
         }
       });
 

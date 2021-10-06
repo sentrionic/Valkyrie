@@ -16,11 +16,11 @@ import {
   useClipboard,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
+import { useQueryClient } from 'react-query';
 import { userStore } from '../../lib/stores/userStore';
 import { InputField } from '../common/InputField';
 import { sendFriendRequest } from '../../lib/api/handler/account';
 import { rKey } from '../../lib/utils/querykeys';
-import { useQueryClient } from 'react-query';
 
 interface AddFriendModalProps {
   isOpen: boolean;
@@ -61,14 +61,16 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
         >
           {({ isSubmitting }) => (
             <Form>
-              <ModalHeader fontWeight="bold" pb={'0'}>
+              <ModalHeader fontWeight="bold" pb="0">
                 ADD FRIEND
               </ModalHeader>
               <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody>
                 <Text mb="4">You can add a friend with their UID.</Text>
                 <InputGroup mb={2}>
-                  <InputLeftAddon bg={'#202225'} borderColor={'black'} children="UID" />
+                  <InputLeftAddon bg="#202225" borderColor="black">
+                    UID
+                  </InputLeftAddon>
                   <Input
                     bg="brandGray.dark"
                     borderColor={hasCopied ? 'brandGreen' : 'black'}
@@ -96,7 +98,7 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
                 <InputField label="Enter a user ID" name="id" />
               </ModalBody>
               <ModalFooter bg="brandGray.dark" mt="2">
-                <Button mr={6} variant="link" onClick={onClose} fontSize={'14px'} _focus={{ outline: 'none' }}>
+                <Button mr={6} variant="link" onClick={onClose} fontSize="14px" _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button
@@ -107,7 +109,7 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
                   _active={{ bg: 'highlight.active' }}
                   _focus={{ boxShadow: 'none' }}
                   isLoading={isSubmitting}
-                  fontSize={'14px'}
+                  fontSize="14px"
                 >
                   Send Friend Request
                 </Button>

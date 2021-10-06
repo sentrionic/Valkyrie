@@ -65,3 +65,8 @@ export interface RequestResponse {
   image: string;
   type: number;
 }
+
+export interface RouterProps {
+  guildId: string;
+  channelId: string;
+}

@@ -8,7 +8,7 @@ import { homeStore } from '../../stores/homeStore';
 
 type WSMessage = { action: 'add_request'; data: RequestResponse };
 
-export function useRequestSocket() {
+export function useRequestSocket(): void {
   const current = userStore((state) => state.current);
   const setRequests = homeStore((state) => state.setRequests);
   const cache = useQueryClient();
@@ -16,22 +16,35 @@ export function useRequestSocket() {
   useEffect((): any => {
     const socket = getSocket();
 
-    socket.send(JSON.stringify({ action: 'joinUser', room: current?.id }));
+    socket.send(
+      JSON.stringify({
+        action: 'joinUser',
+        room: current?.id,
+      })
+    );
 
     socket.addEventListener('message', (event) => {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'add_request': {
-          cache.setQueryData<RequestResponse[]>(rKey, (data) => {
-            return [...data!, response.data].sort((a, b) => a.username.localeCompare(b.username));
-          });
+          cache.setQueryData<RequestResponse[]>(rKey, (data) =>
+            [...data!, response.data].sort((a, b) => a.username.localeCompare(b.username))
+          );
           break;
         }
+
+        default:
+          break;
       }
     });
 
     return () => {
-      socket.send(JSON.stringify({ action: 'leaveRoom', room: current?.id }));
+      socket.send(
+        JSON.stringify({
+          action: 'leaveRoom',
+          room: current?.id,
+        })
+      );
       socket.close();
     };
   }, [cache, current, setRequests]);

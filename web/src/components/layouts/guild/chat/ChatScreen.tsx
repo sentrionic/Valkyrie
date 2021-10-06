@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useInfiniteQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 import { Message } from '../../../items/message/Message';
 import { StartMessages } from '../../../sections/StartMessages';
-import { useParams } from 'react-router-dom';
 import { getMessages } from '../../../../lib/api/handler/messages';
-import { Message as MessageResponse } from '../../../../lib/api/models';
-import { RouterProps } from '../../../../routes/Routes';
+import { Message as MessageResponse, RouterProps } from '../../../../lib/api/models';
 import { checkNewDay, getTimeDifference } from '../../../../lib/utils/dateUtils';
 import { guildScrollbarCss } from '../css/GuildScrollerCSS';
 import { useMessageSocket } from '../../../../lib/api/ws/useMessageSocket';
@@ -22,9 +21,9 @@ export const ChatScreen: React.FC = () => {
   const { data, isLoading, fetchNextPage } = useInfiniteQuery<MessageResponse[]>(
     qKey,
     async ({ pageParam = null }) => {
-      const { data } = await getMessages(channelId, pageParam);
-      if (data.length !== 35) setHasMore(false);
-      return data;
+      const { data: messageData } = await getMessages(channelId, pageParam);
+      if (messageData.length !== 35) setHasMore(false);
+      return messageData;
     },
     {
       staleTime: 0,
@@ -38,8 +37,8 @@ export const ChatScreen: React.FC = () => {
   if (isLoading) {
     return (
       <ChatGrid>
-        <Flex align={'center'} justify={'center'} h={'full'}>
-          <Spinner size={'xl'} thickness={'4px'} />
+        <Flex align="center" justify="center" h="full">
+          <Spinner size="xl" thickness="4px" />
         </Flex>
       </ChatGrid>
     );
@@ -51,22 +50,25 @@ export const ChatScreen: React.FC = () => {
     return getTimeDifference(message1.createdAt, message2.createdAt) <= 5;
   };
 
-  const messages = data ? data!.pages.map((p) => p.map((p) => p)).flat() : [];
+  const messages = data ? data!.pages.map((p) => p.map((mr) => mr)).flat() : [];
 
   return (
     <ChatGrid>
-      <Box h={'10px'} mt={4} />
+      <Box h="10px" mt={4} />
       <Box
         as={InfiniteScroll as any}
         css={guildScrollbarCss}
         dataLength={messages.length}
         next={() => fetchNextPage()}
-        style={{ display: 'flex', flexDirection: 'column-reverse' }}
-        inverse={true}
+        style={{
+          display: 'flex',
+          flexDirection: 'column-reverse',
+        }}
+        inverse
         hasMore={hasMore}
         loader={
           messages.length > 0 && (
-            <Flex align={'center'} justify={'center'} h={'50px'}>
+            <Flex align="center" justify="center" h="50px">
               <Spinner />
             </Flex>
           )

@@ -13,7 +13,7 @@ const client = new QueryClient({
   },
 });
 
-export const App = () => (
+export const App: React.FC = () => (
   <QueryClientProvider client={client}>
     <GlobalState>
       <Routes />

@@ -15,9 +15,9 @@ export const StyledTooltip: React.FC<StyledTooltipProps> = ({ label, position, d
     label={label}
     placement={position}
     isDisabled={disabled}
-    bg={'brandGray.darkest'}
-    color={'white'}
-    fontWeight={'semibold'}
+    bg="brandGray.darkest"
+    color="white"
+    fontWeight="semibold"
     py={1}
     px={3}
   >

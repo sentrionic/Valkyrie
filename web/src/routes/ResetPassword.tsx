@@ -12,7 +12,7 @@ interface TokenProps {
   token: string;
 }
 
-export const ResetPassword = () => {
+export const ResetPassword: React.FC = () => {
   const history = useHistory();
   const { token } = useParams<TokenProps>();
   const [showError, setShowError] = useState(false);
@@ -31,11 +31,17 @@ export const ResetPassword = () => {
           </Box>
           <Box my={4} textAlign="left">
             <Formik
-              initialValues={{ newPassword: '', confirmNewPassword: '' }}
+              initialValues={{
+                newPassword: '',
+                confirmNewPassword: '',
+              }}
               validationSchema={ResetPasswordSchema}
               onSubmit={async (values, { setErrors }) => {
                 try {
-                  const { data } = await resetPassword({ ...values, token });
+                  const { data } = await resetPassword({
+                    ...values,
+                    token,
+                  });
                   if (data) {
                     setUser(data);
                     history.push('/channels/me');

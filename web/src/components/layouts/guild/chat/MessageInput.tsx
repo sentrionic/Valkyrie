@@ -5,12 +5,12 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { FileUploadButton } from './FileUploadButton';
 import { sendMessage } from '../../../../lib/api/handler/messages';
-import { RouterProps } from '../../../../routes/Routes';
 import { getSameSocket } from '../../../../lib/api/getSocket';
 import { userStore } from '../../../../lib/stores/userStore';
 import { channelStore } from '../../../../lib/stores/channelStore';
 import { cKey, dmKey } from '../../../../lib/utils/querykeys';
 import '../css/MessageInput.css';
+import { RouterProps } from '../../../../lib/api/models';
 
 export const MessageInput: React.FC = () => {
   const [text, setText] = useState('');
@@ -27,7 +27,7 @@ export const MessageInput: React.FC = () => {
   const current = userStore((state) => state.current);
   const isTyping = channelStore((state) => state.typing);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (): Promise<void> => {
     if (!text || !text.trim()) {
       return;
     }
@@ -43,9 +43,9 @@ export const MessageInput: React.FC = () => {
     try {
       setSubmitting(true);
       setCurrentlyTyping(false);
-      const data = new FormData();
-      data.append('text', text.trim());
-      await sendMessage(channelId, data);
+      const formData = new FormData();
+      formData.append('text', text.trim());
+      await sendMessage(channelId, formData);
     } catch (err) {}
   };
 
@@ -83,7 +83,7 @@ export const MessageInput: React.FC = () => {
           resize="none"
           minRows={1}
           pl="3rem"
-          name={'text'}
+          name="text"
           placeholder={getPlaceholder()}
           border="0"
           _focus={{ border: '0' }}
@@ -91,7 +91,7 @@ export const MessageInput: React.FC = () => {
           isDisabled={isSubmitting}
           value={text}
           onChange={(e) => {
-            const value = e.target.value;
+            const { value } = e.target;
             if (value.trim().length === 1 && !currentlyTyping) {
               socket.send(
                 JSON.stringify({
@@ -114,27 +114,28 @@ export const MessageInput: React.FC = () => {
             if (value.length <= 2000) setText(value);
           }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter')
+            if (e.key === 'Enter') {
               handleSubmit().then(() => {
                 setText('');
                 setSubmitting(false);
                 inputRef?.current?.focus();
               });
+            }
           }}
         />
         <FileUploadButton />
       </InputGroup>
       {isTyping.length > 0 && (
-        <Flex align={'center'} fontSize={'12px'} my={1}>
+        <Flex align="center" fontSize="12px" my={1}>
           <div className="typing-indicator">
             <span />
             <span />
             <span />
           </div>
-          <Text ml={'1'} fontWeight={'semibold'}>
+          <Text ml="1" fontWeight="semibold">
             {getTypingString(isTyping)}
           </Text>
-          <Text ml={'1'}>{isTyping.length === 1 ? 'is' : 'are'} typing... </Text>
+          <Text ml="1">{isTyping.length === 1 ? 'is' : 'are'} typing... </Text>
         </Flex>
       )}
     </GridItem>

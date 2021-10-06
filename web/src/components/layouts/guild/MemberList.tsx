@@ -1,11 +1,10 @@
 import React from 'react';
 import { GridItem, UnorderedList } from '@chakra-ui/react';
-import { MemberListItem } from '../../items/MemberListItem';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { MemberListItem } from '../../items/MemberListItem';
 import { getGuildMembers } from '../../../lib/api/handler/guilds';
-import { Member } from '../../../lib/api/models';
-import { RouterProps } from '../../../routes/Routes';
+import { Member, RouterProps } from '../../../lib/api/models';
 import { mKey } from '../../../lib/utils/querykeys';
 import { memberScrollbarCss } from './css/MemberScrollerCSS';
 import { useMemberSocket } from '../../../lib/api/ws/useMemberSocket';
@@ -20,18 +19,22 @@ export const MemberList: React.FC = () => {
   const online: Member[] = [];
   const offline: Member[] = [];
 
-  if (data)
+  if (data) {
     data.forEach((m) => {
-      if (m.isOnline) online.push(m);
-      else offline.push(m);
+      if (m.isOnline) {
+        online.push(m);
+      } else {
+        offline.push(m);
+      }
     });
+  }
 
   useMemberSocket(guildId, key);
 
   return (
     <GridItem
       gridColumn={4}
-      gridRow={'1 / 4'}
+      gridRow="1 / 4"
       bg="memberList"
       overflowY="hidden"
       _hover={{ overflowY: 'auto' }}

@@ -19,14 +19,14 @@ import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { AiOutlineLock } from 'react-icons/ai';
+import { CUIAutoComplete } from 'chakra-ui-autocomplete';
+import { useHistory } from 'react-router-dom';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { getGuildMembers } from '../../lib/api/handler/guilds';
 import { ChannelSchema } from '../../lib/utils/validation/channel.schema';
-import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import { mKey } from '../../lib/utils/querykeys';
 import { createChannel } from '../../lib/api/handler/channel';
-import { useHistory } from 'react-router-dom';
 
 interface IProps {
   guildId: string;
@@ -35,6 +35,7 @@ interface IProps {
 }
 
 interface Item {
+  // eslint-disable-next-line react/no-unused-prop-types
   value: string;
   label: string;
   image: string;
@@ -49,26 +50,30 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
   const members: Item[] = [];
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
 
-  data?.map((m) => members.push({ label: m.username, value: m.id, image: m.image }));
+  data?.map((m) =>
+    members.push({
+      label: m.username,
+      value: m.id,
+      image: m.image,
+    })
+  );
 
-  const handleCreateItem = (item: Item) => {
+  const handleCreateItem = (item: Item): void => {
     setSelectedItems((curr) => [...curr, item]);
   };
 
-  const handleSelectedItemsChange = (selectedItems?: Item[]) => {
-    if (selectedItems) {
-      setSelectedItems(selectedItems);
+  const handleSelectedItemsChange = (changedItems?: Item[]): void => {
+    if (changedItems) {
+      setSelectedItems(changedItems);
     }
   };
 
-  const ListItem = (selected: Item) => {
-    return (
-      <Flex align="center">
-        <Avatar mr={2} size="sm" src={selected.image} />
-        <Text textColor={'#000'}>{selected.label}</Text>
-      </Flex>
-    );
-  };
+  const ListItem = ({ image, label }: Item): JSX.Element => (
+    <Flex align="center">
+      <Avatar mr={2} size="sm" src={image} />
+      <Text textColor="#000">{label}</Text>
+    </Flex>
+  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -84,14 +89,14 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
             try {
               const ids: string[] = [];
               selectedItems.map((i) => ids.push(i.value));
-              const { data } = await createChannel(guildId, {
+              const { data: responseData } = await createChannel(guildId, {
                 ...values,
                 members: ids,
               });
-              if (data) {
+              if (responseData) {
                 resetForm();
                 onClose();
-                history.push(`/channels/${guildId}/${data.id}`);
+                history.push(`/channels/${guildId}/${responseData.id}`);
               }
             } catch (err: any) {
               if (err?.response?.status === 500) {
@@ -130,7 +135,7 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                   By making a channel private, only selected members will be able to view this channel
                 </Text>
                 {!values.isPublic && (
-                  <Box mt={'2'} pb={0}>
+                  <Box mt="2" pb={0}>
                     <CUIAutoComplete
                       label="Who can access this channel"
                       placeholder=""
@@ -151,14 +156,14 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
               </ModalBody>
 
               <ModalFooter bg="brandGray.dark">
-                <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link" _focus={{ outline: 'none' }}>
+                <Button onClick={onClose} fontSize="14px" mr={6} variant="link" _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button
                   background="highlight.standard"
                   color="white"
                   type="submit"
-                  fontSize={'14px'}
+                  fontSize="14px"
                   _hover={{ bg: 'highlight.hover' }}
                   _active={{ bg: 'highlight.active' }}
                   _focus={{ boxShadow: 'none' }}

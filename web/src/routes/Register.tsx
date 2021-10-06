@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Box, Button, Flex, Heading, Image, Link, Text } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { Link as RLink, useHistory } from 'react-router-dom';
@@ -6,9 +7,8 @@ import { toErrorMap } from '../lib/utils/toErrorMap';
 import { userStore } from '../lib/stores/userStore';
 import { RegisterSchema } from '../lib/utils/validation/auth.schema';
 import { register } from '../lib/api/handler/auth';
-import { useState } from 'react';
 
-export const Register = () => {
+export const Register = (): JSX.Element => {
   const history = useHistory();
   const setUser = userStore((state) => state.setUser);
   const [error, showError] = useState(false);
@@ -25,7 +25,11 @@ export const Register = () => {
           </Box>
           <Box my={4} textAlign="left">
             <Formik
-              initialValues={{ email: '', username: '', password: '' }}
+              initialValues={{
+                email: '',
+                username: '',
+                password: '',
+              }}
               validationSchema={RegisterSchema}
               onSubmit={async (values, { setErrors }) => {
                 try {

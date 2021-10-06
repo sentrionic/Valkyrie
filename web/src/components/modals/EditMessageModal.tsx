@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Flex,
+  Input,
   LightMode,
   Modal,
   ModalBody,
@@ -11,7 +12,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  Input,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Message } from '../../lib/api/models';
@@ -28,7 +28,7 @@ export const EditMessageModal: React.FC<IProps> = ({ message, isOpen, onClose })
   const [text, setNewText] = useState(message.text!);
   const [showError, toggleShow] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (): Promise<void> => {
     if (!text || !text.trim()) return;
 
     try {
@@ -48,7 +48,7 @@ export const EditMessageModal: React.FC<IProps> = ({ message, isOpen, onClose })
           Edit Message
         </ModalHeader>
         <ModalBody>
-          <Flex alignItems="center" my="2" mr="1" justify="space-between" boxShadow={'dark-lg'} py={2}>
+          <Flex alignItems="center" my="2" mr="1" justify="space-between" boxShadow="dark-lg" py={2}>
             <Flex alignItems="center">
               <Avatar h="40px" w="40px" ml="4" src={message.user.image} />
               <Box ml="3">
@@ -78,11 +78,11 @@ export const EditMessageModal: React.FC<IProps> = ({ message, isOpen, onClose })
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
+          <Button onClick={onClose} mr={6} variant="link" fontSize="14px" _focus={{ outline: 'none' }}>
             Cancel
           </Button>
           <LightMode>
-            <Button colorScheme="green" fontSize={'14px'} onClick={handleSubmit}>
+            <Button colorScheme="green" fontSize="14px" onClick={handleSubmit}>
               Save
             </Button>
           </LightMode>

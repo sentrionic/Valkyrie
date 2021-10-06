@@ -12,7 +12,7 @@ export const FriendsListHeader: React.FC = () => {
   const requests = homeStore((state) => state.requestCount);
 
   return (
-    <GridItem gridColumn={3} gridRow={'1'} bg="brandGray.light" padding="10px" zIndex="2" boxShadow="md">
+    <GridItem gridColumn={3} gridRow="1" bg="brandGray.light" padding="10px" zIndex="2" boxShadow="md">
       <Flex align="center" justify="space-between">
         <Flex align="center" ml={2} fontSize="14px">
           <Icon as={FiUsers} fontSize="20px" />
@@ -21,9 +21,9 @@ export const FriendsListHeader: React.FC = () => {
           </Text>
           <Button
             fontSize="14px"
-            ml={'4'}
-            size={'xs'}
-            colorScheme={'gray'}
+            ml="4"
+            size="xs"
+            colorScheme="gray"
             onClick={() => {
               if (isPending) toggle();
             }}
@@ -34,9 +34,9 @@ export const FriendsListHeader: React.FC = () => {
           </Button>
           <Button
             fontSize="14px"
-            size={'xs'}
-            ml={'2'}
-            colorScheme={'gray'}
+            size="xs"
+            ml="2"
+            colorScheme="gray"
             variant={isPending ? 'solid' : 'ghost'}
             onClick={() => {
               if (!isPending) toggle();
@@ -50,8 +50,8 @@ export const FriendsListHeader: React.FC = () => {
         <LightMode>
           <Button
             fontSize="14px"
-            size={'xs'}
-            bg={'brandGreen'}
+            size="xs"
+            bg="brandGreen"
             _hover={{ bg: 'brandGreen' }}
             _active={{ bg: 'brandGreen' }}
             onClick={onOpen}

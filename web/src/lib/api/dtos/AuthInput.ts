@@ -1,7 +1,9 @@
+// eslint-disable-next-line max-classes-per-file
 export interface LoginDTO {
-  [key: string]: any;
   email: string;
   password: string;
+
+  [key: string]: any;
 }
 
 export interface RegisterDTO extends LoginDTO {
@@ -10,12 +12,16 @@ export interface RegisterDTO extends LoginDTO {
 
 export class ChangePasswordInput {
   currentPassword!: string;
+
   newPassword!: string;
+
   confirmNewPassword!: string;
 }
 
 export class ResetPasswordInput {
   token!: string;
+
   newPassword!: string;
+
   confirmNewPassword!: string;
 }

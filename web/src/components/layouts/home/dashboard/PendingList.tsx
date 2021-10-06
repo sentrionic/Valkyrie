@@ -25,8 +25,8 @@ export const PendingList: React.FC = () => {
 
   if (data.length === 0) {
     return (
-      <Flex justify={'center'} align={'center'} w={'full'}>
-        <Text textColor={'brandGray.accent'}>There are no pending friend requests</Text>
+      <Flex justify="center" align="center" w="full">
+        <Text textColor="brandGray.accent">There are no pending friend requests</Text>
       </Flex>
     );
   }

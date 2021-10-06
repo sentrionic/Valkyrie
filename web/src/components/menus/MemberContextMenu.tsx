@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { Divider, Flex, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme } from 'react-contexify';
 import { useHistory } from 'react-router-dom';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
@@ -20,7 +20,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
   const { isOpen: modIsOpen, onOpen: modOnOpen, onClose: modOnClose } = useDisclosure();
   const [isBan, setIsBan] = useState(false);
 
-  const getOrCreateDM = async () => {
+  const getOrCreateDM = async (): Promise<void> => {
     try {
       const { data } = await getOrCreateDirectMessage(member.id);
       if (data) {
@@ -29,7 +29,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
     } catch (err) {}
   };
 
-  const handleFriendClick = async () => {
+  const handleFriendClick = async (): Promise<void> => {
     if (!member.isFriend) {
       try {
         await sendFriendRequest(member.id);
@@ -42,24 +42,27 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
   return (
     <>
       <Menu id={id} theme={theme.dark}>
-        <Item onClick={() => getOrCreateDM()} className={'menu-item'}>
+        <Item onClick={() => getOrCreateDM()} className="menu-item">
           <Flex align="center" justify="space-between" w="full">
             <Text>Message</Text>
           </Flex>
         </Item>
-        <Item onClick={handleFriendClick} className={'menu-item'}>
+        <Item onClick={handleFriendClick} className="menu-item">
           <Flex align="center" justify="space-between" w="full">
             <Text>{member.isFriend ? 'Remove' : 'Add'} Friend</Text>
           </Flex>
         </Item>
         {isOwner && (
           <>
+            <Flex align="center" justify="center" w="full">
+              <Divider my="1" w="90%" />
+            </Flex>
             <Item
               onClick={() => {
                 setIsBan(false);
                 modOnOpen();
               }}
-              className={'delete-item'}
+              className="delete-item"
             >
               <Flex align="center" justify="space-between" w="full">
                 <Text>Kick {member.username}</Text>
@@ -70,7 +73,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
                 setIsBan(true);
                 modOnOpen();
               }}
-              className={'delete-item'}
+              className="delete-item"
             >
               <Flex align="center" justify="space-between" w="full">
                 <Text>Ban {member.username}</Text>

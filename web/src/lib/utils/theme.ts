@@ -42,7 +42,12 @@ const fonts = {
   body: "'Open Sans', sans-serif",
 };
 
-const customTheme = extendTheme({ colors, config, styles, fonts });
+const customTheme = extendTheme({
+  colors,
+  config,
+  styles,
+  fonts,
+});
 
 export default customTheme;
 

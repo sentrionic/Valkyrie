@@ -14,7 +14,7 @@ export const FriendsDashboard: React.FC = () => {
       <FriendsListHeader />
       <GridItem
         gridColumn={3}
-        gridRow={'2'}
+        gridRow="2"
         bg="brandGray.light"
         mr="5px"
         display="flex"

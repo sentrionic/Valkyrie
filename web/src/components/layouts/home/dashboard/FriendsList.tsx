@@ -16,8 +16,8 @@ export const FriendsList: React.FC = () => {
 
   if (data.length === 0) {
     return (
-      <Flex justify={'center'} align={'center'} w={'full'}>
-        <Text textColor={'brandGray.accent'}>No one here yet</Text>
+      <Flex justify="center" align="center" w="full">
+        <Text textColor="brandGray.accent">No one here yet</Text>
       </Flex>
     );
   }

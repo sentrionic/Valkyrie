@@ -15,15 +15,9 @@ import { NotificationListItem } from '../../items/NotificationListItem';
 export const GuildList: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data } = useQuery(
-    gKey,
-    () => {
-      return getUserGuilds().then((response) => response.data);
-    },
-    {
-      cacheTime: Infinity,
-    }
-  );
+  const { data } = useQuery(gKey, () => getUserGuilds().then((response) => response.data), {
+    cacheTime: Infinity,
+  });
 
   const { data: dmData } = useQuery<DMNotification[]>(nKey, () => [], {
     cacheTime: Infinity,
@@ -32,14 +26,7 @@ export const GuildList: React.FC = () => {
   useGuildSocket();
 
   return (
-    <GridItem
-      gridColumn={1}
-      gridRow={'1 / 4'}
-      bg="brandGray.darker"
-      overflowY="auto"
-      css={guildScrollbarCss}
-      zIndex={2}
-    >
+    <GridItem gridColumn={1} gridRow="1 / 4" bg="brandGray.darker" overflowY="auto" css={guildScrollbarCss} zIndex={2}>
       <HomeIcon />
       <UnorderedList listStyleType="none" ml="0">
         {dmData?.map((dm) => (

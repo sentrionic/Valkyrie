@@ -7,16 +7,14 @@ type AccountState = {
   current: AccountResponse | null;
   setUser: (account: AccountResponse) => void;
   logout: () => void;
-  isAuth: () => boolean;
 };
 
 export const userStore = create<AccountState>(
   persist(
-    (set, get) => ({
+    (set) => ({
       current: null,
-      setUser: (account: AccountResponse) => set({ current: account }),
+      setUser: (account) => set({ current: account }),
       logout: () => set({ current: null }),
-      isAuth: () => get().current != null,
     }),
     {
       name: 'user-storage',

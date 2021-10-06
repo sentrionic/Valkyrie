@@ -6,10 +6,10 @@ export const FileSchema = yup.object().shape({
   file: yup
     .mixed()
     .nullable()
-    .test('fileSize', 'The file is too large', (value) => {
-      return value?.size < 5000000;
-    })
-    .test('type', 'Only the following formats are accepted: Image and Audio', (value) => {
-      return value && SUPPORTED_FORMATS.includes(value.type);
-    }),
+    .test('fileSize', 'The file is too large', (value) => value?.size < 5000000)
+    .test(
+      'type',
+      'Only the following formats are accepted: Image and Audio',
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
 });

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Avatar, AvatarBadge, Flex, ListItem, Text } from '@chakra-ui/react';
 import { useContextMenu } from 'react-contexify';
-import { Member } from '../../lib/api/models';
+import { useParams } from 'react-router-dom';
+import { Member, RouterProps } from '../../lib/api/models';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { userStore } from '../../lib/stores/userStore';
-import { useParams } from 'react-router-dom';
-import { RouterProps } from '../../routes/Routes';
 import { MemberContextMenu } from '../menus/MemberContextMenu';
 
 interface MemberListItemProps {
@@ -27,7 +26,7 @@ export const MemberListItem: React.FC<MemberListItemProps> = ({ member }) => {
       <ListItem
         p="2"
         mx="10px"
-        color={'brandGray.accent'}
+        color="brandGray.accent"
         _hover={{
           bg: 'brandGray.light',
           borderRadius: '5px',

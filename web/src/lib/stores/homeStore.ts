@@ -11,13 +11,13 @@ type HomeStoreType = {
   toggleDisplay: () => void;
 };
 
-export const homeStore = create<HomeStoreType>((set, get) => ({
+export const homeStore = create<HomeStoreType>((set) => ({
   notifCount: 0,
   requestCount: 0,
   increment: () => set((state) => ({ notifCount: state.notifCount + 1 })),
-  reset: () => set((state) => ({ notifCount: 0 })),
-  resetRequest: () => set((state) => ({ requestCount: 0 })),
-  setRequests: (r) => set((state) => ({ requestCount: r })),
+  reset: () => set({ notifCount: 0 }),
+  resetRequest: () => set({ requestCount: 0 }),
+  setRequests: (r) => set({ requestCount: r }),
   isPending: false,
   toggleDisplay: () => set((state) => ({ isPending: !state.isPending })),
 }));

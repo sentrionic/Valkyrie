@@ -87,7 +87,7 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
               </ModalBody>
 
               <ModalFooter bg="brandGray.dark">
-                <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link" _focus={{ outline: 'none' }}>
+                <Button onClick={onClose} fontSize="14px" mr={6} variant="link" _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button
@@ -98,7 +98,7 @@ export const ChangePasswordModal: React.FC<IProps> = ({ isOpen, onClose }) => {
                   _active={{ bg: 'highlight.active' }}
                   _focus={{ boxShadow: 'none' }}
                   isLoading={isSubmitting}
-                  fontSize={'14px'}
+                  fontSize="14px"
                 >
                   Done
                 </Button>

@@ -26,7 +26,7 @@ import { logout } from '../lib/api/handler/auth';
 import { CropImageModal } from '../components/modals/CropImageModal';
 import { aKey } from '../lib/utils/querykeys';
 
-export const Account = () => {
+export const Account = (): JSX.Element | null => {
   const history = useHistory();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,17 +43,17 @@ export const Account = () => {
   const [cropImage, setCropImage] = useState('');
   const [croppedImage, setCroppedImage] = useState<File | null>(null);
 
-  const closeClicked = () => {
+  const closeClicked = (): void => {
     history.goBack();
   };
 
-  const applyCrop = (file: Blob) => {
+  const applyCrop = (file: Blob): void => {
     setImageUrl(URL.createObjectURL(file));
     setCroppedImage(new File([file], 'avatar', { type: 'image/jpeg' }));
     cropperOnClose();
   };
 
-  const logoutClicked = async () => {
+  const logoutClicked = async (): Promise<void> => {
     const { data } = await logout();
     if (data) {
       cache.clear();
@@ -123,7 +123,10 @@ export const Account = () => {
                         size="xl"
                         name={user?.username}
                         src={imageUrl || user?.image}
-                        _hover={{ cursor: 'pointer', opacity: 0.5 }}
+                        _hover={{
+                          cursor: 'pointer',
+                          opacity: 0.5,
+                        }}
                         onClick={() => inputFile.current.click()}
                       />
                     </Tooltip>
@@ -158,14 +161,14 @@ export const Account = () => {
                       autoComplete="username"
                     />
 
-                    <Flex my={8} align={'end'}>
+                    <Flex my={8} align="end">
                       <Spacer />
-                      <Button mr={4} colorScheme="white" variant="outline" onClick={closeClicked} fontSize={'14px'}>
+                      <Button mr={4} colorScheme="white" variant="outline" onClick={closeClicked} fontSize="14px">
                         Close
                       </Button>
 
                       <LightMode>
-                        <Button type="submit" colorScheme="green" isLoading={isSubmitting} fontSize={'14px'}>
+                        <Button type="submit" colorScheme="green" isLoading={isSubmitting} fontSize="14px">
                           Update
                         </Button>
                       </LightMode>
@@ -175,7 +178,7 @@ export const Account = () => {
               )}
             </Formik>
           </Box>
-          <Divider my={'4'} />
+          <Divider my="4" />
           <Flex>
             <Heading fontSize="18px">PASSWORD AND AUTHENTICATION</Heading>
           </Flex>
@@ -188,13 +191,13 @@ export const Account = () => {
               _active={{ bg: 'highlight.active' }}
               _focus={{ boxShadow: 'none' }}
               onClick={onOpen}
-              fontSize={'14px'}
+              fontSize="14px"
             >
               Change Password
             </Button>
 
             <Spacer />
-            <Button colorScheme="red" variant="outline" onClick={logoutClicked} fontSize={'14px'}>
+            <Button colorScheme="red" variant="outline" onClick={logoutClicked} fontSize="14px">
               Logout
             </Button>
           </Flex>

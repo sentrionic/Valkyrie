@@ -13,7 +13,7 @@ export const NavBar: React.FC = () => {
         <Logo />
       </Flex>
 
-      <Flex align="center" justify={'flex-end'}>
+      <Flex align="center" justify="flex-end">
         {current ? (
           <Link to="/channels/me">
             <Button

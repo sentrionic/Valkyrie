@@ -21,12 +21,12 @@ import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { AiOutlineLock } from 'react-icons/ai';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { CUIAutoComplete } from 'chakra-ui-autocomplete';
+import { useQuery } from 'react-query';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { getGuildMembers } from '../../lib/api/handler/guilds';
 import { ChannelSchema } from '../../lib/utils/validation/channel.schema';
-import { CUIAutoComplete } from 'chakra-ui-autocomplete';
-import { useQuery } from 'react-query';
 import { useGetCurrentChannel } from '../../lib/utils/hooks/useGetCurrentChannel';
 import { cKey, mKey } from '../../lib/utils/querykeys';
 import { deleteChannel, editChannel, getPrivateChannelMembers } from '../../lib/api/handler/channel';
@@ -39,6 +39,7 @@ interface IProps {
 }
 
 interface Item {
+  // eslint-disable-next-line react/no-unused-prop-types
   value: string;
   label: string;
   image: string;
@@ -60,40 +61,44 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
   const [screen, setScreen] = useState(ChannelScreen.START);
   const [showError, toggleShow] = useState(false);
 
-  const goBack = () => setScreen(ChannelScreen.START);
-  const submitClose = () => {
+  const goBack = (): void => setScreen(ChannelScreen.START);
+  const submitClose = (): void => {
     setScreen(ChannelScreen.START);
     onClose();
   };
 
-  data?.map((m) => members.push({ label: m.username, value: m.id, image: m.image }));
+  data?.map((m) =>
+    members.push({
+      label: m.username,
+      value: m.id,
+      image: m.image,
+    })
+  );
 
   // eslint-disable-next-line
-  const { data: current } = useQuery<Item[]>(`${channelId}-members`, async () => {
-    const { data } = await getPrivateChannelMembers(channelId);
-    const current = members.filter((m) => data.includes(m.value));
+  const { data: _ } = useQuery<Item[]>(`${channelId}-members`, async () => {
+    const { data: memberData } = await getPrivateChannelMembers(channelId);
+    const current = members.filter((m) => memberData.includes(m.value));
     setSelectedItems(current);
     return current;
   });
 
-  const handleCreateItem = (item: Item) => {
+  const handleCreateItem = (item: Item): void => {
     setSelectedItems((curr) => [...curr, item]);
   };
 
-  const handleSelectedItemsChange = (selectedItems?: Item[]) => {
-    if (selectedItems) {
-      setSelectedItems(selectedItems);
+  const handleSelectedItemsChange = (changedItems?: Item[]): void => {
+    if (changedItems) {
+      setSelectedItems(changedItems);
     }
   };
 
-  const ListItem = (selected: Item) => {
-    return (
-      <Flex align="center">
-        <Avatar mr={2} size="sm" src={selected.image} />
-        <Text textColor={'#000'}>{selected.label}</Text>
-      </Flex>
-    );
-  };
+  const ListItem = ({ image, label }: Item): JSX.Element => (
+    <Flex align="center">
+      <Avatar mr={2} size="sm" src={image} />
+      <Text textColor="#000">{label}</Text>
+    </Flex>
+  );
 
   if (!channel) return null;
 
@@ -112,11 +117,11 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
               try {
                 const ids: string[] = [];
                 selectedItems.map((i) => ids.push(i.value));
-                const { data } = await editChannel(channelId, {
+                const { data: responseData } = await editChannel(channelId, {
                   ...values,
                   members: ids,
                 });
-                if (data) {
+                if (responseData) {
                   resetForm();
                   onClose();
                 }
@@ -158,7 +163,7 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
                     By making a channel private, only selected members will be able to view this channel
                   </Text>
                   {!values.isPublic && (
-                    <Box mt={'2'} pb={0}>
+                    <Box mt="2" pb={0}>
                       <CUIAutoComplete
                         label="Who can access this channel"
                         placeholder=""
@@ -171,14 +176,14 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
                     </Box>
                   )}
 
-                  <Divider my={'2'} />
+                  <Divider my="2" />
 
                   <LightMode>
                     <Button
                       onClick={() => setScreen(ChannelScreen.CONFIRM)}
-                      colorScheme={'red'}
+                      colorScheme="red"
                       variant="ghost"
-                      fontSize={'14px'}
+                      fontSize="14px"
                       rightIcon={<FaRegTrashAlt />}
                     >
                       Delete Channel
@@ -193,7 +198,7 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
                 </ModalBody>
 
                 <ModalFooter bg="brandGray.dark">
-                  <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
+                  <Button onClick={onClose} mr={6} variant="link" fontSize="14px" _focus={{ outline: 'none' }}>
                     Cancel
                   </Button>
                   <Button
@@ -204,7 +209,7 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
                     _active={{ bg: 'highlight.active' }}
                     _focus={{ boxShadow: 'none' }}
                     isLoading={isSubmitting}
-                    fontSize={'14px'}
+                    fontSize="14px"
                   >
                     Save Changes
                   </Button>
@@ -215,13 +220,7 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
         </ModalContent>
       )}
       {screen === ChannelScreen.CONFIRM && (
-        <DeleteChannelModal
-          goBack={goBack}
-          submitClose={submitClose}
-          name={channel.name}
-          channelId={channel.id}
-          guildId={guildId}
-        />
+        <DeleteChannelModal goBack={goBack} submitClose={submitClose} name={channel.name} channelId={channel.id} />
       )}
     </Modal>
   );
@@ -232,12 +231,11 @@ interface IScreenProps {
   submitClose: () => void;
   name: string;
   channelId: string;
-  guildId: string;
 }
 
-const DeleteChannelModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, channelId, guildId }) => {
+const DeleteChannelModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, channelId }) => {
   const [showError, toggleShow] = useState(false);
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     try {
       const { data } = await deleteChannel(channelId);
       if (data) {
@@ -264,11 +262,11 @@ const DeleteChannelModal: React.FC<IScreenProps> = ({ goBack, submitClose, name,
       </ModalBody>
 
       <ModalFooter bg="brandGray.dark">
-        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
+        <Button mr={6} variant="link" onClick={goBack} fontSize="14px" _focus={{ outline: 'none' }}>
           Cancel
         </Button>
         <LightMode>
-          <Button colorScheme="red" fontSize={'14px'} onClick={() => handleDelete()}>
+          <Button colorScheme="red" fontSize="14px" onClick={() => handleDelete()}>
             Delete Channel
           </Button>
         </LightMode>

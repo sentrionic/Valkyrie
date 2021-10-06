@@ -14,16 +14,16 @@ export const AddGuildIcon: React.FC<AddGuildIconProps> = ({ onOpen }) => {
   return (
     <>
       {isHover && <HoverGuildPill />}
-      <StyledTooltip label={'Add a Server'} position={'right'}>
+      <StyledTooltip label="Add a Server" position="right">
         <Flex
-          direction={'column'}
-          m={'auto'}
-          align={'center'}
-          justify={'center'}
-          bg={'brandGray.light'}
-          borderRadius={'50%'}
-          h={'48px'}
-          w={'48px'}
+          direction="column"
+          m="auto"
+          align="center"
+          justify="center"
+          bg="brandGray.light"
+          borderRadius="50%"
+          h="48px"
+          w="48px"
           _hover={{
             cursor: 'pointer',
             borderRadius: '35%',

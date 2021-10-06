@@ -25,21 +25,22 @@ interface IProps {
 }
 
 export const CropImageModal: React.FC<IProps> = ({ isOpen, onClose, applyCrop, initialImage }) => {
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [crop, setCrop] = useState({
+    x: 0,
+    y: 0,
+  });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixelsResult) => {
+    setCroppedAreaPixels(croppedAreaPixelsResult);
   }, []);
 
   const showCroppedImage = useCallback(async () => {
     try {
       const croppedImage = await getCroppedImg(initialImage, croppedAreaPixels);
       applyCrop(croppedImage);
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) {}
   }, [croppedAreaPixels, initialImage, applyCrop]);
 
   return (
@@ -79,14 +80,14 @@ export const CropImageModal: React.FC<IProps> = ({ isOpen, onClose, applyCrop, i
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} fontSize={'14px'} mr={6} variant="link">
+          <Button onClick={onClose} fontSize="14px" mr={6} variant="link">
             Cancel
           </Button>
           <Button
             background="highlight.standard"
             color="white"
             type="submit"
-            fontSize={'14px'}
+            fontSize="14px"
             _hover={{ bg: 'highlight.hover' }}
             _active={{ bg: 'highlight.active' }}
             _focus={{ boxShadow: 'none' }}

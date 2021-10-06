@@ -7,7 +7,7 @@ import { toErrorMap } from '../lib/utils/toErrorMap';
 import { ForgotPasswordSchema } from '../lib/utils/validation/auth.schema';
 import { forgotPassword } from '../lib/api/handler/auth';
 
-export const ForgotPassword = () => {
+export const ForgotPassword = (): JSX.Element => {
   const history = useHistory();
   const toast = useToast();
 
@@ -60,7 +60,7 @@ export const ForgotPassword = () => {
                     _hover={{ bg: 'highlight.hover' }}
                     _active={{ bg: 'highlight.active' }}
                     _focus={{ boxShadow: 'none' }}
-                    fontSize={'14px'}
+                    fontSize="14px"
                   >
                     Send Mail
                   </Button>

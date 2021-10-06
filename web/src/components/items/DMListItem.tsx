@@ -19,12 +19,10 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
   const history = useHistory();
   const cache = useQueryClient();
 
-  const closeDM = async () => {
+  const closeDM = async (): Promise<void> => {
     try {
       await closeDirectMessage(dm.id);
-      cache.setQueryData<DMChannel[]>(dmKey, (d) => {
-        return d!.filter((c) => c.id !== dm.id);
-      });
+      cache.setQueryData<DMChannel[]>(dmKey, (d) => d!.filter((c) => c.id !== dm.id));
       if (isActive) {
         history.replace('/channels/me');
       }
@@ -47,7 +45,7 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
         onMouseLeave={() => setShowButton(false)}
         onMouseEnter={() => setShowButton(true)}
       >
-        <Flex align={'center'} justify={'space-between'}>
+        <Flex align="center" justify="space-between">
           <Flex align="center">
             <Avatar size="sm" src={dm.user.image}>
               <AvatarBadge boxSize="1.25em" bg={dm.user.isOnline ? 'green.500' : 'gray.500'} />

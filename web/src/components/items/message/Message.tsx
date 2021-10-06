@@ -6,13 +6,12 @@ import { MdEdit } from 'react-icons/md';
 import { FaEllipsisH, FaRegTrashAlt } from 'react-icons/fa';
 import { FiLink } from 'react-icons/fi';
 import { MessageContent } from './MessageContent';
-import { Message as MessageResponse } from '../../../lib/api/models';
+import { Message as MessageResponse, RouterProps } from '../../../lib/api/models';
 import { userStore } from '../../../lib/stores/userStore';
 import { getShortenedTime, getTime } from '../../../lib/utils/dateUtils';
 import { DeleteMessageModal } from '../../modals/DeleteMessageModal';
 import { EditMessageModal } from '../../modals/EditMessageModal';
 import { useGetCurrentGuild } from '../../../lib/utils/hooks/useGetCurrentGuild';
-import { RouterProps } from '../../../routes/Routes';
 import { MemberContextMenu } from '../../menus/MemberContextMenu';
 import { UserPopover } from '../../sections/UserPopover';
 import '../css/ContextMenu.css';
@@ -41,7 +40,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
 
   const { show: profileShow } = useContextMenu({ id });
 
-  const openInNewTab = (url: string) => {
+  const openInNewTab = (url: string): void => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
   };
@@ -57,24 +56,24 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
         onMouseLeave={() => setShowSettings(false)}
         onMouseEnter={() => setShowSettings(true)}
       >
-        <Flex w={'full'}>
+        <Flex w="full">
           {isCompact ? (
             <>
-              <Box ml={'3'} minW={'44px'} textAlign={'center'}>
-                <Text fontSize={'10px'} color="brandGray.accent" mt={'1'} hidden={!showSettings}>
+              <Box ml="3" minW="44px" textAlign="center">
+                <Text fontSize="10px" color="brandGray.accent" mt="1" hidden={!showSettings}>
                   {getShortenedTime(message.createdAt)}
                 </Text>
               </Box>
 
-              <Box ml="3" w={'full'} onContextMenu={show}>
+              <Box ml="3" w="full" onContextMenu={show}>
                 <MessageContent message={message} />
               </Box>
               {showSettings && showMenu ? (
-                <Box onClick={show} mr="2" _hover={{ cursor: 'pointer' }} h={'5px'}>
+                <Box onClick={show} mr="2" _hover={{ cursor: 'pointer' }} h="5px">
                   <FaEllipsisH />
                 </Box>
               ) : (
-                <Box mr={'6'} />
+                <Box mr="6" />
               )}
             </>
           ) : (
@@ -84,7 +83,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                   h="40px"
                   w="40px"
                   ml="4"
-                  mt={'1'}
+                  mt="1"
                   src={message.user.image}
                   _hover={{
                     cursor: 'pointer',
@@ -94,9 +93,9 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                   }}
                 />
               </UserPopover>
-              <Box ml="3" w={'full'} onContextMenu={show}>
-                <Flex alignItems="center" justify={'space-between'}>
-                  <Flex alignItems={'center'}>
+              <Box ml="3" w="full" onContextMenu={show}>
+                <Flex alignItems="center" justify="space-between">
+                  <Flex alignItems="center">
                     <Text color={message.user.color ?? undefined}>
                       {message.user.nickname ?? message.user.username}
                     </Text>
@@ -121,7 +120,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
           <Menu id={message.id} theme={theme.dark}>
             {message.attachment?.filetype ? (
               <Item
-                className={'menu-item'}
+                className="menu-item"
                 onClick={() => {
                   if (message.attachment?.url) openInNewTab(message.attachment.url);
                 }}
@@ -131,16 +130,18 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                   <Icon as={FiLink} />
                 </Flex>
               </Item>
-            ) : !isAuthor ? null : (
-              <Item className={'menu-item'} onClick={onEditOpen}>
-                <Flex align="center" justify="space-between" w="full">
-                  <Text>Edit Message</Text>
-                  <Icon as={MdEdit} />
-                </Flex>
-              </Item>
+            ) : (
+              !isAuthor && (
+                <Item className="menu-item" onClick={onEditOpen}>
+                  <Flex align="center" justify="space-between" w="full">
+                    <Text>Edit Message</Text>
+                    <Icon as={MdEdit} />
+                  </Flex>
+                </Item>
+              )
             )}
             {(isAuthor || isOwner) && (
-              <Item onClick={onDeleteOpen} className={'delete-item'}>
+              <Item onClick={onDeleteOpen} className="delete-item">
                 <Flex align="center" justify="space-between" w="full">
                   <Text>Delete Message</Text>
                   <Icon as={FaRegTrashAlt} />

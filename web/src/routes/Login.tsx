@@ -8,7 +8,7 @@ import { userStore } from '../lib/stores/userStore';
 import { LoginSchema } from '../lib/utils/validation/auth.schema';
 import { login } from '../lib/api/handler/auth';
 
-export const Login = () => {
+export const Login = (): JSX.Element => {
   const history = useHistory();
   const setUser = userStore((state) => state.setUser);
 
@@ -24,7 +24,10 @@ export const Login = () => {
           </Box>
           <Box my={4} textAlign="left">
             <Formik
-              initialValues={{ email: '', password: '' }}
+              initialValues={{
+                email: '',
+                password: '',
+              }}
               validationSchema={LoginSchema}
               onSubmit={async (values, { setErrors }) => {
                 try {
@@ -70,7 +73,7 @@ export const Login = () => {
                     Login
                   </Button>
                   <Text mt="4">
-                    Don't have an account yet?{' '}
+                    Don&apos;t have an account yet?{' '}
                     <Link as={RLink} to="/register" textColor="highlight.standard" _focus={{ outline: 'none' }}>
                       Sign Up
                     </Link>

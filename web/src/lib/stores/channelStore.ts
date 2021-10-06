@@ -7,9 +7,9 @@ type ChannelState = {
   reset: () => void;
 };
 
-export const channelStore = create<ChannelState>((set, get) => ({
+export const channelStore = create<ChannelState>((set) => ({
   typing: [],
   addTyping: (username) => set((state) => ({ typing: [...state.typing, username] })),
   removeTyping: (username) => set((state) => ({ typing: [...state.typing.filter((u) => u !== username)] })),
-  reset: () => set((state) => ({ typing: [] })),
+  reset: () => set({ typing: [] }),
 }));

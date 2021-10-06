@@ -28,9 +28,9 @@ interface IProps {
 
 export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
   const current = userStore((state) => state.current);
-  const { data } = useQuery(`settings-${guildId}`, () => {
-    return getGuildMemberSettings(guildId).then((response) => response.data);
-  });
+  const { data } = useQuery(`settings-${guildId}`, () =>
+    getGuildMemberSettings(guildId).then((response) => response.data)
+  );
   const [showError, toggleShow] = useState(false);
 
   if (!data) return null;
@@ -50,8 +50,8 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
               // Default color --> Reset
               if (values.color === '#fff') setFieldValue('color', null);
 
-              const { data } = await changeGuildMemberSettings(guildId, values);
-              if (data) {
+              const { data: responseData } = await changeGuildMemberSettings(guildId, values);
+              if (responseData) {
                 onClose();
               }
             } catch (err: any) {
@@ -79,38 +79,38 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
                   value={values.nickname ?? current?.username}
                 />
                 <Text
-                  mt={'2'}
-                  ml={'1'}
-                  color={'brandGray.accent'}
+                  mt="2"
+                  ml="1"
+                  color="brandGray.accent"
                   _hover={{
                     cursor: 'pointer',
                     color: 'highlight.standard',
                   }}
-                  fontSize={'14px'}
+                  fontSize="14px"
                   onClick={() => setFieldValue('nickname', null)}
                 >
                   Reset Nickname
                 </Text>
 
-                <Divider my={'4'} />
+                <Divider my="4" />
 
                 <TwitterPicker
                   color={values.color || '#fff'}
                   onChangeComplete={(color) => {
                     if (color) setFieldValue('color', color.hex);
                   }}
-                  className={'picker'}
+                  className="picker"
                 />
 
                 <Text
-                  mt={'2'}
-                  ml={'1'}
-                  color={'brandGray.accent'}
+                  mt="2"
+                  ml="1"
+                  color="brandGray.accent"
                   _hover={{
                     cursor: 'pointer',
                     color: 'highlight.standard',
                   }}
-                  fontSize={'14px'}
+                  fontSize="14px"
                   onClick={() => setFieldValue('color', '#fff')}
                 >
                   Reset Color
@@ -124,7 +124,7 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
               </ModalBody>
 
               <ModalFooter bg="brandGray.dark">
-                <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
+                <Button onClick={onClose} mr={6} variant="link" fontSize="14px" _focus={{ outline: 'none' }}>
                   Cancel
                 </Button>
                 <Button
@@ -135,7 +135,7 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
                   _active={{ bg: 'highlight.active' }}
                   _focus={{ boxShadow: 'none' }}
                   isLoading={isSubmitting}
-                  fontSize={'14px'}
+                  fontSize="14px"
                 >
                   Save
                 </Button>

@@ -20,7 +20,7 @@ import {
 import { Form, Formik } from 'formik';
 import React, { useRef, useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { IoPersonRemove, IoCheckmarkCircle } from 'react-icons/io5';
+import { IoCheckmarkCircle, IoPersonRemove } from 'react-icons/io5';
 import { ImHammer2 } from 'react-icons/im';
 import { BiUnlink } from 'react-icons/bi';
 import { useQuery, useQueryClient } from 'react-query';
@@ -52,8 +52,8 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
   const [isReset, setIsReset] = useState(false);
   const [showError, toggleShow] = useState(false);
 
-  const goBack = () => setScreen(SettingsScreen.START);
-  const submitClose = () => {
+  const goBack = (): void => setScreen(SettingsScreen.START);
+  const submitClose = (): void => {
     setScreen(SettingsScreen.START);
     onClose();
   };
@@ -65,7 +65,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
   const [cropImage, setCropImage] = useState('');
   const [croppedImage, setCroppedImage] = useState<any>(null);
 
-  const applyCrop = (file: Blob) => {
+  const applyCrop = (file: Blob): void => {
     setImageUrl(URL.createObjectURL(file));
     setCroppedImage(new File([file], 'icon', { type: 'image/jpeg' }));
     cropperOnClose();
@@ -73,7 +73,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
 
   if (!guild) return null;
 
-  const invalidateInvites = async () => {
+  const invalidateInvites = async (): Promise<void> => {
     try {
       const { data } = await invalidateInviteLinks(guild!.id);
       if (data) {
@@ -126,20 +126,23 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                 <ModalCloseButton _focus={{ outline: 'none' }} />
                 <ModalBody>
                   <Flex mb="4" justify="center">
-                    <Box textAlign={'center'}>
+                    <Box textAlign="center">
                       <Tooltip label="Change Icon" aria-label="Change Icon">
                         <Avatar
                           size="xl"
                           name={guild?.name[0]}
-                          bg={'brandGray.darker'}
-                          color={'#fff'}
+                          bg="brandGray.darker"
+                          color="#fff"
                           src={imageUrl || ''}
-                          _hover={{ cursor: 'pointer', opacity: 0.5 }}
+                          _hover={{
+                            cursor: 'pointer',
+                            opacity: 0.5,
+                          }}
                           onClick={() => inputFile.current.click()}
                         />
                       </Tooltip>
                       <Text
-                        mt={'2'}
+                        mt="2"
                         _hover={{
                           cursor: 'pointer',
                           color: 'brandGray.accent',
@@ -168,37 +171,33 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
 
                   <InputField label="server name" name="name" />
 
-                  <Divider my={'4'} />
+                  <Divider my="4" />
 
-                  <Text fontWeight={'semibold'} mb={2}>
+                  <Text fontWeight="semibold" mb={2}>
                     Additional Configuration
                   </Text>
 
-                  <Flex align={'center'} justify={'space-between'} mb={'2'}>
+                  <Flex align="center" justify="space-between" mb="2">
                     <Button
                       onClick={invalidateInvites}
-                      fontSize={'14px'}
+                      fontSize="14px"
                       rightIcon={isReset ? <IoCheckmarkCircle /> : <BiUnlink />}
                       colorScheme={isReset ? 'green' : 'gray'}
                     >
                       Invalidate Links
                     </Button>
-                    <Button
-                      onClick={() => setScreen(SettingsScreen.BANLIST)}
-                      fontSize={'14px'}
-                      rightIcon={<ImHammer2 />}
-                    >
+                    <Button onClick={() => setScreen(SettingsScreen.BANLIST)} fontSize="14px" rightIcon={<ImHammer2 />}>
                       Bans
                     </Button>
                   </Flex>
-                  <Flex align={'center'} justify={'space-between'} mb={'2'}>
+                  <Flex align="center" justify="space-between" mb="2">
                     <LightMode>
                       <Button
                         onClick={() => setScreen(SettingsScreen.CONFIRM)}
-                        colorScheme={'red'}
+                        colorScheme="red"
                         variant="ghost"
-                        fontSize={'14px'}
-                        textColor={'menuRed'}
+                        fontSize="14px"
+                        textColor="menuRed"
                         rightIcon={<FaRegTrashAlt />}
                       >
                         Delete Server
@@ -213,7 +212,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                 </ModalBody>
 
                 <ModalFooter bg="brandGray.dark">
-                  <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'}>
+                  <Button onClick={onClose} mr={6} variant="link" fontSize="14px">
                     Cancel
                   </Button>
                   <Button
@@ -224,7 +223,7 @@ export const GuildSettingsModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
                     _active={{ bg: 'highlight.active' }}
                     _focus={{ boxShadow: 'none' }}
                     isLoading={isSubmitting}
-                    fontSize={'14px'}
+                    fontSize="14px"
                   >
                     Save Changes
                   </Button>
@@ -260,7 +259,7 @@ interface IScreenProps {
 const DeleteGuildModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, guildId }) => {
   const [showError, toggleShow] = useState(false);
 
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     try {
       const { data } = await deleteGuild(guildId);
       if (data) {
@@ -291,11 +290,11 @@ const DeleteGuildModal: React.FC<IScreenProps> = ({ goBack, submitClose, name, g
       </ModalBody>
 
       <ModalFooter bg="brandGray.dark">
-        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
+        <Button mr={6} variant="link" onClick={goBack} fontSize="14px" _focus={{ outline: 'none' }}>
           Cancel
         </Button>
         <LightMode>
-          <Button colorScheme="red" fontSize={'14px'} onClick={() => handleDelete()}>
+          <Button colorScheme="red" fontSize="14px" onClick={() => handleDelete()}>
             Delete Server
           </Button>
         </LightMode>
@@ -314,28 +313,26 @@ const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
   const { data } = useQuery(key, () => getBanList(guildId).then((response) => response.data));
   const cache = useQueryClient();
 
-  const unbanUser = async (id: string) => {
+  const unbanUser = async (id: string): Promise<void> => {
     try {
-      const { data } = await unbanMember(guildId, id);
-      if (data) {
-        cache.setQueryData<Member[]>(key, (d) => {
-          return d!.filter((b) => b.id !== id);
-        });
+      const { data: responseData } = await unbanMember(guildId, id);
+      if (responseData) {
+        cache.setQueryData<Member[]>(key, (d) => d!.filter((b) => b.id !== id));
       }
     } catch (err) {}
   };
 
   return (
-    <ModalContent bg="brandGray.light" maxH={'500px'}>
+    <ModalContent bg="brandGray.light" maxH="500px">
       <ModalHeader fontWeight="bold" pb="0">
         {data?.length} Bans
       </ModalHeader>
-      <ModalBody pb={3} overflowY={'auto'} css={channelScrollbarCss}>
+      <ModalBody pb={3} overflowY="auto" css={channelScrollbarCss}>
         <Text mb={2}>Bans are by account. Click on the icon to unban.</Text>
 
         {data?.map((m) => (
           <Flex
-            p={'3'}
+            p="3"
             _hover={{
               bg: 'brandGray.dark',
               borderRadius: '5px',
@@ -343,7 +340,7 @@ const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
             align="center"
             justify="space-between"
           >
-            <Flex align="center" w={'full'}>
+            <Flex align="center" w="full">
               <Avatar size="sm" src={m.image} />
               <Text ml="2">{m.username}</Text>
             </Flex>
@@ -362,7 +359,7 @@ const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
       </ModalBody>
 
       <ModalFooter bg="brandGray.dark">
-        <Button mr={6} variant="link" onClick={goBack} fontSize={'14px'} _focus={{ outline: 'none' }}>
+        <Button mr={6} variant="link" onClick={goBack} fontSize="14px" _focus={{ outline: 'none' }}>
           Back
         </Button>
       </ModalFooter>

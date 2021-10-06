@@ -26,7 +26,7 @@ interface IProps {
 export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose }) => {
   const [showError, toggleShow] = useState(false);
 
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     try {
       const { data } = await deleteMessage(message.id);
       if (data) {
@@ -46,11 +46,11 @@ export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose 
           Delete Message
         </ModalHeader>
         <ModalBody>
-          <Text mb={'4'}>Are you sure you want to delete this message?</Text>
+          <Text mb="4">Are you sure you want to delete this message?</Text>
 
-          <Flex alignItems="center" my="2" mr="1" justify="space-between" boxShadow={'dark-lg'} py={2}>
+          <Flex alignItems="center" my="2" mr="1" justify="space-between" boxShadow="dark-lg" py={2}>
             <Flex>
-              <Avatar h="40px" w="40px" ml="4" mt={'1'} src={message.user.image} />
+              <Avatar h="40px" w="40px" ml="4" mt="1" src={message.user.image} />
               <Box ml="3">
                 <Flex alignItems="center">
                   <Text>{message.user.username}</Text>
@@ -71,11 +71,11 @@ export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose 
         </ModalBody>
 
         <ModalFooter bg="brandGray.dark">
-          <Button onClick={onClose} mr={6} variant="link" fontSize={'14px'} _focus={{ outline: 'none' }}>
+          <Button onClick={onClose} mr={6} variant="link" fontSize="14px" _focus={{ outline: 'none' }}>
             Cancel
           </Button>
           <LightMode>
-            <Button colorScheme="red" fontSize={'14px'} onClick={() => handleDelete()}>
+            <Button colorScheme="red" fontSize="14px" onClick={() => handleDelete()}>
               Delete
             </Button>
           </LightMode>

@@ -13,18 +13,18 @@ export const AccountBar: React.FC = () => {
       <Tooltip
         hasArrow
         label={hasCopied ? 'Copied!' : 'Click to copy ID'}
-        placement={'top'}
+        placement="top"
         bg={hasCopied ? 'brandGreen' : 'brandGray.darkest'}
-        color={'white'}
+        color="white"
         closeOnClick={false}
       >
-        <Flex align="center" w={'full'} mr={2} _hover={{ cursor: 'pointer' }} onClick={onCopy}>
+        <Flex align="center" w="full" mr={2} _hover={{ cursor: 'pointer' }} onClick={onCopy}>
           <Avatar size="sm" src={user?.image} />
           <Text ml="2">{user?.username}</Text>
         </Flex>
       </Tooltip>
-      <Link to={'/account'}>
-        <Tooltip hasArrow label={'User Settings'} placement={'top'} bg={'brandGray.darkest'} color={'white'}>
+      <Link to="/account">
+        <Tooltip hasArrow label="User Settings" placement="top" bg="brandGray.darkest" color="white">
           <IconButton icon={<RiSettings5Fill />} aria-label="settings" size="sm" fontSize="20px" variant="ghost" />
         </Tooltip>
       </Link>

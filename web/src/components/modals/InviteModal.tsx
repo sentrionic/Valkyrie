@@ -17,7 +17,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getInviteLink } from '../../lib/api/handler/guilds';
-import { RouterProps } from '../../routes/Routes';
+import { RouterProps } from '../../lib/api/models';
 
 interface InviteModalProps {
   isOpen: boolean;
@@ -32,7 +32,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
 
   useEffect(() => {
     if (isOpen) {
-      const fetchLink = async () => {
+      const fetchLink = async (): Promise<void> => {
         try {
           const { data } = await getInviteLink(guildId, isPermanent);
           if (data) setInviteLink(data);
@@ -46,7 +46,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent bg="brandGray.light">
-        <ModalHeader textAlign="center" fontWeight="bold" pb={'0'}>
+        <ModalHeader textAlign="center" fontWeight="bold" pb="0">
           Invite Link
         </ModalHeader>
         <ModalCloseButton _focus={{ outline: 'none' }} />
@@ -73,7 +73,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
                 bg={hasCopied ? 'brandGreen' : 'highlight.standard'}
                 color="white"
                 type="submit"
-                fontSize={'14px'}
+                fontSize="14px"
                 _hover={{ bg: 'highlight.hover' }}
                 _active={{ bg: 'highlight.active' }}
                 _focus={{ boxShadow: 'none' }}
@@ -84,7 +84,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
             </InputRightElement>
           </InputGroup>
 
-          <Text my={'2'} fontSize={'12px'}>
+          <Text my="2" fontSize="12px">
             {isPermanent
               ? "Your invite link won't expire"
               : 'Your invite link expires in 1 day and can only be used once'}

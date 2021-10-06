@@ -10,7 +10,7 @@ type WSMessage =
   | { action: 'delete_guild' | 'remove_from_guild' | 'new_notification'; data: string }
   | { action: 'edit_guild'; data: Guild };
 
-export function useGuildSocket() {
+export function useGuildSocket(): void {
   const history = useHistory();
   const cache = useQueryClient();
   const current = userStore((state) => state.current);
@@ -19,7 +19,12 @@ export function useGuildSocket() {
   useEffect((): any => {
     const socket = getSocket();
 
-    socket.send(JSON.stringify({ action: 'joinUser', room: current?.id }));
+    socket.send(
+      JSON.stringify({
+        action: 'joinUser',
+        room: current?.id,
+      })
+    );
 
     socket.addEventListener('message', (event) => {
       const response: WSMessage = JSON.parse(event.data);
@@ -27,11 +32,16 @@ export function useGuildSocket() {
         case 'edit_guild': {
           const editedGuild = response.data;
           cache.setQueryData<Guild[]>(gKey, (d) => {
-            const index = d!.findIndex((c) => c.id === editedGuild.id);
+            const data = d ?? [];
+            const index = data.findIndex((c) => c.id === editedGuild.id);
             if (index !== -1) {
-              d![index] = { ...d![index], name: editedGuild.name, icon: editedGuild.icon };
+              data[index] = {
+                ...data[index],
+                name: editedGuild.name,
+                icon: editedGuild.icon,
+              };
             }
-            return d!;
+            return data;
           });
           break;
         }
@@ -52,11 +62,15 @@ export function useGuildSocket() {
           const id = response.data;
           if (!location.pathname.includes(id)) {
             cache.setQueryData<Guild[]>(gKey, (d) => {
-              const index = d!.findIndex((c) => c.id === id);
+              const data = d ?? [];
+              const index = data.findIndex((c) => c.id === id);
               if (index !== -1) {
-                d![index] = { ...d![index], hasNotification: true };
+                data[index] = {
+                  ...data[index],
+                  hasNotification: true,
+                };
               }
-              return d!;
+              return data;
             });
           }
           break;
@@ -73,11 +87,19 @@ export function useGuildSocket() {
           });
           break;
         }
+
+        default:
+          break;
       }
     });
 
     return () => {
-      socket.send(JSON.stringify({ action: 'leaveRoom', room: current?.id }));
+      socket.send(
+        JSON.stringify({
+          action: 'leaveRoom',
+          room: current?.id,
+        })
+      );
       socket.close();
     };
   }, [current, cache, history, location]);

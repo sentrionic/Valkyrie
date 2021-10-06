@@ -13,7 +13,7 @@ export const Invite: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const handleJoin = async () => {
+    const handleJoin = async (): Promise<void> => {
       try {
         const { data } = await joinGuild({ link });
         if (data) {
@@ -30,8 +30,8 @@ export const Invite: React.FC = () => {
   }, [link, history]);
 
   return (
-    <Flex minHeight="100vh" align={'center'} justify={'center'} h={'full'}>
-      <Box textAlign={'center'}>
+    <Flex minHeight="100vh" align="center" justify="center" h="full">
+      <Box textAlign="center">
         <Flex mb="4" justify="center">
           <Image src={`${process.env.PUBLIC_URL}/logo.png`} w="80px" />
         </Flex>
@@ -39,7 +39,7 @@ export const Invite: React.FC = () => {
         <Text>You will be automatically redirected.</Text>
         {errors && (
           <Box>
-            <Text my={'2'} textColor={'menuRed'}>
+            <Text my="2" textColor="menuRed">
               {errors}
             </Text>
             <Text>

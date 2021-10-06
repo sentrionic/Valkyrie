@@ -7,11 +7,11 @@ import { CreateChannelModal } from '../../modals/CreateChannelModal';
 import { GuildMenu } from '../../menus/GuildMenu';
 import { InviteModal } from '../../modals/InviteModal';
 import { ChannelListItem } from '../../items/ChannelListItem';
-import { RouterProps } from '../../../routes/Routes';
 import { cKey } from '../../../lib/utils/querykeys';
 import { channelScrollbarCss } from './css/ChannelScrollerCSS';
 import { useChannelSocket } from '../../../lib/api/ws/useChannelSocket';
 import { getChannels } from '../../../lib/api/handler/channel';
+import { RouterProps } from '../../../lib/api/models';
 
 export const Channels: React.FC = () => {
   const { isOpen: inviteIsOpen, onOpen: inviteOpen, onClose: inviteClose } = useDisclosure();
@@ -29,7 +29,7 @@ export const Channels: React.FC = () => {
       <GuildMenu channelOpen={channelOpen} inviteOpen={inviteOpen} />
       <GridItem
         gridColumn={2}
-        gridRow={'2/4'}
+        gridRow="2/4"
         bg="brandGray.dark"
         overflowY="hidden"
         _hover={{ overflowY: 'auto' }}

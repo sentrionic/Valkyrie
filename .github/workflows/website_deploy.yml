@@ -1,12 +1,9 @@
 name: Website Deploy
 
-# When workflow is triggered
 on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'web/**'
+  workflow_run:
+    workflows: ['Test & Lint [Web]']
+    types: [completed]
 
 jobs:
   deploy:

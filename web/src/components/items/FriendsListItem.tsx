@@ -1,11 +1,11 @@
 import { Avatar, AvatarBadge, Flex, IconButton, ListItem, Text, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { FaEllipsisV } from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import { DMChannel, Member } from '../../lib/api/models';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
-import { useHistory } from 'react-router-dom';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
-import { useQueryClient } from 'react-query';
 import { dmKey } from '../../lib/utils/querykeys';
 
 interface FriendsListItemProp {
@@ -17,14 +17,15 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cache = useQueryClient();
 
-  const getDMChannel = async () => {
+  const getDMChannel = async (): Promise<void> => {
     try {
       const { data } = await getOrCreateDirectMessage(friend.id);
       if (data) {
         cache.setQueryData<DMChannel[]>(dmKey, (d) => {
-          const index = d!.findIndex((d) => d.id === data.id);
-          if (index === -1) return [data, ...d!];
-          return d!;
+          const queryData = d ?? [];
+          const index = queryData.findIndex((dm) => dm.id === data.id);
+          if (index === -1) return [data, ...queryData];
+          return queryData;
         });
         history.push(`/channels/me/${data.id}`);
       }
@@ -41,7 +42,7 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
       }}
     >
       <Flex align="center" justify="space-between">
-        <Flex align="center" w={'full'} onClick={getDMChannel} _hover={{ cursor: 'pointer' }}>
+        <Flex align="center" w="full" onClick={getDMChannel} _hover={{ cursor: 'pointer' }}>
           <Avatar size="sm" src={friend.image}>
             <AvatarBadge boxSize="1.25em" bg={friend.isOnline ? 'green.500' : 'gray.500'} />
           </Avatar>

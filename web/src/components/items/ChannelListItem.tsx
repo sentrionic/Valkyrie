@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Icon, ListItem, Text, useDisclosure } from '@chakra-ui/react';
 import { FaHashtag, FaUserLock } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
-import { Channel } from '../../lib/api/models';
 import { Link, useLocation } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { Channel } from '../../lib/api/models';
 import { userStore } from '../../lib/stores/userStore';
 import { ChannelSettingsModal } from '../modals/ChannelSettingsModal';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { ChannelNotificationIndicator } from '../common/GuildPills';
-import { useQueryClient } from 'react-query';
 import { cKey } from '../../lib/utils/querykeys';
 
 interface ChannelListItemProps {
@@ -32,11 +32,12 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
   useEffect(() => {
     if (channel.hasNotification && isActive) {
       cache.setQueryData<Channel[]>(cKey(guildId), (d) => {
-        const index = d!.findIndex((c) => c.id === channel.id);
+        const data = d ?? [];
+        const index = data.findIndex((c) => c.id === channel.id);
         if (index !== -1) {
-          d![index] = { ...d![index], hasNotification: false };
+          data[index] = { ...data[index], hasNotification: false };
         }
-        return d!;
+        return data;
       });
     }
   });
@@ -55,22 +56,22 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
         }}
         bg={isActive ? 'brandGray.active' : undefined}
         mb="2px"
-        position={'relative'}
+        position="relative"
         onMouseLeave={() => setShowSettings(false)}
         onMouseEnter={() => setShowSettings(true)}
       >
         {channel.hasNotification && <ChannelNotificationIndicator />}
-        <Flex align="center" justify={'space-between'}>
+        <Flex align="center" justify="space-between">
           <Flex align="center">
-            <Icon as={channel.isPublic ? FaHashtag : FaUserLock} color={'brandGray.accent'} />
+            <Icon as={channel.isPublic ? FaHashtag : FaUserLock} color="brandGray.accent" />
             <Text ml="2">{channel.name}</Text>
           </Flex>
           {current?.id === guild?.ownerId && (showSettings || isOpen) && (
             <>
               <Icon
                 as={MdSettings}
-                color={'brandGray.accent'}
-                fontSize={'12px'}
+                color="brandGray.accent"
+                fontSize="12px"
                 _hover={{ color: '#fff' }}
                 onClick={(e) => {
                   e.preventDefault();
