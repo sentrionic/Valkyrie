@@ -1,0 +1,28 @@
+name: Release Server Binary
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  releases-matrix:
+    name: Release Go Binary
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: ['386', amd64]
+        exclude:
+          - goarch: '386'
+            goos: darwin
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wangyoucao577/go-release-action@v1.20
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          project_path: './server'
+          binary_name: 'valkyrie-server'
+          md5sum: false
+          extra_files: ./server/.env.example README.md

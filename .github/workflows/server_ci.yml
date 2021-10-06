@@ -1,0 +1,72 @@
+name: Test & Lint
+
+on:
+  push:
+    paths:
+      - 'server/**'
+  pull_request:
+    paths:
+      - 'server/**'
+
+jobs:
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
+          args: --timeout=5m
+          working-directory: ./server
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: valkyrie
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: 'redis:alpine'
+        ports:
+          - '6379:6379'
+        volumes:
+          - 'redisdata:/data'
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Run Unit Tests
+        working-directory: ./server
+        run: make test
+
+      - name: Run E2E
+        run: make e2e
+        working-directory: ./server
+        env:
+          DATABASE_URL: postgresql://root:secret@localhost:5432/valkyrie?sslmode=disable
+          HANDLER_TIMEOUT: 5
+          MAX_BODY_BYTES: 4194304
+          REDIS_URL: redis://localhost:6379
+          SECRET: jmaijopspahisodphiasdhiahiopsdhoiasdg8a89sdta08sdtg8aosdou
+          COOKIE_NAME: vlk

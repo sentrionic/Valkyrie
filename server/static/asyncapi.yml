@@ -2,14 +2,21 @@ asyncapi: '2.0.0'
 info:
   title: Valkyrie Websockets
   version: '1.0.0'
-  description: This service is in charge of processing websocket events. Uses Express Sessions to authenticate. Connections are only possible using Version 2 of the socket.io client.
+  description: >
+    This service is in charge of processing websocket events. Websockets are authenticated       using sessions. All received messages must be specified like this: 
+    | { "action": "joinRoom", "room": "123456789", "message": "username"} |.
+    
+    Room is required to join a channel room, message can be used for additional arguments or information. Both are optional.
+    Emited messages are of form | { "action": "new_message", "data": object } |.
 
 servers:
   production:
-    url: http://localhost:4000/ws
-    protocol: socket.io
-    protocolVersion: 'V2'
-
+    url: wss://api.valkyrieapp.xyz/ws
+    protocol: wss
+  development:
+    url: ws://localhost:8080/ws
+    protocol: ws
+    
 channels:
   /:
     publish:
@@ -51,7 +58,7 @@ channels:
 
 components:
   securitySchemes:
-    token:
+    session:
       type: httpApiKey
       name: token
       in: query

@@ -1,0 +1,1558 @@
+basePath: /api
+definitions:
+  Attachment:
+    properties:
+      filename:
+        type: string
+      filetype:
+        type: string
+      url:
+        type: string
+    type: object
+  BanResponse:
+    properties:
+      id:
+        type: string
+      image:
+        type: string
+      username:
+        type: string
+    type: object
+  ChangePasswordRequest:
+    properties:
+      confirmNewPassword:
+        description: Must be the same as the newPassword value.
+        type: string
+      currentPassword:
+        type: string
+      newPassword:
+        description: Min 6, max 150 characters.
+        type: string
+    type: object
+  Channel:
+    properties:
+      createdAt:
+        type: string
+      hasNotification:
+        type: boolean
+      id:
+        type: string
+      isPublic:
+        type: boolean
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  ChannelRequest:
+    properties:
+      isPublic:
+        description: Default is true
+        type: boolean
+      members:
+        description: Array of memberIds
+        items:
+          type: string
+        type: array
+      name:
+        description: Channel Name. 3 to 30 character
+        type: string
+    type: object
+  CreateGuildRequest:
+    properties:
+      name:
+        description: Guild Name. 3 to 30 characters
+        type: string
+    type: object
+  DMUser:
+    properties:
+      id:
+        type: string
+      image:
+        type: string
+      isFriend:
+        type: boolean
+      isOnline:
+        type: boolean
+      username:
+        type: string
+    type: object
+  DirectMessage:
+    properties:
+      id:
+        type: string
+      user:
+        $ref: '#/definitions/DMUser'
+    type: object
+  EditGuildRequest:
+    properties:
+      icon:
+        description: The old guild icon url if no new image is selected. Set to null
+          to reset the guild icon
+        type: string
+      image:
+        description: image/png or image/jpeg
+        format: binary
+        type: string
+      name:
+        description: Guild Name. 3 to 30 characters
+        type: string
+    type: object
+  EditUser:
+    properties:
+      email:
+        description: Must be unique
+        type: string
+      image:
+        description: image/png or image/jpeg
+        format: binary
+        type: string
+      username:
+        description: Min 3, max 30 characters.
+        type: string
+    type: object
+  ErrorResponse:
+    properties:
+      error:
+        $ref: '#/definitions/HttpError'
+    type: object
+  ErrorsResponse:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/FieldError'
+        type: array
+    type: object
+  FieldError:
+    properties:
+      field:
+        description: The property containing the error
+        type: string
+      message:
+        description: The specific error message
+        type: string
+    type: object
+  ForgotPasswordRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  Friend:
+    properties:
+      id:
+        type: string
+      image:
+        type: string
+      isOnline:
+        type: boolean
+      username:
+        type: string
+    type: object
+  FriendRequest:
+    properties:
+      id:
+        type: string
+      image:
+        type: string
+      type:
+        description: '1: Incoming, 0: Outgoing'
+        enum:
+        - 0
+        - 1
+        type: integer
+      username:
+        type: string
+    type: object
+  GuildResponse:
+    properties:
+      createdAt:
+        type: string
+      default_channel_id:
+        type: string
+      hasNotification:
+        type: boolean
+      icon:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      ownerId:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  HttpError:
+    properties:
+      message:
+        description: The specific error message
+        type: string
+      type:
+        description: The Http Response as a string
+        type: string
+    type: object
+  JoinRequest:
+    properties:
+      link:
+        type: string
+    type: object
+  LoginRequest:
+    properties:
+      email:
+        description: Must be unique
+        type: string
+      password:
+        description: Min 6, max 150 characters.
+        type: string
+    type: object
+  Member:
+    properties:
+      color:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      image:
+        type: string
+      isFriend:
+        type: boolean
+      isOnline:
+        type: boolean
+      nickname:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+  MemberRequest:
+    properties:
+      memberId:
+        type: string
+    type: object
+  MemberSettings:
+    properties:
+      color:
+        type: string
+      nickname:
+        type: string
+    type: object
+  MemberSettingsRequest:
+    properties:
+      color:
+        type: string
+      nickname:
+        type: string
+    type: object
+  Message:
+    properties:
+      attachment:
+        $ref: '#/definitions/Attachment'
+      createdAt:
+        type: string
+      id:
+        type: string
+      text:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/Member'
+    type: object
+  MessageRequest:
+    properties:
+      file:
+        description: image/* or audio/*
+        format: binary
+        type: string
+      text:
+        description: Maximum 2000 characters
+        type: string
+    type: object
+  RegisterRequest:
+    properties:
+      email:
+        description: Must be unique
+        type: string
+      password:
+        description: Min 6, max 150 characters.
+        type: string
+      username:
+        description: Min 3, max 30 characters.
+        type: string
+    type: object
+  ResetPasswordRequest:
+    properties:
+      confirmNewPassword:
+        description: Must be the same as the password value.
+        type: string
+      newPassword:
+        description: Min 6, max 150 characters.
+        type: string
+      token:
+        description: The token the user got from the email.
+        type: string
+    type: object
+  SuccessResponse:
+    properties:
+      success:
+        description: Only returns true, not a json object
+        type: boolean
+    type: object
+  User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      image:
+        type: string
+      isOnline:
+        type: boolean
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:<PORT>
+info:
+  contact: {}
+  description: Valkyrie REST API Specs. This service uses sessions for authentication
+  license:
+    name: Apache 2.0
+  title: Valkyrie API
+  version: "1.0"
+paths:
+  /account:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Current User
+      tags:
+      - Account
+    put:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Update Account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/EditUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Update Current User
+      tags:
+      - Account
+  /account/{memberId}/friend:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: memberId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Remove Friend
+      tags:
+      - Friends
+    post:
+      parameters:
+      - description: User ID
+        in: path
+        name: memberId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Send Friend Request
+      tags:
+      - Friends
+  /account/{memberId}/friend/accept:
+    post:
+      parameters:
+      - description: User ID
+        in: path
+        name: memberId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Accept Friend's Request
+      tags:
+      - Friends
+  /account/{memberId}/friend/cancel:
+    post:
+      parameters:
+      - description: User ID
+        in: path
+        name: memberId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Cancel Friend's Request
+      tags:
+      - Friends
+  /account/change-password:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Change Password
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Change Current User's Password
+      tags:
+      - Account
+  /account/forgot-password:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Forgot Password
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/ForgotPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Forgot Password Request
+      tags:
+      - Account
+  /account/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: User Login
+      tags:
+      - Account
+  /account/logout:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+      summary: User Logout
+      tags:
+      - Account
+  /account/me/friends:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Friend'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Current User's Friends
+      tags:
+      - Friends
+  /account/me/pending:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/FriendRequest'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Current User's Friend Requests
+      tags:
+      - Friends
+  /account/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Create an Account
+      tags:
+      - Account
+  /account/reset-password:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Reset Password
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Reset Password
+      tags:
+      - Account
+  /channels/{channelId}:
+    put:
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channelId
+        required: true
+        type: string
+      - description: Edit Channel
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ChannelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit Channel
+      tags:
+      - Channels
+  /channels/{channelId}/dm:
+    post:
+      parameters:
+      - description: Member ID
+        in: path
+        name: channelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DirectMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get or Create DM
+      tags:
+      - Channels
+  /channels/{channelId}/members:
+    get:
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Members of the given Channel
+      tags:
+      - Channels
+  /channels/{guildId}:
+    get:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Channel'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Guild Channels
+      tags:
+      - Channels
+    post:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Channel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Create Channel
+      tags:
+      - Channels
+  /channels/{id}:
+    delete:
+      parameters:
+      - description: Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Delete Channel
+      tags:
+      - Channels
+  /channels/{id}/dm:
+    delete:
+      parameters:
+      - description: DM Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Close DM
+      tags:
+      - Channels
+  /channels/me/dm:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/DirectMessage'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get User's DMs
+      tags:
+      - Channels
+  /guilds:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/GuildResponse'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Current User's Guilds
+      tags:
+      - Guilds
+  /guilds/{guildId}:
+    delete:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Leave Guild
+      tags:
+      - Guilds
+    put:
+      parameters:
+      - description: Edit Guild
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/EditGuildRequest'
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit Guild
+      tags:
+      - Guilds
+  /guilds/{guildId}/bans:
+    delete:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      - description: Member ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MemberRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/SuccessResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Unban Member
+      tags:
+      - Members
+    get:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/BanResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Guild Ban list
+      tags:
+      - Members
+    post:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      - description: Member ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MemberRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/SuccessResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Ban Member
+      tags:
+      - Members
+  /guilds/{guildId}/delete:
+    delete:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Delete Guild
+      tags:
+      - Guilds
+  /guilds/{guildId}/invite:
+    delete:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Delete all permanent invite links
+      tags:
+      - Guilds
+    get:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      - description: Is Permanent
+        in: query
+        name: isPermanent
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Guild Invite
+      tags:
+      - Guilds
+  /guilds/{guildId}/kick:
+    post:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      - description: Member ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MemberRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/SuccessResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Kick Member
+      tags:
+      - Members
+  /guilds/{guildId}/member:
+    get:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MemberSettings'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Member Settings
+      tags:
+      - Members
+    put:
+      parameters:
+      - description: Edit Member
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MemberSettingsRequest'
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit Member Settings
+      tags:
+      - Members
+  /guilds/{guildId}/members:
+    get:
+      parameters:
+      - description: Guild ID
+        in: path
+        name: guildId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Member'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Guild Members
+      tags:
+      - Guilds
+  /guilds/create:
+    post:
+      parameters:
+      - description: Create Guild
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGuildRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              $ref: '#/definitions/GuildResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Create Guild
+      tags:
+      - Guilds
+  /guilds/join:
+    post:
+      parameters:
+      - description: Join Guild
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/JoinRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GuildResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Join Guild
+      tags:
+      - Guilds
+  /messages/{channelId}:
+    get:
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channelId
+        required: true
+        type: string
+      - description: Cursor Pagination using the createdAt field
+        in: query
+        name: cursor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Message'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Channel Messages
+      tags:
+      - Messages
+    post:
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channelId
+        required: true
+        type: string
+      - description: Create Message
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MessageRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Create Messages
+      tags:
+      - Messages
+  /messages/{messageId}:
+    delete:
+      parameters:
+      - description: Message ID
+        in: path
+        name: messageId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Delete Messages
+      tags:
+      - Messages
+    put:
+      parameters:
+      - description: Message ID
+        in: path
+        name: messageId
+        required: true
+        type: string
+      - description: Edit Message
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit Messages
+      tags:
+      - Messages
+swagger: "2.0"
