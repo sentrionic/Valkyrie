@@ -1,20 +1,15 @@
-name: Test & Lint [Web]
+name: Test & Lint - Web
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'web/**'
   pull_request:
-    branches:
-      - main
     paths:
       - 'web/**'
 
 jobs:
   test:
-    name: Test & Lint [Web]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -3,6 +3,7 @@ name: Deploy [API]
 on:
   workflow_run:
     workflows: ['Test & Lint']
+    branches: [main]
     types: [completed]
 
 jobs:
