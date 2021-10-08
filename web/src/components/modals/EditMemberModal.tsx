@@ -18,7 +18,7 @@ import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { userStore } from '../../lib/stores/userStore';
 import { MemberSchema } from '../../lib/utils/validation/member.schema';
-import { changeGuildMemberSettings, getGuildMemberSettings } from '../../lib/api/handler/guilds';
+import { changeGuildMemberSettings, getGuildMemberSettings } from '../../lib/api/handler/members';
 
 interface IProps {
   guildId: string;

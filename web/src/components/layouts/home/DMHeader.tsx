@@ -3,7 +3,7 @@ import { Box, Flex, GridItem, Icon, Text } from '@chakra-ui/react';
 import { FaAt } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { useGetCurrentDM } from '../../../lib/utils/hooks/useGetCurrentDM';
-import { RouterProps } from '../../../lib/api/models';
+import { RouterProps } from '../../../lib/models/routerProps';
 
 export const DMHeader: React.FC = () => {
   const { channelId } = useParams<RouterProps>();

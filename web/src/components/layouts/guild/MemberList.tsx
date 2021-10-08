@@ -4,11 +4,12 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { MemberListItem } from '../../items/MemberListItem';
 import { getGuildMembers } from '../../../lib/api/handler/guilds';
-import { Member, RouterProps } from '../../../lib/api/models';
 import { mKey } from '../../../lib/utils/querykeys';
 import { memberScrollbarCss } from './css/MemberScrollerCSS';
 import { useMemberSocket } from '../../../lib/api/ws/useMemberSocket';
 import { OnlineLabel } from '../../sections/OnlineLabel';
+import { RouterProps } from '../../../lib/models/routerProps';
+import { Member } from '../../../lib/models/member';
 
 export const MemberList: React.FC = () => {
   const { guildId } = useParams<RouterProps>();

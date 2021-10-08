@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
-import { Channel } from '../models';
 import { useGetCurrentGuild } from '../../utils/hooks/useGetCurrentGuild';
 import { userStore } from '../../stores/userStore';
+import { Channel } from '../../models/channel';
 
 type WSMessage =
   | { action: 'delete_channel' | 'new_notification'; data: string }

@@ -6,7 +6,6 @@ import { MdEdit } from 'react-icons/md';
 import { FaEllipsisH, FaRegTrashAlt } from 'react-icons/fa';
 import { FiLink } from 'react-icons/fi';
 import { MessageContent } from './MessageContent';
-import { Message as MessageResponse, RouterProps } from '../../../lib/api/models';
 import { userStore } from '../../../lib/stores/userStore';
 import { getShortenedTime, getTime } from '../../../lib/utils/dateUtils';
 import { DeleteMessageModal } from '../../modals/DeleteMessageModal';
@@ -14,6 +13,8 @@ import { EditMessageModal } from '../../modals/EditMessageModal';
 import { useGetCurrentGuild } from '../../../lib/utils/hooks/useGetCurrentGuild';
 import { MemberContextMenu } from '../../menus/MemberContextMenu';
 import { UserPopover } from '../../sections/UserPopover';
+import { RouterProps } from '../../../lib/models/routerProps';
+import { Message as MessageResponse } from '../../../lib/models/message';
 import '../css/ContextMenu.css';
 
 interface MessageProps {
@@ -131,7 +132,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
                 </Flex>
               </Item>
             ) : (
-              !isAuthor && (
+              isAuthor && (
                 <Item className="menu-item" onClick={onEditOpen}>
                   <Flex align="center" justify="space-between" w="full">
                     <Text>Edit Message</Text>

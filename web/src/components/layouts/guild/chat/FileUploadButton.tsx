@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import { sendMessage } from '../../../../lib/api/handler/messages';
 import { FileSchema } from '../../../../lib/utils/validation/message.schema';
 import { StyledTooltip } from '../../../sections/StyledTooltip';
-import { RouterProps } from '../../../../lib/api/models';
+import { RouterProps } from '../../../../lib/models/routerProps';
 
 export const FileUploadButton: React.FC = () => {
   const { channelId } = useParams<RouterProps>();

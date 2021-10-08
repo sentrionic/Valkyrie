@@ -20,8 +20,8 @@ import { GuildSchema } from '../../lib/utils/validation/guild.schema';
 import { createGuild, joinGuild } from '../../lib/api/handler/guilds';
 import { userStore } from '../../lib/stores/userStore';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
-import { Guild } from '../../lib/api/models';
 import { gKey } from '../../lib/utils/querykeys';
+import { Guild } from '../../lib/models/guild';
 
 interface IProps {
   isOpen: boolean;

@@ -3,13 +3,14 @@ import React from 'react';
 import { FaEllipsisV } from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
-import { DMChannel, Member } from '../../lib/api/models';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
 import { dmKey } from '../../lib/utils/querykeys';
+import { Friend } from '../../lib/models/friend';
+import { DMChannel } from '../../lib/models/dm';
 
 interface FriendsListItemProp {
-  friend: Member;
+  friend: Friend;
 }
 
 export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {

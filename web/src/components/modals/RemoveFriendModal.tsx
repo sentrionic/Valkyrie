@@ -11,12 +11,12 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useQueryClient } from 'react-query';
-import { Member } from '../../lib/api/models';
 import { removeFriend } from '../../lib/api/handler/account';
 import { fKey } from '../../lib/utils/querykeys';
+import { Friend } from '../../lib/models/friend';
 
 interface IProps {
-  member: Member;
+  member: Friend;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -51,7 +51,7 @@ export const RemoveFriendModal: React.FC<IProps> = ({ member, isOpen, onClose })
                 try {
                   const { data } = await removeFriend(member.id);
                   if (data) {
-                    cache.setQueryData<Member[]>(fKey, (d) => d!.filter((f) => f.id !== member.id));
+                    cache.setQueryData<Friend[]>(fKey, (d) => d!.filter((f) => f.id !== member.id));
                   }
                 } catch (err) {}
               }}

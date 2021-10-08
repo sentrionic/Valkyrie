@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
-import { Member } from '../models';
 import { userStore } from '../../stores/userStore';
 import { fKey } from '../../utils/querykeys';
 import { homeStore } from '../../stores/homeStore';
+import { Friend } from '../../models/friend';
 
 type WSMessage =
   | { action: 'toggle_online' | 'toggle_offline' | 'remove_friend'; data: string }
   | { action: 'requestCount'; data: number }
-  | { action: 'add_friend'; data: Member };
+  | { action: 'add_friend'; data: Friend };
 
 export function useFriendSocket(): void {
   const current = userStore((state) => state.current);
@@ -30,7 +30,7 @@ export function useFriendSocket(): void {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'toggle_online': {
-          cache.setQueryData<Member[]>(fKey, (d) => {
+          cache.setQueryData<Friend[]>(fKey, (d) => {
             const data = d ?? [];
             const index = data.findIndex((m) => m.id === response.data);
             if (index !== -1) data[index].isOnline = true;
@@ -40,7 +40,7 @@ export function useFriendSocket(): void {
         }
 
         case 'toggle_offline': {
-          cache.setQueryData<Member[]>(fKey, (d) => {
+          cache.setQueryData<Friend[]>(fKey, (d) => {
             const data = d ?? [];
             const index = data.findIndex((m) => m.id === response.data);
             if (index !== -1) data[index].isOnline = false;
@@ -55,14 +55,14 @@ export function useFriendSocket(): void {
         }
 
         case 'add_friend': {
-          cache.setQueryData<Member[]>(fKey, (data) =>
+          cache.setQueryData<Friend[]>(fKey, (data) =>
             [...data!, response.data].sort((a, b) => a.username.localeCompare(b.username))
           );
           break;
         }
 
         case 'remove_friend': {
-          cache.setQueryData<Member[]>(fKey, (data) => [...data!.filter((m) => m.id !== response.data)]);
+          cache.setQueryData<Friend[]>(fKey, (data) => [...data!.filter((m) => m.id !== response.data)]);
           break;
         }
 

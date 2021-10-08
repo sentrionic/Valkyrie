@@ -13,9 +13,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Message } from '../../lib/api/models';
 import { deleteMessage } from '../../lib/api/handler/messages';
 import { getTime } from '../../lib/utils/dateUtils';
+import { Message } from '../../lib/models/message';
 
 interface IProps {
   message: Message;

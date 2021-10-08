@@ -4,12 +4,12 @@ import { FaHashtag, FaUserLock } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
-import { Channel } from '../../lib/api/models';
 import { userStore } from '../../lib/stores/userStore';
 import { ChannelSettingsModal } from '../modals/ChannelSettingsModal';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { ChannelNotificationIndicator } from '../common/GuildPills';
 import { cKey } from '../../lib/utils/querykeys';
+import { Channel } from '../../lib/models/channel';
 
 interface ChannelListItemProps {
   channel: Channel;

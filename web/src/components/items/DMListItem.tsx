@@ -3,9 +3,9 @@ import { Avatar, AvatarBadge, Flex, Icon, ListItem, Text } from '@chakra-ui/reac
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { IoMdClose } from 'react-icons/io';
 import { useQueryClient } from 'react-query';
-import { DMChannel } from '../../lib/api/models';
 import { closeDirectMessage } from '../../lib/api/handler/dm';
 import { dmKey } from '../../lib/utils/querykeys';
+import { DMChannel } from '../../lib/models/dm';
 
 interface DMListItemProps {
   dm: DMChannel;

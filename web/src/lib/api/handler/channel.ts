@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { Channel } from '../models';
 import { request } from '../setupAxios';
 import { ChannelInput } from '../dtos/ChannelInput';
+import { Channel } from '../../models/channel';
 
 export const getChannels = (id: string): Promise<AxiosResponse<Channel[]>> => request.get(`channels/${id}`);
 

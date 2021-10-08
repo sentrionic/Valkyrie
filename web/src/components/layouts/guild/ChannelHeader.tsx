@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { settingsStore } from '../../../lib/stores/settingsStore';
 import { useGetCurrentChannel } from '../../../lib/utils/hooks/useGetCurrentChannel';
 import { cKey } from '../../../lib/utils/querykeys';
-import { RouterProps } from '../../../lib/api/models';
+import { RouterProps } from '../../../lib/models/routerProps';
 
 export const ChannelHeader: React.FC = () => {
   const toggleMemberList = settingsStore((state) => state.toggleShowMembers);

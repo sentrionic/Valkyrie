@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { InfiniteData, useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
-import { Message as MessageResponse } from '../models';
 import { userStore } from '../../stores/userStore';
 import { channelStore } from '../../stores/channelStore';
+import { Message } from '../../models/message';
 
 type WSMessage =
-  | { action: 'new_message' | 'edit_message'; data: MessageResponse }
+  | { action: 'new_message' | 'edit_message'; data: Message }
   | { action: 'addToTyping' | 'removeFromTyping' | 'delete_message'; data: string };
 
 export function useMessageSocket(channelId: string, key: string): void {
@@ -29,7 +29,7 @@ export function useMessageSocket(channelId: string, key: string): void {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'new_message': {
-          cache.setQueryData<InfiniteData<MessageResponse[]>>(key, (d) => {
+          cache.setQueryData<InfiniteData<Message[]>>(key, (d) => {
             d!.pages[0].unshift(response.data);
             return d!;
           });
@@ -38,7 +38,7 @@ export function useMessageSocket(channelId: string, key: string): void {
 
         case 'edit_message': {
           const editMessage = response.data;
-          cache.setQueryData<InfiniteData<MessageResponse[]>>(key, (d) => {
+          cache.setQueryData<InfiniteData<Message[]>>(key, (d) => {
             let index = -1;
             let editId = -1;
             const data = d!;
@@ -57,7 +57,7 @@ export function useMessageSocket(channelId: string, key: string): void {
 
         case 'delete_message': {
           const messageId = response.data;
-          cache.setQueryData<InfiniteData<MessageResponse[]>>(key, (d) => {
+          cache.setQueryData<InfiniteData<Message[]>>(key, (d) => {
             let index = -1;
             const data = d!;
             data.pages.forEach((p, i) => {

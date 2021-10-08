@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
-import { Message as MessageResponse } from '../../../lib/api/models';
+import { Message } from '../../../lib/models/message';
 
 interface MessageProps {
-  message: MessageResponse;
+  message: Message;
 }
 
 export const MessageContent: React.FC<MessageProps> = ({ message: { attachment, text, createdAt, updatedAt } }) => {

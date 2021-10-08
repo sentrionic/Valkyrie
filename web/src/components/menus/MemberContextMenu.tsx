@@ -5,8 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
 import { sendFriendRequest } from '../../lib/api/handler/account';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
-import { Member } from '../../lib/api/models';
 import { ModActionModal } from '../modals/ModActionModal';
+import { Member } from '../../lib/models/member';
 
 interface MemberContextMenuProps {
   member: Member;

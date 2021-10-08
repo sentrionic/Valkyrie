@@ -6,12 +6,13 @@ import { useParams } from 'react-router-dom';
 import { Message } from '../../../items/message/Message';
 import { StartMessages } from '../../../sections/StartMessages';
 import { getMessages } from '../../../../lib/api/handler/messages';
-import { Message as MessageResponse, RouterProps } from '../../../../lib/api/models';
 import { checkNewDay, getTimeDifference } from '../../../../lib/utils/dateUtils';
 import { guildScrollbarCss } from '../css/GuildScrollerCSS';
 import { useMessageSocket } from '../../../../lib/api/ws/useMessageSocket';
 import { DateDivider } from '../../../sections/DateDivider';
 import { ChatGrid } from './ChatGrid';
+import { RouterProps } from '../../../../lib/models/routerProps';
+import { Message as MessageResponse } from '../../../../lib/models/message';
 
 export const ChatScreen: React.FC = () => {
   const { channelId } = useParams<RouterProps>();

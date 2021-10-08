@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Flex } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
-import { DMChannel, DMNotification } from '../../lib/api/models';
 import { StyledTooltip } from '../sections/StyledTooltip';
 import { ActiveGuildPill, HoverGuildPill, NotificationIndicator } from '../common/GuildPills';
 import { NotificationIcon } from '../common/NotificationIcon';
 import { dmKey, nKey } from '../../lib/utils/querykeys';
+import { DMChannel, DMNotification } from '../../lib/models/dm';
 
 interface NotificationListItemProps {
   notification: DMNotification;

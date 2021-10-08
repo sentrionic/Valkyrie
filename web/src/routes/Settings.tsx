@@ -21,18 +21,18 @@ import { toErrorMap } from '../lib/utils/toErrorMap';
 import { userStore } from '../lib/stores/userStore';
 import { UserSchema } from '../lib/utils/validation/auth.schema';
 import { getAccount, updateAccount } from '../lib/api/handler/account';
-import { AccountResponse } from '../lib/api/models';
 import { logout } from '../lib/api/handler/auth';
 import { CropImageModal } from '../components/modals/CropImageModal';
 import { aKey } from '../lib/utils/querykeys';
+import { Account } from '../lib/models/account';
 
-export const Account = (): JSX.Element | null => {
+export const Settings = (): JSX.Element | null => {
   const history = useHistory();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: cropperIsOpen, onOpen: cropperOnOpen, onClose: cropperOnClose } = useDisclosure();
 
-  const { data: user } = useQuery<AccountResponse>(aKey, () => getAccount().then((response) => response.data));
+  const { data: user } = useQuery<Account>(aKey, () => getAccount().then((response) => response.data));
   const cache = useQueryClient();
 
   const logoutUser = userStore((state) => state.logout);

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useGetCurrentChannel } from '../../lib/utils/hooks/useGetCurrentChannel';
 import { cKey } from '../../lib/utils/querykeys';
 import { useGetCurrentDM } from '../../lib/utils/hooks/useGetCurrentDM';
-import { RouterProps } from '../../lib/api/models';
+import { RouterProps } from '../../lib/models/routerProps';
 
 export const StartMessages: React.FC = () => {
   const { guildId } = useParams<RouterProps>();

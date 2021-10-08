@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { Guild } from '../../api/models';
 import { gKey } from '../querykeys';
+import { Guild } from '../../models/guild';
 
 export function useGetCurrentGuild(guildId: string): Guild | undefined {
   const { data: guildData } = useQuery<Guild[]>(gKey);

@@ -2,10 +2,11 @@ import React from 'react';
 import { Avatar, AvatarBadge, Flex, ListItem, Text } from '@chakra-ui/react';
 import { useContextMenu } from 'react-contexify';
 import { useParams } from 'react-router-dom';
-import { Member, RouterProps } from '../../lib/api/models';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { userStore } from '../../lib/stores/userStore';
 import { MemberContextMenu } from '../menus/MemberContextMenu';
+import { RouterProps } from '../../lib/models/routerProps';
+import { Member } from '../../lib/models/member';
 
 interface MemberListItemProps {
   member: Member;

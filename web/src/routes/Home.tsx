@@ -7,7 +7,7 @@ import { AppLayout } from '../components/layouts/AppLayout';
 import { ChatScreen } from '../components/layouts/guild/chat/ChatScreen';
 import { DMHeader } from '../components/layouts/home/DMHeader';
 import { MessageInput } from '../components/layouts/guild/chat/MessageInput';
-import { RouterProps } from '../lib/api/models';
+import { RouterProps } from '../lib/models/routerProps';
 
 export const Home: React.FC = () => {
   const { channelId } = useParams<RouterProps>();

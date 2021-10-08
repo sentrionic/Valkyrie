@@ -28,10 +28,11 @@ import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
-import { deleteGuild, editGuild, getBanList, invalidateInviteLinks, unbanMember } from '../../lib/api/handler/guilds';
+import { deleteGuild, editGuild, invalidateInviteLinks } from '../../lib/api/handler/guilds';
 import { CropImageModal } from './CropImageModal';
-import { Member } from '../../lib/api/models';
 import { channelScrollbarCss } from '../layouts/guild/css/ChannelScrollerCSS';
+import { getBanList, unbanMember } from '../../lib/api/handler/members';
+import { Member } from '../../lib/models/member';
 
 interface IProps {
   guildId: string;

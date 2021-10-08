@@ -3,13 +3,13 @@ import React from 'react';
 import { BiCheck } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useQueryClient } from 'react-query';
-import { RequestResponse } from '../../lib/api/models';
 import { StyledTooltip } from '../sections/StyledTooltip';
 import { acceptFriendRequest, declineFriendRequest } from '../../lib/api/handler/account';
 import { fKey, rKey } from '../../lib/utils/querykeys';
+import { FriendRequest, RequestType } from '../../lib/models/friend';
 
 interface RequestListItemProps {
-  request: RequestResponse;
+  request: FriendRequest;
 }
 
 export const RequestListItem: React.FC<RequestListItemProps> = ({ request }) => {
@@ -19,7 +19,7 @@ export const RequestListItem: React.FC<RequestListItemProps> = ({ request }) => 
     try {
       const { data } = await acceptFriendRequest(request.id);
       if (data) {
-        cache.setQueryData<RequestResponse[]>(rKey, (d) => {
+        cache.setQueryData<FriendRequest[]>(rKey, (d) => {
           const queryData = d ?? [];
           return queryData.filter((r) => r.id !== request.id);
         });
@@ -32,7 +32,7 @@ export const RequestListItem: React.FC<RequestListItemProps> = ({ request }) => 
     try {
       const { data } = await declineFriendRequest(request.id);
       if (data) {
-        cache.setQueryData<RequestResponse[]>(rKey, (d) => {
+        cache.setQueryData<FriendRequest[]>(rKey, (d) => {
           const queryData = d ?? [];
           return queryData.filter((r) => r.id !== request.id);
         });
@@ -54,7 +54,9 @@ export const RequestListItem: React.FC<RequestListItemProps> = ({ request }) => 
           <Avatar size="sm" src={request.image} />
           <Box ml="2">
             <Text>{request.username}</Text>
-            <Text fontSize="12px">{request.type === 1 ? 'Incoming Friend Request' : 'Outgoing Friend Request'}</Text>
+            <Text fontSize="12px">
+              {request.type === RequestType.INCOMING ? 'Incoming Friend Request' : 'Outgoing Friend Request'}
+            </Text>
           </Box>
         </Flex>
         <Flex align="center">

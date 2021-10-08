@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
-import { Guild } from '../models';
 import { userStore } from '../../stores/userStore';
 import { gKey } from '../../utils/querykeys';
+import { Guild } from '../../models/guild';
 
 type WSMessage =
   | { action: 'delete_guild' | 'remove_from_guild' | 'new_notification'; data: string }

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
-import { DMChannel } from '../models';
 import { userStore } from '../../stores/userStore';
 import { dmKey } from '../../utils/querykeys';
+import { DMChannel } from '../../models/dm';
 
 type WSMessage = { action: 'push_to_top'; data: string };
 

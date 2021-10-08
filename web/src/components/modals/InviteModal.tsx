@@ -17,7 +17,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getInviteLink } from '../../lib/api/handler/guilds';
-import { RouterProps } from '../../lib/api/models';
+import { RouterProps } from '../../lib/models/routerProps';
 
 interface InviteModalProps {
   isOpen: boolean;

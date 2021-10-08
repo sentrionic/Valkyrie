@@ -10,7 +10,7 @@ import { userStore } from '../../../../lib/stores/userStore';
 import { channelStore } from '../../../../lib/stores/channelStore';
 import { cKey, dmKey } from '../../../../lib/utils/querykeys';
 import '../css/MessageInput.css';
-import { RouterProps } from '../../../../lib/api/models';
+import { RouterProps } from '../../../../lib/models/routerProps';
 
 export const MessageInput: React.FC = () => {
   const [text, setText] = useState('');

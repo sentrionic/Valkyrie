@@ -1,11 +1,10 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import { AccountResponse } from '../api/models';
+import { Account } from '../models/account';
 
 type AccountState = {
-  current: AccountResponse | null;
-  setUser: (account: AccountResponse) => void;
+  current: Account | null;
+  setUser: (account: Account) => void;
   logout: () => void;
 };
 

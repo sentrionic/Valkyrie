@@ -11,7 +11,7 @@ import { cKey } from '../../../lib/utils/querykeys';
 import { channelScrollbarCss } from './css/ChannelScrollerCSS';
 import { useChannelSocket } from '../../../lib/api/ws/useChannelSocket';
 import { getChannels } from '../../../lib/api/handler/channel';
-import { RouterProps } from '../../../lib/api/models';
+import { RouterProps } from '../../../lib/models/routerProps';
 
 export const Channels: React.FC = () => {
   const { isOpen: inviteIsOpen, onOpen: inviteOpen, onClose: inviteClose } = useDisclosure();

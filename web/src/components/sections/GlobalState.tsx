@@ -3,8 +3,8 @@ import { useQueryClient } from 'react-query';
 import { userStore } from '../../lib/stores/userStore';
 import { getSocket } from '../../lib/api/getSocket';
 import { homeStore } from '../../lib/stores/homeStore';
-import { DMChannel, DMNotification } from '../../lib/api/models';
 import { nKey } from '../../lib/utils/querykeys';
+import { DMChannel, DMNotification } from '../../lib/models/dm';
 
 type WSMessage = { action: 'new_dm_notification'; data: DMChannel } | { action: 'send_request' };
 

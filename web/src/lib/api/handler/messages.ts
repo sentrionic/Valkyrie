@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { Message } from '../models';
 import { request } from '../setupAxios';
+import { Message } from '../../models/message';
 
 export const getMessages = (id: string, cursor?: string): Promise<AxiosResponse<Message[]>> =>
   request.get(`messages/${id}${cursor ? `?cursor=${cursor}` : ''}`);

@@ -9,8 +9,8 @@ import { getUserGuilds } from '../../../lib/api/handler/guilds';
 import { gKey, nKey } from '../../../lib/utils/querykeys';
 import { guildScrollbarCss } from './css/GuildScrollerCSS';
 import { useGuildSocket } from '../../../lib/api/ws/useGuildSocket';
-import { DMNotification } from '../../../lib/api/models';
 import { NotificationListItem } from '../../items/NotificationListItem';
+import { DMNotification } from '../../../lib/models/dm';
 
 export const GuildList: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

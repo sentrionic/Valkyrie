@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { Channel } from '../../api/models';
+import { Channel } from '../../models/channel';
 
 export function useGetCurrentChannel(channelId: string, key: string): Channel | undefined {
   const { data } = useQuery<Channel[]>(key);

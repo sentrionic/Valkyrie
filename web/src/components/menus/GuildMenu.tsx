@@ -14,8 +14,9 @@ import { userStore } from '../../lib/stores/userStore';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
 import { GuildSettingsModal } from '../modals/GuildSettingsModal';
 import { EditMemberModal } from '../modals/EditMemberModal';
-import { Guild, RouterProps } from '../../lib/api/models';
 import { gKey } from '../../lib/utils/querykeys';
+import { RouterProps } from '../../lib/models/routerProps';
+import { Guild } from '../../lib/models/guild';
 
 interface GuildMenuProps {
   channelOpen: () => void;

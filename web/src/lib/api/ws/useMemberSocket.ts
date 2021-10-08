@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
-import { Member } from '../models';
+import { Member } from '../../models/member';
 
 type WSMessage =
   | { action: 'remove_member' | 'toggle_online' | 'toggle_offline'; data: string }

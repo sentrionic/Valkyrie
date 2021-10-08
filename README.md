@@ -95,9 +95,8 @@ or alternatively copy the commands into your CLI.
 
 ### Web
 
-0. Install the latest or LTS version of Node.
-1. Run `yarn` to install the dependencies
-2. Rename `.env.development.example` to `.env.development`.
+1. Install the latest or LTS version of Node.
+2. Run `yarn` to install the dependencies
 3. Run `yarn start` to start the client
 4. Go to `localhost:3000`
 
@@ -118,6 +117,12 @@ Run `go test -v -cover ./service/... ./handler/...` (`make test`) to run all tes
 
 Additionally this repository includes E2E tests for all successful requests. To run them you
 have to have Postgres and Redis running in Docker and then run `go test github.com/sentrionic/valkyrie` (`make e2e`).
+
+### Web
+
+Most `useQuery` hooks have tests written for them.
+
+To run them use `yarn test`.
 
 ## Credits
 

@@ -1,10 +1,12 @@
 import { AxiosResponse } from 'axios';
-import { AccountResponse, Member, RequestResponse } from '../models';
 import { request } from '../setupAxios';
+import { Account } from '../../models/account';
+import { Member } from '../../models/member';
+import { FriendRequest } from '../../models/friend';
 
-export const getAccount = (): Promise<AxiosResponse<AccountResponse>> => request.get('/account');
+export const getAccount = (): Promise<AxiosResponse<Account>> => request.get('/account');
 
-export const updateAccount = (body: FormData): Promise<AxiosResponse<AccountResponse>> =>
+export const updateAccount = (body: FormData): Promise<AxiosResponse<Account>> =>
   request.put('/account', body, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -13,7 +15,7 @@ export const updateAccount = (body: FormData): Promise<AxiosResponse<AccountResp
 
 export const getFriends = (): Promise<AxiosResponse<Member[]>> => request.get('/account/me/friends');
 
-export const getPendingRequests = (): Promise<AxiosResponse<RequestResponse[]>> => request.get('/account/me/pending');
+export const getPendingRequests = (): Promise<AxiosResponse<FriendRequest[]>> => request.get('/account/me/pending');
 
 export const sendFriendRequest = (id: string): Promise<AxiosResponse<boolean>> => request.post(`/account/${id}/friend`);
 

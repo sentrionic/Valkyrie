@@ -12,9 +12,10 @@ import {
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { Member, RouterProps } from '../../lib/api/models';
 import { mKey } from '../../lib/utils/querykeys';
-import { banMember, kickMember } from '../../lib/api/handler/guilds';
+import { Member } from '../../lib/models/member';
+import { RouterProps } from '../../lib/models/routerProps';
+import { banMember, kickMember } from '../../lib/api/handler/members';
 
 interface IProps {
   member: Member;
