@@ -1,0 +1,69 @@
+name: Website E2E
+on:
+  workflow_run:
+    workflows: ['Test & Lint - Web']
+    branches: [main]
+    types: [completed]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: valkyrie
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: 'redis:alpine'
+        ports:
+          - '6379:6379'
+        volumes:
+          - 'redisdata:/data'
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Run Server
+        run: go run github.com/sentrionic/valkyrie &
+        working-directory: ./server
+        env:
+          DATABASE_URL: postgresql://root:secret@localhost:5432/valkyrie?sslmode=disable
+          HANDLER_TIMEOUT: 5
+          MAX_BODY_BYTES: 4194304
+          REDIS_URL: redis://localhost:6379
+          SECRET: jmaijopspahisodphiasdhiahiopsdhoiasdg8a89sdta08sdtg8aosdou
+          COOKIE_NAME: vlk
+          PORT: 4000
+          CORS_ORIGIN: http://localhost:3000
+          GIN_MODE: release
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          install-command: yarn
+          start: yarn start
+          wait-on: http://localhost:3000
+          browser: chrome
+          working-directory: ./web
+          headless: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REACT_APP_API: http://localhost:4000
+          REACT_APP_WS: ws://http://localhost:4000/ws

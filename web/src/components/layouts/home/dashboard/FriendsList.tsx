@@ -24,7 +24,7 @@ export const FriendsList: React.FC = () => {
 
   return (
     <>
-      <UnorderedList listStyleType="none" ml="0" w="full" mt="2">
+      <UnorderedList listStyleType="none" ml="0" w="full" mt="2" id="friend-list">
         <OnlineLabel label={`friends — ${data?.length || 0}`} />
         {data.map((f) => (
           <FriendsListItem key={f.id} friend={f} />

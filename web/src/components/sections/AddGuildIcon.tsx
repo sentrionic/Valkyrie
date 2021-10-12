@@ -16,6 +16,7 @@ export const AddGuildIcon: React.FC<AddGuildIconProps> = ({ onOpen }) => {
       {isHover && <HoverGuildPill />}
       <StyledTooltip label="Add a Server" position="right">
         <Flex
+          id="add-guild-icon"
           direction="column"
           m="auto"
           align="center"

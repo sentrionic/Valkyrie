@@ -28,7 +28,7 @@ export const GuildList: React.FC = () => {
   return (
     <GridItem gridColumn={1} gridRow="1 / 4" bg="brandGray.darker" overflowY="auto" css={guildScrollbarCss} zIndex={2}>
       <HomeIcon />
-      <UnorderedList listStyleType="none" ml="0">
+      <UnorderedList listStyleType="none" ml="0" id="guild-list">
         {dmData?.map((dm) => (
           <NotificationListItem notification={dm} key={dm.id} />
         ))}

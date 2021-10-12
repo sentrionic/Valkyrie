@@ -186,7 +186,6 @@ export const Settings = (): JSX.Element | null => {
             <Button
               background="highlight.standard"
               color="white"
-              type="submit"
               _hover={{ bg: 'highlight.hover' }}
               _active={{ bg: 'highlight.active' }}
               _focus={{ boxShadow: 'none' }}

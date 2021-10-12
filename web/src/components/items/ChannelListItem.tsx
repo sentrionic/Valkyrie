@@ -69,6 +69,7 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
           {current?.id === guild?.ownerId && (showSettings || isOpen) && (
             <>
               <Icon
+                aria-label="edit channel"
                 as={MdSettings}
                 color="brandGray.accent"
                 fontSize="12px"

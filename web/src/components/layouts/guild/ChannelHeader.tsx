@@ -22,7 +22,14 @@ export const ChannelHeader: React.FC = () => {
             {channel?.name}
           </Text>
         </Flex>
-        <Icon as={BsPeopleFill} fontSize="20px" mr="2" _hover={{ cursor: 'pointer' }} onClick={toggleMemberList} />
+        <Icon
+          as={BsPeopleFill}
+          fontSize="20px"
+          mr="2"
+          _hover={{ cursor: 'pointer' }}
+          onClick={toggleMemberList}
+          aria-label="toggle member list"
+        />
       </Flex>
     </GridItem>
   );

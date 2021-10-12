@@ -41,7 +41,7 @@ export const MemberList: React.FC = () => {
       _hover={{ overflowY: 'auto' }}
       css={memberScrollbarCss}
     >
-      <UnorderedList listStyleType="none" ml="0">
+      <UnorderedList listStyleType="none" ml="0" id="member-list">
         <OnlineLabel label={`online—${online.length}`} />
         {online.map((m) => (
           <MemberListItem key={`${m.id}`} member={m} />

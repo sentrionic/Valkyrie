@@ -28,7 +28,7 @@ export const DMSidebar: React.FC = () => {
       <Text ml="4" textTransform="uppercase" fontSize="12px" fontWeight="semibold" color="brandGray.accent">
         DIRECT MESSAGES
       </Text>
-      <UnorderedList listStyleType="none" ml="0" mt="4">
+      <UnorderedList listStyleType="none" ml="0" mt="4" id="dm-list">
         {data?.map((dm) => (
           <DMListItem dm={dm} key={dm.id} />
         ))}

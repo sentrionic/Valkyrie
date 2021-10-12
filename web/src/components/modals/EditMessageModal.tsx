@@ -59,6 +59,7 @@ export const EditMessageModal: React.FC<IProps> = ({ message, isOpen, onClose })
                   </Text>
                 </Flex>
                 <Input
+                  id="editMessage"
                   value={text}
                   onChange={(e: any) => setNewText(e.target.value)}
                   bg="brandGray.dark"

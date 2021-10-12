@@ -38,7 +38,8 @@
     "lint": "npx eslint src/**",
     "prettier": "npx prettier --write **/*.{ts,js,css,html,tsx}",
     "compile": "tsc",
-    "workflow": "yarn compile && yarn prettier && yarn lint && yarn test --watchAll=false"
+    "workflow": "yarn compile && yarn prettier && yarn lint && yarn test --watchAll=false",
+    "cypress": "npx cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -67,6 +68,7 @@
     "@types/yup": "^0.29.13",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "cypress": "8.6.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^14.0.0",

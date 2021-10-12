@@ -2,7 +2,7 @@ name: Website Deploy
 
 on:
   workflow_run:
-    workflows: ['Test & Lint - Web']
+    workflows: ['Website E2E']
     branches: [main]
     types: [completed]
 

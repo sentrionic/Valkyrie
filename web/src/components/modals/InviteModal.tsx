@@ -59,6 +59,7 @@ export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => 
 
           <InputGroup>
             <Input
+              id="invite-link"
               bg="brandGray.dark"
               borderColor={hasCopied ? 'brandGreen' : 'black'}
               borderRadius="3px"

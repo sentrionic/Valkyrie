@@ -54,6 +54,7 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
           </Flex>
           {showCloseButton && (
             <Icon
+              aria-label="close dm"
               as={IoMdClose}
               onClick={async (e) => {
                 e.preventDefault();

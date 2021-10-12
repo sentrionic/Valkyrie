@@ -107,6 +107,8 @@ and `localhost:<PORT>` for all the websockets events.
 
 ## Tests
 
+All tests are run on all push and pull requests. Only if they are successful it will run the other Github Actions to automatically deploy the updates.
+
 ### Server
 
 All routes in `handler` have tests written for them.
@@ -123,6 +125,13 @@ have to have Postgres and Redis running in Docker and then run `go test github.c
 Most `useQuery` hooks have tests written for them.
 
 To run them use `yarn test`.
+
+Additionally [Cypress](https://www.cypress.io/) is used for E2E testing.
+
+To run them you need to have the server and the client running.
+After that run `yarn cypress` to open the test window.
+
+**Note**: For unkown reasons websockets connection only randomly work during Cypress runs, which makes testing them impossible.
 
 ## Credits
 

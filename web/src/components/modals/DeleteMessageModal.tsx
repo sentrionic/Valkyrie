@@ -75,7 +75,7 @@ export const DeleteMessageModal: React.FC<IProps> = ({ message, isOpen, onClose 
             Cancel
           </Button>
           <LightMode>
-            <Button colorScheme="red" fontSize="14px" onClick={() => handleDelete()}>
+            <Button type="submit" colorScheme="red" fontSize="14px" onClick={() => handleDelete()}>
               Delete
             </Button>
           </LightMode>
