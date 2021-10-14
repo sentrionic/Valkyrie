@@ -20,7 +20,8 @@ A [Discord](https://discord.com) clone using [React](https://reactjs.org/) and [
 
 ## Video
 
-![Preview](.github/preview.gif)
+https://user-images.githubusercontent.com/38354571/137365365-a7fe91d6-51d7-4739-8742-f68517223f8f.mp4
+
 
 ## Features
 
