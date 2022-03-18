@@ -26,7 +26,7 @@ import { CropImageModal } from '../components/modals/CropImageModal';
 import { aKey } from '../lib/utils/querykeys';
 import { Account } from '../lib/models/account';
 
-export const Settings = (): JSX.Element | null => {
+export const Settings: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();

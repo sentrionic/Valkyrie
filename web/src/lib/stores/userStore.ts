@@ -10,7 +10,8 @@ type AccountState = {
 
 export const userStore = create<AccountState>(
   persist(
-    (set) => ({
+    /* eslint-disable */
+    (set, _) => ({
       current: null,
       setUser: (account) => set({ current: account }),
       logout: () => set({ current: null }),

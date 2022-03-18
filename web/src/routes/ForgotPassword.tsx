@@ -7,7 +7,7 @@ import { toErrorMap } from '../lib/utils/toErrorMap';
 import { ForgotPasswordSchema } from '../lib/utils/validation/auth.schema';
 import { forgotPassword } from '../lib/api/handler/auth';
 
-export const ForgotPassword = (): JSX.Element => {
+export const ForgotPassword: React.FC = () => {
   const history = useHistory();
   const toast = useToast();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Link, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineApi, AiOutlineGithub } from 'react-icons/ai';
-import { SiSocketDotIo } from 'react-icons/si';
+import { SiSocketdotio } from 'react-icons/si';
 import { IconType } from 'react-icons';
 import { StyledTooltip } from './StyledTooltip';
 
@@ -31,7 +31,7 @@ const links = [
     href: `${process.env.REACT_APP_API!}/swagger/index.html`,
   },
   {
-    icon: SiSocketDotIo,
+    icon: SiSocketdotio,
     label: 'Websocket',
     href: `${process.env.REACT_APP_API!}`,
   },

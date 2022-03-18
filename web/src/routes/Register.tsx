@@ -8,7 +8,7 @@ import { userStore } from '../lib/stores/userStore';
 import { RegisterSchema } from '../lib/utils/validation/auth.schema';
 import { register } from '../lib/api/handler/auth';
 
-export const Register = (): JSX.Element => {
+export const Register: React.FC = () => {
   const history = useHistory();
   const setUser = userStore((state) => state.setUser);
   const [error, showError] = useState(false);

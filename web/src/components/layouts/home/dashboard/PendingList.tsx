@@ -32,13 +32,11 @@ export const PendingList: React.FC = () => {
   }
 
   return (
-    <>
-      <UnorderedList listStyleType="none" ml="0" w="full" mt="2">
-        <OnlineLabel label={`Pending — ${data?.length || 0}`} />
-        {data.map((r) => (
-          <RequestListItem request={r} key={r.id} />
-        ))}
-      </UnorderedList>
-    </>
+    <UnorderedList listStyleType="none" ml="0" w="full" mt="2">
+      <OnlineLabel label={`Pending — ${data?.length || 0}`} />
+      {data.map((r) => (
+        <RequestListItem request={r} key={r.id} />
+      ))}
+    </UnorderedList>
   );
 };

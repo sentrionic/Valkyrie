@@ -73,7 +73,7 @@ export const Hero: React.FC<HeroProps> = ({ title, subtitle, image, ctaLink, cta
         md: 0,
       }}
     >
-      <Image src={image} size="50%" rounded="1rem" />
+      <Image src={image} boxSize="50%" rounded="1rem" />
     </Box>
   </Flex>
 );

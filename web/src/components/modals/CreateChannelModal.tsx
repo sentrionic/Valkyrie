@@ -41,6 +41,13 @@ interface Item {
   image: string;
 }
 
+const ListItem = ({ image, label }: Item): JSX.Element => (
+  <Flex align="center">
+    <Avatar mr={2} size="sm" src={image} />
+    <Text textColor="#000">{label}</Text>
+  </Flex>
+);
+
 export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
   const key = mKey(guildId);
   const history = useHistory();
@@ -67,13 +74,6 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
       setSelectedItems(changedItems);
     }
   };
-
-  const ListItem = ({ image, label }: Item): JSX.Element => (
-    <Flex align="center">
-      <Avatar mr={2} size="sm" src={image} />
-      <Text textColor="#000">{label}</Text>
-    </Flex>
-  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>

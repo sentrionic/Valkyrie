@@ -77,5 +77,6 @@ export const GlobalState: React.FC = ({ children }) => {
     }
   }, [current, inc, cache]);
 
+  /* eslint-disable-next-line react/jsx-no-useless-fragment */
   return <>{children}</>;
 };

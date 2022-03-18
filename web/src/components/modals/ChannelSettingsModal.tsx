@@ -50,6 +50,13 @@ enum ChannelScreen {
   CONFIRM,
 }
 
+const ListItem = ({ image, label }: Item): JSX.Element => (
+  <Flex align="center">
+    <Avatar mr={2} size="sm" src={image} />
+    <Text textColor="#000">{label}</Text>
+  </Flex>
+);
+
 export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isOpen, onClose }) => {
   const key = mKey(guildId);
   const { data } = useQuery(key, () => getGuildMembers(guildId).then((response) => response.data));
@@ -92,13 +99,6 @@ export const ChannelSettingsModal: React.FC<IProps> = ({ guildId, channelId, isO
       setSelectedItems(changedItems);
     }
   };
-
-  const ListItem = ({ image, label }: Item): JSX.Element => (
-    <Flex align="center">
-      <Avatar mr={2} size="sm" src={image} />
-      <Text textColor="#000">{label}</Text>
-    </Flex>
-  );
 
   if (!channel) return null;
 

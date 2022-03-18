@@ -1,20 +1,20 @@
 postgres:
-	docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -d postgres:12-alpine
+	docker run --name postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -d postgres:alpine
 
 redis:
-	docker run -d --name redis -p 6379:6379  -v /path/to/redisconf/redis.conf:/redis.conf redis redis-server /redis.conf
+	docker run --name redis -d -p 6379:6379 redis:alpine redis-server --save 60 1
 
 createdb:
-	docker exec -it postgres12 createdb --username=root --owner=root valkyrie
+	docker exec -it postgres createdb --username=root --owner=root valkyrie
 
 dropdb:
-	docker exec -it postgres12 dropdb valkyrie
+	docker exec -it postgres dropdb valkyrie
 
 recreate:
 	make dropdb && make createdb
 
 start:
-	docker start postgres12 && docker start redis
+	docker start postgres && docker start redis
 
 test:
 	go test -v -cover ./service/... ./handler/...

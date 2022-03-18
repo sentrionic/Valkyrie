@@ -7,17 +7,13 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
     image.src = url;
   });
 
-function getRadianAngle(degreeValue: number): number {
-  return (degreeValue * Math.PI) / 180;
-}
-
 /**
  * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
  * @param {File} imageSrc - Image File url
  * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
  * @param {number} rotation - optional rotation parameter
  */
-export default async function getCroppedImg(imageSrc: string, pixelCrop: any, rotation = 0): Promise<Blob> {
+export default async function getCroppedImg(imageSrc: string, pixelCrop: any): Promise<Blob> {
   const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -32,7 +28,6 @@ export default async function getCroppedImg(imageSrc: string, pixelCrop: any, ro
 
   // translate canvas context to a central location on image to allow rotating around the center.
   ctx!.translate(safeArea / 2, safeArea / 2);
-  ctx!.rotate(getRadianAngle(rotation));
   ctx!.translate(-safeArea / 2, -safeArea / 2);
 
   // draw rotated image and store data.

@@ -52,7 +52,7 @@ export const HomeIcon: React.FC = () => {
   );
 };
 
-const Logo = (): JSX.Element => {
+const Logo: React.FC = () => {
   const fill = useColorModeValue('#2D3748', '#fff');
   return (
     <svg width="27pt" height="22pt" viewBox="0 0 27 22" version="1.1">
