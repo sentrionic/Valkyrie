@@ -10,7 +10,7 @@ import { MessageInput } from '../components/layouts/guild/chat/MessageInput';
 import { RouterProps } from '../lib/models/routerProps';
 
 export const Home: React.FC = () => {
-  const { channelId } = useParams<RouterProps>();
+  const { channelId } = useParams<keyof RouterProps>() as RouterProps;
 
   return (
     <AppLayout>

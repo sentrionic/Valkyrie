@@ -3,7 +3,7 @@ import { QueryClientProvider, useQuery } from 'react-query';
 import { rest } from 'msw';
 import * as React from 'react';
 import { dmKey } from '../../lib/utils/querykeys';
-import { createQueryClientWrapper, createTestQueryClientWithData } from '../testUtils';
+import { createQueryClientWrapper, createTestQueryClientWithData, IQueryWrapperProps } from '../testUtils';
 import { server } from '../../setupTests';
 import { getUserDMs } from '../../lib/api/handler/dm';
 import { mockDMChannel, mockDMChannelList } from '../fixture/dmFixtures';
@@ -70,7 +70,7 @@ describe('useGetCurrentDM', () => {
   it('successfully fetches the dm for the given ID', async () => {
     const channelId = mockDMChannel.id;
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(dmKey, mockDMChannelList)}>
         {children}
       </QueryClientProvider>
@@ -101,7 +101,7 @@ describe('useGetCurrentDM', () => {
       },
     };
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(dmKey, [dmChannel])}>{children}</QueryClientProvider>
     );
 
@@ -119,7 +119,7 @@ describe('useGetCurrentDM', () => {
   it('returns undefined if there is not initial data', async () => {
     const channelId = mockDMChannel.id;
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(dmKey, [])}>{children}</QueryClientProvider>
     );
 

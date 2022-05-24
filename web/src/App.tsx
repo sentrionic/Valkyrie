@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { Routes } from './routes/Routes';
+import { AppRoutes } from './routes/Routes';
 import { GlobalState } from './components/sections/GlobalState';
 
 const client = new QueryClient({
@@ -16,7 +16,7 @@ const client = new QueryClient({
 export const App: React.FC = () => (
   <QueryClientProvider client={client}>
     <GlobalState>
-      <Routes />
+      <AppRoutes />
     </GlobalState>
   </QueryClientProvider>
 );

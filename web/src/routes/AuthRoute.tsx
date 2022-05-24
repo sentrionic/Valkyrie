@@ -1,19 +1,19 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { userStore } from '../lib/stores/userStore';
 
-interface IProps extends RouteProps {
-  component: React.ComponentType<RouteComponentProps<any>>;
+interface IProps {
+  children: React.ReactNode;
 }
 
-export const AuthRoute: React.FC<IProps> = ({ component: Component, ...rest }) => {
+export const AuthRoute: React.FC<IProps> = ({ children }) => {
   const storage = JSON.parse(localStorage.getItem('user-storage')!!);
   const current = userStore((state) => state.current);
-  return (
-    <Route
-      {...rest}
-      render={(props) => (current || storage?.state?.current ? <Component {...props} /> : <Redirect to="/login" />)}
-    />
-  );
+
+  if (current || storage?.state?.current) {
+    return <>{children}</>;
+  }
+
+  return <Navigate to="/login" />;
 };

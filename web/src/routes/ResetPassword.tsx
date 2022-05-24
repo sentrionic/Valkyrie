@@ -1,20 +1,20 @@
 import { Box, Button, Flex, Heading, Image, Link, Text } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { Link as RLink, useHistory, useParams } from 'react-router-dom';
+import { Link as RLink, useNavigate, useParams } from 'react-router-dom';
 import { InputField } from '../components/common/InputField';
 import { toErrorMap } from '../lib/utils/toErrorMap';
 import { userStore } from '../lib/stores/userStore';
 import { ResetPasswordSchema } from '../lib/utils/validation/auth.schema';
 import { resetPassword } from '../lib/api/handler/auth';
 
-interface TokenProps {
+type TokenProps = {
   token: string;
-}
+};
 
 export const ResetPassword: React.FC = () => {
-  const history = useHistory();
-  const { token } = useParams<TokenProps>();
+  const navigate = useNavigate();
+  const { token } = useParams<keyof TokenProps>() as TokenProps;
   const [showError, setShowError] = useState(false);
   const [tokenError, setTokenError] = useState('');
   const setUser = userStore((state) => state.setUser);
@@ -44,7 +44,7 @@ export const ResetPassword: React.FC = () => {
                   });
                   if (data) {
                     setUser(data);
-                    history.push('/channels/me');
+                    navigate('/channels/me');
                   }
                 } catch (err: any) {
                   if (err?.response?.status === 500) {

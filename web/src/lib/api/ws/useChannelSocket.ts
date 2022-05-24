@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
 import { useGetCurrentGuild } from '../../utils/hooks/useGetCurrentGuild';
@@ -12,7 +12,7 @@ type WSMessage =
 
 export function useChannelSocket(guildId: string, key: string): void {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const cache = useQueryClient();
   const guild = useGetCurrentGuild(guildId);
   const current = userStore((state) => state.current);
@@ -83,9 +83,9 @@ export function useChannelSocket(guildId: string, key: string): void {
             const currentPath = `/channels/${guildId}/${deleteId}`;
             if (location.pathname === currentPath && guild) {
               if (deleteId === guild.default_channel_id) {
-                history.replace('/channels/me');
+                navigate('/channels/me', { replace: true });
               } else {
-                history.replace(`${guild.default_channel_id}`);
+                navigate(`/channels/${guild.id}/${guild.default_channel_id}`, { replace: true });
               }
             }
             return d!.filter((c) => c.id !== deleteId);
@@ -120,5 +120,5 @@ export function useChannelSocket(guildId: string, key: string): void {
     window.addEventListener('beforeunload', disconnect);
 
     return () => disconnect();
-  }, [guildId, key, cache, history, location, guild, current]);
+  }, [guildId, key, cache, navigate, location, guild, current]);
 }

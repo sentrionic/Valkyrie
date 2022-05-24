@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Avatar, AvatarBadge, Flex, Icon, ListItem, Text } from '@chakra-ui/react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { IoMdClose } from 'react-icons/io';
 import { useQueryClient } from 'react-query';
 import { closeDirectMessage } from '../../lib/api/handler/dm';
@@ -16,7 +16,7 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
   const location = useLocation();
   const isActive = location.pathname === currentPath;
   const [showCloseButton, setShowButton] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const cache = useQueryClient();
 
   const closeDM = async (): Promise<void> => {
@@ -24,7 +24,7 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
       await closeDirectMessage(dm.id);
       cache.setQueryData<DMChannel[]>(dmKey, (d) => d!.filter((c) => c.id !== dm.id));
       if (isActive) {
-        history.replace('/channels/me');
+        navigate('/channels/me', { replace: true });
       }
     } catch (err) {}
   };

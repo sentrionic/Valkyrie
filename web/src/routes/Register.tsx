@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Flex, Heading, Image, Link, Text } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import { Link as RLink, useHistory } from 'react-router-dom';
+import { Link as RLink, useNavigate } from 'react-router-dom';
 import { InputField } from '../components/common/InputField';
 import { toErrorMap } from '../lib/utils/toErrorMap';
 import { userStore } from '../lib/stores/userStore';
@@ -9,7 +9,7 @@ import { RegisterSchema } from '../lib/utils/validation/auth.schema';
 import { register } from '../lib/api/handler/auth';
 
 export const Register: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const setUser = userStore((state) => state.setUser);
   const [error, showError] = useState(false);
 
@@ -36,7 +36,7 @@ export const Register: React.FC = () => {
                   const { data } = await register(values);
                   if (data) {
                     setUser(data);
-                    history.push('/channels/me');
+                    navigate('/channels/me');
                   }
                 } catch (err: any) {
                   if (err?.response?.status === 500) {

@@ -1,7 +1,7 @@
 import { Avatar, AvatarBadge, Flex, IconButton, ListItem, Text, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { FaEllipsisV } from 'react-icons/fa';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
@@ -14,7 +14,7 @@ interface FriendsListItemProp {
 }
 
 export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cache = useQueryClient();
 
@@ -28,7 +28,7 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
           if (index === -1) return [data, ...queryData];
           return queryData;
         });
-        history.push(`/channels/me/${data.id}`);
+        navigate(`/channels/me/${data.id}`);
       }
     } catch (err) {}
   };

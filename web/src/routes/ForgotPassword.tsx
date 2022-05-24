@@ -1,14 +1,14 @@
 import { Box, Button, Flex, Heading, Image, useToast } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { InputField } from '../components/common/InputField';
 import { toErrorMap } from '../lib/utils/toErrorMap';
 import { ForgotPasswordSchema } from '../lib/utils/validation/auth.schema';
 import { forgotPassword } from '../lib/api/handler/auth';
 
 export const ForgotPassword: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const toast = useToast();
 
   return (
@@ -36,7 +36,7 @@ export const ForgotPassword: React.FC = () => {
                       duration: 5000,
                       isClosable: true,
                     });
-                    history.push('/');
+                    navigate('/');
                   }
                 } catch (err: any) {
                   if (err?.response?.data?.errors) {

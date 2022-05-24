@@ -20,7 +20,7 @@ import { StyledTooltip } from '../../../sections/StyledTooltip';
 import { RouterProps } from '../../../../lib/models/routerProps';
 
 export const FileUploadButton: React.FC = () => {
-  const { channelId } = useParams<RouterProps>();
+  const { channelId } = useParams<keyof RouterProps>() as RouterProps;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const inputFile: any = useRef(null);
@@ -88,8 +88,7 @@ export const FileUploadButton: React.FC = () => {
               <ModalCloseButton _focus={{ outline: 'none' }} />
               <ModalBody>
                 <Text mb="2">
-                  Reason:
-                  {errors}
+                  Reason: <>{errors}</>
                 </Text>
                 <Text>Max file size is 5.00 MB</Text>
                 <Text>Only Images and mp3 allowed</Text>

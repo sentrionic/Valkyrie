@@ -7,12 +7,12 @@ import { useGetCurrentDM } from '../../lib/utils/hooks/useGetCurrentDM';
 import { RouterProps } from '../../lib/models/routerProps';
 
 export const StartMessages: React.FC = () => {
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   return guildId === undefined ? <DMStartMessages /> : <ChannelStartMessages />;
 };
 
 const ChannelStartMessages: React.FC = () => {
-  const { guildId, channelId } = useParams<RouterProps>();
+  const { guildId, channelId } = useParams<keyof RouterProps>() as RouterProps;
   const channel = useGetCurrentChannel(channelId, cKey(guildId));
 
   return (
@@ -26,7 +26,7 @@ const ChannelStartMessages: React.FC = () => {
 };
 
 const DMStartMessages: React.FC = () => {
-  const { channelId } = useParams<RouterProps>();
+  const { channelId } = useParams<keyof RouterProps>() as RouterProps;
   const channel = useGetCurrentDM(channelId);
 
   return (

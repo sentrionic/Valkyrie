@@ -6,7 +6,7 @@ import { useGetCurrentDM } from '../../../lib/utils/hooks/useGetCurrentDM';
 import { RouterProps } from '../../../lib/models/routerProps';
 
 export const DMHeader: React.FC = () => {
-  const { channelId } = useParams<RouterProps>();
+  const { channelId } = useParams<keyof RouterProps>() as RouterProps;
   const channel = useGetCurrentDM(channelId);
 
   return (

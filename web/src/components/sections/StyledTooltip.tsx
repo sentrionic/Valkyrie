@@ -7,6 +7,7 @@ interface StyledTooltipProps {
   label: string;
   position: Placement;
   disabled?: boolean;
+  children: React.ReactNode;
 }
 
 export const StyledTooltip: React.FC<StyledTooltipProps> = ({ label, position, disabled = false, children }) => (

@@ -1,4 +1,4 @@
-export interface RouterProps {
+export type RouterProps = {
   guildId: string;
   channelId: string;
-}
+};

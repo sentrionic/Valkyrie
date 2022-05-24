@@ -5,7 +5,7 @@ import { FaUserEdit, FaUserPlus } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
 import { HiLogout } from 'react-icons/hi';
 import { RiSettings5Fill } from 'react-icons/ri';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { StyledMenuList } from './StyledMenuList';
 import { StyledMenuItem, StyledRedMenuItem } from './StyledMenuItem';
@@ -24,9 +24,9 @@ interface GuildMenuProps {
 }
 
 export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen }) => {
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   const guild = useGetCurrentGuild(guildId);
-  const history = useHistory();
+  const navigate = useNavigate();
   const cache = useQueryClient();
 
   const user = userStore((state) => state.current);
@@ -40,7 +40,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
       const { data } = await leaveGuild(guildId);
       if (data) {
         cache.setQueryData<Guild[]>(gKey, (d) => d!.filter((g) => g.id !== guild?.id));
-        history.replace('/channels/me');
+        navigate('/channels/me', { replace: true });
       }
     } catch (err) {}
   };

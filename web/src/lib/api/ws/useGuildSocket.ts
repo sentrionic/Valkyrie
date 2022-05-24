@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { getSocket } from '../getSocket';
 import { userStore } from '../../stores/userStore';
@@ -11,7 +11,7 @@ type WSMessage =
   | { action: 'edit_guild'; data: Guild };
 
 export function useGuildSocket(): void {
-  const history = useHistory();
+  const navigate = useNavigate();
   const cache = useQueryClient();
   const current = userStore((state) => state.current);
   const location = useLocation();
@@ -51,7 +51,7 @@ export function useGuildSocket(): void {
           cache.setQueryData<Guild[]>(gKey, (d) => {
             const isActive = location.pathname.includes(deleteId);
             if (isActive) {
-              history.replace('/channels/me');
+              navigate('/channels/me', { replace: true });
             }
             return d!.filter((g) => g.id !== deleteId);
           });
@@ -81,7 +81,7 @@ export function useGuildSocket(): void {
             const guildId = response.data;
             const isActive = location.pathname.includes(guildId);
             if (isActive) {
-              history.replace('/channels/me');
+              navigate('/channels/me', { replace: true });
             }
             return d!.filter((g) => g.id !== guildId);
           });
@@ -102,5 +102,5 @@ export function useGuildSocket(): void {
       );
       socket.close();
     };
-  }, [current, cache, history, location]);
+  }, [current, cache, navigate, location]);
 }

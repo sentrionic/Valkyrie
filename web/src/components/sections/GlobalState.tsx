@@ -8,7 +8,11 @@ import { DMChannel, DMNotification } from '../../lib/models/dm';
 
 type WSMessage = { action: 'new_dm_notification'; data: DMChannel } | { action: 'send_request' };
 
-export const GlobalState: React.FC = ({ children }) => {
+interface IProps {
+  children: React.ReactNode;
+}
+
+export const GlobalState: React.FC<IProps> = ({ children }) => {
   const current = userStore((state) => state.current);
   const inc = homeStore((state) => state.increment);
   const cache = useQueryClient();

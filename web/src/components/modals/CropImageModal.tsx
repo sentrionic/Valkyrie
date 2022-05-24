@@ -32,7 +32,7 @@ export const CropImageModal: React.FC<IProps> = ({ isOpen, onClose, applyCrop, i
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixelsResult) => {
+  const onCropComplete = useCallback((_: any, croppedAreaPixelsResult: any) => {
     setCroppedAreaPixels(croppedAreaPixelsResult);
   }, []);
 

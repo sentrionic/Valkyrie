@@ -14,7 +14,7 @@ interface MemberListItemProps {
 
 export const MemberListItem: React.FC<MemberListItemProps> = ({ member }) => {
   const current = userStore((state) => state.current);
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   const guild = useGetCurrentGuild(guildId);
   const isOwner = guild !== undefined && guild.ownerId === current?.id;
 

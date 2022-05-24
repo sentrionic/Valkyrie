@@ -27,7 +27,7 @@ interface IProps {
 export const ModActionModal: React.FC<IProps> = ({ member, isOpen, onClose, isBan }) => {
   const cache = useQueryClient();
   const action = isBan ? 'Ban ' : 'Kick ';
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>

@@ -2,7 +2,11 @@ import React from 'react';
 import { GridItem } from '@chakra-ui/react';
 import { scrollbarCss } from '../../../../lib/utils/theme';
 
-export const ChatGrid: React.FC = ({ children }) => (
+interface IProps {
+  children: React.ReactNode;
+}
+
+export const ChatGrid: React.FC<IProps> = ({ children }) => (
   <GridItem
     id="chatGrid"
     gridColumn={3}

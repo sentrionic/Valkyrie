@@ -17,7 +17,7 @@ export const Channels: React.FC = () => {
   const { isOpen: inviteIsOpen, onOpen: inviteOpen, onClose: inviteClose } = useDisclosure();
   const { isOpen: channelIsOpen, onOpen: channelOpen, onClose: channelClose } = useDisclosure();
 
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   const key = cKey(guildId);
 
   const { data } = useQuery(key, () => getChannels(guildId).then((response) => response.data));

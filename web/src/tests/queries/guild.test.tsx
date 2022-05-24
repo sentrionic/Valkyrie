@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { QueryClientProvider, useQuery } from 'react-query';
 import { rest } from 'msw';
 import * as React from 'react';
-import { createQueryClientWrapper, createTestQueryClientWithData } from '../testUtils';
+import { createQueryClientWrapper, createTestQueryClientWithData, IQueryWrapperProps } from '../testUtils';
 import { gKey } from '../../lib/utils/querykeys';
 import { getUserGuilds } from '../../lib/api/handler/guilds';
 import { server } from '../../setupTests';
@@ -67,7 +67,7 @@ describe('useGetCurrentGuild', () => {
   it('successfully fetches the guild for the given ID', async () => {
     const guildId = mockGuild.id;
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(gKey, mockGuildList)}>{children}</QueryClientProvider>
     );
 
@@ -91,7 +91,7 @@ describe('useGetCurrentGuild', () => {
       ownerId: '123941059157915',
     };
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(gKey, [guild])}>{children}</QueryClientProvider>
     );
 
@@ -109,7 +109,7 @@ describe('useGetCurrentGuild', () => {
   it('returns undefined if there is not initial data', async () => {
     const guildId = mockGuild.id;
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(gKey, [])}>{children}</QueryClientProvider>
     );
 

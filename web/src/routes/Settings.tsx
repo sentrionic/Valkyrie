@@ -14,7 +14,7 @@ import {
 import { Form, Formik } from 'formik';
 import React, { useRef, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { InputField } from '../components/common/InputField';
 import { ChangePasswordModal } from '../components/modals/ChangePasswordModal';
 import { toErrorMap } from '../lib/utils/toErrorMap';
@@ -27,7 +27,7 @@ import { aKey } from '../lib/utils/querykeys';
 import { Account } from '../lib/models/account';
 
 export const Settings: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: cropperIsOpen, onOpen: cropperOnOpen, onClose: cropperOnClose } = useDisclosure();
@@ -44,7 +44,7 @@ export const Settings: React.FC = () => {
   const [croppedImage, setCroppedImage] = useState<File | null>(null);
 
   const closeClicked = (): void => {
-    history.goBack();
+    navigate(-1);
   };
 
   const applyCrop = (file: Blob): void => {
@@ -58,7 +58,7 @@ export const Settings: React.FC = () => {
     if (data) {
       cache.clear();
       logoutUser();
-      history.replace('/');
+      navigate('/', { replace: true });
     }
   };
 

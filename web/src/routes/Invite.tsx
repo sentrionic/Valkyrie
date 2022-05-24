@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RLink, useHistory, useParams } from 'react-router-dom';
+import { Link as RLink, useNavigate, useParams } from 'react-router-dom';
 import { Box, Flex, Image, Link, Text } from '@chakra-ui/react';
 import { joinGuild } from '../lib/api/handler/guilds';
 
@@ -8,16 +8,16 @@ interface InviteRouter {
 }
 
 export const Invite: React.FC = () => {
-  const { link } = useParams<InviteRouter>();
+  const { link } = useParams<keyof InviteRouter>() as InviteRouter;
   const [errors, setErrors] = useState<string | null>(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleJoin = async (): Promise<void> => {
       try {
         const { data } = await joinGuild({ link });
         if (data) {
-          history.replace(`/channels/${data.id}/${data.default_channel_id}`);
+          navigate(`/channels/${data.id}/${data.default_channel_id}`, { replace: true });
         }
       } catch (err: any) {
         const status = err?.response?.status;
@@ -27,7 +27,7 @@ export const Invite: React.FC = () => {
       }
     };
     handleJoin();
-  }, [link, history]);
+  }, [link, navigate]);
 
   return (
     <Flex minHeight="100vh" align="center" justify="center" h="full">

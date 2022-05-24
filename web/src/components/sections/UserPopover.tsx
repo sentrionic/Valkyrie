@@ -15,6 +15,7 @@ import { Member } from '../../lib/models/member';
 
 interface UserPopoverProps {
   member: Member;
+  children: React.ReactNode;
 }
 
 export const UserPopover: React.FC<UserPopoverProps> = ({ member, children }) => (

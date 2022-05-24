@@ -14,7 +14,7 @@ import {
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { InputField } from '../common/InputField';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
 import { createGuild, joinGuild } from '../../lib/api/handler/guilds';
@@ -106,7 +106,7 @@ interface IScreenProps {
 
 const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
   const cache = useQueryClient();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <ModalContent bg="brandGray.light">
@@ -123,7 +123,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
               if (data) {
                 cache.setQueryData<Guild[]>(gKey, (old) => [...old!, data]);
                 submitClose();
-                history.push(`/channels/${data.id}/${data.default_channel_id}`);
+                navigate(`/channels/${data.id}/${data.default_channel_id}`);
               }
             } catch (err: any) {
               const status = err?.response?.status;
@@ -185,7 +185,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
 const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
   const user = userStore((state) => state.current);
   const cache = useQueryClient();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <ModalContent bg="brandGray.light">
@@ -200,7 +200,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             if (data) {
               cache.setQueryData<Guild[]>(gKey, (old) => [...old!, data]);
               submitClose();
-              history.push(`/channels/${data.id}/${data.default_channel_id}`);
+              navigate(`/channels/${data.id}/${data.default_channel_id}`);
             }
           } catch (err: any) {
             if (err?.response?.status === 400) {

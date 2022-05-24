@@ -10,7 +10,7 @@ import { RouterProps } from '../../../lib/models/routerProps';
 
 export const ChannelHeader: React.FC = () => {
   const toggleMemberList = settingsStore((state) => state.toggleShowMembers);
-  const { guildId, channelId } = useParams<RouterProps>();
+  const { guildId, channelId } = useParams<keyof RouterProps>() as RouterProps;
   const channel = useGetCurrentChannel(channelId, cKey(guildId));
 
   return (

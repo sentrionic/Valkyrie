@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Login } from './Login';
 import { Register } from './Register';
 import { ForgotPassword } from './ForgotPassword';
@@ -11,29 +11,54 @@ import { Settings } from './Settings';
 import { Landing } from './Landing';
 import { Invite } from './Invite';
 
-export const Routes: React.FC = () => (
+export const AppRoutes: React.FC = () => (
   <BrowserRouter>
-    <Switch>
-      <Route path="/login">
-        <Login />
-      </Route>
-      <Route path="/register">
-        <Register />
-      </Route>
-      <Route path="/forgot-password">
-        <ForgotPassword />
-      </Route>
-      <Route path="/reset-password/:token">
-        <ResetPassword />
-      </Route>
-      <Route exact path="/">
-        <Landing />
-      </Route>
-      <AuthRoute exact path="/channels/me" component={Home} />
-      <AuthRoute exact path="/channels/me/:channelId" component={Home} />
-      <AuthRoute exact path="/channels/:guildId/:channelId" component={ViewGuild} />
-      <AuthRoute exact path="/account" component={Settings} />
-      <AuthRoute exact path="/:link" component={Invite} />
-    </Switch>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/" element={<Landing />} />
+      <Route
+        path="/channels/me"
+        element={
+          <AuthRoute>
+            <Home />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/channels/me/:channelId"
+        element={
+          <AuthRoute>
+            <Home />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/channels/:guildId/:channelId"
+        element={
+          <AuthRoute>
+            <ViewGuild />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/account"
+        element={
+          <AuthRoute>
+            <Settings />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/:link"
+        element={
+          <AuthRoute>
+            <Invite />
+          </AuthRoute>
+        }
+      />
+    </Routes>
   </BrowserRouter>
 );

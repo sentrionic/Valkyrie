@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { QueryClientProvider, useQuery } from 'react-query';
 import { rest } from 'msw';
 import * as React from 'react';
-import { createQueryClientWrapper, createTestQueryClientWithData } from '../testUtils';
+import { createQueryClientWrapper, createTestQueryClientWithData, IQueryWrapperProps } from '../testUtils';
 import { fKey } from '../../lib/utils/querykeys';
 import { server } from '../../setupTests';
 import { getFriends } from '../../lib/api/handler/account';
@@ -65,7 +65,7 @@ describe('useGetFriend', () => {
   it('successfully fetches the friend for the given ID', async () => {
     const friendId = mockFriend.id;
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(fKey, mockFriendList)}>{children}</QueryClientProvider>
     );
 
@@ -90,7 +90,7 @@ describe('useGetFriend', () => {
       isOnline: false,
     };
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(fKey, [friend])}>{children}</QueryClientProvider>
     );
 
@@ -108,7 +108,7 @@ describe('useGetFriend', () => {
   it('returns undefined if there is not initial data', async () => {
     const friendId = mockFriend.id;
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(fKey, [])}>{children}</QueryClientProvider>
     );
 

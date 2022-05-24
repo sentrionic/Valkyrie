@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { QueryClientProvider, useQuery } from 'react-query';
 import { rest } from 'msw';
 import * as React from 'react';
-import { createQueryClientWrapper, createTestQueryClientWithData } from '../testUtils';
+import { createQueryClientWrapper, createTestQueryClientWithData, IQueryWrapperProps } from '../testUtils';
 import { cKey } from '../../lib/utils/querykeys';
 import { server } from '../../setupTests';
 import { mockGuild } from '../fixture/guildFixtures';
@@ -71,7 +71,7 @@ describe('useGetCurrentChannel', () => {
     const channelId = mockChannel.id;
     const key = cKey('12312456127277383');
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(key, mockChannelList)}>{children}</QueryClientProvider>
     );
 
@@ -97,7 +97,7 @@ describe('useGetCurrentChannel', () => {
       isPublic: true,
     };
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(key, [channel])}>{children}</QueryClientProvider>
     );
 
@@ -116,7 +116,7 @@ describe('useGetCurrentChannel', () => {
     const channelId = mockChannel.id;
     const key = cKey(mockGuild.id);
 
-    const wrapper: React.FC = ({ children }) => (
+    const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(key, [])}>{children}</QueryClientProvider>
     );
 

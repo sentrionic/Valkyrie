@@ -20,7 +20,7 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { AiOutlineLock } from 'react-icons/ai';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { getGuildMembers } from '../../lib/api/handler/guilds';
@@ -50,7 +50,7 @@ const ListItem = ({ image, label }: Item): JSX.Element => (
 
 export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
   const key = mKey(guildId);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { data } = useQuery(key, () => getGuildMembers(guildId).then((response) => response.data));
   const [showError, toggleError] = useState(false);
 
@@ -96,7 +96,7 @@ export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose 
               if (responseData) {
                 resetForm();
                 onClose();
-                history.push(`/channels/${guildId}/${responseData.id}`);
+                navigate(`/channels/${guildId}/${responseData.id}`);
               }
             } catch (err: any) {
               if (err?.response?.status === 500) {

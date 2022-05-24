@@ -13,7 +13,7 @@ import {
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { TwitterPicker } from 'react-color';
+import { ColorResult, TwitterPicker } from 'react-color';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { userStore } from '../../lib/stores/userStore';
@@ -96,7 +96,7 @@ export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) 
 
                 <TwitterPicker
                   color={values.color || '#fff'}
-                  onChangeComplete={(color) => {
+                  onChangeComplete={(color: ColorResult) => {
                     if (color) setFieldValue('color', color.hex);
                   }}
                   className="picker"

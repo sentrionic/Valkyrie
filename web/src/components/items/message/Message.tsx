@@ -26,7 +26,7 @@ export const Message: React.FC<MessageProps> = ({ message, isCompact = false }) 
   const [showSettings, setShowSettings] = useState(false);
   const current = userStore((state) => state.current);
   const isAuthor = current?.id === message.user.id;
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   const guild = useGetCurrentGuild(guildId);
   const isOwner = guild !== undefined && guild.ownerId === current?.id;
   const showMenu = isAuthor || isOwner || message.attachment?.url;

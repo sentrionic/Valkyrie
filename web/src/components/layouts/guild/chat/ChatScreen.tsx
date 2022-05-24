@@ -15,7 +15,7 @@ import { RouterProps } from '../../../../lib/models/routerProps';
 import { Message as MessageResponse } from '../../../../lib/models/message';
 
 export const ChatScreen: React.FC = () => {
-  const { channelId } = useParams<RouterProps>();
+  const { channelId } = useParams<keyof RouterProps>() as RouterProps;
   const [hasMore, setHasMore] = useState(true);
   const qKey = `messages-${channelId}`;
 

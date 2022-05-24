@@ -32,7 +32,11 @@ export const createTestQueryClientWithData = (key: string, data: any[]): QueryCl
   return client;
 };
 
-export const createQueryClientWrapper: React.FC = ({ children }) => (
+export interface IQueryWrapperProps {
+  children: React.ReactNode;
+}
+
+export const createQueryClientWrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
   <QueryClientProvider client={createTestQueryClient()}>{children}</QueryClientProvider>
 );
 

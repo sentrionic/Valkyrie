@@ -25,7 +25,7 @@ interface InviteModalProps {
 }
 
 export const InviteModal: React.FC<InviteModalProps> = ({ isOpen, onClose }) => {
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   const [inviteLink, setInviteLink] = useState('');
   const { hasCopied, onCopy } = useClipboard(inviteLink);
   const [isPermanent, setPermanent] = useState(false);

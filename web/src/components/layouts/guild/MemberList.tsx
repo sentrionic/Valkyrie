@@ -12,7 +12,7 @@ import { RouterProps } from '../../../lib/models/routerProps';
 import { Member } from '../../../lib/models/member';
 
 export const MemberList: React.FC = () => {
-  const { guildId } = useParams<RouterProps>();
+  const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   const key = mKey(guildId);
 
   const { data } = useQuery(key, () => getGuildMembers(guildId).then((response) => response.data));

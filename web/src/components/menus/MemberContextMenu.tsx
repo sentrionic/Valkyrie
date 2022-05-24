@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Divider, Flex, Text, useDisclosure } from '@chakra-ui/react';
 import { Item, Menu, theme } from 'react-contexify';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
 import { sendFriendRequest } from '../../lib/api/handler/account';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
@@ -15,7 +15,7 @@ interface MemberContextMenuProps {
 }
 
 export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, isOwner, id }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: modIsOpen, onOpen: modOnOpen, onClose: modOnClose } = useDisclosure();
   const [isBan, setIsBan] = useState(false);
@@ -24,7 +24,7 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
     try {
       const { data } = await getOrCreateDirectMessage(member.id);
       if (data) {
-        history.push(`/channels/me/${data.id}`);
+        navigate(`/channels/me/${data.id}`);
       }
     } catch (err) {}
   };

@@ -18,7 +18,7 @@ export const MessageInput: React.FC = () => {
   const [currentlyTyping, setCurrentlyTyping] = useState(false);
   const inputRef: any = useRef();
 
-  const { guildId, channelId } = useParams<RouterProps>();
+  const { guildId, channelId } = useParams<keyof RouterProps>() as RouterProps;
   const qKey = guildId === undefined ? dmKey : cKey(guildId);
   const { data } = useQuery<any[]>(qKey);
   const channel = data?.find((c) => c.id === channelId);
