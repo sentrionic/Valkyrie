@@ -12,6 +12,8 @@ import { channelScrollbarCss } from './css/ChannelScrollerCSS';
 import { useChannelSocket } from '../../../lib/api/ws/useChannelSocket';
 import { getChannels } from '../../../lib/api/handler/channel';
 import { RouterProps } from '../../../lib/models/routerProps';
+import { VoiceChat } from './VoiceChat';
+import { VoiceBar } from '../VoiceBar';
 
 export const Channels: React.FC = () => {
   const { isOpen: inviteIsOpen, onOpen: inviteOpen, onClose: inviteClose } = useDisclosure();
@@ -41,8 +43,10 @@ export const Channels: React.FC = () => {
           {data?.map((c) => (
             <ChannelListItem channel={c} guildId={guildId} key={`${c.id}`} />
           ))}
+          <VoiceChat />
           <Box h="16" />
         </UnorderedList>
+        <VoiceBar />
         <AccountBar />
       </GridItem>
     </>

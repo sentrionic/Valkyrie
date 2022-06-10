@@ -73,7 +73,7 @@ func (g *guildService) GenerateInviteLink(ctx context.Context, guildId string, i
 		return "", err
 	}
 
-	if err := g.RedisRepository.SaveInvite(ctx, guildId, id, isPermanent); err != nil {
+	if err = g.RedisRepository.SaveInvite(ctx, guildId, id, isPermanent); err != nil {
 		return "", err
 	}
 
@@ -126,4 +126,20 @@ func (g *guildService) FindUsersByIds(ids []string, guildId string) (*[]model.Us
 
 func (g *guildService) UpdateMemberLastSeen(userId, guildId string) error {
 	return g.GuildRepository.UpdateMemberLastSeen(userId, guildId)
+}
+
+func (g *guildService) RemoveVCMember(userId, guildId string) error {
+	return g.GuildRepository.RemoveVCMember(userId, guildId)
+}
+
+func (g *guildService) GetVCMembers(guildId string) (*[]model.VCMemberResponse, error) {
+	return g.GuildRepository.VCMembers(guildId)
+}
+
+func (g *guildService) UpdateVCMember(isMuted, isDeafened bool, userId, guildId string) error {
+	return g.GuildRepository.UpdateVCMember(isMuted, isDeafened, userId, guildId)
+}
+
+func (g *guildService) GetVCMember(userId, guildId string) (*model.VCMember, error) {
+	return g.GuildRepository.GetVCMember(userId, guildId)
 }

@@ -16,6 +16,7 @@ type Guild struct {
 	Members     []User         `gorm:"many2many:members;constraint:OnDelete:CASCADE;"`
 	Channels    []Channel      `gorm:"constraint:OnDelete:CASCADE;"`
 	Bans        []User         `gorm:"many2many:bans;constraint:OnDelete:CASCADE;"`
+	VCMembers   []User         `gorm:"many2many:vc_members;constraint:OnDelete:CASCADE;"`
 }
 
 // GuildResponse contains all info to display a guild.
@@ -54,6 +55,7 @@ type GuildService interface {
 	GetGuild(id string) (*Guild, error)
 	GetUserGuilds(uid string) (*[]GuildResponse, error)
 	GetGuildMembers(userId string, guildId string) (*[]MemberResponse, error)
+	GetVCMembers(guildId string) (*[]VCMemberResponse, error)
 	CreateGuild(guild *Guild) (*Guild, error)
 	GenerateInviteLink(ctx context.Context, guildId string, isPermanent bool) (string, error)
 	UpdateGuild(guild *Guild) error
@@ -68,6 +70,9 @@ type GuildService interface {
 	UpdateMemberSettings(settings *MemberSettings, userId string, guildId string) error
 	FindUsersByIds(ids []string, guildId string) (*[]User, error)
 	UpdateMemberLastSeen(userId, guildId string) error
+	RemoveVCMember(userId, guildId string) error
+	UpdateVCMember(isMuted, isDeafened bool, userId, guildId string) error
+	GetVCMember(userId, guildId string) (*VCMember, error)
 }
 
 // GuildRepository defines methods related to guild db operations the service layer expects
@@ -77,6 +82,7 @@ type GuildRepository interface {
 	FindByID(id string) (*Guild, error)
 	List(uid string) (*[]GuildResponse, error)
 	GuildMembers(userId string, guildId string) (*[]MemberResponse, error)
+	VCMembers(guildId string) (*[]VCMemberResponse, error)
 	Create(guild *Guild) (*Guild, error)
 	Save(guild *Guild) error
 	RemoveMember(userId string, guildId string) error
@@ -88,5 +94,8 @@ type GuildRepository interface {
 	FindUsersByIds(ids []string, guildId string) (*[]User, error)
 	GetMember(userId, guildId string) (*User, error)
 	UpdateMemberLastSeen(userId, guildId string) error
+	RemoveVCMember(userId, guildId string) error
 	GetMemberIds(guildId string) (*[]string, error)
+	UpdateVCMember(isMuted, isDeafened bool, userId, guildId string) error
+	GetVCMember(userId, guildId string) (*VCMember, error)
 }

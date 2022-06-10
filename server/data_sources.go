@@ -41,11 +41,16 @@ func initDS() (*dataSources, error) {
 		&model.DMMember{},
 		&model.Message{},
 		&model.Attachment{},
+		&model.VCMember{},
 	); err != nil {
 		return nil, fmt.Errorf("error migrating models: %w", err)
 	}
 
 	if err := db.SetupJoinTable(&model.Guild{}, "Members", &model.Member{}); err != nil {
+		return nil, fmt.Errorf("error creating join table: %w", err)
+	}
+
+	if err := db.SetupJoinTable(&model.Guild{}, "VCMembers", &model.VCMember{}); err != nil {
 		return nil, fmt.Errorf("error creating join table: %w", err)
 	}
 

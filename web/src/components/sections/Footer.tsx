@@ -41,7 +41,7 @@ export const Footer: React.FC = () => (
   <Flex bottom={0} as="footer" align="center" justify="center" w="100%" p={8}>
     <Box textAlign="center">
       <Text fontSize="xl">
-        <span>Valkyrie | 2021</span>
+        <span>Valkyrie | 2022</span>
       </Text>
       <Text>This is not a real commercial app.</Text>
       <Stack mt={2} isInline justify="center" spacing="6">

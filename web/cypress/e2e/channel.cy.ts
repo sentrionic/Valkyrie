@@ -5,7 +5,7 @@ describe('Channels related actions', () => {
   const id = uuid().toString();
   const email = `${id}@example.com`;
   let guildId = '';
-  let channelName = '';
+  let channelId = '';
 
   it('registers the user', () => {
     cy.registerUser(email, id);
@@ -48,11 +48,11 @@ describe('Channels related actions', () => {
     // Confirm the user got sent to the newly created channel
     cy.wait('@create').then((interception) => {
       const body = interception.response.body;
-      const url = `channels/${guildId}/${body.id}`;
+      channelId = body.id;
+      const url = `channels/${guildId}/${channelId}`;
       cy.url().should('include', url);
+      cy.contains('random').should('exist');
     });
-
-    cy.contains('random').should('exist');
   });
 
   it('should successfully switch between channels', () => {
@@ -72,13 +72,20 @@ describe('Channels related actions', () => {
     cy.contains('random').trigger('mouseover');
     cy.get('[aria-label="edit channel"]').click();
 
+    cy.intercept({
+      method: 'PUT',
+      pathname: `/api/channels/${channelId}`,
+    }).as('update');
+
     // Edit the values
     cy.get('input[name="name"]').clear().type('secret').should('have.value', 'secret');
     cy.get('input[type="checkbox"]').check({ force: true });
     cy.get('[type=submit]').click();
 
     // Check that the edited channel exists
-    cy.contains('secret').should('exist');
+    cy.wait('@update').then((_) => {
+      cy.contains('secret').should('exist');
+    });
   });
 
   it('should successfully delete the channel', () => {
@@ -89,11 +96,18 @@ describe('Channels related actions', () => {
     cy.contains('secret').last().trigger('mouseover');
     cy.get('[aria-label="edit channel"]').last().click();
 
+    cy.intercept({
+      method: 'DELETE',
+      pathname: `/api/channels/${channelId}`,
+    }).as('delete');
+
     cy.contains('Delete Channel').click();
     cy.get('button').contains('Delete Channel').click();
 
-    // Check that the channel is gone and that the user got moved
-    cy.contains('secret').should('have.length.lte', 1);
-    cy.contains('Welcome to #general').should('exist');
+    cy.wait('@delete').then((interception) => {
+      // Check that the channel is gone and that the user got moved
+      cy.contains('secret').should('have.length.lte', 1);
+      cy.contains('Welcome to #general').should('exist');
+    });
   });
 });

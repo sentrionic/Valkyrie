@@ -107,7 +107,7 @@ describe('Message related actions', () => {
     cy.loginUser(email);
     cy.clickOnFirstGuild();
 
-    cy.wait(100);
+    cy.wait(200);
     cy.firstMessage().get('img').eq(1).rightclick();
     cy.contains('Add Friend').should('not.exist');
     cy.contains('Message').should('not.exist');

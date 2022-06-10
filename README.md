@@ -14,14 +14,13 @@ A [Discord](https://discord.com) clone using [React](https://reactjs.org/) and [
 **Notes:**
 
 - File Upload is disabled.
-- The design does not fully match current Discord anymore.
+- The design does not fully match the current design of Discord anymore.
 - Data regularly gets wiped, so you can use any valid email and password.
 - For the old [Socket.io](https://socket.io/) stack using [NestJS](https://nestjs.com/) check out the [v1](https://github.com/sentrionic/Valkyrie/tree/v1) branch.
 
 ## Video
 
 https://user-images.githubusercontent.com/38354571/137365365-a7fe91d6-51d7-4739-8742-f68517223f8f.mp4
-
 
 ## Features
 
@@ -35,6 +34,7 @@ https://user-images.githubusercontent.com/38354571/137365365-a7fe91d6-51d7-4739-
 - Friend System
 - Notification System
 - Basic Moderation for the guild owner (delete messages, kick & ban members)
+- Basic Voice Chat (one voice channel per guild + mute & deafen)
 
 ## Stack
 
@@ -44,7 +44,7 @@ https://user-images.githubusercontent.com/38354571/137365365-a7fe91d6-51d7-4739-
 - [Gorilla Websockets](https://github.com/gorilla/websocket) for WS communication
 - [Gorm](https://gorm.io/) as the database ORM
 - PostgreSQL to save all data
-- Redis for storing sessions and reset token
+- Redis for storing sessions and reset tokens
 - S3 for storing files and Gmail for sending emails
 - Hosted on [Heroku](https://www.heroku.com/)
 
@@ -68,7 +68,7 @@ or alternatively copy the commands into your CLI.
 
 1. Install Docker and get the Postgresql and Redis containers (`make postgres` && `make redis`)
 2. Start both containers (`make start`) and create a DB (`make createdb`)
-3. Install Golang and get all the dependencies (`go mod tidy`)
+3. Install the latest version of Go and get all the dependencies (`go mod tidy`)
 4. Rename `.env.example` to `.env` and fill in the values
 
 - `Required`
@@ -92,14 +92,15 @@ or alternatively copy the commands into your CLI.
 
 5. Run `go run github.com/sentrionic/valkyrie` to run the server
 
-**Alternatively**: If you only want to run the backend without installing Golang and all dependencies, you can download the pre compiled server from the [Release tab](https://github.com/sentrionic/Valkyrie/releases) instead. You will still need to follow the above steps 1, 2 and 4.
+**Alternatively**: If you only want to run the backend without installing Go and all dependencies, you can download the pre compiled server from the [Release tab](https://github.com/sentrionic/Valkyrie/releases) instead. You will still need to follow the above steps 1, 2 and 4.
 
 ### Web
 
-1. Install the latest or LTS version of Node.
-2. Run `yarn` to install the dependencies
-3. Run `yarn start` to start the client
-4. Go to `localhost:3000`
+1. Install Node 18 or the LTS version of Node.
+2. Install [yarn](https://classic.yarnpkg.com/lang/en/)
+3. Run `yarn` to install the dependencies
+4. Run `yarn start` to start the client
+5. Go to `localhost:3000`
 
 ## Endpoints
 
@@ -138,6 +139,8 @@ After that run `yarn cypress` to open the test window.
 
 [Ben Awad](https://github.com/benawad): The inital project is based on his Slack tutorial series and I always look at his repositories for inspiration.
 
-[Jacob Goodwin](https://github.com/JacobSNGoodwin/memrizr): This backend is built upon his tutorial series and uses his backend structure
+[Jacob Goodwin](https://github.com/JacobSNGoodwin/memrizr): This backend is built upon his tutorial series and uses his backend structure.
 
-[Jeroen de Kok](https://dev.to/jeroendk/building-a-simple-chat-application-with-websockets-in-go-and-vue-js-gao): The websockets structure is based on his tutorial
+[Jeroen de Kok](https://dev.to/jeroendk/building-a-simple-chat-application-with-websockets-in-go-and-vue-js-gao): The websockets structure is based on his tutorial.
+
+[ericellb](https://github.com/ericellb/React-Discord-Clone): His repository helped me implement voice chat.

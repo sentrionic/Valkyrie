@@ -14,6 +14,13 @@ type Member struct {
 	UpdatedAt time.Time
 }
 
+type VCMember struct {
+	UserID     string `gorm:"primaryKey;constraint:OnDelete:CASCADE;"`
+	GuildID    string `gorm:"primaryKey;constraint:OnDelete:CASCADE;"`
+	IsMuted    bool
+	IsDeafened bool
+}
+
 // MemberResponse is the API response of a member.
 type MemberResponse struct {
 	Id        string    `json:"id"`
@@ -39,3 +46,13 @@ type MemberSettings struct {
 	Nickname *string `json:"nickname"`
 	Color    *string `json:"color"`
 } //@name MemberSettings
+
+// VCMemberResponse is the API response of a member that is currently in a VC.
+type VCMemberResponse struct {
+	Id         string  `json:"id"`
+	Username   string  `json:"username"`
+	Image      string  `json:"image"`
+	IsMuted    bool    `json:"isMuted"`
+	IsDeafened bool    `json:"IsDeafened"`
+	Nickname   *string `json:"nickname"`
+} //@name VCMember

@@ -40,6 +40,15 @@
         "allowExpressions": true
       }
     ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error", // or error
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
     "react/jsx-no-useless-fragment": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",

@@ -7,9 +7,9 @@ import (
 
 // ReceivedMessage represents a received websocket message
 type ReceivedMessage struct {
-	Action  string  `json:"action"`
-	Room    string  `json:"room"`
-	Message *string `json:"message"`
+	Action  string       `json:"action"`
+	Room    string       `json:"room"`
+	Message *interface{} `json:"message"`
 }
 
 // WebsocketMessage represents an emitted message

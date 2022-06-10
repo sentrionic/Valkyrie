@@ -43,12 +43,19 @@ describe('Guild related actions', () => {
     cy.openGuildMenu();
     cy.contains('Server Settings').click();
 
+    cy.intercept({
+      method: 'PUT',
+      pathname: `/api/guilds/${guildId}`,
+    }).as('update');
+
     // Updates the values and saves them
     cy.get('input[name="name"]').clear().type('Valkyrie').should('have.value', 'Valkyrie');
     cy.contains('Save Changes').click();
 
     // Check the updates were applied
-    cy.contains('Valkyrie').should('exist');
+    cy.wait('@update').then((_) => {
+      cy.contains('Valkyrie').should('exist');
+    });
   });
 
   it('should successfully clear the invites', () => {

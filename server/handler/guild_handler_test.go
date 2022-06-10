@@ -312,6 +312,203 @@ func TestHandler_GetGuildMembers(t *testing.T) {
 	})
 }
 
+func TestHandler_GetVCMembers(t *testing.T) {
+	// Setup
+	gin.SetMode(gin.TestMode)
+	authUser := fixture.GetMockUser()
+	guild := fixture.GetMockGuild("")
+	guild.Members = append(guild.Members, *authUser)
+
+	response := make([]model.VCMemberResponse, 0)
+
+	for i := 0; i < 5; i++ {
+		mockUser := fixture.GetMockUser()
+
+		guild.VCMembers = append(guild.VCMembers, *authUser)
+		response = append(response, model.VCMemberResponse{
+			Id:         mockUser.ID,
+			Username:   mockUser.Username,
+			Image:      mockUser.Image,
+			IsMuted:    false,
+			IsDeafened: false,
+		})
+	}
+
+	t.Run("Successful Fetch", func(t *testing.T) {
+		mockGuildService := new(mocks.GuildService)
+		mockGuildService.On("GetGuild", guild.ID).Return(guild, nil)
+		mockGuildService.On("GetVCMembers", guild.ID).Return(&response, nil)
+
+		// a response recorder for getting written http response
+		rr := httptest.NewRecorder()
+
+		router := getAuthenticatedTestRouter(authUser.ID)
+
+		NewHandler(&Config{
+			R:            router,
+			GuildService: mockGuildService,
+		})
+
+		reqUrl := fmt.Sprintf("/api/guilds/%s/vcmembers", guild.ID)
+		request, err := http.NewRequest(http.MethodGet, reqUrl, nil)
+		assert.NoError(t, err)
+
+		router.ServeHTTP(rr, request)
+
+		respBody, err := json.Marshal(response)
+		assert.NoError(t, err)
+
+		assert.Equal(t, http.StatusOK, rr.Code)
+		assert.Equal(t, respBody, rr.Body.Bytes())
+		mockGuildService.AssertExpectations(t)
+	})
+
+	t.Run("Unauthorized", func(t *testing.T) {
+		mockGuildService := new(mocks.GuildService)
+		mockGuildService.On("GetGuild", guild.ID).Return(guild, nil)
+		mockGuildService.On("GetVCMembers", guild.ID).Return(response, nil)
+
+		// a response recorder for getting written http response
+		rr := httptest.NewRecorder()
+
+		router := getTestRouter()
+
+		NewHandler(&Config{
+			R:            router,
+			GuildService: mockGuildService,
+		})
+
+		reqUrl := fmt.Sprintf("/api/guilds/%s/vcmembers", guild.ID)
+		request, err := http.NewRequest(http.MethodGet, reqUrl, nil)
+		assert.NoError(t, err)
+
+		router.ServeHTTP(rr, request)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, http.StatusUnauthorized, rr.Code)
+
+		mockGuildService.AssertNotCalled(t, "GetGuild", guild.ID)
+		mockGuildService.AssertNotCalled(t, "GetVCMembers", guild.ID)
+	})
+
+	t.Run("Not a member of the guild", func(t *testing.T) {
+		invalidGuild := fixture.GetMockGuild("")
+
+		mockGuildService := new(mocks.GuildService)
+		mockGuildService.On("GetGuild", invalidGuild.ID).Return(invalidGuild, nil)
+
+		// a response recorder for getting written http response
+		rr := httptest.NewRecorder()
+
+		router := getAuthenticatedTestRouter(authUser.ID)
+
+		NewHandler(&Config{
+			R:            router,
+			GuildService: mockGuildService,
+		})
+
+		reqUrl := fmt.Sprintf("/api/guilds/%s/vcmembers", invalidGuild.ID)
+		request, err := http.NewRequest(http.MethodGet, reqUrl, nil)
+		assert.NoError(t, err)
+
+		router.ServeHTTP(rr, request)
+
+		assert.NoError(t, err)
+
+		mockError := apperrors.NewAuthorization(apperrors.NotAMember)
+		respBody, err := json.Marshal(gin.H{
+			"error": mockError,
+		})
+		assert.NoError(t, err)
+
+		assert.Equal(t, mockError.Status(), rr.Code)
+		assert.Equal(t, respBody, rr.Body.Bytes())
+
+		mockGuildService.AssertCalled(t, "GetGuild", invalidGuild.ID)
+		mockGuildService.AssertNotCalled(t, "GetVCMembers", guild.ID)
+	})
+
+	t.Run("Guild not found", func(t *testing.T) {
+
+		invalidGuild := fixture.GetMockGuild("")
+
+		mockGuildService := new(mocks.GuildService)
+
+		mockError := apperrors.NewNotFound("guild", invalidGuild.ID)
+		mockGuildService.On("GetGuild", invalidGuild.ID).Return(nil, mockError)
+		mockGuildService.On("GetVCMembers", guild.ID).Return(&response, nil)
+
+		// a response recorder for getting written http response
+		rr := httptest.NewRecorder()
+
+		router := getAuthenticatedTestRouter(authUser.ID)
+
+		NewHandler(&Config{
+			R:            router,
+			GuildService: mockGuildService,
+		})
+
+		reqUrl := fmt.Sprintf("/api/guilds/%s/vcmembers", invalidGuild.ID)
+		request, err := http.NewRequest(http.MethodGet, reqUrl, nil)
+		assert.NoError(t, err)
+
+		router.ServeHTTP(rr, request)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, mockError.Status(), rr.Code)
+		respBody, err := json.Marshal(gin.H{
+			"error": mockError,
+		})
+		assert.NoError(t, err)
+
+		assert.Equal(t, mockError.Status(), rr.Code)
+		assert.Equal(t, respBody, rr.Body.Bytes())
+
+		mockGuildService.AssertCalled(t, "GetGuild", invalidGuild.ID)
+		mockGuildService.AssertNotCalled(t, "GetVCMembers", guild.ID)
+	})
+
+	t.Run("Error", func(t *testing.T) {
+		mockGuildService := new(mocks.GuildService)
+
+		mockGuildService.On("GetGuild", guild.ID).Return(guild, nil)
+		mockError := apperrors.NewNotFound("guild", guild.ID)
+		mockGuildService.On("GetVCMembers", guild.ID).Return(nil, mockError)
+
+		// a response recorder for getting written http response
+		rr := httptest.NewRecorder()
+
+		router := getAuthenticatedTestRouter(authUser.ID)
+
+		NewHandler(&Config{
+			R:            router,
+			GuildService: mockGuildService,
+		})
+
+		reqUrl := fmt.Sprintf("/api/guilds/%s/vcmembers", guild.ID)
+		request, err := http.NewRequest(http.MethodGet, reqUrl, nil)
+		assert.NoError(t, err)
+
+		router.ServeHTTP(rr, request)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, mockError.Status(), rr.Code)
+		respBody, err := json.Marshal(gin.H{
+			"error": mockError,
+		})
+		assert.NoError(t, err)
+
+		assert.Equal(t, mockError.Status(), rr.Code)
+		assert.Equal(t, respBody, rr.Body.Bytes())
+
+		mockGuildService.AssertCalled(t, "GetGuild", guild.ID)
+		mockGuildService.AssertCalled(t, "GetVCMembers", guild.ID)
+	})
+}
+
 func TestHandler_CreateGuild(t *testing.T) {
 	// Setup
 	gin.SetMode(gin.TestMode)

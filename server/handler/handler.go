@@ -97,6 +97,7 @@ func NewHandler(c *Config) {
 	gg.Use(middleware.AuthUser())
 
 	gg.GET("/:guildId/members", h.GetGuildMembers)
+	gg.GET("/:guildId/vcmembers", h.GetVCMembers)
 	gg.GET("", h.GetUserGuilds)
 	gg.POST("/create", h.CreateGuild)
 	gg.GET("/:guildId/invite", h.GetInvite)

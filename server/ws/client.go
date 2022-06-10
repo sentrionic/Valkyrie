@@ -163,12 +163,16 @@ func (client *Client) handleNewMessage(jsonMessage []byte) {
 		client.handleJoinGuildMessage(message)
 	case JoinUserAction:
 		client.handleJoinRoomMessage(message)
+	case JoinVoiceAction:
+		client.handleJoinVoiceMessage(message)
 
 	// Leave Room Actions
 	case LeaveRoomAction:
 		client.handleLeaveRoomMessage(message)
 	case LeaveGuildAction:
 		client.handleLeaveGuildMessage(message)
+	case LeaveVoiceAction:
+		client.handleLeaveVoiceMessage(message)
 
 	// Chat Typing Actions
 	case StartTypingAction:
@@ -185,6 +189,15 @@ func (client *Client) handleNewMessage(jsonMessage []byte) {
 	// Other
 	case GetRequestCountAction:
 		client.handleGetRequestCount()
+
+	// Voice Chat
+	case VoiceSignal:
+		client.handleVoiceSignal(message)
+
+	case ToggleMute:
+		fallthrough
+	case ToggleDeafen:
+		client.updateVCMember(message)
 	}
 }
 
@@ -325,6 +338,156 @@ func (client *Client) toggleOnlineStatus(isOnline bool) {
 			}
 			room.broadcast <- &msg
 		}
+	}
+}
+
+// handleJoinGuildMessage joins the given guild's voice chat if the user is a member in it
+func (client *Client) handleJoinVoiceMessage(message model.ReceivedMessage) {
+	roomName := message.Room
+
+	room := client.hub.findRoomById(roomName)
+	if room == nil {
+		room = client.hub.createRoom(roomName)
+	}
+
+	client.rooms[room] = true
+
+	room.register <- client
+
+	uid := client.ID
+	us := client.hub.userService
+
+	user, err := us.Get(uid)
+
+	if err != nil {
+		log.Printf("could not find user: %v", err)
+		return
+	}
+
+	guild, err := client.hub.guildService.GetGuild(room.GetId())
+
+	if err != nil {
+		log.Printf("could not find guild: %v", err)
+		return
+	}
+
+	if !isMember(guild, user.ID) {
+		return
+	}
+
+	guild.VCMembers = append(guild.VCMembers, *user)
+
+	_ = client.hub.guildService.UpdateGuild(guild)
+
+	clients, err := client.hub.guildService.GetVCMembers(guild.ID)
+
+	if err != nil {
+		log.Printf("could not get vc members: %v", err)
+		return
+	}
+
+	msg := model.WebsocketMessage{
+		Action: message.Action,
+		Data: gin.H{
+			"userId":  user.ID,
+			"clients": clients,
+		},
+	}
+
+	room.broadcast <- &msg
+}
+
+// handleVoiceSignal exchanges the messages needed to setup WebRTC
+func (client *Client) handleVoiceSignal(message model.ReceivedMessage) {
+	data := (*message.Message).(map[string]interface{})
+	receiver := data["userId"]
+
+	if receiver == "" {
+		return
+	}
+
+	data["userId"] = client.ID
+
+	if room := client.hub.findRoomById(message.Room); room != nil {
+		for c := range room.clients {
+			if c.ID == receiver {
+				msg := model.WebsocketMessage{
+					Action: message.Action,
+					Data:   data,
+				}
+				room.broadcast <- &msg
+				break
+			}
+		}
+	}
+}
+
+// handleLeaveVoiceMessage leaves the voice chat and the room
+func (client *Client) handleLeaveVoiceMessage(message model.ReceivedMessage) {
+
+	if room := client.hub.findRoomById(message.Room); room != nil {
+
+		_ = client.hub.guildService.RemoveVCMember(client.ID, message.Room)
+		client.handleLeaveRoomMessage(message)
+
+		guild, err := client.hub.guildService.GetGuild(room.GetId())
+
+		if err != nil {
+			log.Printf("could not find guild: %v", err)
+			return
+		}
+
+		clients, err := client.hub.guildService.GetVCMembers(guild.ID)
+
+		if err != nil {
+			log.Printf("could not get vc members: %v", err)
+			return
+		}
+
+		msg := model.WebsocketMessage{
+			Action: message.Action,
+			Data: gin.H{
+				"userId":  client.ID,
+				"clients": clients,
+			},
+		}
+
+		room.broadcast <- &msg
+
+	}
+}
+
+// updateVCMember updates the values of the user in the voice chat
+func (client *Client) updateVCMember(message model.ReceivedMessage) {
+	data := (*message.Message).(map[string]interface{})
+	value := data["value"].(bool)
+
+	user, err := client.hub.guildService.GetVCMember(client.ID, message.Room)
+
+	if err != nil {
+		log.Printf("could not find vc member: %v", err)
+		return
+	}
+
+	if message.Action == ToggleMute {
+		user.IsMuted = value
+	} else if message.Action == ToggleDeafen {
+		user.IsDeafened = value
+	}
+
+	err = client.hub.guildService.UpdateVCMember(user.IsMuted, user.IsDeafened, client.ID, message.Room)
+
+	if err != nil {
+		log.Printf("could not update vc member: %v", err)
+		return
+	}
+
+	if room := client.hub.findRoomById(message.Room); room != nil {
+		msg := model.WebsocketMessage{
+			Action: message.Action,
+			Data:   message.Message,
+		}
+		room.broadcast <- &msg
 	}
 }
 

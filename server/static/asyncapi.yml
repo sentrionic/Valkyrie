@@ -1,4 +1,4 @@
-asyncapi: '2.0.0'
+asyncapi: '2.4.0'
 info:
   title: Valkyrie Websockets
   version: '1.0.0'
@@ -14,7 +14,7 @@ servers:
     url: wss://api.valkyrieapp.xyz/ws
     protocol: wss
   development:
-    url: ws://localhost:8080/ws
+    url: ws://localhost:4000/ws
     protocol: ws
     
 channels:

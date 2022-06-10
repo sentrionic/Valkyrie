@@ -54,7 +54,7 @@ jobs:
           GIN_MODE: release
 
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           install-command: yarn
           start: yarn start

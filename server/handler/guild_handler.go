@@ -97,6 +97,57 @@ func (h *Handler) GetGuildMembers(c *gin.Context) {
 	c.JSON(http.StatusOK, members)
 }
 
+// GetVCMembers returns the given guild's members that are currently in the VC
+// GetVCMembers godoc
+// @Tags Guilds
+// @Summary Get Guild VC Members
+// @Produce  json
+// @Param guildId path string true "Guild ID"
+// @Success 200 {array} model.VCMemberResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Failure 404 {object} model.ErrorResponse
+// @Router /guilds/{guildId}/vcmembers [get]
+func (h *Handler) GetVCMembers(c *gin.Context) {
+	userId := c.MustGet("userId").(string)
+	guildId := c.Param("guildId")
+
+	guild, err := h.guildService.GetGuild(guildId)
+
+	if err != nil {
+		log.Printf("Unable to find guilds for id: %v\n%v", guildId, err)
+		e := apperrors.NewNotFound("guild", guildId)
+
+		c.JSON(e.Status(), gin.H{
+			"error": e,
+		})
+		return
+	}
+
+	// Check if a member
+	if !isMember(guild, userId) {
+		e := apperrors.NewAuthorization(apperrors.NotAMember)
+
+		c.JSON(e.Status(), gin.H{
+			"error": e,
+		})
+		return
+	}
+
+	members, err := h.guildService.GetVCMembers(guild.ID)
+
+	if err != nil {
+		log.Printf("Unable to find vc members for id: %v\n%v", guildId, err)
+		e := apperrors.NewNotFound("guild", guildId)
+
+		c.JSON(e.Status(), gin.H{
+			"error": e,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, members)
+}
+
 type createGuildRequest struct {
 	// Guild Name. 3 to 30 characters
 	Name string `json:"name"`

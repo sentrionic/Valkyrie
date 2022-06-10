@@ -4,6 +4,7 @@ import { GuildInput } from '../dtos/GuildInput';
 import { InviteInput } from '../dtos/InviteInput';
 import { Guild } from '../../models/guild';
 import { Member } from '../../models/member';
+import { VCMember } from '../../models/voice';
 
 export const getUserGuilds = (): Promise<AxiosResponse<Guild[]>> => request.get('/guilds');
 
@@ -18,6 +19,8 @@ export const invalidateInviteLinks = (id: string): Promise<AxiosResponse<boolean
   request.delete(`guilds/${id}/invite`);
 
 export const getGuildMembers = (id: string): Promise<AxiosResponse<Member[]>> => request.get(`guilds/${id}/members`);
+
+export const getVCMembers = (id: string): Promise<AxiosResponse<VCMember[]>> => request.get(`guilds/${id}/vcmembers`);
 
 export const leaveGuild = (id: string): Promise<AxiosResponse<boolean>> => request.delete(`guilds/${id}`);
 

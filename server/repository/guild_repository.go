@@ -264,3 +264,54 @@ func (r *guildRepository) GetMemberIds(guildId string) (*[]string, error) {
 
 	return &users, result.Error
 }
+
+func (r *guildRepository) RemoveVCMember(userId, guildId string) error {
+	if result := r.DB.Exec("DELETE FROM vc_members WHERE guild_id = ? AND user_id = ?", guildId, userId); result.Error != nil {
+		log.Printf("Could not add the user with id: %v to the vc of the guild with id: %v. Reason: %v\n", userId, guildId, result.Error)
+		return apperrors.NewInternal()
+	}
+	return nil
+}
+
+func (r *guildRepository) VCMembers(guildId string) (*[]model.VCMemberResponse, error) {
+	var members []model.VCMemberResponse
+	result := r.DB.Raw(`
+		SELECT u.id,
+			   u.username,
+			   u.image,
+			   vm.is_muted,
+			   vm.is_deafened,
+			   m.nickname
+		FROM users AS u
+				 JOIN vc_members vm ON u."id"::text = vm."user_id"
+				 JOIN members m on vm.user_id = m.user_id AND vm.guild_id = m.guild_id
+		WHERE vm."guild_id" = ?
+		ORDER BY (CASE WHEN m.nickname notnull THEN m.nickname ELSE u.username END)
+	`, guildId).Find(&members)
+
+	return &members, result.Error
+}
+
+func (r *guildRepository) UpdateVCMember(isMuted, isDeafened bool, userId, guildId string) error {
+	err := r.DB.
+		Table("vc_members").
+		Where("user_id = ? AND guild_id = ?", userId, guildId).
+		Updates(map[string]interface{}{
+			"is_muted":    isMuted,
+			"is_deafened": isDeafened,
+		}).
+		Error
+	return err
+}
+
+func (r *guildRepository) GetVCMember(userId, guildId string) (*model.VCMember, error) {
+	var user model.VCMember
+
+	result := r.DB.Raw(`
+		SELECT * from vc_members vm
+		WHERE vm."guild_id" = ?
+		AND vm."user_id" = ?
+	`, guildId, userId).Find(&user)
+
+	return &user, result.Error
+}

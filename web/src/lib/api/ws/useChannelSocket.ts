@@ -5,10 +5,13 @@ import { getSocket } from '../getSocket';
 import { useGetCurrentGuild } from '../../utils/hooks/useGetCurrentGuild';
 import { userStore } from '../../stores/userStore';
 import { Channel } from '../../models/channel';
+import { VCMember, VoiceResponse } from '../../models/voice';
+import { vcKey } from '../../utils/querykeys';
 
 type WSMessage =
   | { action: 'delete_channel' | 'new_notification'; data: string }
-  | { action: 'add_channel' | 'add_private_channel' | 'edit_channel'; data: Channel };
+  | { action: 'add_channel' | 'add_private_channel' | 'edit_channel'; data: Channel }
+  | { action: 'joinVoice' | 'leaveVoice'; data: VoiceResponse };
 
 export function useChannelSocket(guildId: string, key: string): void {
   const location = useLocation();
@@ -109,6 +112,20 @@ export function useChannelSocket(guildId: string, key: string): void {
               return data;
             });
           }
+          break;
+        }
+
+        case 'joinVoice': {
+          const { data } = response;
+          // Remove the current user from the list
+          cache.setQueryData<VCMember[]>(vcKey(guildId), (_) => data.clients.filter((e) => e.id !== current?.id));
+          break;
+        }
+
+        case 'leaveVoice': {
+          const { data } = response;
+          // Remove the current user from the list
+          cache.setQueryData<VCMember[]>(vcKey(guildId), (_) => data.clients.filter((e) => e.id !== current?.id));
           break;
         }
 

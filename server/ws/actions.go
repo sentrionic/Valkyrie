@@ -5,8 +5,10 @@ const (
 	JoinUserAction        = "joinUser"
 	JoinGuildAction       = "joinGuild"
 	JoinChannelAction     = "joinChannel"
+	JoinVoiceAction       = "joinVoice"
 	LeaveGuildAction      = "leaveGuild"
 	LeaveRoomAction       = "leaveRoom"
+	LeaveVoiceAction      = "leaveVoice"
 	StartTypingAction     = "startTyping"
 	StopTypingAction      = "stopTyping"
 	ToggleOnlineAction    = "toggleOnline"
@@ -40,4 +42,7 @@ const (
 	RemoveFriendAction      = "remove_friend"
 	PushToTopAction         = "push_to_top"
 	RequestCountEmission    = "requestCount"
+	VoiceSignal             = "voice-signal"
+	ToggleMute              = "toggle-mute"
+	ToggleDeafen            = "toggle-deafen"
 )
