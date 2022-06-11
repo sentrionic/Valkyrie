@@ -43,7 +43,7 @@ Cypress.Commands.add('createGuild', (id) => {
 });
 
 Cypress.Commands.add('clickOnFirstGuild', () => {
-  cy.wait(100);
+  cy.wait(1000);
   cy.get('a[href*="channels"]').not('a[href*="channels/me"]').first().click();
 });
 
@@ -57,7 +57,7 @@ Cypress.Commands.add('joinGuild', (invite) => {
 
   cy.get('input').type(invite).should('have.value', invite);
   cy.get('[type=submit]').click();
-  cy.wait(100);
+  cy.wait(1000);
 });
 
 Cypress.Commands.add('getChat', () => {
