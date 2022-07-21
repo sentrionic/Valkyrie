@@ -69,4 +69,4 @@ jobs:
           MAX_BODY_BYTES: 4194304
           REDIS_URL: redis://localhost:6379
           SECRET: jmaijopspahisodphiasdhiahiopsdhoiasdg8a89sdta08sdtg8aosdou
-          COOKIE_NAME: vlk
+          CORS_ORIGIN: origin

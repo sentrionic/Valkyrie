@@ -2,13 +2,14 @@ package main
 
 import (
 	"context"
-	"github.com/sentrionic/valkyrie/config"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/sentrionic/valkyrie/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
