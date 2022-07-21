@@ -22,8 +22,9 @@ func setupTest(t *testing.T) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	ctx := context.Background()
-	err := godotenv.Load()
-	assert.NoError(t, err)
+
+	// Load config for local testing, ignore for CI
+	_ = godotenv.Load()
 
 	cfg, err := config.LoadConfig(ctx)
 	assert.NoError(t, err)
