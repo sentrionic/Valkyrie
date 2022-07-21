@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/sentrionic/valkyrie/config"
 	"log"
 	"net/http"
 	"os"
@@ -32,27 +33,34 @@ func main() {
 		}
 	}
 
+	ctx := context.Background()
+	cfg, err := config.LoadConfig(ctx)
+
+	if err != nil {
+		log.Fatalln("Could not load the config")
+	}
+
 	// initialize data sources
-	ds, err := initDS()
+	ds, err := initDS(ctx, cfg)
 
 	if err != nil {
 		log.Fatalf("Unable to initialize data sources: %v\n", err)
 	}
 
-	router, err := inject(ds)
+	router, err := inject(ds, cfg)
 
 	if err != nil {
 		log.Fatalf("Failure to inject data sources: %v\n", err)
 	}
 
 	srv := &http.Server{
-		Addr:    ":" + os.Getenv("PORT"),
+		Addr:    ":" + cfg.Port,
 		Handler: router,
 	}
 
 	// Graceful server shutdown - https://github.com/gin-gonic/examples/blob/master/graceful-shutdown/graceful-shutdown/server.go
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err = srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to initialize server: %v\n", err)
 		}
 	}()
@@ -79,7 +87,7 @@ func main() {
 
 	// Shutdown server
 	log.Println("Shutting down server...")
-	if err := srv.Shutdown(ctx); err != nil {
+	if err = srv.Shutdown(ctx); err != nil {
 		log.Fatalf("Server forced to shutdown: %v\n", err)
 	}
 }

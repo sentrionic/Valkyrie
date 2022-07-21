@@ -13,7 +13,7 @@ import (
 
 func TestGuildService_CreateMessage(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 		mockMessage := fixture.GetMockMessage("", "")
 
 		params := &model.Message{
@@ -142,8 +142,7 @@ func TestMessageService_UploadFile(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		imageURL := "https://imageurl.com/jdfkj34kljl"
 		channelId := fixture.RandID()
-		id, err := GenerateId()
-		assert.NoError(t, err)
+		id := GenerateId()
 
 		multipartImageFixture := fixture.NewMultipartImage("image.png", "image/png")
 		defer multipartImageFixture.Close()
@@ -175,7 +174,7 @@ func TestMessageService_UploadFile(t *testing.T) {
 			FileRepository: mockFileRepository,
 		})
 
-		_, err = ms.UploadFile(imageFileHeader, channelId)
+		_, err := ms.UploadFile(imageFileHeader, channelId)
 		assert.NoError(t, err)
 
 		mockFileRepository.AssertExpectations(t)

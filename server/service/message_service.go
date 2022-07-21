@@ -40,11 +40,7 @@ func (m *messageService) GetMessages(userId string, channel *model.Channel, curs
 }
 
 func (m *messageService) CreateMessage(params *model.Message) (*model.Message, error) {
-	id, err := GenerateId()
-	if err != nil {
-		return nil, err
-	}
-	params.ID = id
+	params.ID = GenerateId()
 
 	return m.MessageRepository.CreateMessage(params)
 }
@@ -73,12 +69,7 @@ func (m *messageService) UploadFile(header *multipart.FileHeader, channelId stri
 		Filename: filename,
 	}
 
-	id, err := GenerateId()
-	if err != nil {
-		return nil, err
-	}
-
-	attachment.ID = id
+	attachment.ID = GenerateId()
 
 	directory := fmt.Sprintf("channels/%s", channelId)
 	url, err := m.FileRepository.UploadFile(header, directory, filename, mimetype)

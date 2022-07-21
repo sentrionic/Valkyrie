@@ -16,7 +16,7 @@ import (
 func TestAuthUser(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
-	uid, _ := service.GenerateId()
+	uid := service.GenerateId()
 
 	t.Run("Adds an userId to context", func(t *testing.T) {
 		rr := httptest.NewRecorder()

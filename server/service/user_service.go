@@ -65,13 +65,7 @@ func (s *userService) Register(user *model.User) (*model.User, error) {
 		return nil, apperrors.NewInternal()
 	}
 
-	id, err := GenerateId()
-
-	if err != nil {
-		return nil, err
-	}
-
-	user.ID = id
+	user.ID = GenerateId()
 	user.Image = generateAvatar(user.Email)
 	user.Password = hashedPassword
 

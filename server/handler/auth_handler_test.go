@@ -405,7 +405,7 @@ func TestHandler_Logout(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := service.GenerateId()
+		uid := service.GenerateId()
 
 		rr := httptest.NewRecorder()
 

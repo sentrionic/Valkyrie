@@ -14,7 +14,7 @@ import (
 
 func TestGet(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 		mockUser := fixture.GetMockUser()
 		mockUser.ID = uid
 
@@ -32,7 +32,7 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("Error", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 
 		mockUserRepository := new(mocks.UserRepository)
 		us := NewUserService(&USConfig{
@@ -86,7 +86,7 @@ func TestUserService_GetByEmail(t *testing.T) {
 
 func TestRegister(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 		mockUser := fixture.GetMockUser()
 
 		initial := &model.User{
@@ -176,7 +176,7 @@ func TestLogin(t *testing.T) {
 	})
 
 	t.Run("Invalid email/password combination", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 
 		mockUserResp := fixture.GetMockUser()
 		mockUserResp.ID = uid
@@ -207,7 +207,7 @@ func TestUpdateDetails(t *testing.T) {
 	})
 
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 
 		mockUser := fixture.GetMockUser()
 		mockUser.ID = uid
@@ -226,7 +226,7 @@ func TestUpdateDetails(t *testing.T) {
 	})
 
 	t.Run("Failure", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 
 		mockUser := fixture.GetMockUser()
 		mockUser.ID = uid
@@ -261,7 +261,7 @@ func TestUserService_ChangeAvatar(t *testing.T) {
 	})
 
 	t.Run("Successful new image", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 
 		// does not have have imageURL
 		mockUser := fixture.GetMockUser()
@@ -318,7 +318,7 @@ func TestUserService_ChangeAvatar(t *testing.T) {
 
 	t.Run("Successful update image", func(t *testing.T) {
 		imageURL := "https://imageurl.com/jdfkj34kljl"
-		uid, _ := GenerateId()
+		uid := GenerateId()
 
 		mockUser := &model.User{
 			Email:    "new@bob.com",
@@ -415,7 +415,7 @@ func TestUserService_ChangeAvatar(t *testing.T) {
 	})
 
 	t.Run("UserRepository UpdateImage Error", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 		imageURL := "https://imageurl.com/jdfkj34kljl"
 
 		// has imageURL

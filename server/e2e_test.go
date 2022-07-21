@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/sentrionic/valkyrie/config"
 	"github.com/sentrionic/valkyrie/model"
 	"github.com/sentrionic/valkyrie/model/fixture"
 	"github.com/stretchr/testify/assert"
@@ -16,16 +18,27 @@ import (
 	"testing"
 )
 
-func TestMain_AccountE2E(t *testing.T) {
+func setupTest(t *testing.T) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
-	_ = godotenv.Load()
-
-	ds, err := initDS()
+	ctx := context.Background()
+	err := godotenv.Load()
 	assert.NoError(t, err)
 
-	router, err := inject(ds)
+	cfg, err := config.LoadConfig(ctx)
 	assert.NoError(t, err)
+
+	ds, err := initDS(ctx, cfg)
+	assert.NoError(t, err)
+
+	router, err := inject(ds, cfg)
+	assert.NoError(t, err)
+
+	return router
+}
+
+func TestMain_AccountE2E(t *testing.T) {
+	router := setupTest(t)
 
 	authUser := fixture.GetMockUser()
 	cookie := ""
@@ -60,7 +73,7 @@ func TestMain_AccountE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -95,7 +108,7 @@ func TestMain_AccountE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -125,7 +138,7 @@ func TestMain_AccountE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -162,7 +175,7 @@ func TestMain_AccountE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockUsername, respBody.Username)
@@ -221,7 +234,7 @@ func TestMain_AccountE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockUsername, respBody.Username)
@@ -245,7 +258,6 @@ func TestMain_AccountE2E(t *testing.T) {
 			},
 			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
-				assert.NoError(t, err)
 			},
 		},
 		{
@@ -278,15 +290,7 @@ func TestMain_AccountE2E(t *testing.T) {
 }
 
 func TestMain_FriendsE2E(t *testing.T) {
-	gin.SetMode(gin.ReleaseMode)
-
-	_ = godotenv.Load()
-
-	ds, err := initDS()
-	assert.NoError(t, err)
-
-	router, err := inject(ds)
-	assert.NoError(t, err)
+	router := setupTest(t)
 
 	authUser := fixture.GetMockUser()
 	cookie := ""
@@ -321,7 +325,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -358,7 +362,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockUser.Username, respBody.Username)
@@ -404,7 +408,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.FriendRequest{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -449,7 +453,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.FriendRequest{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -470,7 +474,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.Friend{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -515,7 +519,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.Friend{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -554,7 +558,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.FriendRequest{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -603,15 +607,7 @@ func TestMain_FriendsE2E(t *testing.T) {
 }
 
 func TestMain_GuildsE2E(t *testing.T) {
-	gin.SetMode(gin.ReleaseMode)
-
-	_ = godotenv.Load()
-
-	ds, err := initDS()
-	assert.NoError(t, err)
-
-	router, err := inject(ds)
-	assert.NoError(t, err)
+	router := setupTest(t)
 
 	authUser := fixture.GetMockUser()
 	cookie := ""
@@ -651,7 +647,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -688,7 +684,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockUser.Username, respBody.Username)
@@ -723,7 +719,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockGuild.Name, respBody.Name)
@@ -752,7 +748,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -809,9 +805,8 @@ func TestMain_GuildsE2E(t *testing.T) {
 			},
 			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
-				assert.NoError(t, err)
 
-				err = json.Unmarshal(recorder.Body.Bytes(), &inviteLink)
+				err := json.Unmarshal(recorder.Body.Bytes(), &inviteLink)
 				assert.NoError(t, err)
 				assert.NotNil(t, inviteLink)
 			},
@@ -836,7 +831,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockName, respBody.Name)
@@ -862,7 +857,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -911,7 +906,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -933,7 +928,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.MemberResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -983,7 +978,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1008,15 +1003,7 @@ func TestMain_GuildsE2E(t *testing.T) {
 }
 
 func TestMain_MembersE2E(t *testing.T) {
-	gin.SetMode(gin.ReleaseMode)
-
-	_ = godotenv.Load()
-
-	ds, err := initDS()
-	assert.NoError(t, err)
-
-	router, err := inject(ds)
-	assert.NoError(t, err)
+	router := setupTest(t)
 
 	authUser := fixture.GetMockUser()
 	cookie := ""
@@ -1054,7 +1041,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -1091,7 +1078,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockUser.Username, respBody.Username)
@@ -1127,7 +1114,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockGuild.Name, respBody.Name)
@@ -1183,7 +1170,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &model.MemberSettings{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, *respBody.Nickname)
@@ -1203,7 +1190,7 @@ func TestMain_MembersE2E(t *testing.T) {
 			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
-				err = json.Unmarshal(recorder.Body.Bytes(), &inviteLink)
+				err := json.Unmarshal(recorder.Body.Bytes(), &inviteLink)
 				assert.NoError(t, err)
 				assert.NotNil(t, inviteLink)
 			},
@@ -1228,7 +1215,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockGuild.Name, respBody.Name)
@@ -1254,7 +1241,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1310,7 +1297,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1338,7 +1325,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockGuild.Name, respBody.Name)
@@ -1364,7 +1351,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1420,7 +1407,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1442,7 +1429,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.BanResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1494,7 +1481,7 @@ func TestMain_MembersE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.BanResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1519,15 +1506,7 @@ func TestMain_MembersE2E(t *testing.T) {
 }
 
 func TestMain_ChannelsE2E(t *testing.T) {
-	gin.SetMode(gin.ReleaseMode)
-
-	_ = godotenv.Load()
-
-	ds, err := initDS()
-	assert.NoError(t, err)
-
-	router, err := inject(ds)
-	assert.NoError(t, err)
+	router := setupTest(t)
 
 	authUser := fixture.GetMockUser()
 	cookie := ""
@@ -1563,7 +1542,7 @@ func TestMain_ChannelsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -1597,10 +1576,9 @@ func TestMain_ChannelsE2E(t *testing.T) {
 			},
 			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
-				assert.NoError(t, err)
 
 				respBody := &model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockGuild.Name, respBody.Name)
@@ -1636,7 +1614,7 @@ func TestMain_ChannelsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.ChannelResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockChannel.Name, respBody.Name)
@@ -1663,7 +1641,7 @@ func TestMain_ChannelsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.ChannelResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1718,7 +1696,7 @@ func TestMain_ChannelsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.ChannelResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1748,7 +1726,7 @@ func TestMain_ChannelsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				var respBody []string
-				err = json.Unmarshal(recorder.Body.Bytes(), &respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), &respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1789,7 +1767,7 @@ func TestMain_ChannelsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.ChannelResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -1822,15 +1800,7 @@ func TestMain_ChannelsE2E(t *testing.T) {
 }
 
 func TestMain_DMsE2E(t *testing.T) {
-	gin.SetMode(gin.ReleaseMode)
-
-	_ = godotenv.Load()
-
-	ds, err := initDS()
-	assert.NoError(t, err)
-
-	router, err := inject(ds)
-	assert.NoError(t, err)
+	router := setupTest(t)
 
 	authUser := fixture.GetMockUser()
 	cookie := ""
@@ -1866,7 +1836,7 @@ func TestMain_DMsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -1903,7 +1873,7 @@ func TestMain_DMsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockUser.Username, respBody.Username)
@@ -1932,7 +1902,7 @@ func TestMain_DMsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &model.DirectMessage{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.NotNil(t, respBody.User)
@@ -1959,7 +1929,7 @@ func TestMain_DMsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.DirectMessage{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -2008,7 +1978,7 @@ func TestMain_DMsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.DirectMessage{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -2030,7 +2000,7 @@ func TestMain_DMsE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &model.DirectMessage{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.NotNil(t, respBody.User)
@@ -2060,15 +2030,7 @@ func TestMain_DMsE2E(t *testing.T) {
 }
 
 func TestMain_MessagesE2E(t *testing.T) {
-	gin.SetMode(gin.ReleaseMode)
-
-	_ = godotenv.Load()
-
-	ds, err := initDS()
-	assert.NoError(t, err)
-
-	router, err := inject(ds)
-	assert.NoError(t, err)
+	router := setupTest(t)
 
 	authUser := fixture.GetMockUser()
 	cookie := ""
@@ -2106,7 +2068,7 @@ func TestMain_MessagesE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.User{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, authUser.Username, respBody.Username)
@@ -2140,10 +2102,9 @@ func TestMain_MessagesE2E(t *testing.T) {
 			},
 			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
-				assert.NoError(t, err)
 
 				respBody := &model.GuildResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockGuild.Name, respBody.Name)
@@ -2179,7 +2140,7 @@ func TestMain_MessagesE2E(t *testing.T) {
 				assert.Equal(t, http.StatusCreated, recorder.Code)
 
 				respBody := &model.ChannelResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 
 				assert.Equal(t, mockChannel.Name, respBody.Name)
@@ -2231,7 +2192,7 @@ func TestMain_MessagesE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.MessageResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -2297,7 +2258,7 @@ func TestMain_MessagesE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.MessageResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 
@@ -2354,7 +2315,7 @@ func TestMain_MessagesE2E(t *testing.T) {
 				assert.Equal(t, http.StatusOK, recorder.Code)
 
 				respBody := &[]model.MessageResponse{}
-				err = json.Unmarshal(recorder.Body.Bytes(), respBody)
+				err := json.Unmarshal(recorder.Body.Bytes(), respBody)
 				assert.NoError(t, err)
 				assert.NotNil(t, respBody)
 

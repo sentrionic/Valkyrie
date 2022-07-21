@@ -25,7 +25,7 @@ func TestHandler_GetCurrent(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := service.GenerateId()
+		uid := service.GenerateId()
 
 		mockUserResp := fixture.GetMockUser()
 		mockUserResp.ID = uid
@@ -57,7 +57,7 @@ func TestHandler_GetCurrent(t *testing.T) {
 	})
 
 	t.Run("NotFound", func(t *testing.T) {
-		uid, _ := service.GenerateId()
+		uid := service.GenerateId()
 		mockUserService := new(mocks.UserService)
 		mockUserService.On("Get", uid).Return(nil, fmt.Errorf("some error down call chain"))
 
@@ -89,7 +89,7 @@ func TestHandler_GetCurrent(t *testing.T) {
 	})
 
 	t.Run("Unauthorized", func(t *testing.T) {
-		uid, _ := service.GenerateId()
+		uid := service.GenerateId()
 		mockUserService := new(mocks.UserService)
 		mockUserService.On("Get", uid).Return(nil, nil)
 
@@ -116,7 +116,7 @@ func TestHandler_EditAccount(t *testing.T) {
 	// Setup
 	gin.SetMode(gin.TestMode)
 
-	uid, _ := service.GenerateId()
+	uid := service.GenerateId()
 	mockUser := fixture.GetMockUser()
 	mockUser.ID = uid
 
@@ -307,7 +307,7 @@ func TestHandler_ChangePassword(t *testing.T) {
 	// Setup
 	gin.SetMode(gin.TestMode)
 
-	uid, _ := service.GenerateId()
+	uid := service.GenerateId()
 	mockUser := fixture.GetMockUser()
 	mockUser.ID = uid
 
@@ -439,7 +439,7 @@ func TestHandler_ChangePassword_BadRequest(t *testing.T) {
 	// Setup
 	gin.SetMode(gin.TestMode)
 
-	uid, _ := service.GenerateId()
+	uid := service.GenerateId()
 	mockUser := fixture.GetMockUser()
 	mockUser.ID = uid
 

@@ -2,20 +2,25 @@ package service
 
 import (
 	"github.com/bwmarrin/snowflake"
-	"github.com/sentrionic/valkyrie/model/apperrors"
 	"log"
 )
 
-// GenerateId generates a snowflake id
-func GenerateId() (string, error) {
-	node, err := snowflake.NewNode(1)
-	if err != nil {
-		log.Printf("Failed to genenerate an snowflake id: %v\n", err.Error())
-		return "", apperrors.NewInternal()
-	}
+var node *snowflake.Node
 
+func init() {
+	const nodeID int64 = 1
+
+	var err error
+	node, err = snowflake.NewNode(nodeID)
+	if err != nil {
+		log.Fatalf("failed to init snowflake node: %v", err.Error())
+	}
+}
+
+// GenerateId generates a snowflake id
+func GenerateId() string {
 	// Generate a snowflake ID.
 	id := node.Generate()
 
-	return id.String(), nil
+	return id.String()
 }

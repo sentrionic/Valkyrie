@@ -43,7 +43,7 @@ func NewFileRepository(session *session.Session, bucketName string) model.FileRe
 func (s *s3FileRepository) UploadAvatar(header *multipart.FileHeader, directory string) (string, error) {
 	uploader := s3manager.NewUploader(s.S3Session)
 
-	id, _ := service.GenerateId()
+	id := service.GenerateId()
 	key := fmt.Sprintf("files/%s/%s.jpeg", directory, id)
 
 	file, err := header.Open()

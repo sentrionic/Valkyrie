@@ -12,7 +12,7 @@ import (
 
 func TestChannelService_CreateChannel(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 		mockChannel := fixture.GetMockChannel("")
 
 		params := &model.Channel{
@@ -83,24 +83,9 @@ func TestChannelService_AddDMChannelMembers(t *testing.T) {
 			ChannelRepository: mockChannelRepository,
 		})
 
-		members := make([]model.DMMember, 0)
-		for _, mId := range ids {
-			id, err := GenerateId()
-			assert.NoError(t, err)
-
-			member := model.DMMember{
-				ID:        id,
-				UserID:    mId,
-				ChannelId: channelId,
-				IsOpen:    userId == mId,
-			}
-			members = append(members, member)
-		}
-
 		mockChannelRepository.
-			On("AddDMChannelMembers", members).
+			On("AddDMChannelMembers", mock.AnythingOfType("[]model.DMMember")).
 			// Has to be added so the different IDs get accepted
-			Run(func(args mock.Arguments) {}).
 			Return(nil)
 
 		err := cs.AddDMChannelMembers(ids, channelId, userId)
@@ -115,25 +100,10 @@ func TestChannelService_AddDMChannelMembers(t *testing.T) {
 			ChannelRepository: mockChannelRepository,
 		})
 
-		members := make([]model.DMMember, 0)
-		for _, mId := range ids {
-			id, err := GenerateId()
-			assert.NoError(t, err)
-
-			member := model.DMMember{
-				ID:        id,
-				UserID:    mId,
-				ChannelId: channelId,
-				IsOpen:    userId == mId,
-			}
-			members = append(members, member)
-		}
-
 		mockError := apperrors.NewInternal()
 		mockChannelRepository.
-			On("AddDMChannelMembers", members).
+			On("AddDMChannelMembers", mock.AnythingOfType("[]model.DMMember")).
 			// Has to be added so the different IDs get accepted
-			Run(func(args mock.Arguments) {}).
 			Return(mockError)
 
 		err := cs.AddDMChannelMembers(ids, channelId, userId)

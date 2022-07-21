@@ -13,7 +13,7 @@ import (
 
 func TestGuildService_CreateGuild(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
-		uid, _ := GenerateId()
+		uid := GenerateId()
 		mockGuild := fixture.GetMockGuild("")
 
 		params := &model.Guild{

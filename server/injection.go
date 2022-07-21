@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	cors "github.com/rs/cors/wrapper/gin"
+	"github.com/sentrionic/valkyrie/config"
 	"github.com/sentrionic/valkyrie/handler"
 	"github.com/sentrionic/valkyrie/handler/middleware"
 	"github.com/sentrionic/valkyrie/model"
@@ -17,35 +18,25 @@ import (
 	sredis "github.com/ulule/limiter/v3/drivers/store/redis"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 )
 
-func inject(d *dataSources) (*gin.Engine, error) {
+func inject(d *dataSources, cfg config.Config) (*gin.Engine, error) {
 	log.Println("Injecting data sources")
 
-	/*
-	 * repository layer
-	 */
+	// Repository layer
 	userRepository := repository.NewUserRepository(d.DB)
 	friendRepository := repository.NewFriendRepository(d.DB)
 	guildRepository := repository.NewGuildRepository(d.DB)
 	channelRepository := repository.NewChannelRepository(d.DB)
 	messageRepository := repository.NewMessageRepository(d.DB)
 
-	bucketName := os.Getenv("AWS_STORAGE_BUCKET_NAME")
-	fileRepository := repository.NewFileRepository(d.S3Session, bucketName)
+	fileRepository := repository.NewFileRepository(d.S3Session, cfg.BucketName)
 	redisRepository := repository.NewRedisRepository(d.RedisClient)
 
-	gmailUser := os.Getenv("GMAIL_USER")
-	gmailPassword := os.Getenv("GMAIL_PASSWORD")
-	origin := os.Getenv("CORS_ORIGIN")
-	mailRepository := repository.NewMailRepository(gmailUser, gmailPassword, origin)
+	mailRepository := repository.NewMailRepository(cfg.GmailUser, cfg.GmailPassword, cfg.CorsOrigin)
 
-	/*
-	 * service layer
-	 */
+	// Service Layer
 	userService := service.NewUserService(&service.USConfig{
 		UserRepository:  userRepository,
 		FileRepository:  fileRepository,
@@ -81,7 +72,7 @@ func inject(d *dataSources) (*gin.Engine, error) {
 
 	// set cors settings
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{origin},
+		AllowedOrigins:   []string{cfg.CorsOrigin},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 	})
@@ -91,13 +82,14 @@ func inject(d *dataSources) (*gin.Engine, error) {
 	password := d.RedisClient.Options().Password
 
 	// initialize session store
-	secret := os.Getenv("SECRET")
-	store, _ := redis.NewStore(10, "tcp", redisURL, password, []byte(secret))
+	store, err := redis.NewStore(10, "tcp", redisURL, password, []byte(cfg.SessionSecret))
 
-	domain := os.Getenv("DOMAIN")
+	if err != nil {
+		return nil, fmt.Errorf("could not initialize redis session store: %w", err)
+	}
 
 	store.Options(sessions.Options{
-		Domain:   domain,
+		Domain:   cfg.Domain,
 		MaxAge:   60 * 60 * 24 * 7, // 7 days
 		Secure:   gin.Mode() == gin.ReleaseMode,
 		HttpOnly: true,
@@ -106,20 +98,6 @@ func inject(d *dataSources) (*gin.Engine, error) {
 	})
 
 	router.Use(sessions.Sessions(model.CookieName, store))
-
-	// set time out
-	handlerTimeout := os.Getenv("HANDLER_TIMEOUT")
-	ht, err := strconv.ParseInt(handlerTimeout, 0, 64)
-	if err != nil {
-		return nil, fmt.Errorf("could not parse HANDLER_TIMEOUT as int: %w", err)
-	}
-
-	// set max body size
-	maxBodyBytes := os.Getenv("MAX_BODY_BYTES")
-	mbb, err := strconv.ParseInt(maxBodyBytes, 0, 64)
-	if err != nil {
-		return nil, fmt.Errorf("could not parse MAX_BODY_BYTES as int: %w", err)
-	}
 
 	// add rate limit
 	rate := limiter.Rate{
@@ -159,8 +137,8 @@ func inject(d *dataSources) (*gin.Engine, error) {
 		ChannelService:  channelService,
 		MessageService:  messageService,
 		SocketService:   socketService,
-		TimeoutDuration: time.Duration(ht) * time.Second,
-		MaxBodyBytes:    mbb,
+		TimeoutDuration: time.Duration(cfg.HandlerTimeOut) * time.Second,
+		MaxBodyBytes:    cfg.MaxBodyBytes,
 	})
 
 	return router, nil

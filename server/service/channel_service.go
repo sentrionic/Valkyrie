@@ -29,13 +29,7 @@ func NewChannelService(c *CSConfig) model.ChannelService {
 }
 
 func (c *channelService) CreateChannel(channel *model.Channel) (*model.Channel, error) {
-	id, err := GenerateId()
-
-	if err != nil {
-		return nil, err
-	}
-
-	channel.ID = id
+	channel.ID = GenerateId()
 
 	return c.ChannelRepository.Create(channel)
 }
@@ -63,14 +57,8 @@ func (c *channelService) GetDirectMessageChannel(userId string, memberId string)
 func (c *channelService) AddDMChannelMembers(memberIds []string, channelId string, userId string) error {
 	var members []model.DMMember
 	for _, mId := range memberIds {
-		id, err := GenerateId()
-
-		if err != nil {
-			return err
-		}
-
 		member := model.DMMember{
-			ID:        id,
+			ID:        GenerateId(),
 			UserID:    mId,
 			ChannelId: channelId,
 			IsOpen:    userId == mId,

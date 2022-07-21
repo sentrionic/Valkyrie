@@ -47,13 +47,7 @@ func (g *guildService) GetGuildMembers(userId string, guildId string) (*[]model.
 }
 
 func (g *guildService) CreateGuild(guild *model.Guild) (*model.Guild, error) {
-	id, err := GenerateId()
-
-	if err != nil {
-		return nil, err
-	}
-
-	guild.ID = id
+	guild.ID = GenerateId()
 
 	return g.GuildRepository.Create(guild)
 }
