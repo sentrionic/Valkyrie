@@ -38,7 +38,7 @@ func main() {
 	cfg, err := config.LoadConfig(ctx)
 
 	if err != nil {
-		log.Fatalln("Could not load the config")
+		log.Fatalf("Could not load the config: %v\n", err)
 	}
 
 	// initialize data sources
