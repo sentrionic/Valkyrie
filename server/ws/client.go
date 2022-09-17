@@ -399,7 +399,7 @@ func (client *Client) handleJoinVoiceMessage(message model.ReceivedMessage) {
 
 // handleVoiceSignal exchanges the messages needed to setup WebRTC
 func (client *Client) handleVoiceSignal(message model.ReceivedMessage) {
-	data := (*message.Message).(map[string]interface{})
+	data := (*message.Message).(map[string]any)
 	receiver := data["userId"]
 
 	if receiver == "" {
@@ -459,7 +459,7 @@ func (client *Client) handleLeaveVoiceMessage(message model.ReceivedMessage) {
 
 // updateVCMember updates the values of the user in the voice chat
 func (client *Client) updateVCMember(message model.ReceivedMessage) {
-	data := (*message.Message).(map[string]interface{})
+	data := (*message.Message).(map[string]any)
 	value := data["value"].(bool)
 
 	user, err := client.hub.guildService.GetVCMember(client.ID, message.Room)

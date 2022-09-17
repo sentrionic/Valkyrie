@@ -32,8 +32,8 @@ func Timeout(timeout time.Duration, errTimeout *apperrors.Error) gin.HandlerFunc
 		// update gin request context
 		c.Request = c.Request.WithContext(ctx)
 
-		finished := make(chan struct{})        // to indicate handler finished
-		panicChan := make(chan interface{}, 1) // used to handle panics if we can't recover
+		finished := make(chan struct{}) // to indicate handler finished
+		panicChan := make(chan any, 1)  // used to handle panics if we can't recover
 
 		go func() {
 			defer func() {

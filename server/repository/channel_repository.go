@@ -172,7 +172,7 @@ func (r *channelRepository) SetDirectMessageStatus(dmId string, userId string, i
 	err := r.DB.
 		Table("dm_members").
 		Where("channel_id = ? AND user_id = ?", dmId, userId).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"is_open":    isOpen,
 			"updated_at": time.Now(),
 		}).
@@ -185,7 +185,7 @@ func (r *channelRepository) OpenDMForAll(dmId string) error {
 	err := r.DB.
 		Table("dm_members").
 		Where("channel_id = ? ", dmId).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"is_open":    true,
 			"updated_at": time.Now(),
 		}).

@@ -7,15 +7,15 @@ import (
 
 // ReceivedMessage represents a received websocket message
 type ReceivedMessage struct {
-	Action  string       `json:"action"`
-	Room    string       `json:"room"`
-	Message *interface{} `json:"message"`
+	Action  string `json:"action"`
+	Room    string `json:"room"`
+	Message *any   `json:"message"`
 }
 
 // WebsocketMessage represents an emitted message
 type WebsocketMessage struct {
-	Action string      `json:"action"`
-	Data   interface{} `json:"data"`
+	Action string `json:"action"`
+	Data   any    `json:"data"`
 }
 
 // Encode turns the message into a byte array

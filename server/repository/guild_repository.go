@@ -203,7 +203,7 @@ func (r *guildRepository) UpdateMemberSettings(settings *model.MemberSettings, u
 	err := r.DB.
 		Table("members").
 		Where("user_id = ? AND guild_id = ?", userId, guildId).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"color":      settings.Color,
 			"nickname":   settings.Nickname,
 			"updated_at": time.Now(),
@@ -245,7 +245,7 @@ func (r *guildRepository) UpdateMemberLastSeen(userId, guildId string) error {
 	err := r.DB.
 		Table("members").
 		Where("user_id = ? AND guild_id = ?", userId, guildId).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"last_seen": time.Now(),
 		}).
 		Error
@@ -296,7 +296,7 @@ func (r *guildRepository) UpdateVCMember(isMuted, isDeafened bool, userId, guild
 	err := r.DB.
 		Table("vc_members").
 		Where("user_id = ? AND guild_id = ?", userId, guildId).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"is_muted":    isMuted,
 			"is_deafened": isDeafened,
 		}).
