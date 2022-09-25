@@ -46,11 +46,13 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
         onMouseEnter={() => setShowButton(true)}
       >
         <Flex align="center" justify="space-between">
-          <Flex align="center">
+          <Flex align="center" textOverflow="ellipsis" maxW="80%">
             <Avatar size="sm" src={dm.user.image}>
               <AvatarBadge boxSize="1.25em" bg={dm.user.isOnline ? 'green.500' : 'gray.500'} />
             </Avatar>
-            <Text ml="2">{dm.user.username}</Text>
+            <Text ml="2" noOfLines={1}>
+              {dm.user.username}
+            </Text>
           </Flex>
           {showCloseButton && (
             <Icon

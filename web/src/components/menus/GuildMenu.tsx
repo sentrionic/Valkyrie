@@ -51,7 +51,9 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
         {({ isOpen: menuIsOpen }) => (
           <>
             <Flex justify="space-between" align="center">
-              <Heading fontSize="20px">{guild?.name}</Heading>
+              <Heading fontSize="20px" noOfLines={1}>
+                {guild?.name}
+              </Heading>
               <MenuButton>
                 <Icon as={!menuIsOpen ? FiChevronDown : FiX} />
               </MenuButton>

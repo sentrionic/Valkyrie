@@ -6,7 +6,7 @@ go 1.19
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
-	github.com/aws/aws-sdk-go v1.44.100
+	github.com/aws/aws-sdk-go v1.44.105
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/disintegration/imaging v1.6.2
 	github.com/gin-contrib/sessions v0.0.5
@@ -28,14 +28,14 @@ require (
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
 	github.com/swaggo/gin-swagger v1.5.3
-	github.com/swaggo/swag v1.8.5
+	github.com/swaggo/swag v1.8.6
 	github.com/ulule/limiter/v3 v3.10.0
-	golang.org/x/crypto v0.0.0-20220829220503-c86fa9a7ed90
-	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
-	golang.org/x/sys v0.0.0-20220915200043-7b5979e65e41 // indirect
+	golang.org/x/crypto v0.0.0-20220924013350-4ba4fb4dd9e7
+	golang.org/x/net v0.0.0-20220923203811-8be639271d50 // indirect
+	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
 	golang.org/x/tools v0.1.12 // indirect
-	gorm.io/driver/postgres v1.3.9
-	gorm.io/gorm v1.23.9
+	gorm.io/driver/postgres v1.3.10
+	gorm.io/gorm v1.23.10
 )
 
 require (

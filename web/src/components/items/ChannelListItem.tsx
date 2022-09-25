@@ -62,9 +62,11 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
       >
         {channel.hasNotification && <ChannelNotificationIndicator />}
         <Flex align="center" justify="space-between">
-          <Flex align="center">
+          <Flex align="center" textOverflow="ellipsis" maxW="80%">
             <Icon as={channel.isPublic ? FaHashtag : FaUserLock} color="brandGray.accent" />
-            <Text ml="2">{channel.name}</Text>
+            <Text ml="2" noOfLines={1}>
+              {channel.name}
+            </Text>
           </Flex>
           {current?.id === guild?.ownerId && (showSettings || isOpen) && (
             <>

@@ -48,9 +48,19 @@ export const AccountBar: React.FC = () => {
         color="white"
         closeOnClick={false}
       >
-        <Flex align="center" w="full" mr={2} _hover={{ cursor: 'pointer' }} onClick={onCopy}>
+        <Flex
+          align="center"
+          maxW="50%"
+          w="full"
+          mr={2}
+          _hover={{ cursor: 'pointer' }}
+          onClick={onCopy}
+          textOverflow="ellipsis"
+        >
           <Avatar size="sm" src={user?.image} />
-          <Text ml="2">{user?.username}</Text>
+          <Text noOfLines={1} ml="2" fontSize="14px">
+            {user?.username}
+          </Text>
         </Flex>
       </Tooltip>
       <Flex>

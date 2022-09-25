@@ -64,8 +64,8 @@ export const MemberContextMenu: React.FC<MemberContextMenuProps> = ({ member, is
               }}
               className="delete-item"
             >
-              <Flex align="center" justify="space-between" w="full">
-                <Text>Kick {member.username}</Text>
+              <Flex align="center" justify="space-between" w="full" textOverflow="ellipsis">
+                <Text noOfLines={1}>Kick {member.username}</Text>
               </Flex>
             </Item>
             <Item
