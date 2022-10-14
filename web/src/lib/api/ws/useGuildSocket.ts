@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSocket } from '../getSocket';
 import { userStore } from '../../stores/userStore';
 import { gKey } from '../../utils/querykeys';
@@ -31,29 +31,29 @@ export function useGuildSocket(): void {
       switch (response.action) {
         case 'edit_guild': {
           const editedGuild = response.data;
-          cache.setQueryData<Guild[]>(gKey, (d) => {
-            const data = d ?? [];
-            const index = data.findIndex((c) => c.id === editedGuild.id);
-            if (index !== -1) {
-              data[index] = {
-                ...data[index],
-                name: editedGuild.name,
-                icon: editedGuild.icon,
-              };
-            }
-            return data;
+          cache.setQueryData<Guild[]>([gKey], (d) => {
+            if (!d) return [];
+            return d.map((g) =>
+              g.id === editedGuild.id
+                ? {
+                    ...g,
+                    name: editedGuild.name,
+                    icon: editedGuild.icon,
+                  }
+                : g
+            );
           });
           break;
         }
 
         case 'delete_guild': {
           const deleteId = response.data;
-          cache.setQueryData<Guild[]>(gKey, (d) => {
+          cache.setQueryData<Guild[]>([gKey], (d) => {
             const isActive = location.pathname.includes(deleteId);
             if (isActive) {
               navigate('/channels/me', { replace: true });
             }
-            return d!.filter((g) => g.id !== deleteId);
+            return d?.filter((g) => g.id !== deleteId) ?? [];
           });
           break;
         }
@@ -61,29 +61,29 @@ export function useGuildSocket(): void {
         case 'new_notification': {
           const id = response.data;
           if (!location.pathname.includes(id)) {
-            cache.setQueryData<Guild[]>(gKey, (d) => {
-              const data = d ?? [];
-              const index = data.findIndex((c) => c.id === id);
-              if (index !== -1) {
-                data[index] = {
-                  ...data[index],
-                  hasNotification: true,
-                };
-              }
-              return data;
+            cache.setQueryData<Guild[]>([gKey], (d) => {
+              if (!d) return [];
+              return d.map((g) =>
+                g.id === id
+                  ? {
+                      ...g,
+                      hasNotification: true,
+                    }
+                  : g
+              );
             });
           }
           break;
         }
 
         case 'remove_from_guild': {
-          cache.setQueryData<Guild[]>(gKey, (d) => {
+          cache.setQueryData<Guild[]>([gKey], (d) => {
             const guildId = response.data;
             const isActive = location.pathname.includes(guildId);
             if (isActive) {
               navigate('/channels/me', { replace: true });
             }
-            return d!.filter((g) => g.id !== guildId);
+            return d?.filter((g) => g.id !== guildId) ?? [];
           });
           break;
         }

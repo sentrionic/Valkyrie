@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { QueryClientProvider, useQuery } from 'react-query';
+import { QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import * as React from 'react';
 import { createQueryClientWrapper, createTestQueryClientWithData, IQueryWrapperProps } from '../testUtils';
@@ -14,7 +14,7 @@ describe('useQuery - getUserGuilds', () => {
   it("successfully fetches the user's guild list", async () => {
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useQuery(gKey, async () => {
+        useQuery([gKey], async () => {
           const { data } = await getUserGuilds();
           return data;
         }),
@@ -47,7 +47,7 @@ describe('useQuery - getUserGuilds', () => {
 
     const { result, waitFor } = renderHook(
       () =>
-        useQuery(gKey, async () => {
+        useQuery([gKey], async () => {
           const { data } = await getUserGuilds();
           return data;
         }),
@@ -68,7 +68,9 @@ describe('useGetCurrentGuild', () => {
     const guildId = mockGuild.id;
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(gKey, mockGuildList)}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([gKey], mockGuildList)}>
+        {children}
+      </QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetCurrentGuild(guildId), {
@@ -92,7 +94,7 @@ describe('useGetCurrentGuild', () => {
     };
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(gKey, [guild])}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([gKey], [guild])}>{children}</QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetCurrentGuild(guildId), {
@@ -110,7 +112,7 @@ describe('useGetCurrentGuild', () => {
     const guildId = mockGuild.id;
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(gKey, [])}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([gKey], [])}>{children}</QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetCurrentGuild(guildId), {

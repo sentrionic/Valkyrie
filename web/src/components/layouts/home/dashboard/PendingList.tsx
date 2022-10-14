@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Flex, UnorderedList, Text } from '@chakra-ui/react';
 import { rKey } from '../../../../lib/utils/querykeys';
 import { getPendingRequests } from '../../../../lib/api/handler/account';
@@ -9,7 +9,7 @@ import { homeStore } from '../../../../lib/stores/homeStore';
 import { useRequestSocket } from '../../../../lib/api/ws/useRequestSocket';
 
 export const PendingList: React.FC = () => {
-  const { data } = useQuery(rKey, () => getPendingRequests().then((response) => response.data), {
+  const { data } = useQuery([rKey], () => getPendingRequests().then((response) => response.data), {
     staleTime: 0,
   });
 

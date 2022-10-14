@@ -1,19 +1,19 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSocket } from '../getSocket';
 import { useGetCurrentGuild } from '../../utils/hooks/useGetCurrentGuild';
 import { userStore } from '../../stores/userStore';
 import { Channel } from '../../models/channel';
 import { VCMember, VoiceResponse } from '../../models/voice';
-import { vcKey } from '../../utils/querykeys';
+import { cKey, vcKey } from '../../utils/querykeys';
 
 type WSMessage =
   | { action: 'delete_channel' | 'new_notification'; data: string }
   | { action: 'add_channel' | 'add_private_channel' | 'edit_channel'; data: Channel }
   | { action: 'joinVoice' | 'leaveVoice'; data: VoiceResponse };
 
-export function useChannelSocket(guildId: string, key: string): void {
+export function useChannelSocket(guildId: string): void {
   const location = useLocation();
   const navigate = useNavigate();
   const cache = useQueryClient();
@@ -56,42 +56,48 @@ export function useChannelSocket(guildId: string, key: string): void {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'add_channel': {
-          cache.setQueryData<Channel[]>(key, (data) => [...data!, response.data]);
+          cache.setQueryData<Channel[]>([cKey, guildId], (data) => [...(data ?? []), response.data]);
           break;
         }
 
         case 'add_private_channel': {
-          cache.setQueryData<Channel[]>(key, (data) => [...data!, response.data]);
+          cache.setQueryData<Channel[]>([cKey, guildId], (data) => [...(data ?? []), response.data]);
           break;
         }
 
         case 'edit_channel': {
           const editedChannel = response.data;
-          cache.setQueryData<Channel[]>(key, (d) => {
+          cache.setQueryData<Channel[]>([cKey, guildId], (d) => {
             const data = d ?? [];
-            const index = data.findIndex((c) => c.id === editedChannel.id);
-            if (index !== -1) {
-              data[index] = editedChannel;
-            } else if (editedChannel.isPublic) {
-              data.push(editedChannel);
+
+            const contains = data.includes(editedChannel);
+
+            // Channel used to be private and is public now
+            if (!contains && editedChannel.isPublic) {
+              return [...data, editedChannel];
             }
-            return data;
+
+            return data.map((c) => (c.id === editedChannel.id ? editedChannel : c));
           });
           break;
         }
 
         case 'delete_channel': {
           const deleteId = response.data;
-          cache.setQueryData<Channel[]>(key, (d) => {
+          cache.setQueryData<Channel[]>([cKey, guildId], (d) => {
             const currentPath = `/channels/${guildId}/${deleteId}`;
+
+            // The deleted channel is the channel the user is currently in
             if (location.pathname === currentPath && guild) {
+              // If it's the default channel, redirect to home
               if (deleteId === guild.default_channel_id) {
                 navigate('/channels/me', { replace: true });
+                // Redirect the user to the default channel
               } else {
                 navigate(`/channels/${guild.id}/${guild.default_channel_id}`, { replace: true });
               }
             }
-            return d!.filter((c) => c.id !== deleteId);
+            return d?.filter((c) => c.id !== deleteId) ?? [];
           });
           break;
         }
@@ -100,17 +106,10 @@ export function useChannelSocket(guildId: string, key: string): void {
           const id = response.data;
           const currentPath = `/channels/${guildId}/${id}`;
           if (location.pathname !== currentPath) {
-            cache.setQueryData<Channel[]>(key, (d) => {
-              const data = d ?? [];
-              const index = data.findIndex((c) => c.id === id);
-              if (index !== -1) {
-                data[index] = {
-                  ...d![index],
-                  hasNotification: true,
-                };
-              }
-              return data;
-            });
+            cache.setQueryData<Channel[]>(
+              [cKey, guildId],
+              (d) => d?.map((c) => (c.id === id ? { ...c, hasNotification: true } : c)) ?? []
+            );
           }
           break;
         }
@@ -118,14 +117,14 @@ export function useChannelSocket(guildId: string, key: string): void {
         case 'joinVoice': {
           const { data } = response;
           // Remove the current user from the list
-          cache.setQueryData<VCMember[]>(vcKey(guildId), (_) => data.clients.filter((e) => e.id !== current?.id));
+          cache.setQueryData<VCMember[]>([vcKey, guildId], (_) => data.clients.filter((e) => e.id !== current?.id));
           break;
         }
 
         case 'leaveVoice': {
           const { data } = response;
           // Remove the current user from the list
-          cache.setQueryData<VCMember[]>(vcKey(guildId), (_) => data.clients.filter((e) => e.id !== current?.id));
+          cache.setQueryData<VCMember[]>([vcKey, guildId], (_) => data.clients.filter((e) => e.id !== current?.id));
           break;
         }
 
@@ -137,5 +136,5 @@ export function useChannelSocket(guildId: string, key: string): void {
     window.addEventListener('beforeunload', disconnect);
 
     return () => disconnect();
-  }, [guildId, key, cache, navigate, location, guild, current]);
+  }, [guildId, cache, navigate, location, guild, current]);
 }

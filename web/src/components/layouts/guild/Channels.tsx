@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, GridItem, UnorderedList, useDisclosure } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AccountBar } from '../AccountBar';
 import { CreateChannelModal } from '../../modals/CreateChannelModal';
 import { GuildMenu } from '../../menus/GuildMenu';
@@ -20,11 +20,10 @@ export const Channels: React.FC = () => {
   const { isOpen: channelIsOpen, onOpen: channelOpen, onClose: channelClose } = useDisclosure();
 
   const { guildId } = useParams<keyof RouterProps>() as RouterProps;
-  const key = cKey(guildId);
 
-  const { data } = useQuery(key, () => getChannels(guildId).then((response) => response.data));
+  const { data } = useQuery([cKey, guildId], () => getChannels(guildId).then((response) => response.data));
 
-  useChannelSocket(guildId, key);
+  useChannelSocket(guildId);
 
   return (
     <>

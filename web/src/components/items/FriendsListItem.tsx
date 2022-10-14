@@ -2,7 +2,7 @@ import { Avatar, AvatarBadge, Flex, IconButton, ListItem, Text, useDisclosure } 
 import React from 'react';
 import { FaEllipsisV } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { getOrCreateDirectMessage } from '../../lib/api/handler/dm';
 import { RemoveFriendModal } from '../modals/RemoveFriendModal';
 import { dmKey } from '../../lib/utils/querykeys';
@@ -22,7 +22,7 @@ export const FriendsListItem: React.FC<FriendsListItemProp> = ({ friend }) => {
     try {
       const { data } = await getOrCreateDirectMessage(friend.id);
       if (data) {
-        cache.setQueryData<DMChannel[]>(dmKey, (d) => {
+        cache.setQueryData<DMChannel[]>([dmKey], (d) => {
           const queryData = d ?? [];
           const index = queryData.findIndex((dm) => dm.id === data.id);
           if (index === -1) return [data, ...queryData];

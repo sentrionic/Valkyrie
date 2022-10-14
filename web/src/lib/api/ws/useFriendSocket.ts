@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSocket } from '../getSocket';
 import { userStore } from '../../stores/userStore';
 import { fKey } from '../../utils/querykeys';
@@ -24,27 +24,24 @@ export function useFriendSocket(): void {
         room: current?.id,
       })
     );
+
     socket.send(JSON.stringify({ action: 'getRequestCount' }));
 
     socket.addEventListener('message', (event) => {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'toggle_online': {
-          cache.setQueryData<Friend[]>(fKey, (d) => {
-            const data = d ?? [];
-            const index = data.findIndex((m) => m.id === response.data);
-            if (index !== -1) data[index].isOnline = true;
-            return data;
+          cache.setQueryData<Friend[]>([fKey], (d) => {
+            if (!d) return [];
+            return d.map((f) => (f.id === response.data ? { ...f, isOnline: true } : f));
           });
           break;
         }
 
         case 'toggle_offline': {
-          cache.setQueryData<Friend[]>(fKey, (d) => {
-            const data = d ?? [];
-            const index = data.findIndex((m) => m.id === response.data);
-            if (index !== -1) data[index].isOnline = false;
-            return data;
+          cache.setQueryData<Friend[]>([fKey], (d) => {
+            if (!d) return [];
+            return d.map((f) => (f.id === response.data ? { ...f, isOnline: false } : f));
           });
           break;
         }
@@ -55,14 +52,14 @@ export function useFriendSocket(): void {
         }
 
         case 'add_friend': {
-          cache.setQueryData<Friend[]>(fKey, (data) =>
-            [...data!, response.data].sort((a, b) => a.username.localeCompare(b.username))
+          cache.setQueryData<Friend[]>([fKey], (data) =>
+            [...(data ?? []), response.data].sort((a, b) => a.username.localeCompare(b.username))
           );
           break;
         }
 
         case 'remove_friend': {
-          cache.setQueryData<Friend[]>(fKey, (data) => [...data!.filter((m) => m.id !== response.data)]);
+          cache.setQueryData<Friend[]>([fKey], (data) => [...(data?.filter((m) => m.id !== response.data) ?? [])]);
           break;
         }
 

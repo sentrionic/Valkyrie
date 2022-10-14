@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { QueryClientProvider, useQuery } from 'react-query';
+import { QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import * as React from 'react';
 import { createQueryClientWrapper, createTestQueryClientWithData, IQueryWrapperProps } from '../testUtils';
@@ -17,7 +17,7 @@ describe('useQuery - getChannels', () => {
 
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useQuery(cKey(guildId), async () => {
+        useQuery([cKey, guildId], async () => {
           const { data } = await getChannels(guildId);
           return data;
         }),
@@ -50,7 +50,7 @@ describe('useQuery - getChannels', () => {
 
     const { result, waitFor } = renderHook(
       () =>
-        useQuery(cKey(guildId), async () => {
+        useQuery([cKey, guildId], async () => {
           const { data } = await getChannels(guildId);
           return data;
         }),
@@ -69,13 +69,13 @@ describe('useQuery - getChannels', () => {
 describe('useGetCurrentChannel', () => {
   it('successfully fetches the channel for the given ID and key', async () => {
     const channelId = mockChannel.id;
-    const key = cKey('12312456127277383');
+    const key = [cKey, mockGuild.id];
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(key, mockChannelList)}>{children}</QueryClientProvider>
     );
 
-    const { result, unmount } = renderHook(() => useGetCurrentChannel(channelId, key), {
+    const { result, unmount } = renderHook(() => useGetCurrentChannel(channelId, mockGuild.id), {
       wrapper,
     });
 
@@ -89,7 +89,7 @@ describe('useGetCurrentChannel', () => {
 
   it('returns undefined if it cannot find a channel with the given id', async () => {
     const channelId = mockChannel.id;
-    const key = cKey(mockGuild.id);
+    const key = [cKey, mockGuild.id];
     const channel: Channel = {
       id: '12345676890345345',
       name: 'Guild Name',
@@ -101,7 +101,7 @@ describe('useGetCurrentChannel', () => {
       <QueryClientProvider client={createTestQueryClientWithData(key, [channel])}>{children}</QueryClientProvider>
     );
 
-    const { result, unmount } = renderHook(() => useGetCurrentChannel(channelId, key), {
+    const { result, unmount } = renderHook(() => useGetCurrentChannel(channelId, mockGuild.id), {
       wrapper,
     });
 
@@ -114,13 +114,13 @@ describe('useGetCurrentChannel', () => {
 
   it('returns undefined if there is not initial data', async () => {
     const channelId = mockChannel.id;
-    const key = cKey(mockGuild.id);
+    const key = [cKey, mockGuild.id];
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
       <QueryClientProvider client={createTestQueryClientWithData(key, [])}>{children}</QueryClientProvider>
     );
 
-    const { result, unmount } = renderHook(() => useGetCurrentChannel(channelId, key), {
+    const { result, unmount } = renderHook(() => useGetCurrentChannel(channelId, mockGuild.id), {
       wrapper,
     });
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, AvatarBadge, Flex, Icon, ListItem, Text } from '@chakra-ui/react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { IoMdClose } from 'react-icons/io';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { closeDirectMessage } from '../../lib/api/handler/dm';
 import { dmKey } from '../../lib/utils/querykeys';
 import { DMChannel } from '../../lib/models/dm';
@@ -22,7 +22,7 @@ export const DMListItem: React.FC<DMListItemProps> = ({ dm }) => {
   const closeDM = async (): Promise<void> => {
     try {
       await closeDirectMessage(dm.id);
-      cache.setQueryData<DMChannel[]>(dmKey, (d) => d!.filter((c) => c.id !== dm.id));
+      cache.setQueryData<DMChannel[]>([dmKey], (d) => d?.filter((c) => c.id !== dm.id) ?? []);
       if (isActive) {
         navigate('/channels/me', { replace: true });
       }

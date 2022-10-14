@@ -6,7 +6,7 @@ import { MdAddCircle } from 'react-icons/md';
 import { HiLogout } from 'react-icons/hi';
 import { RiSettings5Fill } from 'react-icons/ri';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { StyledMenuList } from './StyledMenuList';
 import { StyledMenuItem, StyledRedMenuItem } from './StyledMenuItem';
 import { leaveGuild } from '../../lib/api/handler/guilds';
@@ -39,7 +39,7 @@ export const GuildMenu: React.FC<GuildMenuProps> = ({ channelOpen, inviteOpen })
     try {
       const { data } = await leaveGuild(guildId);
       if (data) {
-        cache.setQueryData<Guild[]>(gKey, (d) => d!.filter((g) => g.id !== guild?.id));
+        cache.setQueryData<Guild[]>([gKey], (d) => d?.filter((g) => g.id !== guild?.id) ?? []);
         navigate('/channels/me', { replace: true });
       }
     } catch (err) {}

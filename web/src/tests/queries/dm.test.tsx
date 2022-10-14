@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { QueryClientProvider, useQuery } from 'react-query';
+import { QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import * as React from 'react';
 import { dmKey } from '../../lib/utils/querykeys';
@@ -14,7 +14,7 @@ describe('useQuery - getUserDMs', () => {
   it("successfully fetches the user's dm list", async () => {
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useQuery(dmKey, async () => {
+        useQuery([dmKey], async () => {
           const { data } = await getUserDMs();
           return data;
         }),
@@ -50,7 +50,7 @@ describe('useQuery - getUserDMs', () => {
 
     const { result, waitFor } = renderHook(
       () =>
-        useQuery(dmKey, async () => {
+        useQuery([dmKey], async () => {
           const { data } = await getUserDMs();
           return data;
         }),
@@ -71,7 +71,7 @@ describe('useGetCurrentDM', () => {
     const channelId = mockDMChannel.id;
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(dmKey, mockDMChannelList)}>
+      <QueryClientProvider client={createTestQueryClientWithData([dmKey], mockDMChannelList)}>
         {children}
       </QueryClientProvider>
     );
@@ -102,7 +102,7 @@ describe('useGetCurrentDM', () => {
     };
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(dmKey, [dmChannel])}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([dmKey], [dmChannel])}>{children}</QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetCurrentDM(channelId), {
@@ -120,7 +120,7 @@ describe('useGetCurrentDM', () => {
     const channelId = mockDMChannel.id;
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(dmKey, [])}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([dmKey], [])}>{children}</QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetCurrentDM(channelId), {

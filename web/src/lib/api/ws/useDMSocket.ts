@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSocket } from '../getSocket';
 import { userStore } from '../../stores/userStore';
 import { dmKey } from '../../utils/querykeys';
@@ -27,10 +27,14 @@ export function useDMSocket(): void {
       switch (response.action) {
         case 'push_to_top': {
           const dmId = response.data;
-          cache.setQueryData<DMChannel[]>(dmKey, (d) => {
+          cache.setQueryData<DMChannel[]>([dmKey], (d) => {
             const data = d ?? [];
             const index = data.findIndex((dm) => dm.id === dmId);
+
+            // If no DM exists or it's already the top one, do nothing
             if (index === 0 || index === -1) return [...data];
+
+            // Push the DM to the top
             const dm = data[index];
             return [dm, ...data.filter((dc) => dc.id !== dmId)];
           });

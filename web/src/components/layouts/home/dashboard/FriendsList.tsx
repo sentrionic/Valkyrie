@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Flex, Text, UnorderedList } from '@chakra-ui/react';
 import { fKey } from '../../../../lib/utils/querykeys';
 import { getFriends } from '../../../../lib/api/handler/account';
@@ -8,7 +8,7 @@ import { FriendsListItem } from '../../../items/FriendsListItem';
 import { useFriendSocket } from '../../../../lib/api/ws/useFriendSocket';
 
 export const FriendsList: React.FC = () => {
-  const { data } = useQuery(fKey, () => getFriends().then((response) => response.data));
+  const { data } = useQuery([fKey], () => getFriends().then((response) => response.data));
 
   useFriendSocket();
 

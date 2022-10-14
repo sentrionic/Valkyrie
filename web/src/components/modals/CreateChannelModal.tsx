@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AiOutlineLock } from 'react-icons/ai';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,7 @@ const ListItem = ({ image, label }: Item): JSX.Element => (
 );
 
 export const CreateChannelModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
-  const key = mKey(guildId);
+  const key = [mKey, guildId];
   const navigate = useNavigate();
   const { data } = useQuery(key, () => getGuildMembers(guildId).then((response) => response.data));
   const [showError, toggleError] = useState(false);

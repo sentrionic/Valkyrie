@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { Message } from '../../../items/message/Message';
 import { StartMessages } from '../../../sections/StartMessages';
@@ -13,14 +13,14 @@ import { DateDivider } from '../../../sections/DateDivider';
 import { ChatGrid } from './ChatGrid';
 import { RouterProps } from '../../../../lib/models/routerProps';
 import { Message as MessageResponse } from '../../../../lib/models/message';
+import { msgKey } from '../../../../lib/utils/querykeys';
 
 export const ChatScreen: React.FC = () => {
   const { channelId } = useParams<keyof RouterProps>() as RouterProps;
   const [hasMore, setHasMore] = useState(true);
-  const qKey = `messages-${channelId}`;
 
   const { data, isLoading, fetchNextPage } = useInfiniteQuery<MessageResponse[]>(
-    qKey,
+    [msgKey, channelId],
     async ({ pageParam = null }) => {
       const { data: messageData } = await getMessages(channelId, pageParam);
       if (messageData.length !== 35) setHasMore(false);
@@ -33,7 +33,7 @@ export const ChatScreen: React.FC = () => {
     }
   );
 
-  useMessageSocket(channelId, qKey);
+  useMessageSocket(channelId);
 
   if (isLoading) {
     return (

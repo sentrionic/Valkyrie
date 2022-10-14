@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSocket } from '../getSocket';
 import { Member } from '../../models/member';
+import { mKey } from '../../utils/querykeys';
 
 type WSMessage =
   | { action: 'remove_member' | 'toggle_online' | 'toggle_offline'; data: string }
   | { action: 'add_member'; data: Member };
 
-export function useMemberSocket(guildId: string, key: string): void {
+export function useMemberSocket(guildId: string): void {
   const cache = useQueryClient();
+
   useEffect((): any => {
     const socket = getSocket();
+    const key = [mKey, guildId];
 
     socket.send(
       JSON.stringify({
@@ -24,7 +27,8 @@ export function useMemberSocket(guildId: string, key: string): void {
       switch (response.action) {
         case 'add_member': {
           cache.setQueryData<Member[]>(key, (data) =>
-            [...data!, response.data].sort((a, b) => {
+            // Add member and sort array by nickname, then username
+            [...(data ?? []), response.data].sort((a, b) => {
               if (a.nickname && b.nickname) {
                 return a.nickname.localeCompare(b.nickname);
               }
@@ -41,17 +45,15 @@ export function useMemberSocket(guildId: string, key: string): void {
         }
 
         case 'remove_member': {
-          cache.setQueryData<Member[]>(key, (data) => [...data!.filter((m) => m.id !== response.data)]);
+          cache.setQueryData<Member[]>(key, (data) => [...(data?.filter((m) => m.id !== response.data) ?? [])]);
           break;
         }
 
         case 'toggle_online': {
           const memberId = response.data;
           cache.setQueryData<Member[]>(key, (d) => {
-            const data = d ?? [];
-            const index = data.findIndex((m) => m.id === memberId);
-            if (index !== -1) data[index].isOnline = true;
-            return data;
+            if (!d) return [];
+            return d.map((m) => (m.id === memberId ? { ...m, isOnline: true } : m));
           });
           break;
         }
@@ -59,10 +61,8 @@ export function useMemberSocket(guildId: string, key: string): void {
         case 'toggle_offline': {
           const memberId = response.data;
           cache.setQueryData<Member[]>(key, (d) => {
-            const data = d ?? [];
-            const index = data.findIndex((m) => m.id === memberId);
-            if (index !== -1) data[index].isOnline = false;
-            return data;
+            if (!d) return [];
+            return d.map((m) => (m.id === memberId ? { ...m, isOnline: false } : m));
           });
           break;
         }
@@ -81,5 +81,5 @@ export function useMemberSocket(guildId: string, key: string): void {
       );
       socket.close();
     };
-  }, [key, cache, guildId]);
+  }, [cache, guildId]);
 }

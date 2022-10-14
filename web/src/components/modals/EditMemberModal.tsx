@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ColorResult, TwitterPicker } from 'react-color';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
@@ -28,7 +28,7 @@ interface IProps {
 
 export const EditMemberModal: React.FC<IProps> = ({ guildId, isOpen, onClose }) => {
   const current = userStore((state) => state.current);
-  const { data } = useQuery(`settings-${guildId}`, () =>
+  const { data } = useQuery(['settings', guildId], () =>
     getGuildMemberSettings(guildId).then((response) => response.data)
   );
   const [showError, toggleShow] = useState(false);

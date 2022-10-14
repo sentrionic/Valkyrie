@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { userStore } from '../../lib/stores/userStore';
 import { getSocket } from '../../lib/api/getSocket';
 import { homeStore } from '../../lib/stores/homeStore';
@@ -40,23 +40,28 @@ export const GlobalState: React.FC<IProps> = ({ children }) => {
           case 'new_dm_notification': {
             const channel = response.data;
             if (channel.user.id !== current.id) {
-              cache.setQueryData<DMNotification[]>(nKey, (data) => {
-                const index = data?.findIndex((c) => c.id === channel.id);
+              cache.setQueryData<DMNotification[]>([nKey], (data) => {
+                if (!data) return [{ ...channel, count: 1 }];
+
+                const index = data.findIndex((c) => c.id === channel.id);
+
+                // DM exists, increment message count
                 if (index !== -1 && index !== undefined) {
                   return [
                     {
                       ...channel,
-                      count: data![index].count + 1,
+                      count: data[index].count + 1,
                     },
-                    ...data!.filter((c) => c.id !== channel.id),
+                    ...data.filter((c) => c.id !== channel.id),
                   ];
                 }
+                // Add the new DM to the list
                 return [
                   {
                     ...channel,
                     count: 1,
                   },
-                  ...(data || []),
+                  ...data,
                 ];
               });
             }

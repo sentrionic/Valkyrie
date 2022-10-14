@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import * as React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { mockGuildList } from './fixture/guildFixtures';
 import { mockDMChannelList } from './fixture/dmFixtures';
 import { mockAccount } from './fixture/accountFixture';
@@ -17,14 +17,28 @@ const createTestQueryClient = (): QueryClient =>
         retry: false,
       },
     },
+    logger: {
+      // eslint-disable-next-line no-console
+      log: console.log,
+      // eslint-disable-next-line no-console
+      warn: console.warn,
+      error: () => {},
+    },
   });
 
-export const createTestQueryClientWithData = (key: string, data: any[]): QueryClient => {
+export const createTestQueryClientWithData = (key: string[], data: any[]): QueryClient => {
   const client = new QueryClient({
     defaultOptions: {
       queries: {
         retry: false,
       },
+    },
+    logger: {
+      // eslint-disable-next-line no-console
+      log: console.log,
+      // eslint-disable-next-line no-console
+      warn: console.warn,
+      error: () => {},
     },
   });
   client.setQueryData(key, () => [...data]);

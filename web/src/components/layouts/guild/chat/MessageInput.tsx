@@ -2,15 +2,15 @@ import React, { useRef, useState } from 'react';
 import { Flex, GridItem, InputGroup, Text, Textarea } from '@chakra-ui/react';
 import ResizeTextarea from 'react-textarea-autosize';
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { FileUploadButton } from './FileUploadButton';
 import { sendMessage } from '../../../../lib/api/handler/messages';
 import { getSameSocket } from '../../../../lib/api/getSocket';
 import { userStore } from '../../../../lib/stores/userStore';
 import { channelStore } from '../../../../lib/stores/channelStore';
 import { cKey, dmKey } from '../../../../lib/utils/querykeys';
-import '../css/MessageInput.css';
 import { RouterProps } from '../../../../lib/models/routerProps';
+import '../css/MessageInput.css';
 
 export const MessageInput: React.FC = () => {
   const [text, setText] = useState('');
@@ -19,7 +19,7 @@ export const MessageInput: React.FC = () => {
   const inputRef: any = useRef();
 
   const { guildId, channelId } = useParams<keyof RouterProps>() as RouterProps;
-  const qKey = guildId === undefined ? dmKey : cKey(guildId);
+  const qKey = guildId === undefined ? [dmKey] : [cKey, guildId];
   const { data } = useQuery<any[]>(qKey);
   const channel = data?.find((c) => c.id === channelId);
 

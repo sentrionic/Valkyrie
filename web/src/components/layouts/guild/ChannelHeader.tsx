@@ -5,13 +5,12 @@ import { BsPeopleFill } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import { settingsStore } from '../../../lib/stores/settingsStore';
 import { useGetCurrentChannel } from '../../../lib/utils/hooks/useGetCurrentChannel';
-import { cKey } from '../../../lib/utils/querykeys';
 import { RouterProps } from '../../../lib/models/routerProps';
 
 export const ChannelHeader: React.FC = () => {
   const toggleMemberList = settingsStore((state) => state.toggleShowMembers);
   const { guildId, channelId } = useParams<keyof RouterProps>() as RouterProps;
-  const channel = useGetCurrentChannel(channelId, cKey(guildId));
+  const channel = useGetCurrentChannel(channelId, guildId);
 
   return (
     <GridItem gridColumn={3} gridRow="1" bg="brandGray.light" padding="10px" zIndex="2" boxShadow="md">

@@ -3,7 +3,7 @@ import { Flex, Icon, ListItem, Text, useDisclosure } from '@chakra-ui/react';
 import { FaHashtag, FaUserLock } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { userStore } from '../../lib/stores/userStore';
 import { ChannelSettingsModal } from '../modals/ChannelSettingsModal';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
@@ -31,13 +31,9 @@ export const ChannelListItem: React.FC<ChannelListItemProps> = ({ channel, guild
 
   useEffect(() => {
     if (channel.hasNotification && isActive) {
-      cache.setQueryData<Channel[]>(cKey(guildId), (d) => {
-        const data = d ?? [];
-        const index = data.findIndex((c) => c.id === channel.id);
-        if (index !== -1) {
-          data[index] = { ...data[index], hasNotification: false };
-        }
-        return data;
+      cache.setQueryData<Channel[]>([cKey, guildId], (d) => {
+        if (!d) return [];
+        return d.map((c) => (c.id === channel.id ? { ...c, hasNotification: false } : c));
       });
     }
   });

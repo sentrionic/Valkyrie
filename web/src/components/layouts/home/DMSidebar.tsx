@@ -1,6 +1,6 @@
 import React from 'react';
 import { GridItem, Box, Text, UnorderedList } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AccountBar } from '../AccountBar';
 import { FriendsListButton } from '../../sections/FriendsListButton';
 import { DMListItem } from '../../items/DMListItem';
@@ -11,7 +11,7 @@ import { useDMSocket } from '../../../lib/api/ws/useDMSocket';
 import { DMPlaceholder } from '../../sections/DMPlaceholder';
 
 export const DMSidebar: React.FC = () => {
-  const { data } = useQuery(dmKey, () => getUserDMs().then((result) => result.data));
+  const { data } = useQuery([dmKey], () => getUserDMs().then((result) => result.data));
 
   useDMSocket();
 

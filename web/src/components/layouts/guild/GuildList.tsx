@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Divider, Flex, GridItem, UnorderedList, useDisclosure } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AddGuildModal } from '../../modals/AddGuildModal';
 import { GuildListItem } from '../../items/GuildListItem';
 import { AddGuildIcon } from '../../sections/AddGuildIcon';
@@ -15,11 +15,11 @@ import { DMNotification } from '../../../lib/models/dm';
 export const GuildList: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data } = useQuery(gKey, () => getUserGuilds().then((response) => response.data), {
+  const { data } = useQuery([gKey], () => getUserGuilds().then((response) => response.data), {
     cacheTime: Infinity,
   });
 
-  const { data: dmData } = useQuery<DMNotification[]>(nKey, () => [], {
+  const { data: dmData } = useQuery<DMNotification[]>([nKey], () => [], {
     cacheTime: Infinity,
   });
 

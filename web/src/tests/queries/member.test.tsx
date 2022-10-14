@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import { mKey } from '../../lib/utils/querykeys';
 import { createQueryClientWrapper } from '../testUtils';
@@ -11,11 +11,10 @@ import { mockMember } from '../fixture/memberFixtures';
 describe('useQuery - getGuildMembers', () => {
   it("successfully fetches the guild's member list", async () => {
     const guildId = mockGuild.id;
-    const key = mKey(guildId);
 
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useQuery(key, async () => {
+        useQuery([mKey, guildId], async () => {
           const { data } = await getGuildMembers(guildId);
           return data;
         }),
@@ -44,12 +43,11 @@ describe('useQuery - getGuildMembers', () => {
 
   it('returns an error when the server returns status 500', async () => {
     const guildId = mockGuild.id;
-    const key = mKey(guildId);
     server.use(rest.get('*', (req, res, ctx) => res(ctx.status(500))));
 
     const { result, waitFor } = renderHook(
       () =>
-        useQuery(key, async () => {
+        useQuery([mKey, guildId], async () => {
           const { data } = await getGuildMembers(guildId);
           return data;
         }),

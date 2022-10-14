@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import { aKey } from '../../lib/utils/querykeys';
 import { createQueryClientWrapper } from '../testUtils';
@@ -11,7 +11,7 @@ describe('useQuery - getAccount', () => {
   it("successfully fetches the user's info", async () => {
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useQuery(aKey, async () => {
+        useQuery([aKey], async () => {
           const { data } = await getAccount();
           return data;
         }),
@@ -42,7 +42,7 @@ describe('useQuery - getAccount', () => {
 
     const { result, waitFor } = renderHook(
       () =>
-        useQuery(aKey, async () => {
+        useQuery([aKey], async () => {
           const { data } = await getAccount();
           return data;
         }),

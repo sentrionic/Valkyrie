@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { QueryClientProvider, useQuery } from 'react-query';
+import { QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import * as React from 'react';
 import { createQueryClientWrapper, createTestQueryClientWithData, IQueryWrapperProps } from '../testUtils';
@@ -13,7 +13,7 @@ describe('useQuery - getFriends', () => {
   it("successfully fetches the user's friend list", async () => {
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useQuery(fKey, async () => {
+        useQuery([fKey], async () => {
           const { data } = await getFriends();
           return data;
         }),
@@ -45,7 +45,7 @@ describe('useQuery - getFriends', () => {
 
     const { result, waitFor } = renderHook(
       () =>
-        useQuery(fKey, async () => {
+        useQuery([fKey], async () => {
           const { data } = await getFriends();
           return data;
         }),
@@ -66,7 +66,9 @@ describe('useGetFriend', () => {
     const friendId = mockFriend.id;
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(fKey, mockFriendList)}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([fKey], mockFriendList)}>
+        {children}
+      </QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetFriend(friendId), {
@@ -91,7 +93,7 @@ describe('useGetFriend', () => {
     };
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(fKey, [friend])}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([fKey], [friend])}>{children}</QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetFriend(friendId), {
@@ -109,7 +111,7 @@ describe('useGetFriend', () => {
     const friendId = mockFriend.id;
 
     const wrapper: React.FC<IQueryWrapperProps> = ({ children }) => (
-      <QueryClientProvider client={createTestQueryClientWithData(fKey, [])}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClientWithData([fKey], [])}>{children}</QueryClientProvider>
     );
 
     const { result, unmount } = renderHook(() => useGetFriend(friendId), {

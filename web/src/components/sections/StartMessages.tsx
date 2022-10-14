@@ -2,7 +2,6 @@ import { Avatar, Box, Divider, Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetCurrentChannel } from '../../lib/utils/hooks/useGetCurrentChannel';
-import { cKey } from '../../lib/utils/querykeys';
 import { useGetCurrentDM } from '../../lib/utils/hooks/useGetCurrentDM';
 import { RouterProps } from '../../lib/models/routerProps';
 
@@ -13,7 +12,7 @@ export const StartMessages: React.FC = () => {
 
 const ChannelStartMessages: React.FC = () => {
   const { guildId, channelId } = useParams<keyof RouterProps>() as RouterProps;
-  const channel = useGetCurrentChannel(channelId, cKey(guildId));
+  const channel = useGetCurrentChannel(channelId, guildId);
 
   return (
     <Flex alignItems="center" mb="2" justify="center">

@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import { rKey } from '../../lib/utils/querykeys';
 import { createQueryClientWrapper } from '../testUtils';
@@ -11,7 +11,7 @@ describe('useQuery - getPendingRequests', () => {
   it("successfully fetches the user's pending requests", async () => {
     const { result, waitForNextUpdate } = renderHook(
       () =>
-        useQuery(rKey, async () => {
+        useQuery([rKey], async () => {
           const { data } = await getPendingRequests();
           return data;
         }),
@@ -42,7 +42,7 @@ describe('useQuery - getPendingRequests', () => {
 
     const { result, waitFor } = renderHook(
       () =>
-        useQuery(rKey, async () => {
+        useQuery([rKey], async () => {
           const { data } = await getPendingRequests();
           return data;
         }),

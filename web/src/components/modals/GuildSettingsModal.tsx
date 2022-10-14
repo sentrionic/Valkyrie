@@ -23,7 +23,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { IoCheckmarkCircle, IoPersonRemove } from 'react-icons/io5';
 import { ImHammer2 } from 'react-icons/im';
 import { BiUnlink } from 'react-icons/bi';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { InputField } from '../common/InputField';
 import { toErrorMap } from '../../lib/utils/toErrorMap';
 import { useGetCurrentGuild } from '../../lib/utils/hooks/useGetCurrentGuild';
@@ -310,7 +310,7 @@ interface IBanScreenProps {
 }
 
 const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
-  const key = `bans-${guildId}`;
+  const key = ['bans', guildId];
   const { data } = useQuery(key, () => getBanList(guildId).then((response) => response.data));
   const cache = useQueryClient();
 
@@ -318,7 +318,7 @@ const BanListModal: React.FC<IBanScreenProps> = ({ goBack, guildId }) => {
     try {
       const { data: responseData } = await unbanMember(guildId, id);
       if (responseData) {
-        cache.setQueryData<Member[]>(key, (d) => d!.filter((b) => b.id !== id));
+        cache.setQueryData<Member[]>(key, (d) => d?.filter((b) => b.id !== id) ?? []);
       }
     } catch (err) {}
   };

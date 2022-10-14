@@ -1,7 +1,7 @@
 import { Box, Flex, Icon, ListItem, Text } from '@chakra-ui/react';
 import React from 'react';
 import { FaVolumeUp } from 'react-icons/fa';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getVCMembers } from '../../../lib/api/handler/guilds';
 import { useVoiceSocket } from '../../../lib/api/ws/useVoiceSocket';
@@ -15,7 +15,7 @@ import { VoiceChannelItem } from '../../items/VoiceChannelItem';
 export const VoiceChat: React.FC<{}> = () => {
   const { guildId } = useParams<keyof RouterProps>() as RouterProps;
   const current = userStore((state) => state.current);
-  const key = vcKey(guildId);
+  const key = [vcKey, guildId];
 
   const [voiceChatID, setVoiceID] = voiceStore((state) => [state.voiceChatID, state.setVoiceID]);
   const [inVC, setIsInVC] = voiceStore((state) => [state.inVC, state.setInVC]);
@@ -28,7 +28,7 @@ export const VoiceChat: React.FC<{}> = () => {
 
   const { data } = useQuery(key, () => getVCMembers(guildId).then((response) => response.data));
 
-  useVoiceSocket(key);
+  useVoiceSocket();
   useSetupVoiceChat(guildId);
 
   const joinVoice = async (): Promise<void> => {

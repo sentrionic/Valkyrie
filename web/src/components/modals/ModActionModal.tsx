@@ -10,7 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { mKey } from '../../lib/utils/querykeys';
 import { Member } from '../../lib/models/member';
@@ -57,10 +57,7 @@ export const ModActionModal: React.FC<IProps> = ({ member, isOpen, onClose, isBa
                 try {
                   const { data } = isBan ? await banMember(guildId, member.id) : await kickMember(guildId, member.id);
                   if (data) {
-                    cache.setQueryData<Member[]>(mKey(guildId), (d) => {
-                      if (d !== undefined) return d!.filter((f) => f.id !== member.id);
-                      return d!;
-                    });
+                    cache.setQueryData<Member[]>([mKey, guildId], (d) => d!.filter((f) => f.id !== member.id) ?? []);
                   }
                 } catch (err) {}
               }}

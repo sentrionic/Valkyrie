@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useRef, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { InputField } from '../components/common/InputField';
 import { ChangePasswordModal } from '../components/modals/ChangePasswordModal';
@@ -32,7 +32,7 @@ export const Settings: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: cropperIsOpen, onOpen: cropperOnOpen, onClose: cropperOnClose } = useDisclosure();
 
-  const { data: user } = useQuery<Account>(aKey, () => getAccount().then((response) => response.data));
+  const { data: user } = useQuery<Account>([aKey], () => getAccount().then((response) => response.data));
   const cache = useQueryClient();
 
   const logoutUser = userStore((state) => state.logout);

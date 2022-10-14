@@ -1,19 +1,21 @@
 import { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { RouterProps } from '../../models/routerProps';
 import { VCMember, VoiceResponse, VoiceSignal } from '../../models/voice';
 import { userStore } from '../../stores/userStore';
 import { voiceStore } from '../../stores/voiceStore';
 import { getSameSocket } from '../getSocket';
+import { vcKey } from '../../utils/querykeys';
 
 type WSMessage =
   | { action: 'joinVoice' | 'leaveVoice'; data: VoiceResponse }
   | { action: 'toggle-mute' | 'toggle-deafen'; data: { id: string; value: boolean } }
   | { action: 'voice-signal'; data: VoiceSignal };
 
-export function useVoiceSocket(key: string): void {
+export function useVoiceSocket(): void {
   const { guildId } = useParams<keyof RouterProps>() as RouterProps;
+  const key = [vcKey, guildId];
 
   const current = userStore((state) => state.current);
 

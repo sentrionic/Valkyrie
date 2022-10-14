@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { InputField } from '../common/InputField';
 import { GuildSchema } from '../../lib/utils/validation/guild.schema';
@@ -121,7 +121,7 @@ const JoinServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
             try {
               const { data } = await joinGuild(values);
               if (data) {
-                cache.setQueryData<Guild[]>(gKey, (old) => [...old!, data]);
+                cache.setQueryData<Guild[]>([gKey], (old) => [...(old ?? []), data]);
                 submitClose();
                 navigate(`/channels/${data.id}/${data.default_channel_id}`);
               }
@@ -198,7 +198,7 @@ const CreateServerModal: React.FC<IScreenProps> = ({ goBack, submitClose }) => {
           try {
             const { data } = await createGuild(values);
             if (data) {
-              cache.setQueryData<Guild[]>(gKey, (old) => [...old!, data]);
+              cache.setQueryData<Guild[]>([gKey], (old) => [...(old ?? []), data]);
               submitClose();
               navigate(`/channels/${data.id}/${data.default_channel_id}`);
             }

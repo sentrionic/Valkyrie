@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { rest } from 'msw';
 import { createQueryClientWrapper } from '../testUtils';
 import { server } from '../../setupTests';
@@ -11,12 +11,12 @@ import { Message } from '../../lib/models/message';
 describe('useQuery - getMessages', () => {
   it("successfully fetches the channel's message list", async () => {
     const channelId = mockChannel.id;
-    const qKey = `messages-${channelId}`;
+    const qKey = 'messages';
 
     const { result, waitForNextUpdate } = renderHook(
       () =>
         useInfiniteQuery<Message[]>(
-          qKey,
+          [qKey, channelId],
           async ({ pageParam = null }) => {
             const { data: messageData } = await getMessages(channelId, pageParam);
             return messageData;
@@ -46,13 +46,13 @@ describe('useQuery - getMessages', () => {
 
   it('returns an error when the server returns status 500', async () => {
     const channelId = mockChannel.id;
-    const qKey = `messages-${channelId}`;
+    const qKey = 'messages';
     server.use(rest.get('*', (req, res, ctx) => res(ctx.status(500))));
 
     const { result, waitFor } = renderHook(
       () =>
         useInfiniteQuery<Message[]>(
-          qKey,
+          [qKey, channelId],
           async ({ pageParam = null }) => {
             const { data: messageData } = await getMessages(channelId, pageParam);
             return messageData;

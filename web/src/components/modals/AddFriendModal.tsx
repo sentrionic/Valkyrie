@@ -16,7 +16,7 @@ import {
   useClipboard,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { userStore } from '../../lib/stores/userStore';
 import { InputField } from '../common/InputField';
 import { sendFriendRequest } from '../../lib/api/handler/account';
@@ -48,7 +48,7 @@ export const AddFriendModal: React.FC<AddFriendModalProps> = ({ isOpen, onClose 
                 const { data } = await sendFriendRequest(values.id);
                 if (data) {
                   onClose();
-                  await cache.invalidateQueries(rKey);
+                  await cache.invalidateQueries([rKey]);
                 }
               } catch (err: any) {
                 if (err?.response?.data?.error) {

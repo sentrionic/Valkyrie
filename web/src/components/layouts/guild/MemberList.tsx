@@ -1,7 +1,7 @@
 import React from 'react';
 import { GridItem, UnorderedList } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { MemberListItem } from '../../items/MemberListItem';
 import { getGuildMembers } from '../../../lib/api/handler/guilds';
 import { mKey } from '../../../lib/utils/querykeys';
@@ -13,7 +13,7 @@ import { Member } from '../../../lib/models/member';
 
 export const MemberList: React.FC = () => {
   const { guildId } = useParams<keyof RouterProps>() as RouterProps;
-  const key = mKey(guildId);
+  const key = [mKey, guildId];
 
   const { data } = useQuery(key, () => getGuildMembers(guildId).then((response) => response.data));
 
@@ -30,7 +30,7 @@ export const MemberList: React.FC = () => {
     });
   }
 
-  useMemberSocket(guildId, key);
+  useMemberSocket(guildId);
 
   return (
     <GridItem

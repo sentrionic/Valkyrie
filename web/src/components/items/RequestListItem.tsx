@@ -2,7 +2,7 @@ import { Avatar, Box, Flex, IconButton, ListItem, Text } from '@chakra-ui/react'
 import React from 'react';
 import { BiCheck } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { StyledTooltip } from '../sections/StyledTooltip';
 import { acceptFriendRequest, declineFriendRequest } from '../../lib/api/handler/account';
 import { fKey, rKey } from '../../lib/utils/querykeys';
@@ -19,11 +19,8 @@ export const RequestListItem: React.FC<RequestListItemProps> = ({ request }) => 
     try {
       const { data } = await acceptFriendRequest(request.id);
       if (data) {
-        cache.setQueryData<FriendRequest[]>(rKey, (d) => {
-          const queryData = d ?? [];
-          return queryData.filter((r) => r.id !== request.id);
-        });
-        await cache.invalidateQueries(fKey);
+        cache.setQueryData<FriendRequest[]>([rKey], (d) => d?.filter((r) => r.id !== request.id) ?? []);
+        await cache.invalidateQueries([fKey]);
       }
     } catch (err) {}
   };
@@ -32,10 +29,7 @@ export const RequestListItem: React.FC<RequestListItemProps> = ({ request }) => 
     try {
       const { data } = await declineFriendRequest(request.id);
       if (data) {
-        cache.setQueryData<FriendRequest[]>(rKey, (d) => {
-          const queryData = d ?? [];
-          return queryData.filter((r) => r.id !== request.id);
-        });
+        cache.setQueryData<FriendRequest[]>([rKey], (d) => d?.filter((r) => r.id !== request.id) ?? []);
       }
     } catch (err) {}
   };

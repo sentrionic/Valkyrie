@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
-import { InfiniteData, useQueryClient } from 'react-query';
+import { InfiniteData, useQueryClient } from '@tanstack/react-query';
 import { getSocket } from '../getSocket';
 import { userStore } from '../../stores/userStore';
 import { channelStore } from '../../stores/channelStore';
 import { Message } from '../../models/message';
+import { msgKey } from '../../utils/querykeys';
 
 type WSMessage =
   | { action: 'new_message' | 'edit_message'; data: Message }
   | { action: 'addToTyping' | 'removeFromTyping' | 'delete_message'; data: string };
 
-export function useMessageSocket(channelId: string, key: string): void {
+export function useMessageSocket(channelId: string): void {
   const current = userStore((state) => state.current);
   const store = channelStore();
   const cache = useQueryClient();
@@ -29,42 +30,40 @@ export function useMessageSocket(channelId: string, key: string): void {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'new_message': {
-          cache.setQueryData<InfiniteData<Message[]>>(key, (d) => {
-            d!.pages[0].unshift(response.data);
-            return d!;
+          cache.setQueryData<InfiniteData<Message[]>>([msgKey, channelId], (d) => {
+            if (!d) return { pages: [], pageParams: [] };
+            return {
+              pages: d.pages.map((messages, i) => (i === 0 ? [response.data, ...messages] : messages)),
+              pageParams: [...d.pageParams],
+            };
           });
           break;
         }
 
         case 'edit_message': {
           const editMessage = response.data;
-          cache.setQueryData<InfiniteData<Message[]>>(key, (d) => {
-            let index = -1;
-            let editId = -1;
-            const data = d!;
-            data.pages.forEach((p, i) => {
-              editId = p.findIndex((m) => m.id === editMessage.id);
-              if (editId !== -1) index = i;
-            });
-            if (index !== -1 && editId !== -1) {
-              data.pages[index][editId].text = editMessage.text;
-              data.pages[index][editId].updatedAt = editMessage.updatedAt;
-            }
-            return data;
+          cache.setQueryData<InfiniteData<Message[]>>([msgKey, channelId], (d) => {
+            if (!d) return { pages: [], pageParams: [] };
+            return {
+              pages: d.pages.map((messages) =>
+                messages.map((m) =>
+                  m.id === editMessage.id ? { ...m, text: editMessage.text, updatedAt: editMessage.updatedAt } : m
+                )
+              ),
+              pageParams: [...d.pageParams],
+            };
           });
           break;
         }
 
         case 'delete_message': {
           const messageId = response.data;
-          cache.setQueryData<InfiniteData<Message[]>>(key, (d) => {
-            let index = -1;
-            const data = d!;
-            data.pages.forEach((p, i) => {
-              if (p.findIndex((m) => m.id === messageId) !== -1) index = i;
-            });
-            if (index !== -1) data.pages[index] = data.pages[index].filter((m) => m.id !== messageId);
-            return data;
+          cache.setQueryData<InfiniteData<Message[]>>([msgKey, channelId], (d) => {
+            if (!d) return { pages: [], pageParams: [] };
+            return {
+              pages: d.pages.map((messages) => messages.filter((m) => m.id !== messageId)),
+              pageParams: [...d.pageParams],
+            };
           });
           break;
         }
@@ -97,5 +96,5 @@ export function useMessageSocket(channelId: string, key: string): void {
       socket.close();
     };
     // eslint-disable-next-line
-  }, [channelId, cache, key, current]);
+  }, [channelId, cache, current]);
 }

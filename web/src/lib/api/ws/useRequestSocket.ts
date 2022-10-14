@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSocket } from '../getSocket';
 import { userStore } from '../../stores/userStore';
 import { rKey } from '../../utils/querykeys';
@@ -27,8 +27,8 @@ export function useRequestSocket(): void {
       const response: WSMessage = JSON.parse(event.data);
       switch (response.action) {
         case 'add_request': {
-          cache.setQueryData<FriendRequest[]>(rKey, (data) =>
-            [...data!, response.data].sort((a, b) => a.username.localeCompare(b.username))
+          cache.setQueryData<FriendRequest[]>([rKey], (data) =>
+            [...(data ?? []), response.data].sort((a, b) => a.username.localeCompare(b.username))
           );
           break;
         }
