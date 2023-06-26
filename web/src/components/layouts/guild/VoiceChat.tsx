@@ -49,7 +49,6 @@ export const VoiceChat: React.FC<{}> = () => {
           autoGainControl: false,
           channelCount: 2,
           echoCancellation: false,
-          latency: 0,
           noiseSuppression: false,
           sampleRate: 48000,
           sampleSize: 16,

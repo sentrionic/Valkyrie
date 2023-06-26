@@ -1,33 +1,33 @@
-name: Website Deploy
+# name: Website Deploy
 
-on:
-  workflow_run:
-    workflows: ['Website E2E']
-    branches: [main]
-    types: [completed]
+# on:
+#   workflow_run:
+#     workflows: ['Website E2E']
+#     branches: [main]
+#     types: [completed]
 
-jobs:
-  on-success:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          cache: 'yarn'
-          cache-dependency-path: web/yarn.lock
-      - run: yarn install
-        working-directory: ./web
-      - run: yarn build --if-present
-        working-directory: ./web
-      - name: Deploy to netlify
-        uses: netlify/actions/cli@master
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        with:
-          args: deploy --dir=web/build --prod
-          secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'
+# jobs:
+#   on-success:
+#     runs-on: ubuntu-latest
+#     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+#       - name: Use Node.js 18.x
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18.x'
+#           cache: 'yarn'
+#           cache-dependency-path: web/yarn.lock
+#       - run: yarn install
+#         working-directory: ./web
+#       - run: yarn build --if-present
+#         working-directory: ./web
+#       - name: Deploy to netlify
+#         uses: netlify/actions/cli@master
+#         env:
+#           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+#           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+#         with:
+#           args: deploy --dir=web/build --prod
+#           secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'

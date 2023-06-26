@@ -89,7 +89,7 @@ or alternatively copy the commands into your CLI.
 
 ### Web
 
-1. Install Node 18 or the LTS version of Node.
+1. Install Node 20 or the LTS version of Node.
 2. Install [yarn](https://classic.yarnpkg.com/lang/en/)
 3. Run `yarn` to install the dependencies
 4. Run `yarn start` to start the client
